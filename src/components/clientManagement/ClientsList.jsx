@@ -339,6 +339,7 @@ const ClientList = () => {
                                     href={row.website}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    className="dark:text-white"
                                   >
                                     <FaExternalLinkSquareAlt size={18} />
                                   </a>
