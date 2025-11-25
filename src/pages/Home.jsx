@@ -195,8 +195,8 @@ export default function Home() {
     },
   ];
 
-  const handleLogout = () => {
-    Swal.fire({
+  const handleLogout = async () => {
+    const result = await Swal.fire({
       title: "Log out of your account?",
       text: "You’ll be signed out and need to log in again to continue.",
       icon: "question",
@@ -217,27 +217,15 @@ export default function Home() {
         cancelButton:
           "px-5 py-2 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all",
       },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        logout();
-        Swal.fire({
-          title: "See you soon! 👋",
-          text: "You’ve been logged out successfully.",
-          icon: "success",
-          background: "#f9fafb",
-          color: "#1f2937",
-          showConfirmButton: false,
-          timer: 2000,
-          customClass: {
-            popup: "rounded-2xl shadow-xl p-6",
-            title: "text-lg font-semibold text-gray-800",
-            htmlContainer: "text-sm text-gray-600",
-          },
-        }).then(() => {
-          navigate("/login");
-        });
-      }
     });
+
+    if (!result.isConfirmed) return;
+
+    const success = await logout();
+
+    if (success) {
+      navigate("/login");
+    }
   };
 
   return (

@@ -251,15 +251,6 @@ const ClientRequirement = () => {
             Basic Details
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* <SelectField
-              name="client"
-              label="Client"
-              value={formData.client}
-              options={activeClients}
-              // options={["691c640497c1e09c60e33c9d", "sdsdh45"]}
-              handleChange={handleChange}
-              error={errors.client}
-            /> */}
             <div className="relative w-full">
               <select
                 name="client"

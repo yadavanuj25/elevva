@@ -17,6 +17,8 @@ const PERMISSION_MAP = {
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [loggingOut, setLoggingOut] = useState(false);
+
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user") || "null")
   );
@@ -59,6 +61,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      setLoggingOut(true);
+
       const res = await fetch(
         "https://crm-backend-qbz0.onrender.com/api/auth/logout",
         {
@@ -70,17 +74,21 @@ export const AuthProvider = ({ children }) => {
       );
       const data = await res.json();
       if (res.ok) {
-        setToken(null);
-        setUser(null);
-        setRole("");
-        setModules([]);
-        localStorage.clear();
         console.log(data.message || "Logged out successfully");
       } else {
         console.error("Logout failed:", data.message || "Unknown error");
       }
+      setToken(null);
+      setUser(null);
+      setRole("");
+      setModules([]);
+      localStorage.removeItem("token");
+      return true;
     } catch (error) {
       console.error("Error during logout:", error);
+      return false;
+    } finally {
+      setLoggingOut(false);
     }
   };
 

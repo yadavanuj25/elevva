@@ -1,5 +1,40 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
+
+const getStatusColor = (s) => {
+  switch (s) {
+    case "open":
+    case "active":
+    case "Active":
+      return "bg-[#1abe17]";
+
+    case "cancelled":
+    case "terminated":
+    case "banned":
+    case "Banned":
+      return "bg-red-800";
+
+    case "in-active":
+    case "inactive":
+      return "bg-red-600";
+
+    case "on hold":
+    case "on_hold":
+    case "defaulter":
+    case "Defaulter":
+      return "bg-[#f9b801]";
+
+    case "in progress":
+    case "in_progress":
+      return "bg-blue-500";
+
+    case "filled":
+      return "bg-orange-600";
+
+    default:
+      return "bg-gray-400";
+  }
+};
 
 const StatusDropDown = ({
   rowId,
@@ -10,70 +45,27 @@ const StatusDropDown = ({
   handleStatusUpdate,
   position = { left: "-left-4", top: "top-[50px]" },
 }) => {
+  const dropdownRef = useRef(null);
   const s = status?.toLowerCase() || "";
-  const getStatusColor = (s) => {
-    switch (s) {
-      case "open":
-      case "active":
-      case "Active":
-        return "bg-[#1abe17]";
 
-      case "cancelled":
-      case "terminated":
-      case "banned":
-      case "Banned":
-        return "bg-red-800";
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenStatusRow(null);
+      }
+    };
 
-      case "in-active":
-      case "inactive":
-        return "bg-red-600";
-
-      case "on hold":
-      case "on_hold":
-      case "defaulter":
-      case "Defaulter":
-        return "bg-[#f9b801]";
-
-      case "in progress":
-      case "in_progress":
-        return "bg-blue-500";
-
-      case "filled":
-        return "bg-orange-600";
-
-      default:
-        return "bg-gray-400";
+    if (openStatusRow === rowId) {
+      document.addEventListener("mousedown", handleClickOutside);
     }
-  };
 
-  // DOT COLOR
-  const getDotColor = (s) => {
-    switch (s) {
-      case "open":
-      case "active":
-        return "bg-green-500";
-
-      case "cancelled":
-      case "terminated":
-      case "banned":
-        return "bg-red-800";
-
-      case "on hold":
-      case "on_hold":
-      case "defaulter":
-        return "bg-yellow-400";
-
-      case "in progress":
-      case "filled":
-        return "bg-orange-500";
-
-      default:
-        return "bg-gray-400";
-    }
-  };
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openStatusRow, rowId, setOpenStatusRow]);
 
   return (
-    <div className="relative w-max">
+    <div className="relative w-max" ref={dropdownRef}>
       {/* STATUS BADGE */}
       <div
         onClick={() => setOpenStatusRow(openStatusRow === rowId ? null : rowId)}
@@ -101,7 +93,7 @@ const StatusDropDown = ({
             w-48
             rounded-xl
             shadow-[0_4px_20px_rgba(0,0,0,0.15)]
-            bg-white dark:bg-[#1f1f23]
+            bg-white dark:bg-[#283343] dark:text-white
             border border-gray-200 dark:border-gray-700
             z-50
             backdrop-blur-md

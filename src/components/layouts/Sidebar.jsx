@@ -151,7 +151,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     );
   };
 
-  // Close sidebar on mobile outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (window.innerWidth < 768 && isOpen) {
