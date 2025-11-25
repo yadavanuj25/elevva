@@ -152,7 +152,10 @@ const ViewRequirement = () => {
                     icon={<Info size={16} />}
                   />
                 </ViewSection>
-                <ViewSection title="Contact Person" icon={<Info size={18} />}>
+                <ViewSection
+                  title="Owner of the Requirement"
+                  icon={<Info size={18} />}
+                >
                   <ViewInfo
                     label="Added by"
                     value={requirement.createdBy.fullName}
@@ -165,7 +168,17 @@ const ViewRequirement = () => {
                   />
                   <ViewInfo
                     label="Created at"
-                    value={new Date(requirement.createdAt).toLocaleString()}
+                    value={new Date(requirement.createdAt).toLocaleString(
+                      "en-IN",
+                      {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      }
+                    )}
                     icon={<CalendarDays size={16} />}
                   />
                 </ViewSection>

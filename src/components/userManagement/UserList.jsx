@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -8,40 +8,32 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  TablePagination,
   Checkbox,
 } from "@mui/material";
-import {
-  Pencil,
-  Plus,
-  RefreshCcw,
-  Mail,
-  AtSign,
-  ChevronUp,
-  ChevronDown,
-} from "lucide-react";
-import { useAuth } from "../../auth/AuthContext";
+import { Pencil, Mail, AtSign } from "lucide-react";
 import DateDisplay from "../ui/DateDisplay";
 import Spinner from "../loaders/Spinner";
-import ToolTip from "../ui/ToolTip";
 import NoData from "../ui/NoData";
 import { getAllUsers, updateUserStatus } from "../../services/userServices";
 import Search from "../sharedComponents/Search";
 import StatusDropDown from "../ui/StatusDropDown";
+import Tabs from "../ui/tableComponents/Tabs";
+import RefreshButton from "../ui/tableComponents/RefreshButton";
+import CommonPagination from "../ui/tableComponents/CommonPagination";
+import TableHeader from "../ui/tableComponents/TableHeader";
 
 const UserList = () => {
-  const { token } = useAuth();
   const navigate = useNavigate();
   const [allUsers, setAllUsers] = useState([]);
-  const [counts, setCounts] = useState({ all: 0, active: 0, inactive: 0 });
   const [pagination, setPagination] = useState({
     total: 0,
     page: 1,
     pages: 1,
     limit: 25,
   });
+  const [statusTabs, setStatusTabs] = useState([]);
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("user_id");
+  const [orderBy, setOrderBy] = useState("users.createdAt");
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -51,7 +43,7 @@ const UserList = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [pagination.page, pagination.limit, activeTab, searchQuery]);
+  }, [pagination.page, pagination.limit, searchQuery]);
 
   const fetchUsers = async () => {
     try {
@@ -59,25 +51,29 @@ const UserList = () => {
       const data = await getAllUsers(
         pagination.page,
         pagination.limit,
-        activeTab,
         searchQuery
       );
+      const userData = data.users || [];
+
+      const uniqueStatuses = [
+        "All",
+        ...new Set(userData.map((r) => r.status || "unknown")),
+      ];
+
+      const tabsWithCounts = uniqueStatuses.map((status) => ({
+        name: status,
+        count:
+          status === "All"
+            ? userData.length
+            : userData.filter((r) => r.status === status).length,
+      }));
       setAllUsers(data.users || []);
+      setStatusTabs(tabsWithCounts);
       setPagination((prev) => ({
         ...prev,
         total: data.pagination?.total || 0,
         pages: data.pagination?.pages || 1,
       }));
-      const activeCount =
-        data.users?.filter((u) => u.status === "active").length || 0;
-      const inactiveCount =
-        data.users?.filter((u) => u.status === "inactive").length || 0;
-      const allCount = data.pagination?.total || 0;
-      setCounts({
-        all: allCount,
-        active: activeCount,
-        inactive: inactiveCount,
-      });
     } catch (error) {
       setErrorMsg(`"Errors  when fetching users" || ${error}`);
     } finally {
@@ -125,6 +121,9 @@ const UserList = () => {
 
   const filteredData = useMemo(() => {
     let data = [...allUsers];
+    if (activeTab !== "All") {
+      data = data.filter((c) => c.status === activeTab);
+    }
 
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
@@ -141,7 +140,7 @@ const UserList = () => {
     }
 
     return data;
-  }, [allUsers, searchQuery]);
+  }, [allUsers, activeTab, searchQuery]);
 
   const sortedData = useMemo(() => {
     return [...filteredData].sort((a, b) => {
@@ -175,16 +174,7 @@ const UserList = () => {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-semibold ">All Users</h2>
-          <button
-            className="flex items-center gap-2 "
-            onClick={() => fetchUsers()}
-          >
-            <ToolTip
-              title="Refresh"
-              placement="top"
-              icon={<RefreshCcw size={16} />}
-            />
-          </button>
+          <RefreshButton fetchData={fetchUsers} />
         </div>
         <div>
           {errorMsg && (
@@ -194,44 +184,30 @@ const UserList = () => {
           )}
 
           {/* Tabs */}
-          <div className="relative mb-4">
-            <div className="flex gap-4 border-b border-gray-300 dark:border-gray-600 mb-4">
-              {["All", "Active", "InActive"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => handleTabChange(tab)}
-                  className={`relative flex items-center gap-2 px-4 py-2 transition-all duration-300 ${
-                    activeTab === tab
-                      ? "text-dark  border-b-2 border-dark font-semibold"
-                      : "text-gray-500 hover:opacity-90"
-                  }`}
-                >
-                  {tab} ({counts[tab.toLowerCase()] || 0})
-                </button>
-              ))}
-            </div>
-          </div>
+          <Tabs
+            statusTabs={statusTabs}
+            activeTab={activeTab}
+            handleTabChange={handleTabChange}
+          />
           <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
             {/* Search Box */}
 
-            <Search
+            <TableHeader
               searchQuery={searchQuery}
-              handleSearchChange={handleSearchChange}
+              onSearchChange={handleSearchChange}
               addLink="/admin/usermanagement/create-user"
-              title="Add New User"
+              title="User"
             />
 
             {/* Pgination */}
-            <TablePagination
-              className="text-black dark:text-white"
-              component="div"
-              count={pagination.total}
-              page={pagination.page - 1}
+            <CommonPagination
+              total={pagination.total}
+              page={pagination.page}
+              limit={pagination.limit}
               onPageChange={handleChangePage}
-              rowsPerPage={pagination.limit}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              rowsPerPageOptions={[25, 50, 100]}
+              onLimitChange={handleChangeRowsPerPage}
             />
+
             {/* Table */}
             <TableContainer className="rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600">
               <div
@@ -349,7 +325,7 @@ const UserList = () => {
                             />
                           </TableCell>
 
-                          <TableCell className="whitespace-nowrap  dark:text-gray-300">
+                          <TableCell className="whitespace-nowrap dark:text-gray-300">
                             {row.role?.name
                               ? row.role.name.charAt(0).toUpperCase() +
                                 row.role.name.slice(1)
@@ -409,15 +385,13 @@ const UserList = () => {
                 </Table>
               </div>
             </TableContainer>
-            <TablePagination
-              component="div"
-              className="text-black dark:text-white"
-              count={pagination.total}
-              page={pagination.page - 1}
+
+            <CommonPagination
+              total={pagination.total}
+              page={pagination.page}
+              limit={pagination.limit}
               onPageChange={handleChangePage}
-              rowsPerPage={pagination.limit}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              rowsPerPageOptions={[25, 50, 100]}
+              onLimitChange={handleChangeRowsPerPage}
             />
           </div>
         </div>

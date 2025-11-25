@@ -17,6 +17,7 @@ import {
   Shield,
   Users,
   Info,
+  CalendarDays,
 } from "lucide-react";
 import { useAuth } from "../../auth/AuthContext";
 import { useParams, useNavigate } from "react-router-dom";
@@ -207,11 +208,40 @@ const ViewProfile = () => {
                       />
                     </div>
                   </ViewSection>
+                  <ViewSection
+                    title="Owner of the Profile"
+                    icon={<Info size={18} />}
+                  >
+                    <ViewInfo
+                      label="Added by"
+                      value={profile.submittedBy.fullName}
+                      icon={<Users size={16} />}
+                    />
+                    <ViewInfo
+                      label="Email"
+                      value={profile.submittedBy.email}
+                      icon={<Mail size={16} />}
+                    />
+                    <ViewInfo
+                      label="Created at"
+                      value={new Date(profile.createdAt).toLocaleString(
+                        "en-IN",
+                        {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        }
+                      )}
+                      icon={<CalendarDays size={16} />}
+                    />
+                  </ViewSection>
                 </div>
 
                 {/* Right Column */}
                 <div className="lg:col-span-2 border border-gray-300 dark:border-gray-600 rounded-lg ">
-                  {/* Professional Information */}
                   <ViewSection
                     title="Professional Information"
                     icon={<Briefcase size={18} />}
@@ -291,17 +321,6 @@ const ViewProfile = () => {
                         <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                           {profile.description}
                         </p>
-                      </div>
-                    )}
-
-                    {/* Submitted Info */}
-                    {profile.submittedBy && (
-                      <div className="border-t pt-3 text-xs text-gray-500 dark:text-gray-400">
-                        Submitted by:{" "}
-                        <strong>{profile.submittedBy.fullName}</strong> (
-                        {profile.submittedBy.email}) <br />
-                        Created at:{" "}
-                        {new Date(profile.createdAt).toLocaleString()}
                       </div>
                     )}
                   </ViewSection>

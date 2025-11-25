@@ -17,6 +17,8 @@ import DateDisplay from "../ui/DateDisplay";
 import Spinner from "../loaders/Spinner";
 import NoData from "../ui/NoData";
 import ToolTip from "../ui/ToolTip";
+import RefreshButton from "../ui/tableComponents/RefreshButton";
+import TableHeader from "../ui/tableComponents/TableHeader";
 
 const RoleList = () => {
   const { token } = useAuth();
@@ -97,6 +99,10 @@ const RoleList = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   // 🔹 Handle sorting
@@ -183,37 +189,16 @@ const RoleList = () => {
         <h2 className="text-2xl font-semibold ">
           Role & Permission Management
         </h2>
-        <button className="flex items-center gap-2 " onClick={getAllRoles}>
-          <ToolTip
-            title="Refresh"
-            placement="top"
-            icon={<RefreshCcw size={16} />}
-          />
-        </button>
+        <RefreshButton fetchData={getAllRoles} />
       </div>
       <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
         {/* Search and Add */}
-        <div className="py-4 border-b border-gray-300 dark:border-gray-600 flex justify-between items-center">
-          <div className="w-1/2">
-            <input
-              type="text"
-              placeholder="Search by role name..."
-              className="w-full bg-white dark:bg-darkBg p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-gray-500 transition"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <div>
-            <Link
-              to="/admin/rolemanagement/create-roles"
-              className="px-3 py-1.5 flex gap-1 items-center bg-dark text-white rounded-md hover:opacity-90"
-            >
-              <Plus size={18} />
-              <span>Add New Role</span>
-            </Link>
-          </div>
-        </div>
-
+        <TableHeader
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          addLink="/admin/rolemanagement/create-roles"
+          title="Role"
+        />
         <>
           {/* Pagination */}
           <TablePagination

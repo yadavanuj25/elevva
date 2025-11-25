@@ -12,6 +12,7 @@ import {
   Briefcase,
   Info,
   Users,
+  CalendarDays,
 } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import Spinner from "../loaders/Spinner";
@@ -203,6 +204,34 @@ const ViewClient = () => {
                     icon={<MapPin size={16} />}
                   />
                 </ViewSection>
+
+                <ViewSection
+                  title="Owner of the Client"
+                  icon={<Info size={18} />}
+                >
+                  <ViewInfo
+                    label="Added by"
+                    value={client.addedBy.fullName}
+                    icon={<Users size={16} />}
+                  />
+                  <ViewInfo
+                    label="Email"
+                    value={client.addedBy.email}
+                    icon={<Mail size={16} />}
+                  />
+                  <ViewInfo
+                    label="Created at"
+                    value={new Date(client.createdAt).toLocaleString("en-IN", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                    icon={<CalendarDays size={16} />}
+                  />
+                </ViewSection>
               </div>
 
               {/* RIGHT COLUMN */}
@@ -212,6 +241,13 @@ const ViewClient = () => {
                   icon={<Building size={18} />}
                 >
                   <div className="grid sm:grid-cols-2 ">
+                    <ViewInfo
+                      label="Empanelment Date"
+                      value={new Date(
+                        client.empanelmentDate
+                      ).toLocaleDateString()}
+                      icon={<Info size={16} />}
+                    />
                     <ViewInfo
                       label="Category"
                       value={client.clientCategory}
@@ -233,28 +269,10 @@ const ViewClient = () => {
                       icon={<Info size={16} />}
                     />
                     <ViewInfo
-                      label="Empanelment Date"
-                      value={new Date(
-                        client.empanelmentDate
-                      ).toLocaleDateString()}
+                      label="LinkedIn"
+                      value={client.linkedin || "-"}
                       icon={<Info size={16} />}
                     />
-                  </div>
-                </ViewSection>
-
-                {/* Additional */}
-                <ViewSection
-                  title="Additional Information"
-                  icon={<Info size={18} />}
-                >
-                  <ViewBlock title="About Vendor" value={client.aboutVendor} />
-                  <ViewBlock title="Instructions" value={client.instructions} />
-
-                  <div className="border-t pt-3 text-xs text-gray-500 dark:text-gray-400">
-                    Added by: <strong>{client.addedBy?.fullName}</strong> (
-                    {client.addedBy?.email})
-                    <br />
-                    Created at: {new Date(client.createdAt).toLocaleString()}
                   </div>
                 </ViewSection>
               </div>

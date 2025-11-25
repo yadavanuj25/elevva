@@ -34,6 +34,10 @@ import {
   updateProfileStatus,
 } from "../../services/profileServices";
 import StatusDropDown from "../ui/StatusDropDown";
+import Tabs from "../ui/tableComponents/Tabs";
+import RefreshButton from "../ui/tableComponents/RefreshButton";
+import TableHeader from "../ui/tableComponents/TableHeader";
+import CommonPagination from "../ui/tableComponents/CommonPagination";
 
 const ProfileList = () => {
   const { token } = useAuth();
@@ -41,21 +45,15 @@ const ProfileList = () => {
   const location = useLocation();
   const [successMsg, setSuccessMsg] = useState("");
   const [allProfiles, setAllProfiles] = useState([]);
-  const [counts, setCounts] = useState({
-    all: 0,
-    active: 0,
-    inactive: 0,
-    banned: 0,
-    defaulter: 0,
-  });
   const [pagination, setPagination] = useState({
     total: 0,
     page: 1,
     pages: 1,
     limit: 25,
   });
+  const [statusTabs, setStatusTabs] = useState([]);
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("user_id");
+  const [orderBy, setOrderBy] = useState("profiles.createdAt");
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -76,7 +74,7 @@ const ProfileList = () => {
 
   useEffect(() => {
     fetchProfiles();
-  }, [pagination.page, pagination.limit, activeTab, searchQuery]);
+  }, [pagination.page, pagination.limit, searchQuery]);
 
   const fetchProfiles = async () => {
     try {
@@ -84,34 +82,30 @@ const ProfileList = () => {
       const data = await getAllProfiles(
         pagination.page,
         pagination.limit,
-        activeTab,
         searchQuery
       );
+      const profilesData = data.profiles || [];
       setAllProfiles(data.profiles || []);
+      const uniqueStatuses = [
+        "All",
+        ...new Set(profilesData.map((r) => r.status || "unknown")),
+      ];
+
+      const tabsWithCounts = uniqueStatuses.map((status) => ({
+        name: status,
+        count:
+          status === "All"
+            ? profilesData.length
+            : profilesData.filter((r) => r.status === status).length,
+      }));
+      setStatusTabs(tabsWithCounts);
       setPagination((prev) => ({
         ...prev,
         total: data.pagination?.total || 0,
         pages: data.pagination?.pages || 1,
       }));
-      const activeCount =
-        data.profiles?.filter((u) => u.status === "Active").length || 0;
-      const inactiveCount =
-        data.profiles?.filter((u) => u.status === "Inactive").length || 0;
-      const allCount = data.pagination?.total || 0;
-      const bannedCount =
-        data.profiles?.filter((u) => u.status === "Banned").length || 0;
-      const defaulterCount =
-        data.profiles?.filter((u) => u.status === "Defaulter").length || 0;
-
-      setCounts({
-        all: allCount,
-        active: activeCount,
-        inactive: inactiveCount,
-        banned: bannedCount,
-        defaulter: defaulterCount,
-      });
     } catch (error) {
-      setErrorMsg(`"Errors  when fetching users" || ${error}`);
+      setErrorMsg(`"Errors  when fetching clients" || ${error}`);
     } finally {
       setLoading(false);
     }
@@ -146,6 +140,9 @@ const ProfileList = () => {
 
   const filteredData = useMemo(() => {
     let data = [...allProfiles];
+    if (activeTab !== "All") {
+      data = data.filter((c) => c.status === activeTab);
+    }
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       data = data.filter((profile) =>
@@ -160,7 +157,7 @@ const ProfileList = () => {
       );
     }
     return data;
-  }, [allProfiles, searchQuery]);
+  }, [allProfiles, activeTab, searchQuery]);
 
   const sortedData = useMemo(() => {
     return [...filteredData].sort((a, b) => {
@@ -214,16 +211,7 @@ const ProfileList = () => {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-semibold ">All Profiles</h2>
-          <button
-            className="flex items-center gap-2 "
-            onClick={() => fetchProfiles()}
-          >
-            <ToolTip
-              title="Refresh"
-              placement="top"
-              icon={<RefreshCcw size={16} />}
-            />
-          </button>
+          <RefreshButton fetchData={fetchProfiles} />
         </div>
         {successMsg && (
           <div className="mb-4 p-2 bg-green-400 text-center text-md font-semibold  text-white rounded">
@@ -237,57 +225,27 @@ const ProfileList = () => {
         )}
         <div>
           {/* Tabs */}
-          <div className="relative mb-4">
-            <div className="flex gap-4 border-b border-gray-300 dark:border-gray-600 mb-4">
-              {["All", "Active", "InActive", "Banned", "Defaulter"].map(
-                (tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => handleTabChange(tab)}
-                    className={`relative flex items-center gap-2 px-4 py-2 transition-all duration-300 ${
-                      activeTab === tab
-                        ? "text-dark  border-b-2 border-dark font-semibold"
-                        : "text-gray-500 hover:opacity-90"
-                    }`}
-                  >
-                    {tab} ({counts[tab.toLowerCase()] || 0})
-                  </button>
-                )
-              )}
-            </div>
-          </div>
+          <Tabs
+            statusTabs={statusTabs}
+            activeTab={activeTab}
+            handleTabChange={handleTabChange}
+          />
           <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
             {/* Search Box */}
-            <div className="py-4 border-b border-gray-300 dark:border-gray-600 flex justify-between items-center">
-              <div className="w-1/2">
-                <input
-                  type="text"
-                  placeholder="Search by name, email or phone..."
-                  className="w-full bg-white dark:bg-darkBg p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-gray-500 transition"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-              </div>
-              <div>
-                <Link
-                  to="/admin/profilemanagement/add-profile"
-                  className="px-2 py-1.5 flex gap-1 items-center bg-dark text-white rounded-md"
-                >
-                  <Plus size={18} />
-                  <span>Add New Profile</span>
-                </Link>
-              </div>
-            </div>
+
+            <TableHeader
+              searchQuery={searchQuery}
+              onSearchChange={handleSearchChange}
+              addLink="/admin/profilemanagement/add-profile"
+              title="Profile"
+            />
             {/* Pgination */}
-            <TablePagination
-              component="div"
-              className="text-black dark:text-white"
-              count={pagination.total}
-              page={pagination.page - 1}
+            <CommonPagination
+              total={pagination.total}
+              page={pagination.page}
+              limit={pagination.limit}
               onPageChange={handleChangePage}
-              rowsPerPage={pagination.limit}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              rowsPerPageOptions={[25, 50, 100]}
+              onLimitChange={handleChangeRowsPerPage}
             />
             {/* Table */}
             <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 ">
@@ -538,15 +496,12 @@ const ProfileList = () => {
                 </Table>
               </div>
             </TableContainer>
-            <TablePagination
-              component="div"
-              className="text-black dark:text-white"
-              count={pagination.total}
-              page={pagination.page - 1}
+            <CommonPagination
+              total={pagination.total}
+              page={pagination.page}
+              limit={pagination.limit}
               onPageChange={handleChangePage}
-              rowsPerPage={pagination.limit}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              rowsPerPageOptions={[25, 50, 100]}
+              onLimitChange={handleChangeRowsPerPage}
             />
           </div>
         </div>

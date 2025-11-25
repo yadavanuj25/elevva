@@ -10,16 +10,7 @@ import {
   TablePagination,
   Checkbox,
 } from "@mui/material";
-import {
-  Pencil,
-  RefreshCcw,
-  Plus,
-  AtSign,
-  Eye,
-  Trash,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { Pencil, RefreshCcw, Plus, AtSign, Eye, Trash } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Spinner from "../loaders/Spinner";
 import NoData from "../ui/NoData";
@@ -32,6 +23,10 @@ import {
 } from "../../services/clientServices";
 import Filter from "../ui/Filter";
 import StatusDropDown from "../ui/StatusDropDown";
+import Tabs from "../ui/tableComponents/Tabs";
+import RefreshButton from "../ui/tableComponents/RefreshButton";
+import TableHeader from "../ui/tableComponents/TableHeader";
+import CommonPagination from "../ui/tableComponents/CommonPagination";
 
 const ClientsRequirementsList = () => {
   const navigate = useNavigate();
@@ -46,7 +41,7 @@ const ClientsRequirementsList = () => {
     limit: 25,
   });
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("clientName");
+  const [orderBy, setOrderBy] = useState("requirements.createdAt");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -59,7 +54,6 @@ const ClientsRequirementsList = () => {
     "Cancelled",
     "Closed",
   ];
-
   useEffect(() => {
     fetchRequirements();
     fetchClients();
@@ -109,9 +103,7 @@ const ClientsRequirementsList = () => {
         pagination.limit,
         searchQuery
       );
-
       const allClients = data.clients || [];
-      console.log(allClients);
       const formattedClients = allClients.map((c) => ({
         label: c.clientName,
         value: c._id,
@@ -160,48 +152,11 @@ const ClientsRequirementsList = () => {
   const getStickyClass = (columnId) => {
     switch (columnId) {
       case "action":
-        return "sticky right-0 z-20";
+        return "sticky -right-[0.1px] z-20";
       case "requirementPriority":
-        return "sticky right-[128px] z-20";
+        return "sticky right-[114px] z-20";
       default:
         return "";
-    }
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Open":
-        return "bg-green-600";
-      case "On Hold":
-        return "bg-amber-500";
-      case "In Progress":
-        return "bg-blue-600";
-      case "Filled":
-        return "bg-emerald-700";
-      case "Cancelled":
-        return "bg-red-700";
-      case "Closed":
-        return "bg-gray-600";
-      default:
-        return "bg-gray-500";
-    }
-  };
-  const getTabsColor = (tabs) => {
-    switch (tabs) {
-      case "Open":
-        return "text-green-600";
-      case "On Hold":
-        return "text-amber-500";
-      case "In Progress":
-        return "text-blue-600";
-      case "Filled":
-        return "text-emerald-700";
-      case "Cancelled":
-        return "text-red-700";
-      case "Closed":
-        return "text-gray-600";
-      default:
-        return "text-gray-500";
     }
   };
 
@@ -293,16 +248,7 @@ const ClientsRequirementsList = () => {
     <>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">All Requirements</h2>
-        <button
-          className="flex items-center"
-          onClick={() => fetchRequirements()}
-        >
-          <ToolTip
-            title="Refresh"
-            placement="top"
-            icon={<RefreshCcw size={16} />}
-          />
-        </button>
+        <RefreshButton fetchData={fetchRequirements} />
       </div>
 
       {errorMsg && (
@@ -311,59 +257,30 @@ const ClientsRequirementsList = () => {
         </div>
       )}
       {/* Tabs */}
-      <div className="flex gap-4 border-b mb-4">
-        {statusTabs.map((tab) => (
-          <button
-            key={tab.name}
-            onClick={() => handleTabChange(tab.name)}
-            className={`relative flex items-center gap-2 px-4 py-2 ${
-              activeTab === tab.name
-                ? "text-dark border-b-2 border-dark font-semibold"
-                : `${getTabsColor(tab.name)}`
-            }`}
-          >
-            {tab.name}
-            <span>({tab.count})</span>
-          </button>
-        ))}
-      </div>
+      <Tabs
+        statusTabs={statusTabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
 
       <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
-        {/* Search */}
-        <div className="py-4 border-b border-gray-300 dark:border-gray-600 flex justify-between items-center">
-          <div className="w-1/2">
-            <input
-              type="text"
-              placeholder="Search by name, email or phone..."
-              className="w-full bg-white dark:bg-darkBg p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-gray-500 transition"
-              value={searchQuery}
-              onChange={handleSearchChange}
-            />
-          </div>
-          <div>
-            <Link
-              to="/admin/clientmanagement/add-clientRequirement"
-              className="px-2 py-1.5 flex gap-1 items-center bg-dark text-white rounded-md"
-            >
-              <Plus size={18} />
-              <span>Add New Requirement</span>
-            </Link>
-          </div>
-        </div>
+        <TableHeader
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          addLink="/admin/clientmanagement/add-clientRequirement"
+          title="Requirement"
+        />
         <div className="filter flex items-center justify-between">
           <div>
             <Filter clients={clients} />
           </div>
           {/* Pagination */}
-          <TablePagination
-            component="div"
-            className="text-black dark:text-white"
-            count={pagination.total}
-            page={pagination.page - 1}
+          <CommonPagination
+            total={pagination.total}
+            page={pagination.page}
+            limit={pagination.limit}
             onPageChange={handleChangePage}
-            rowsPerPage={pagination.limit}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            rowsPerPageOptions={[25, 50, 100]}
+            onLimitChange={handleChangeRowsPerPage}
           />
         </div>
         <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 ">
@@ -572,15 +489,12 @@ const ClientsRequirementsList = () => {
             </Table>
           </div>
         </TableContainer>
-        <TablePagination
-          component="div"
-          className="text-black dark:text-white"
-          count={pagination.total}
-          page={pagination.page - 1}
+        <CommonPagination
+          total={pagination.total}
+          page={pagination.page}
+          limit={pagination.limit}
           onPageChange={handleChangePage}
-          rowsPerPage={pagination.limit}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          rowsPerPageOptions={[25, 50, 100]}
+          onLimitChange={handleChangeRowsPerPage}
         />
       </div>
     </>

@@ -7,7 +7,6 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  TablePagination,
   Checkbox,
 } from "@mui/material";
 import { FaExternalLinkSquareAlt } from "react-icons/fa";
@@ -36,26 +35,22 @@ import {
 import StatusDropDown from "../ui/StatusDropDown";
 import TableHeader from "../ui/tableComponents/TableHeader";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
+import Tabs from "../ui/tableComponents/Tabs";
+import RefreshButton from "../ui/tableComponents/RefreshButton";
 
 const ClientList = () => {
   const navigate = useNavigate();
-
   const [clients, setClients] = useState([]);
   const [activeTab, setActiveTab] = useState("All");
-  const [counts, setCounts] = useState({
-    all: 0,
-    active: 0,
-    inactive: 0,
-  });
-
   const [pagination, setPagination] = useState({
     total: 0,
     page: 1,
     pages: 1,
     limit: 25,
   });
+  const [statusTabs, setStatusTabs] = useState([]);
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("clientName");
+  const [orderBy, setOrderBy] = useState("clients.createdAt");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -74,17 +69,20 @@ const ClientList = () => {
         pagination.limit,
         searchQuery
       );
-
       const allClients = data.clients || [];
-
+      const uniqueStatuses = [
+        "All",
+        ...new Set(allClients.map((r) => r.status || "Unknown")),
+      ];
+      const tabsWithCounts = uniqueStatuses.map((status) => ({
+        name: status,
+        count:
+          status === "All"
+            ? allClients.length
+            : allClients.filter((r) => r.status === status).length,
+      }));
       setClients(allClients);
-
-      setCounts({
-        all: allClients.length,
-        active: allClients.filter((c) => c.status === "active").length,
-        inactive: allClients.filter((c) => c.status === "inactive").length,
-      });
-
+      setStatusTabs(tabsWithCounts);
       setPagination((prev) => ({
         ...prev,
         total: data.pagination?.total || 0,
@@ -96,6 +94,7 @@ const ClientList = () => {
       setLoading(false);
     }
   };
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setPagination((prev) => ({ ...prev, page: 1 }));
@@ -145,13 +144,10 @@ const ClientList = () => {
   };
   const filteredData = useMemo(() => {
     let data = [...clients];
-    if (activeTab === "Active") {
-      data = data.filter((c) => c.status === "active");
-    } else if (activeTab === "InActive") {
-      data = data.filter((c) => c.status === "inactive");
+    if (activeTab !== "All") {
+      data = data.filter((c) => c.status === activeTab);
     }
 
-    // Apply Search Filter
     if (searchQuery.trim() !== "") {
       const q = searchQuery.toLowerCase();
       data = data.filter((c) =>
@@ -160,6 +156,7 @@ const ClientList = () => {
     }
     return data;
   }, [clients, activeTab, searchQuery]);
+
   const sortedData = useMemo(() => {
     return [...filteredData].sort((a, b) => {
       const aVal = a[orderBy] ?? "";
@@ -192,13 +189,7 @@ const ClientList = () => {
     <>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">All Clients</h2>
-        <button className="flex items-center" onClick={() => fetchClients()}>
-          <ToolTip
-            title="Refresh"
-            placement="top"
-            icon={<RefreshCcw size={16} />}
-          />
-        </button>
+        <RefreshButton fetchData={fetchClients} />
       </div>
 
       {errorMsg && (
@@ -207,29 +198,17 @@ const ClientList = () => {
         </div>
       )}
       {/* Tabs */}
-      <div className="relative mb-4">
-        <div className="flex gap-4 border-b border-gray-300 dark:border-gray-600 mb-4">
-          {["All", "Active", "InActive"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => handleTabChange(tab)}
-              className={`relative flex items-center gap-2 px-4 py-2 transition-all duration-300 ${
-                activeTab === tab
-                  ? "text-dark border-b-2 border-dark font-semibold"
-                  : "text-gray-500 hover:opacity-90"
-              }`}
-            >
-              {tab} ({counts[tab.toLowerCase()] || 0})
-            </button>
-          ))}
-        </div>
-      </div>
-
+      <Tabs
+        statusTabs={statusTabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
       <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
         <TableHeader
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}
           addLink="/admin/clientmanagement/add-client"
+          title="Client"
         />
 
         {/* Pagination */}
@@ -258,7 +237,7 @@ const ClientList = () => {
                     { id: "clientCategory", label: "Category" },
                     { id: "status", label: "Status" },
                     { id: "clientSource", label: "Source" },
-                    { id: "companySize", label: "Company Size" },
+
                     { id: "poc1", label: "POC" },
                     { id: "empanelmentDate", label: "Empanelment Date" },
                     { id: "addedBy", label: "Added By" },
@@ -332,8 +311,8 @@ const ClientList = () => {
                                 {row.clientName.charAt(0).toUpperCase() +
                                   row.clientName.slice(1)}
                               </p>
-
-                              <div className="flex gap-2 items-center">
+                              {/* Website & Linkedin */}
+                              {/* <div className="flex gap-2 items-center">
                                 {row.website && (
                                   <a
                                     href={row.website}
@@ -353,7 +332,7 @@ const ClientList = () => {
                                     <FaLinkedin className="text-[#0077B5] text-[18px]" />
                                   </a>
                                 )}
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </div>
@@ -380,9 +359,7 @@ const ClientList = () => {
                       <TableCell className="whitespace-nowrap dark:text-gray-300">
                         {row.clientSource}
                       </TableCell>
-                      <TableCell className="whitespace-nowrap dark:text-gray-300">
-                        {row.companySize}
-                      </TableCell>
+
                       <TableCell className="whitespace-nowrap dark:text-gray-300">
                         <div>
                           <p className="flex items-center gap-1  dark:text-gray-300 font-semibold">
@@ -463,6 +440,7 @@ const ClientList = () => {
             </Table>
           </div>
         </TableContainer>
+
         <CommonPagination
           total={pagination.total}
           page={pagination.page}
