@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Menu, Settings, LogOut, Bell, CircleHelp, User } from "lucide-react";
+import { RiMenuFold3Line, RiMenuUnfold3Line } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
 import LightDarkMode from "../themes/LightDarkMode";
 import Tippy from "@tippyjs/react";
@@ -27,7 +28,7 @@ const IconButton = ({ title, icon: Icon, badge }) => (
   </Tippy>
 );
 
-const Header = ({ toggleSidebar }) => {
+const Header = ({ toggleSidebar, isOpen }) => {
   const navigate = useNavigate();
   const popupRef = useRef(null);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -89,14 +90,18 @@ const Header = ({ toggleSidebar }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 flex items-center bg-white dark:bg-darkBg justify-between px-6 py-3 border-b border-gray-300 dark:border-gray-600">
+    <header className="sticky top-0 z-40 flex items-center bg-white dark:bg-darkBg justify-between px-3 py-3 border-b border-gray-300 dark:border-gray-600">
       {/* Left */}
       <div className="flex gap-5 items-center text-md font-medium">
         <button
           onClick={toggleSidebar}
           className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
         >
-          <Menu size={20} />
+          {isOpen ? (
+            <RiMenuFold3Line size={20} />
+          ) : (
+            <RiMenuUnfold3Line size={20} />
+          )}
         </button>
         <div className="hidden sm:block ">
           Welcome to Elevva{" "}

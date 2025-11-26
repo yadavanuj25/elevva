@@ -3,7 +3,7 @@ import { ChevronDown, Settings, LayoutDashboard, X, Users } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { AiOutlineDashboard } from "react-icons/ai";
-import { TbReportAnalytics } from "react-icons/tb";
+
 import logo from "../../assets/logo/logo.png";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {

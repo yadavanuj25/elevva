@@ -25,7 +25,7 @@ const AdminLayout = () => {
           sidebarOpen ? "md:ml-64" : "md:ml-20"
         }`}
       >
-        <Header toggleSidebar={toggleSidebar} />
+        <Header toggleSidebar={toggleSidebar} isOpen={sidebarOpen} />
         <main className="flex-1 p-4 overflow-auto ">
           <Outlet />
         </main>
