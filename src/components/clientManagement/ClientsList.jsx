@@ -22,6 +22,8 @@ import {
   ChevronDown,
   Mail,
   Phone,
+  LayoutGrid,
+  List,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Spinner from "../loaders/Spinner";
@@ -37,6 +39,8 @@ import TableHeader from "../ui/tableComponents/TableHeader";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
 import Tabs from "../ui/tableComponents/Tabs";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
+import GridLayout from "../ui/tableComponents/GridLayout";
+import TableLayout from "../ui/tableComponents/TableLayout";
 
 const ClientList = () => {
   const navigate = useNavigate();
@@ -56,6 +60,7 @@ const ClientList = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const statusOptions = ["active", "inactive", "on_hold", "terminated"];
+  const [viewMode, setViewMode] = useState("list");
 
   useEffect(() => {
     fetchClients();
@@ -203,11 +208,31 @@ const ClientList = () => {
         activeTab={activeTab}
         handleTabChange={handleTabChange}
       />
+
+      <div className="flex justify-end gap-2 mb-3">
+        <button
+          onClick={() => setViewMode("list")}
+          className={`p-2 rounded border ${
+            viewMode === "list" ? "bg-dark text-white" : "bg-gray-200"
+          }`}
+        >
+          <List size={20} />
+        </button>
+
+        <button
+          onClick={() => setViewMode("grid")}
+          className={`p-2 rounded border ${
+            viewMode === "grid" ? "bg-dark text-white" : "bg-gray-200"
+          }`}
+        >
+          <LayoutGrid size={20} />
+        </button>
+      </div>
       <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
         <TableHeader
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}
-          addLink="/admin/clientmanagement/add-client"
+          addLink="/admin/clientManagement/add-client"
           title="Client"
         />
 
@@ -219,235 +244,50 @@ const ClientList = () => {
           onPageChange={handleChangePage}
           onLimitChange={handleChangeRowsPerPage}
         />
+        {viewMode === "grid" ? (
+          <>
+            <GridLayout
+              data={sortedData}
+              loading={loading}
+              renderCard={(row) => (
+                <div className="p-4 border rounded-xl bg-white shadow">
+                  <h3 className="font-semibold text-lg">{row.clientName}</h3>
+                  <p>Status: {row.status}</p>
+                  <p>Email: {row.poc1.email}</p>
 
-        <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 ">
-          <div className="overflow-x-auto">
-            <Table className="min-w-full">
-              <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-20">
-                <TableRow>
-                  <TableCell
-                    padding="checkbox"
-                    className="bg-[#f2f4f5] dark:bg-darkGray"
-                  >
-                    <Checkbox color="primary" />
-                  </TableCell>
-
-                  {[
-                    { id: "clientName", label: "Client Name" },
-                    { id: "clientCategory", label: "Category" },
-                    { id: "status", label: "Status" },
-                    { id: "clientSource", label: "Source" },
-
-                    { id: "poc1", label: "POC" },
-                    { id: "empanelmentDate", label: "Empanelment Date" },
-                    { id: "addedBy", label: "Added By" },
-                    { id: "createdAt", label: "Created Dtm" },
-                    { id: "updatedAt", label: "Modified Dtm" },
-
-                    { id: "action", label: "Action", sticky: true },
-                  ].map((col) => (
-                    <TableCell
-                      key={col.id}
-                      className={`whitespace-nowrap font-bold text-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray ${
-                        col.sticky ? getStickyClass(col.id) : ""
-                      }`}
-                    >
-                      {col.id !== "action" ? (
-                        <TableSortLabel
-                          active={orderBy === col.id}
-                          direction={orderBy === col.id ? order : "asc"}
-                          onClick={() => handleSort(col.id)}
-                          sx={{
-                            color: "inherit !important",
-                            "& .MuiTableSortLabel-icon": {
-                              opacity: 1,
-                              color: "currentColor !important",
-                            },
-                          }}
-                        >
-                          <strong> {col.label}</strong>
-                        </TableSortLabel>
-                      ) : (
-                        <strong> {col.label}</strong>
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={12} className="text-center py-10">
-                      <Spinner size={45} text="Loading clients..." />
-                    </TableCell>
-                  </TableRow>
-                ) : sortedData.length > 0 ? (
-                  sortedData.map((row) => (
-                    <TableRow
-                      key={row._id}
-                      className="hover:bg-lightGray dark:hover:bg-darkGray"
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox color="primary" />
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          {row.profileImage ? (
-                            <img
-                              src={row.profileImage}
-                              alt={row.clientName}
-                              className="w-10 h-10 rounded-md object-cover border border-dark"
-                            />
-                          ) : (
-                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-gray-200 text-dark font-semibold">
-                              {row.clientName?.slice(0, 2).toUpperCase()}
-                            </div>
-                          )}
-                          <div>
-                            <div className="flex flex-col items-start gap-1">
-                              <p className="flex items-center gap-1  dark:text-gray-300 font-semibold">
-                                <AtSign size={14} />
-                                {row.clientName.charAt(0).toUpperCase() +
-                                  row.clientName.slice(1)}
-                              </p>
-                              {/* Website & Linkedin */}
-                              {/* <div className="flex gap-2 items-center">
-                                {row.website && (
-                                  <a
-                                    href={row.website}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="dark:text-white"
-                                  >
-                                    <FaExternalLinkSquareAlt size={18} />
-                                  </a>
-                                )}
-                                {row.linkedin && (
-                                  <a
-                                    href={row.linkedin}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    <FaLinkedin className="text-[#0077B5] text-[18px]" />
-                                  </a>
-                                )}
-                              </div> */}
-                            </div>
-                          </div>
-                        </div>
-                      </TableCell>
-
-                      <TableCell className="whitespace-nowrap dark:text-gray-300">
-                        {row.clientCategory}
-                      </TableCell>
-                      <TableCell
-                        className={`relative whitespace-nowrap ${getStickyClass(
-                          "status"
-                        )}`}
-                      >
-                        <StatusDropDown
-                          rowId={row._id}
-                          status={row.status}
-                          openStatusRow={openStatusRow}
-                          setOpenStatusRow={setOpenStatusRow}
-                          statusOptions={statusOptions}
-                          handleStatusUpdate={handleStatusUpdate}
-                        />
-                      </TableCell>
-
-                      <TableCell className="whitespace-nowrap dark:text-gray-300">
-                        {row.clientSource}
-                      </TableCell>
-
-                      <TableCell className="whitespace-nowrap dark:text-gray-300">
-                        <div>
-                          <p className="flex items-center gap-1  dark:text-gray-300 font-semibold">
-                            <AtSign size={14} />
-                            {row.poc1.name.charAt(0).toUpperCase() +
-                              row.poc1.name.slice(1)}
-                          </p>
-                          <p className="flex items-center gap-1 text-gray-600 dark:text-gray-300 text-sm">
-                            <Mail size={14} />
-                            {row.poc1.email}
-                          </p>
-                          <p className="flex items-center gap-1 text-gray-600 dark:text-gray-300 text-sm">
-                            <Phone size={14} />
-                            {row.poc1.phone}
-                          </p>
-                        </div>
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap dark:text-gray-300">
-                        {formatDate(row.empanelmentDate)}
-                      </TableCell>
-
-                      <TableCell className="whitespace-nowrap dark:text-gray-300">
-                        {row.addedBy?.fullName || "-"}
-                      </TableCell>
-
-                      <TableCell className="whitespace-nowrap dark:text-gray-300">
-                        {new Date(row.createdAt).toLocaleString("en-IN", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap  dark:text-gray-200">
-                        <DateDisplay date={row.updatedAt} />
-                      </TableCell>
-
-                      {/* Action */}
-                      <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
-                        <div className="flex gap-2 items-center">
-                          <button
-                            className="text-white bg-dark px-1 py-1 rounded"
-                            onClick={() =>
-                              navigate(
-                                `/admin/clientmanagement/edit-client/${row._id}`
-                              )
-                            }
-                          >
-                            <Pencil size={18} />
-                          </button>
-                          <button
-                            className="text-white bg-[#1abe17] px-1 py-1 rounded"
-                            onClick={() =>
-                              navigate(
-                                `/admin/clientmanagement/view-client/${row._id}`
-                              )
-                            }
-                          >
-                            <Eye size={18} />
-                          </button>
-                          <button className="text-white bg-red-600 px-1 py-1 rounded">
-                            <Trash size={18} />
-                          </button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={12} className="py-10 text-center">
-                      <NoData title="No Clients Found" />
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </TableContainer>
-
-        <CommonPagination
-          total={pagination.total}
-          page={pagination.page}
-          limit={pagination.limit}
-          onPageChange={handleChangePage}
-          onLimitChange={handleChangeRowsPerPage}
-        />
+                  <div className="flex gap-2 mt-3">
+                    <button onClick={() => navigate(`/edit/${row._id}`)}>
+                      Edit
+                    </button>
+                    <button onClick={() => navigate(`/view/${row._id}`)}>
+                      View
+                    </button>
+                  </div>
+                </div>
+              )}
+            />
+          </>
+        ) : (
+          <TableLayout
+            loading={loading}
+            order={order}
+            orderBy={orderBy}
+            searchQuery={searchQuery}
+            handleSearchChange={handleSearchChange}
+            addNew="/admin/clientManagement/add-client"
+            title="Client"
+            pagination={pagination}
+            handleChangePage={handleChangePage}
+            handleChangeRowsPerPage={handleChangeRowsPerPage}
+            handleSort={handleSort}
+            sortedData={sortedData}
+            openStatusRow={openStatusRow}
+            setOpenStatusRow={setOpenStatusRow}
+            statusOptions={statusOptions}
+            handleStatusUpdate={handleStatusUpdate}
+            formatDate={formatDate}
+          />
+        )}
       </div>
     </>
   );

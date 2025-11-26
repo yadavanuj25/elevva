@@ -51,14 +51,37 @@ const ViewRequirement = () => {
       setLoading(false);
     }
   };
+  const getTabsColor = (s) => {
+    switch (s.toLowerCase()) {
+      case "open":
+      case "active":
+        return "bg-[#1abe17]";
 
-  // const stripHTML = (html) => {
-  //   if (!html) return "";
-  //   return html
-  //     .replace(/<[^>]+>/g, "")
-  //     .replace(/\s+/g, " ")
-  //     .trim();
-  // };
+      case "cancelled":
+      case "terminated":
+      case "banned":
+        return "bg-red-800";
+
+      case "in-active":
+      case "inactive":
+        return "bg-red-600";
+
+      case "on hold":
+      case "on_hold":
+      case "defaulter":
+        return "bg-[#f9b801]";
+
+      case "in progress":
+      case "in_progress":
+        return "bg-blue-500";
+
+      case "filled":
+        return "bg-orange-600";
+
+      default:
+        return "bg-gray-400";
+    }
+  };
 
   return (
     <>
@@ -106,7 +129,11 @@ const ViewRequirement = () => {
                   <p className="text-sm text-gray-700 dark:text-gray-400">
                     {requirement.techStack}
                   </p>
-                  <span className="inline-block mt-2 px-2 py-1 text-xs font-[500] text-white rounded-md bg-dark">
+                  <span
+                    className={`inline-block mt-2 px-2 py-1 text-xs font-[500] text-white rounded-md  ${getTabsColor(
+                      requirement.positionStatus
+                    )}`}
+                  >
                     {requirement.positionStatus}
                   </span>
                 </div>

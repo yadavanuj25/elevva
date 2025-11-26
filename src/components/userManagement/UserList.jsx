@@ -376,7 +376,7 @@ const UserList = () => {
                         >
                           <NoData
                             title="No Data Found"
-                            description="There are currently no users in the system."
+                            // description="There are currently no users in the system."
                           />
                         </TableCell>
                       </TableRow>

@@ -22,19 +22,12 @@ import NoData from "../ui/NoData";
 import { getClientById } from "../../services/clientServices";
 import ViewInfo from "../ui/ViewInfo";
 import ViewSection from "../ui/ViewSection";
-import ViewBlock from "../ui/ViewBlock";
-const IconButton = ({ title, icon }) => (
-  <Tippy content={title} placement="top" arrow={false} animation="fade">
-    <div className="px-2 py-1.5 bg-gray-600 text-white text-sm rounded-md cursor-pointer">
-      {icon}
-    </div>
-  </Tippy>
-);
+import RefreshButton from "../ui/tableComponents/RefreshButton";
+import ViewTabs from "../ui/viewComponents/ViewTabs";
 
 const ViewClient = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [client, setClient] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -53,6 +46,37 @@ const ViewClient = () => {
       setLoading(false);
     }
   };
+  const getTabsColor = (s) => {
+    switch (s.toLowerCase()) {
+      case "open":
+      case "active":
+        return "bg-[#1abe17]";
+
+      case "cancelled":
+      case "terminated":
+      case "banned":
+        return "bg-red-800";
+
+      case "in-active":
+      case "inactive":
+        return "bg-red-600";
+
+      case "on hold":
+      case "on_hold":
+      case "defaulter":
+        return "bg-[#f9b801]";
+
+      case "in progress":
+      case "in_progress":
+        return "bg-blue-500";
+
+      case "filled":
+        return "bg-orange-600";
+
+      default:
+        return "bg-gray-400";
+    }
+  };
 
   return (
     <>
@@ -68,16 +92,7 @@ const ViewClient = () => {
             <Spinner size={20} color="#3b82f6" />
           )}
         </div>
-        <button
-          className="flex items-center gap-2 "
-          onClick={() => fetchClientById()}
-        >
-          <ToolTip
-            title="Refresh"
-            placement="top"
-            icon={<RefreshCcw size={16} />}
-          />
-        </button>
+        <RefreshButton fetchData={fetchClientById} />
       </div>
 
       {/* MAIN CARD */}
@@ -102,8 +117,13 @@ const ViewClient = () => {
                   <p className="text-sm text-gray-700 dark:text-gray-400">
                     {client.clientCategory}
                   </p>
-                  <span className="inline-block mt-2 px-2 py-1 text-xs font-[500] text-white rounded-md bg-green-600">
-                    {client.status}
+                  <span
+                    className={`inline-block mt-2 px-2 py-1 text-xs font-[500] text-white rounded-md ${getTabsColor(
+                      client.status
+                    )}`}
+                  >
+                    {client.status.charAt(0).toUpperCase() +
+                      client.status.slice(1)}
                   </span>
                 </div>
               </div>
@@ -275,6 +295,7 @@ const ViewClient = () => {
                     />
                   </div>
                 </ViewSection>
+                <ViewTabs />
               </div>
             </div>
           </div>

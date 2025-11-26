@@ -183,30 +183,22 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       >
         {/* Header */}
         <div className="px-4 py-4 flex items-center justify-between border-b border-gray-300 dark:border-gray-600 flex-shrink-0">
-          {isOpen ? (
-            <div className="w-full flex items-center justify-between p-0 sm:p-0.5">
-              <Link
-                to="/"
-                className="text-lg  flex items-center gap-1 truncate text-dark dark:text-white"
-              >
-                <img src={logo} alt="" className="w-7" />
-                <span className="font-extrabold">Elevva CRM</span>
-              </Link>
+          <div className="w-full flex items-center justify-between p-0 sm:p-0.5">
+            <Link
+              to="/"
+              className="text-lg  flex items-center gap-1 truncate text-dark dark:text-white"
+            >
+              <img src={logo} alt="" className="w-7" />
+              {isOpen && <span className="font-extrabold">Elevva CRM</span>}
+            </Link>
 
-              <button
-                className="sm:hidden text-gray-600 dark:text-gray-300 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-                onClick={() => setIsOpen(false)}
-              >
-                <X size={20} />
-              </button>
-            </div>
-          ) : (
-            <div className="flex justify-center items-center w-full p-0 sm:p-[3px]">
-              <span className="text-lg font-bold text-dark dark:text-white">
-                <img src={logo} alt="logo" className="w-7" />
-              </span>
-            </div>
-          )}
+            <button
+              className="sm:hidden text-gray-600 dark:text-gray-300 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+              onClick={() => setIsOpen(false)}
+            >
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         {/* Navigation */}
@@ -214,7 +206,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           {navSections.map((section) => (
             <div key={section.section}>
               {isOpen && section.section && (
-                <h4 className="px-4 pb-2 text-[13px] font-medium  dark:text-gray-300 uppercase tracking-wide sticky top-0 bg-white dark:bg-darkBg z-10">
+                <h4 className="px-4 pb-2 text-[13px] font-medium  dark:text-gray-300 uppercase tracking-wide  bg-white dark:bg-darkBg z-10">
                   {section.section}
                 </h4>
               )}
