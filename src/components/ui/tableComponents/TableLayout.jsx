@@ -14,8 +14,6 @@ import {
 import { Pencil, AtSign, Eye, Trash, Mail, Phone } from "lucide-react";
 import Spinner from "../../loaders/Spinner";
 import NoData from "../NoData";
-import TableHeader from "./TableHeader";
-import CommonPagination from "./CommonPagination";
 import StatusDropDown from "../StatusDropDown";
 import DateDisplay from "../DateDisplay";
 
@@ -34,13 +32,6 @@ const TableLayout = ({
   loading = false,
   order,
   orderBy,
-  searchQuery,
-  handleSearchChange,
-  addNew,
-  title,
-  pagination,
-  handleChangePage,
-  handleChangeRowsPerPage,
   handleSort,
   sortedData,
   openStatusRow,
@@ -266,15 +257,6 @@ const TableLayout = ({
           </Table>
         </div>
       </TableContainer>
-
-      {/* Pagination */}
-      <CommonPagination
-        total={pagination.total}
-        page={pagination.page}
-        limit={pagination.limit}
-        onPageChange={handleChangePage}
-        onLimitChange={handleChangeRowsPerPage}
-      />
     </>
   );
 };

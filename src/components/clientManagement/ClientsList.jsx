@@ -1,40 +1,11 @@
 import React, { useState, useMemo, useEffect } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  Checkbox,
-} from "@mui/material";
-import { FaExternalLinkSquareAlt } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa6";
-import {
-  Pencil,
-  RefreshCcw,
-  Plus,
-  AtSign,
-  Eye,
-  Trash,
-  ChevronUp,
-  ChevronDown,
-  Mail,
-  Phone,
-  LayoutGrid,
-  List,
-} from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import Spinner from "../loaders/Spinner";
-import NoData from "../ui/NoData";
-import ToolTip from "../ui/ToolTip";
-import DateDisplay from "../ui/DateDisplay";
+import { LayoutGrid, List } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 import {
   getAllClients,
   updateClientStatus,
 } from "../../services/clientServices";
-import StatusDropDown from "../ui/StatusDropDown";
 import TableHeader from "../ui/tableComponents/TableHeader";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
 import Tabs from "../ui/tableComponents/Tabs";
@@ -99,27 +70,22 @@ const ClientList = () => {
       setLoading(false);
     }
   };
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
-
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
-
   const handleSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
-
   const handleChangePage = (e, newPage) => {
     setPagination((prev) => ({ ...prev, page: newPage + 1 }));
   };
-
   const handleChangeRowsPerPage = (e) => {
     setPagination((prev) => ({
       ...prev,
@@ -127,18 +93,6 @@ const ClientList = () => {
       page: 1,
     }));
   };
-
-  const getStickyClass = (columnId) => {
-    switch (columnId) {
-      case "action":
-        return "sticky right-0 z-20";
-      case "status1":
-        return "sticky right-[128px] ";
-      default:
-        return "";
-    }
-  };
-
   const formatDate = (date) => {
     if (!date) return "-";
     return new Date(date).toLocaleDateString("en-IN", {
@@ -161,7 +115,6 @@ const ClientList = () => {
     }
     return data;
   }, [clients, activeTab, searchQuery]);
-
   const sortedData = useMemo(() => {
     return [...filteredData].sort((a, b) => {
       const aVal = a[orderBy] ?? "";
@@ -171,7 +124,6 @@ const ClientList = () => {
         : bVal.localeCompare?.(aVal);
     });
   }, [filteredData, order, orderBy]);
-
   const handleStatusUpdate = async (id, newStatus) => {
     try {
       const payload = {
@@ -212,7 +164,7 @@ const ClientList = () => {
       <div className="flex justify-end gap-2 mb-3">
         <button
           onClick={() => setViewMode("list")}
-          className={`p-2 rounded border ${
+          className={`p-1 rounded border ${
             viewMode === "list" ? "bg-dark text-white" : "bg-gray-200"
           }`}
         >
@@ -221,7 +173,7 @@ const ClientList = () => {
 
         <button
           onClick={() => setViewMode("grid")}
-          className={`p-2 rounded border ${
+          className={`p-1 rounded border ${
             viewMode === "grid" ? "bg-dark text-white" : "bg-gray-200"
           }`}
         >
@@ -272,13 +224,6 @@ const ClientList = () => {
             loading={loading}
             order={order}
             orderBy={orderBy}
-            searchQuery={searchQuery}
-            handleSearchChange={handleSearchChange}
-            addNew="/admin/clientManagement/add-client"
-            title="Client"
-            pagination={pagination}
-            handleChangePage={handleChangePage}
-            handleChangeRowsPerPage={handleChangeRowsPerPage}
             handleSort={handleSort}
             sortedData={sortedData}
             openStatusRow={openStatusRow}
@@ -288,6 +233,13 @@ const ClientList = () => {
             formatDate={formatDate}
           />
         )}
+        <CommonPagination
+          total={pagination.total}
+          page={pagination.page}
+          limit={pagination.limit}
+          onPageChange={handleChangePage}
+          onLimitChange={handleChangeRowsPerPage}
+        />
       </div>
     </>
   );
