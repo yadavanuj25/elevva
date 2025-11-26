@@ -19,6 +19,7 @@ import NoData from "../ui/NoData";
 import ToolTip from "../ui/ToolTip";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
 import TableHeader from "../ui/tableComponents/TableHeader";
+import TableSkeleton from "../loaders/TableSkeleton";
 
 const RoleList = () => {
   const { token } = useAuth();
@@ -38,8 +39,8 @@ const RoleList = () => {
   }, []);
 
   const getAllRoles = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       setError("");
       const res = await fetch(
         "https://crm-backend-qbz0.onrender.com/api/roles",
@@ -105,14 +106,12 @@ const RoleList = () => {
     setSearchQuery(e.target.value);
   };
 
-  // 🔹 Handle sorting
   const handleSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
-  // 🔹 Handle checkbox selection
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = filteredData.map((n) => n.id);
@@ -137,7 +136,6 @@ const RoleList = () => {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  // 🔹 Search / filter
   const filteredData = useMemo(() => {
     let data = roleData;
     if (searchQuery.trim() !== "") {
@@ -151,7 +149,6 @@ const RoleList = () => {
     return data;
   }, [searchQuery, roleData]);
 
-  // 🔹 Sorting
   const sortedData = useMemo(() => {
     const sorted = [...filteredData].sort((a, b) => {
       const aValue = a[orderBy];
@@ -174,7 +171,6 @@ const RoleList = () => {
     return sorted;
   }, [filteredData, order, orderBy]);
 
-  // 🔹 Pagination
   const paginatedData = sortedData.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
@@ -275,14 +271,8 @@ const RoleList = () => {
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={12}>
-                        <div className="flex justify-center items-center h-[300px]">
-                          <Spinner
-                            size={50}
-                            color="#3b82f6"
-                            text="Loading..."
-                          />
-                        </div>
+                      <TableCell colSpan={12} className="text-center py-10">
+                        <TableSkeleton rows={6} />
                       </TableCell>
                     </TableRow>
                   ) : paginatedData.length > 0 ? (

@@ -13,6 +13,19 @@ import RefreshButton from "../ui/tableComponents/RefreshButton";
 import GridLayout from "../ui/tableComponents/GridLayout";
 import TableLayout from "../ui/tableComponents/TableLayout";
 
+const columns = [
+  { id: "clientName", label: "Client Name" },
+  { id: "clientCategory", label: "Category" },
+  { id: "status", label: "Status" },
+  { id: "clientSource", label: "Source" },
+  { id: "poc1", label: "POC" },
+  { id: "empanelmentDate", label: "Empanelment Date" },
+  { id: "addedBy", label: "Added By" },
+  { id: "createdAt", label: "Created Dtm" },
+  { id: "updatedAt", label: "Modified Dtm" },
+  { id: "action", label: "Action", sticky: true },
+];
+
 const ClientList = () => {
   const navigate = useNavigate();
   const [clients, setClients] = useState([]);
@@ -115,6 +128,7 @@ const ClientList = () => {
     }
     return data;
   }, [clients, activeTab, searchQuery]);
+
   const sortedData = useMemo(() => {
     return [...filteredData].sort((a, b) => {
       const aVal = a[orderBy] ?? "";
@@ -202,6 +216,7 @@ const ClientList = () => {
         ) : (
           <TableLayout
             loading={loading}
+            columns={columns}
             order={order}
             orderBy={orderBy}
             handleSort={handleSort}

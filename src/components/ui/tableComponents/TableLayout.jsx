@@ -31,6 +31,7 @@ const getStickyClass = (columnId) => {
 
 const TableLayout = ({
   loading = false,
+  columns,
   order,
   orderBy,
   handleSort,
@@ -59,21 +60,10 @@ const TableLayout = ({
                 </TableCell>
 
                 {/* Table Columns */}
-                {[
-                  { id: "clientName", label: "Client Name" },
-                  { id: "clientCategory", label: "Category" },
-                  { id: "status", label: "Status" },
-                  { id: "clientSource", label: "Source" },
-                  { id: "poc1", label: "POC" },
-                  { id: "empanelmentDate", label: "Empanelment Date" },
-                  { id: "addedBy", label: "Added By" },
-                  { id: "createdAt", label: "Created Dtm" },
-                  { id: "updatedAt", label: "Modified Dtm" },
-                  { id: "action", label: "Action", sticky: true },
-                ].map((col) => (
+                {columns.map((col) => (
                   <TableCell
                     key={col.id}
-                    className={`whitespace-nowrap font-bold text-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray 
+                    className={`whitespace-nowrap font-bold text-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray
                   ${col.sticky ? getStickyClass(col.id) : ""}`}
                   >
                     {col.id !== "action" ? (
@@ -104,8 +94,7 @@ const TableLayout = ({
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={12} className="text-center py-10">
-                    {/* <Spinner size={45} text="Loading clients..." /> */}
-                    <TableSkeleton rows={6} columns={8} />
+                    <TableSkeleton rows={6} />
                   </TableCell>
                 </TableRow>
               ) : sortedData.length > 0 ? (
@@ -114,12 +103,9 @@ const TableLayout = ({
                     key={row._id}
                     className="hover:bg-lightGray dark:hover:bg-darkGray"
                   >
-                    {/* Row Checkbox */}
                     <TableCell padding="checkbox">
                       <Checkbox color=" dark:text-white" />
                     </TableCell>
-
-                    {/* Client Name + Avatar */}
                     <TableCell className="whitespace-nowrap">
                       <div className="flex items-center gap-2">
                         {row.profileImage ? (
@@ -133,7 +119,6 @@ const TableLayout = ({
                             {row.clientName?.slice(0, 2).toUpperCase()}
                           </div>
                         )}
-
                         <div className="flex flex-col items-start gap-1">
                           <p className="flex items-center gap-1 dark:text-gray-300 font-semibold">
                             <AtSign size={14} />
@@ -143,13 +128,9 @@ const TableLayout = ({
                         </div>
                       </div>
                     </TableCell>
-
-                    {/* Category */}
                     <TableCell className="whitespace-nowrap dark:text-gray-300">
                       {row.clientCategory}
                     </TableCell>
-
-                    {/* Status */}
                     <TableCell
                       className={`relative whitespace-nowrap ${getStickyClass(
                         "status"
@@ -164,13 +145,9 @@ const TableLayout = ({
                         handleStatusUpdate={handleStatusUpdate}
                       />
                     </TableCell>
-
-                    {/* Source */}
                     <TableCell className="whitespace-nowrap dark:text-gray-300">
                       {row.clientSource}
                     </TableCell>
-
-                    {/* POC */}
                     <TableCell className="whitespace-nowrap dark:text-gray-300">
                       <div>
                         <p className="flex items-center gap-1 font-semibold dark:text-gray-300">
@@ -188,18 +165,12 @@ const TableLayout = ({
                         </p>
                       </div>
                     </TableCell>
-
-                    {/* Empanelment Date */}
                     <TableCell className="whitespace-nowrap dark:text-gray-300">
                       {formatDate(row.empanelmentDate)}
                     </TableCell>
-
-                    {/* Added By */}
                     <TableCell className="whitespace-nowrap dark:text-gray-300">
                       {row.addedBy?.fullName || "-"}
                     </TableCell>
-
-                    {/* Created Date */}
                     <TableCell className="whitespace-nowrap dark:text-gray-300">
                       {new Date(row.createdAt).toLocaleString("en-IN", {
                         day: "2-digit",
@@ -210,13 +181,9 @@ const TableLayout = ({
                         hour12: true,
                       })}
                     </TableCell>
-
-                    {/* Modified Date */}
                     <TableCell className="whitespace-nowrap dark:text-gray-200">
                       <DateDisplay date={row.updatedAt} />
                     </TableCell>
-
-                    {/* Actions */}
                     <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                       <div className="flex gap-2 items-center">
                         <button
@@ -264,3 +231,112 @@ const TableLayout = ({
 };
 
 export default TableLayout;
+
+// import React from "react";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableContainer,
+//   TableHead,
+//   TableRow,
+//   TableSortLabel,
+//   Checkbox,
+// } from "@mui/material";
+
+// import TableSkeleton from "../../loaders/TableSkeleton";
+// import NoData from "../NoData";
+
+// const getStickyClass = (columnId) => {
+//   switch (columnId) {
+//     case "action":
+//       return "sticky right-0 z-20 bg-[#f2f4f5] dark:bg-darkGray";
+//     case "status1":
+//       return "sticky right-[128px] bg-[#f2f4f5] dark:bg-darkGray";
+//     default:
+//       return "";
+//   }
+// };
+// const TableLayout = ({
+//   loading = false,
+//   columns = [],
+//   order,
+//   orderBy,
+//   handleSort,
+//   rows = [],
+//   renderRow,
+// }) => {
+//   return (
+//     <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600">
+//       <div className="overflow-x-auto">
+//         <Table className="min-w-full">
+//           <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-20">
+//             <TableRow>
+//               <TableCell
+//                 padding="checkbox"
+//                 className="bg-[#f2f4f5] dark:bg-darkGray"
+//               >
+//                 <Checkbox />
+//               </TableCell>
+//               {columns.map((col) => (
+//                 <TableCell
+//                   key={col.id}
+//                   className={`whitespace-nowrap font-bold text-darkBg dark:text-white
+//                   bg-[#f2f4f5] dark:bg-darkGray
+//                   ${col.sticky ? getStickyClass(col.id) : ""}`}
+//                 >
+//                   {col.sortable ? (
+//                     <TableSortLabel
+//                       active={orderBy === col.id}
+//                       direction={orderBy === col.id ? order : "asc"}
+//                       onClick={() => handleSort(col.id)}
+//                       sx={{
+//                         color: "inherit !important",
+//                         "& .MuiTableSortLabel-icon": {
+//                           opacity: 1,
+//                           color: "currentColor !important",
+//                         },
+//                       }}
+//                     >
+//                       <strong>{col.label}</strong>
+//                     </TableSortLabel>
+//                   ) : (
+//                     <strong>{col.label}</strong>
+//                   )}
+//                 </TableCell>
+//               ))}
+//             </TableRow>
+//           </TableHead>
+//           <TableBody>
+//             {loading ? (
+//               <TableRow>
+//                 <TableCell colSpan={columns.length + 1} className="py-10">
+//                   <TableSkeleton rows={6} columns={columns.length} />
+//                 </TableCell>
+//               </TableRow>
+//             ) : rows.length === 0 ? (
+//               <TableRow>
+//                 <TableCell colSpan={columns.length + 1} className="py-10">
+//                   <NoData title="No Data Found" />
+//                 </TableCell>
+//               </TableRow>
+//             ) : (
+//               rows.map((row) => (
+//                 <TableRow
+//                   key={row._id}
+//                   className="hover:bg-lightGray dark:hover:bg-darkGray"
+//                 >
+//                   <TableCell padding="checkbox">
+//                     <Checkbox />
+//                   </TableCell>
+//                   {renderRow(row)}
+//                 </TableRow>
+//               ))
+//             )}
+//           </TableBody>
+//         </Table>
+//       </div>
+//     </TableContainer>
+//   );
+// };
+// export default TableLayout;

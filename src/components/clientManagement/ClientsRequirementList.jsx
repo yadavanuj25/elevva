@@ -27,6 +27,7 @@ import Tabs from "../ui/tableComponents/Tabs";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
 import TableHeader from "../ui/tableComponents/TableHeader";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
+import TableSkeleton from "../loaders/TableSkeleton";
 
 const ClientsRequirementsList = () => {
   const navigate = useNavigate();
@@ -60,8 +61,8 @@ const ClientsRequirementsList = () => {
   }, [pagination.page, pagination.limit, searchQuery]);
 
   const fetchRequirements = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const data = await getAllRequirements(
         pagination.page,
         pagination.limit,
@@ -80,14 +81,13 @@ const ClientsRequirementsList = () => {
             ? allRequirements.length
             : allRequirements.filter((r) => r.positionStatus === status).length,
       }));
-
       setStatusTabs(tabsWithCounts);
-
       setPagination((prev) => ({
         ...prev,
         total: data.pagination?.total || 0,
         pages: data.pagination?.pages || 1,
       }));
+      setLoading(false);
     } catch (error) {
       setErrorMsg(`Error fetching clients: ${error}`);
     } finally {
@@ -344,8 +344,8 @@ const ClientsRequirementsList = () => {
               <TableBody>
                 {loading ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-10">
-                      <Spinner size={45} text="Loading clients..." />
+                    <TableCell colSpan={12} className="text-center py-10">
+                      <TableSkeleton rows={6}  />
                     </TableCell>
                   </TableRow>
                 ) : sortedData.length > 0 ? (

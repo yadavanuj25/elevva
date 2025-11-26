@@ -7,6 +7,7 @@ import SelectField from "../ui/SelectField";
 import * as yup from "yup";
 import { ArrowLeft, Upload, Save, Eye, EyeOff, User } from "lucide-react";
 import Spinner from "../loaders/Spinner";
+import FormSkeleton from "../loaders/FormSkeleton";
 import { getUserById } from "../../services/userServices";
 
 const schema = yup.object().shape({
@@ -57,7 +58,7 @@ export default function EditUser() {
   const [loadingCountries, setLoadingCountries] = useState(false);
   const [loadingRole, setLoadingRole] = useState(false);
   const [profilePreview, setProfilePreview] = useState(null);
-  const [loadingUser, setLoadingUser] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getAllRoles();
@@ -97,8 +98,8 @@ export default function EditUser() {
   };
 
   const fetchUserById = async (userId) => {
+    setLoading(true);
     try {
-      setLoadingUser(true);
       const data = await getUserById(userId);
       console.log(data);
       if (data?.user) {
@@ -122,12 +123,13 @@ export default function EditUser() {
           status: user.status || "active",
           sendWelcomeEmail: true,
         });
+        setLoading(false);
         if (user.profileImage) setProfilePreview(user.profileImage);
       }
     } catch (err) {
       setErrorMsg(err);
     } finally {
-      setLoadingUser(false);
+      setLoading(false);
     }
   };
 
@@ -284,192 +286,195 @@ export default function EditUser() {
         </div>
       )}
 
-      {loadingUser ? (
-        <div className="flex justify-center items-center min-h-[70vh]">
-          <Spinner size={60} color="#3b82f6" text="Loading..." />
-        </div>
-      ) : (
-        <form
-          onSubmit={handleSubmit}
-          autoComplete="off"
-          className="grid grid-cols-1 sm:grid-cols-[minmax(0,30%)_minmax(0,70%)] gap-5 items-stretch"
-        >
-          {/* User Profile */}
-          <div className="p-6 flex flex-col items-center gap-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
-            {/* Profile Image Upload */}
-            <div className="flex flex-col items-center  rounded-md space-y-2 col-span-2">
-              <div
-                className={`border rounded-full p-1 ${
-                  errors.profileImage
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                }`}
-              >
+      <div className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 ">
+        {loading ? (
+          <FormSkeleton rows={6} />
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            autoComplete="off"
+            className="grid grid-cols-1 sm:grid-cols-[minmax(0,30%)_minmax(0,70%)] gap-5 items-stretch"
+          >
+            {/* User Profile */}
+            <div className="p-6 flex flex-col items-center gap-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+              {/* Profile Image Upload */}
+              <div className="flex flex-col items-center  rounded-md space-y-2 col-span-2">
                 <div
-                  className={`w-28 h-28 bg-gray-100 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400`}
+                  className={`border rounded-full p-1 ${
+                    errors.profileImage
+                      ? "border-red-500"
+                      : "border-gray-300 dark:border-gray-600"
+                  }`}
                 >
-                  {profilePreview ? (
-                    <img
-                      src={profilePreview}
-                      alt="User Profile Preview"
-                      className="w-full h-full object-contain"
-                    />
-                  ) : (
-                    <User size={40} />
-                  )}
+                  <div
+                    className={`w-28 h-28 bg-gray-100 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400`}
+                  >
+                    {profilePreview ? (
+                      <img
+                        src={profilePreview}
+                        alt="User Profile Preview"
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <User size={40} />
+                    )}
+                  </div>
+                </div>
+
+                <label
+                  htmlFor="profileImage"
+                  className="flex gap-2 items-center cursor-pointer bg-dark text-white px-2 py-2 rounded text-sm"
+                >
+                  <Upload size={18} />
+                  Upload Image
+                </label>
+                <input
+                  id="profileImage"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleProfileImageChange}
+                />
+              </div>
+              <p
+                className={`text-center  ${
+                  errors.profileImage ? "text-red-600" : "text-[#605e5e]"
+                } mb-2`}
+              >
+                Allowed *.jpeg, *.jpg, *.png, <br /> max size of 1 Mb{" "}
+              </p>
+              {/* Status Toggle */}
+              <div className="flex justify-center">
+                <div className="flex items-center bg-gray-100 border border-gray-300 rounded-full p-1">
+                  <button
+                    type="button"
+                    onClick={() => handleStatusToggle("active")}
+                    className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
+                      formData.status === "active"
+                        ? "bg-green-600 text-white shadow-sm"
+                        : "text-gray-600 hover:bg-green-50"
+                    }`}
+                  >
+                    Active
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleStatusToggle("inactive")}
+                    className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
+                      formData.status === "inactive"
+                        ? "bg-red-600 text-white shadow-sm"
+                        : "text-gray-600 hover:bg-red-50"
+                    }`}
+                  >
+                    Inactive
+                  </button>
                 </div>
               </div>
-
-              <label
-                htmlFor="profileImage"
-                className="flex gap-2 items-center cursor-pointer bg-dark text-white px-2 py-2 rounded text-sm"
-              >
-                <Upload size={18} />
-                Upload Image
-              </label>
-              <input
-                id="profileImage"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleProfileImageChange}
-              />
             </div>
-            <p
-              className={`text-center  ${
-                errors.profileImage ? "text-red-600" : "text-[#605e5e]"
-              } mb-2`}
-            >
-              Allowed *.jpeg, *.jpg, *.png, <br /> max size of 1 Mb{" "}
-            </p>
-            {/* Status Toggle */}
-            <div className="flex justify-center">
-              <div className="flex items-center bg-gray-100 border border-gray-300 rounded-full p-1">
-                <button
-                  type="button"
-                  onClick={() => handleStatusToggle("active")}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
-                    formData.status === "active"
-                      ? "bg-green-600 text-white shadow-sm"
-                      : "text-gray-600 hover:bg-green-50"
-                  }`}
-                >
-                  Active
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleStatusToggle("inactive")}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
-                    formData.status === "inactive"
-                      ? "bg-red-600 text-white shadow-sm"
-                      : "text-gray-600 hover:bg-red-50"
-                  }`}
-                >
-                  Inactive
-                </button>
-              </div>
-            </div>
-          </div>
-          {/* User Form */}
-          <div className=" rounded-xl p-6 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                // id="user_name"
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                handleChange={handleChange}
-                className="col-span-2 md:col-span-1"
-                errors={errors}
-                labelName="Full Name"
-              />
-              <Input
-                // id="user_email"
-                type="text"
-                name="email"
-                value={formData.email}
-                handleChange={handleChange}
-                className="col-span-2 md:col-span-1"
-                errors={errors}
-                labelName="Email"
-              />
-
-              <div className="relative w-full">
+            {/* User Form */}
+            <div className=" rounded-xl p-6 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
-                  // id="user_password"
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
+                  // id="user_name"
+                  type="text"
+                  name="fullName"
+                  value={formData.fullName}
                   handleChange={handleChange}
+                  className="col-span-2 md:col-span-1"
                   errors={errors}
-                  labelName="Password"
-                  icon={
-                    <span
-                      onClick={togglePassword}
-                      className="cursor-pointer   z-20 relative"
-                    >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </span>
-                  }
+                  labelName="Full Name"
+                />
+                <Input
+                  // id="user_email"
+                  type="text"
+                  name="email"
+                  value={formData.email}
+                  handleChange={handleChange}
+                  className="col-span-2 md:col-span-1"
+                  errors={errors}
+                  labelName="Email"
                 />
 
-                <button
-                  type="button"
-                  onClick={generatePassword}
-                  className="absolute right-10 top-4 bg-light text-xs font-medium text-dark py-[2px] px-[6px] rounded whitespace-nowrap z-10"
-                >
-                  Generate
-                </button>
-              </div>
+                <div className="relative w-full">
+                  <Input
+                    // id="user_password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    handleChange={handleChange}
+                    errors={errors}
+                    labelName="Password"
+                    icon={
+                      <span
+                        onClick={togglePassword}
+                        className="cursor-pointer   z-20 relative"
+                      >
+                        {showPassword ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
+                      </span>
+                    }
+                  />
 
-              <Input
-                // id="user_phone"
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                handleChange={handleChange}
-                className="col-span-2 md:col-span-1"
-                errors={errors}
-                labelName="Phone"
-              />
-              <div className="relative w-full">
-                <select
-                  // id="user_role"
-                  name="role"
-                  value={formData.role._id}
-                  onChange={handleChange}
-                  className={`block w-full p-[14px] text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition 
+                  <button
+                    type="button"
+                    onClick={generatePassword}
+                    className="absolute right-10 top-4 bg-light text-xs font-medium text-dark py-[2px] px-[6px] rounded whitespace-nowrap z-10"
+                  >
+                    Generate
+                  </button>
+                </div>
+
+                <Input
+                  // id="user_phone"
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  handleChange={handleChange}
+                  className="col-span-2 md:col-span-1"
+                  errors={errors}
+                  labelName="Phone"
+                />
+                <div className="relative w-full">
+                  <select
+                    // id="user_role"
+                    name="role"
+                    value={formData.role._id}
+                    onChange={handleChange}
+                    className={`block w-full p-[14px] text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition 
       ${
         errors.role
           ? "border-red-500"
           : "border-gray-300 dark:border-gray-600 focus:border-black"
       }`}
-                >
-                  <option value="" disabled hidden>
-                    Select role
-                  </option>
-
-                  {loadingRole ? (
-                    <option disabled>
-                      {" "}
-                      <Spinner size={20} />{" "}
+                  >
+                    <option value="" disabled hidden>
+                      Select role
                     </option>
-                  ) : (
-                    allRoles.map((role) => (
-                      <option
-                        key={role._id}
-                        value={role._id}
-                        className="text-darkBg"
-                      >
-                        {role.name}
-                      </option>
-                    ))
-                  )}
-                </select>
 
-                <label
-                  // htmlFor="user_role"
-                  className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                    {loadingRole ? (
+                      <option disabled>
+                        {" "}
+                        <Spinner size={20} />{" "}
+                      </option>
+                    ) : (
+                      allRoles.map((role) => (
+                        <option
+                          key={role._id}
+                          value={role._id}
+                          className="text-darkBg"
+                        >
+                          {role.name}
+                        </option>
+                      ))
+                    )}
+                  </select>
+
+                  <label
+                    // htmlFor="user_role"
+                    className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
                   peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
                    peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
                    ${
@@ -477,80 +482,80 @@ export default function EditUser() {
                        ? "peer-focus:text-red-500"
                        : "peer-focus:text-darkBg dark:peer-focus:text-white"
                    } rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-                >
-                  Role
-                </label>
+                  >
+                    Role
+                  </label>
 
-                {errors.role && (
-                  <p className="text-red-500 text-sm mt-1">{errors.role}</p>
-                )}
-              </div>
-              <Input
-                // id="user_dob"
-                type="date"
-                name="dob"
-                value={formData.dob}
-                handleChange={handleChange}
-                className="col-span-2 md:col-span-1"
-                errors={errors}
-                labelName="DOB"
-              />
+                  {errors.role && (
+                    <p className="text-red-500 text-sm mt-1">{errors.role}</p>
+                  )}
+                </div>
+                <Input
+                  // id="user_dob"
+                  type="date"
+                  name="dob"
+                  value={formData.dob}
+                  handleChange={handleChange}
+                  className="col-span-2 md:col-span-1"
+                  errors={errors}
+                  labelName="DOB"
+                />
 
-              <SelectField
-                // id="country"
-                name="country"
-                label="Country"
-                value={formData.country}
-                handleChange={handleChange}
-                options={countries}
-                loading={loadingCountries}
-                error={errors.country}
-              />
+                <SelectField
+                  // id="country"
+                  name="country"
+                  label="Country"
+                  value={formData.country}
+                  handleChange={handleChange}
+                  options={countries}
+                  loading={loadingCountries}
+                  error={errors.country}
+                />
 
-              <SelectField
-                // id="state"
-                name="state"
-                label="Country"
-                value={formData.state}
-                handleChange={handleChange}
-                options={states}
-                error={errors.state}
-              />
-              <Input
-                // id="user_address"
-                type="text"
-                name="address"
-                value={formData.address}
-                handleChange={handleChange}
-                className=""
-                errors={errors}
-                labelName="Address"
-              />
-              <Input
-                // id="user_zipcode"
-                type="text"
-                name="zipcode"
-                value={formData.zipcode}
-                handleChange={handleChange}
-                className="col-span-2 md:col-span-1"
-                errors={errors}
-                labelName="Zip Code"
-              />
+                <SelectField
+                  // id="state"
+                  name="state"
+                  label="Country"
+                  value={formData.state}
+                  handleChange={handleChange}
+                  options={states}
+                  error={errors.state}
+                />
+                <Input
+                  // id="user_address"
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  handleChange={handleChange}
+                  className=""
+                  errors={errors}
+                  labelName="Address"
+                />
+                <Input
+                  // id="user_zipcode"
+                  type="text"
+                  name="zipcode"
+                  value={formData.zipcode}
+                  handleChange={handleChange}
+                  className="col-span-2 md:col-span-1"
+                  errors={errors}
+                  labelName="Zip Code"
+                />
 
-              <div className="col-span-2">
-                <div className="relative w-full">
-                  <textarea
-                    // id="user_about"
-                    name="about"
-                    rows={4}
-                    value={formData.about}
-                    onChange={handleChange}
-                    placeholder=" "
-                    className="block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition border-gray-300 dark:border-gray-600 focus:border-black"
-                  />
-                  <label
-                    // htmlFor="user_about"
-                    className={`absolute pointer-events-none font-medium text-sm text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                <div className="col-span-2">
+                  <div className="relative w-full">
+                    <textarea
+                      // id="user_about"
+                      name="about"
+                      rows={4}
+                      value={formData.about}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition border-gray-300 dark:border-gray-600 focus:border-black"
+                    />
+                    <label
+                      // htmlFor="user_about"
+                      className={`absolute pointer-events-none font-medium text-sm text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
         ${
           formData.about
             ? "top-2 scale-75 -translate-y-4 text-darkBg dark:text-white"
@@ -560,19 +565,24 @@ export default function EditUser() {
         peer-focus:text-darkBg dark:peer-focus:text-white
         rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
       `}
-                  >
-                    About
-                  </label>
+                    >
+                      About
+                    </label>
+                  </div>
+                </div>
+
+                <div className="col-span-2 flex justify-end">
+                  <Button
+                    type="submit"
+                    text="Update"
+                    icon={<Save size={18} />}
+                  />
                 </div>
               </div>
-
-              <div className="col-span-2 flex justify-end">
-                <Button type="submit" text="Update" icon={<Save size={18} />} />
-              </div>
             </div>
-          </div>
-        </form>
-      )}
+          </form>
+        )}
+      </div>
     </div>
   );
 }

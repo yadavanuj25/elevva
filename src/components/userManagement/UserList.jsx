@@ -10,7 +10,7 @@ import {
   TableSortLabel,
   Checkbox,
 } from "@mui/material";
-import { Pencil, Mail, AtSign } from "lucide-react";
+import { Pencil, Mail, AtSign, List, LayoutGrid } from "lucide-react";
 import DateDisplay from "../ui/DateDisplay";
 import Spinner from "../loaders/Spinner";
 import NoData from "../ui/NoData";
@@ -21,6 +21,7 @@ import Tabs from "../ui/tableComponents/Tabs";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
 import TableHeader from "../ui/tableComponents/TableHeader";
+import TableSkeleton from "../loaders/TableSkeleton";
 
 const UserList = () => {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const UserList = () => {
   const [loading, setLoading] = useState(false);
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const statusOptions = ["active", "inactive"];
+  const [viewMode, setViewMode] = useState("list");
 
   useEffect(() => {
     fetchUsers();
@@ -189,6 +191,7 @@ const UserList = () => {
             activeTab={activeTab}
             handleTabChange={handleTabChange}
           />
+
           <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
             {/* Search Box */}
 
@@ -266,14 +269,8 @@ const UserList = () => {
                   <TableBody>
                     {loading ? (
                       <TableRow>
-                        <TableCell colSpan={12}>
-                          <div className="flex justify-center items-center h-[300px]">
-                            <Spinner
-                              size={50}
-                              color="#3b82f6"
-                              text="Loading... "
-                            />
-                          </div>
+                        <TableCell colSpan={12} className="text-center py-10">
+                          <TableSkeleton rows={6} />
                         </TableCell>
                       </TableRow>
                     ) : sortedData.length > 0 ? (

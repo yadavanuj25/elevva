@@ -7,15 +7,14 @@ import { Save, ArrowLeft } from "lucide-react";
 import * as yup from "yup";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-
 import {
   addClientsRequirement,
   getActiveClients,
   getRequirementsOptions,
   getRequirementById,
 } from "../../services/clientServices";
-
 import BasicDatePicker from "../ui/BasicDatePicker";
+import FormSkeleton from "../loaders/FormSkeleton";
 
 const schema = yup.object().shape({
   client: yup.string().required("Client is required"),
@@ -35,11 +34,10 @@ const schema = yup.object().shape({
 });
 
 const EditClientRequirement = () => {
-  const { id } = useParams(); // requirement id
+  const { id } = useParams();
   const jobDescriptionRef = useRef("");
   const quillRef = useRef(null);
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     client: "",
     requirementPriority: "",
@@ -56,7 +54,6 @@ const EditClientRequirement = () => {
     otherInformation: "",
     expectedClosureDate: "",
   });
-
   const [activeClients, setActiveClients] = useState([]);
   const [options, setOptions] = useState({
     statuses: [],
@@ -66,32 +63,25 @@ const EditClientRequirement = () => {
     workModes: [],
     priorities: [],
   });
-
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  // 🔹 Fetch Data on Load (Clients + Options + Existing Requirement)
   useEffect(() => {
     fetchActiveClients();
     fetchAllOptions();
     fetchPrefill();
   }, []);
 
-  // ---------------------------
-  // Fetch Requirement for Prefill
-  // ---------------------------
   const fetchPrefill = async () => {
     if (!id) return;
-
+    setLoading(true);
     try {
       const res = await getRequirementById(id);
-
       if (res?.success && res?.requirement) {
         const r = res.requirement;
-
         jobDescriptionRef.current = r.jobDescription;
-
         setFormData({
           client: r.client || "",
           requirementPriority: r.requirementPriority || "",
@@ -108,32 +98,26 @@ const EditClientRequirement = () => {
           otherInformation: r.otherInformation || "",
           expectedClosureDate: r.expectedClosureDate?.split("T")[0] || "",
         });
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
       setErrorMsg("Failed to load existing requirement");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ---------------------------
-  // Fetch Dropdown Options
-  // ---------------------------
   const fetchAllOptions = async () => {
     try {
       const data = await getRequirementsOptions();
-
       if (!data?.options) return;
-
       setOptions(data.options);
     } catch (error) {
       console.error("Error fetching options:", error);
       setErrorMsg("Failed to load dropdown options");
     }
   };
-
-  // ---------------------------
-  // Fetch Clients
-  // ---------------------------
   const fetchActiveClients = async () => {
     try {
       const res = await getActiveClients();
@@ -144,16 +128,12 @@ const EditClientRequirement = () => {
       console.log(error);
     }
   };
-
-  // ---------------------------
   // Quill Image Handler
-  // ---------------------------
   const imageHandler = () => {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*";
     input.click();
-
     input.onchange = () => {
       const file = input.files[0];
       const reader = new FileReader();
@@ -165,7 +145,6 @@ const EditClientRequirement = () => {
       reader.readAsDataURL(file);
     };
   };
-
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -180,31 +159,20 @@ const EditClientRequirement = () => {
     }),
     []
   );
-
-  // ---------------------------
-  // Handle Input Change
-  // ---------------------------
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
-
   const handleQuillChange = (content, delta, source, editor) => {
     jobDescriptionRef.current = editor.getHTML();
   };
-
-  // ---------------------------
-  // Submit
-  // ---------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
     setSuccessMsg("");
-
     const finalData = {
       ...formData,
       jobDescription: jobDescriptionRef.current,
@@ -252,16 +220,17 @@ const EditClientRequirement = () => {
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6 border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 "
-      >
-        <div className="section">
-          <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
-            Basic Details
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* <SelectField
+      <div className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 ">
+        {loading ? (
+          <FormSkeleton rows={6} />
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6 ">
+            <div className="section">
+              <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+                Basic Details
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* <SelectField
               name="client"
               label="Client"
               value={formData.client}
@@ -270,31 +239,35 @@ const EditClientRequirement = () => {
               handleChange={handleChange}
               error={errors.client}
             /> */}
-            <div className="relative w-full">
-              <select
-                name="client"
-                value={formData.client}
-                onChange={handleChange}
-                className={`block w-full p-[14px] text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition 
+                <div className="relative w-full">
+                  <select
+                    name="client"
+                    value={formData.client}
+                    onChange={handleChange}
+                    className={`block w-full p-[14px] text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition 
             ${
               errors.client
                 ? "border-red-500"
                 : "border-gray-300 dark:border-gray-600 focus:border-black"
             } dark:text-white`}
-              >
-                <option value="" disabled hidden>
-                  --- Select ---
-                </option>
-                <>
-                  {activeClients.map((client, i) => (
-                    <option key={i} value={client._id} className="text-darkBg">
-                      {client.clientName}
+                  >
+                    <option value="" disabled hidden>
+                      --- Select ---
                     </option>
-                  ))}
-                </>
-              </select>
-              <label
-                className={`absolute pointer-events-none font-bold text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                    <>
+                      {activeClients.map((client, i) => (
+                        <option
+                          key={i}
+                          value={client._id}
+                          className="text-darkBg"
+                        >
+                          {client.clientName}
+                        </option>
+                      ))}
+                    </>
+                  </select>
+                  <label
+                    className={`absolute pointer-events-none font-bold text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
             peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
             peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
             ${
@@ -303,169 +276,171 @@ const EditClientRequirement = () => {
                 : "peer-focus:text-darkBg dark:peer-focus:text-white"
             }
             rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-              >
-                Client
-              </label>
+                  >
+                    Client
+                  </label>
 
-              {errors.client && (
-                <p className="text-red-500 text-sm mt-1">{errors.client}</p>
-              )}
+                  {errors.client && (
+                    <p className="text-red-500 text-sm mt-1">{errors.client}</p>
+                  )}
+                </div>
+                <SelectField
+                  name="requirementPriority"
+                  label="Requirement Priority"
+                  value={formData.requirementPriority}
+                  options={options.priorities}
+                  handleChange={handleChange}
+                  error={errors.requirementPriority}
+                />
+                <SelectField
+                  name="positionStatus"
+                  label="Position Status"
+                  value={formData.positionStatus}
+                  options={options.statuses}
+                  handleChange={handleChange}
+                  error={errors.positionStatus}
+                />
+                <SelectField
+                  name="experience"
+                  label="Experience"
+                  value={formData.experience}
+                  options={options.experiences}
+                  handleChange={handleChange}
+                  error={errors.experience}
+                />
+              </div>
             </div>
-            <SelectField
-              name="requirementPriority"
-              label="Requirement Priority"
-              value={formData.requirementPriority}
-              options={options.priorities}
-              handleChange={handleChange}
-              error={errors.requirementPriority}
-            />
-            <SelectField
-              name="positionStatus"
-              label="Position Status"
-              value={formData.positionStatus}
-              options={options.statuses}
-              handleChange={handleChange}
-              error={errors.positionStatus}
-            />
-            <SelectField
-              name="experience"
-              label="Experience"
-              value={formData.experience}
-              options={options.experiences}
-              handleChange={handleChange}
-              error={errors.experience}
-            />
-          </div>
-        </div>
 
-        <div className="section">
-          <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
-            Work Details
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <SelectField
-              name="workRole"
-              label="Work Role"
-              value={formData.workRole}
-              options={[
-                "Developer",
-                "Manager",
-                "Project Manager",
-                "Data Analyst",
-              ]}
-              handleChange={handleChange}
-              error={errors.workRole}
-            />
-            <SelectField
-              name="workMode"
-              label="Work Mode"
-              value={formData.workMode}
-              options={options.workModes}
-              handleChange={handleChange}
-              error={errors.workMode}
-            />
-            <Input
-              name="workLocation"
-              value={formData.workLocation}
-              handleChange={handleChange}
-              labelName="Work Location"
-              errors={errors}
-            />
-            <Input
-              name="totalPositions"
-              value={formData.totalPositions}
-              handleChange={handleChange}
-              labelName="Total Positions"
-              errors={errors}
-            />
-          </div>
-        </div>
+            <div className="section">
+              <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+                Work Details
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <SelectField
+                  name="workRole"
+                  label="Work Role"
+                  value={formData.workRole}
+                  options={[
+                    "Developer",
+                    "Manager",
+                    "Project Manager",
+                    "Data Analyst",
+                  ]}
+                  handleChange={handleChange}
+                  error={errors.workRole}
+                />
+                <SelectField
+                  name="workMode"
+                  label="Work Mode"
+                  value={formData.workMode}
+                  options={options.workModes}
+                  handleChange={handleChange}
+                  error={errors.workMode}
+                />
+                <Input
+                  name="workLocation"
+                  value={formData.workLocation}
+                  handleChange={handleChange}
+                  labelName="Work Location"
+                  errors={errors}
+                />
+                <Input
+                  name="totalPositions"
+                  value={formData.totalPositions}
+                  handleChange={handleChange}
+                  labelName="Total Positions"
+                  errors={errors}
+                />
+              </div>
+            </div>
 
-        <div className="section">
-          <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
-            Budget Details
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <SelectField
-              name="budgetType"
-              label="Budget Type"
-              value={formData.budgetType}
-              options={options.budgetTypes}
-              handleChange={handleChange}
-              error={errors.budgetType}
-            />
-            <SelectField
-              name="currency"
-              label="Currency"
-              value={formData.currency}
-              options={options.currencies}
-              handleChange={handleChange}
-              error={errors.currency}
-            />
-            <Input
-              name="budget"
-              value={formData.budget}
-              handleChange={handleChange}
-              labelName="Budget Amount"
-              errors={errors}
-            />
+            <div className="section">
+              <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+                Budget Details
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <SelectField
+                  name="budgetType"
+                  label="Budget Type"
+                  value={formData.budgetType}
+                  options={options.budgetTypes}
+                  handleChange={handleChange}
+                  error={errors.budgetType}
+                />
+                <SelectField
+                  name="currency"
+                  label="Currency"
+                  value={formData.currency}
+                  options={options.currencies}
+                  handleChange={handleChange}
+                  error={errors.currency}
+                />
+                <Input
+                  name="budget"
+                  value={formData.budget}
+                  handleChange={handleChange}
+                  labelName="Budget Amount"
+                  errors={errors}
+                />
 
-            <BasicDatePicker
-              name="expectedClosureDate"
-              value={formData.expectedClosureDate}
-              handleChange={handleChange}
-              labelName="Expected Closure Date"
-            />
-          </div>
-        </div>
-        <div className="col-span-2">
-          <Input
-            name="techStack"
-            value={formData.techStack}
-            handleChange={handleChange}
-            labelName="Tech Stack(Position)"
-            errors={errors}
-          />
-        </div>
+                <BasicDatePicker
+                  name="expectedClosureDate"
+                  value={formData.expectedClosureDate}
+                  handleChange={handleChange}
+                  labelName="Expected Closure Date"
+                />
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Input
+                name="techStack"
+                value={formData.techStack}
+                handleChange={handleChange}
+                labelName="Tech Stack(Position)"
+                errors={errors}
+              />
+            </div>
 
-        <div className="section">
-          <div className="col-span-2">
-            <label className="font-medium block mb-1">Job Description</label>
+            <div className="section">
+              <div className="col-span-2">
+                <label className="font-medium block mb-1">
+                  Job Description
+                </label>
 
-            <ReactQuill
-              ref={quillRef}
-              theme="snow"
-              value={jobDescriptionRef.current}
-              onChange={handleQuillChange}
-              modules={modules}
-              className=" bg-white dark:bg-darkBg dark:text-white "
-            />
-            {errors.jobDescription && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.jobDescription}
-              </p>
-            )}
-          </div>
-        </div>
+                <ReactQuill
+                  ref={quillRef}
+                  theme="snow"
+                  value={jobDescriptionRef.current}
+                  onChange={handleQuillChange}
+                  modules={modules}
+                  className=" bg-white dark:bg-darkBg dark:text-white "
+                />
+                {errors.jobDescription && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.jobDescription}
+                  </p>
+                )}
+              </div>
+            </div>
 
-        <div className="section">
-          <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
-            Other Information
-          </h3>
-          <div className="relative w-full">
-            <textarea
-              name="otherInformation"
-              rows={4}
-              value={formData.otherInformation}
-              onChange={handleChange}
-              placeholder=" "
-              className="block p-[14px] w-full text-sm bg-transparent rounded-md border  appearance-none focus:outline-none peer transition
+            <div className="section">
+              <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+                Other Information
+              </h3>
+              <div className="relative w-full">
+                <textarea
+                  name="otherInformation"
+                  rows={4}
+                  value={formData.otherInformation}
+                  onChange={handleChange}
+                  placeholder=" "
+                  className="block p-[14px] w-full text-sm bg-transparent rounded-md border  appearance-none focus:outline-none peer transition
 
           border-gray-300 dark:border-gray-600 focus:border-black"
-            />
-            <label
-              htmlFor="description"
-              className={`absolute pointer-events-none font-medium text-sm text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                />
+                <label
+                  htmlFor="description"
+                  className={`absolute pointer-events-none font-medium text-sm text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
         ${
           formData.otherInformation
             ? "top-2 scale-75 -translate-y-4 text-darkBg dark:text-white"
@@ -475,15 +450,17 @@ const EditClientRequirement = () => {
         peer-focus:text-darkBg dark:peer-focus:text-white
         rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
       `}
-            >
-              Other Information
-            </label>
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <Button type="submit" text="Save" icon={<Save size={18} />} />
-        </div>
-      </form>
+                >
+                  Other Information
+                </label>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <Button type="submit" text="Save" icon={<Save size={18} />} />
+            </div>
+          </form>
+        )}
+      </div>
     </>
   );
 };

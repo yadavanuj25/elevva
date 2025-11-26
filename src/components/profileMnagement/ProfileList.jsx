@@ -38,6 +38,7 @@ import Tabs from "../ui/tableComponents/Tabs";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
 import TableHeader from "../ui/tableComponents/TableHeader";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
+import TableSkeleton from "../loaders/TableSkeleton";
 
 const ProfileList = () => {
   const { token } = useAuth();
@@ -60,6 +61,8 @@ const ProfileList = () => {
   const [loading, setLoading] = useState(false);
   const [favourites, setFavourites] = useState([]);
   const [openStatusRow, setOpenStatusRow] = useState(null);
+  const [expandedRow, setExpandedRow] = useState(null);
+
   const statusOptions = ["Active", "In-active", "Banned", "Defaulter"];
   useEffect(() => {
     if (location.state?.successMsg) {
@@ -178,6 +181,30 @@ const ProfileList = () => {
       default:
         return "";
     }
+  };
+
+  const normalizeSkills = (skills) => {
+    if (!skills) return [];
+
+    if (Array.isArray(skills)) {
+      if (skills.length === 1 && typeof skills[0] === "string") {
+        return skills[0]
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+      }
+
+      return skills.map((s) => (typeof s === "string" ? s.trim() : s));
+    }
+
+    if (typeof skills === "string") {
+      return skills
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    return [];
   };
 
   const handleFavourite = (profileId) => {
@@ -318,14 +345,8 @@ const ProfileList = () => {
                   <TableBody>
                     {loading ? (
                       <TableRow>
-                        <TableCell colSpan={9}>
-                          <div className="flex justify-center items-center h-[300px]">
-                            <Spinner
-                              size={50}
-                              color="#3b82f6"
-                              text="Loading... "
-                            />
-                          </div>
+                        <TableCell colSpan={12} className="text-center py-10">
+                          <TableSkeleton rows={6} />
                         </TableCell>
                       </TableRow>
                     ) : sortedData.length > 0 ? (
@@ -405,17 +426,25 @@ const ProfileList = () => {
                             />
                           </TableCell>
                           <TableCell className="whitespace-nowrap dark:text-gray-300">
-                            <div className="flex flex-wrap gap-2">
-                              {item.skills.map((skill, index) => (
-                                <span
-                                  key={index}
-                                  className="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded-full"
-                                >
-                                  {skill.trim()}
-                                </span>
-                              ))}
-                            </div>
+                            {(() => {
+                              const skills = normalizeSkills(item.skills);
+
+                              // Split into chunks of 5
+                              const chunked = [];
+                              for (let i = 0; i < skills.length; i += 8) {
+                                chunked.push(skills.slice(i, i + 8));
+                              }
+
+                              return (
+                                <div className="flex flex-col gap-1">
+                                  {chunked.map((group, index) => (
+                                    <div key={index}>{group.join(", ")}</div>
+                                  ))}
+                                </div>
+                              );
+                            })()}
                           </TableCell>
+
                           <TableCell className="whitespace-nowrap  dark:text-gray-300">
                             {item.currentCompany}
                           </TableCell>
