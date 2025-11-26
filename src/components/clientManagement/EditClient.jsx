@@ -11,6 +11,7 @@ import {
   getClientById,
 } from "../../services/clientServices";
 import BasicDatePicker from "../ui/BasicDatePicker";
+import FormSkeleton from "../loaders/FormSkeleton";
 
 const EditClient = () => {
   const navigate = useNavigate();
@@ -31,7 +32,6 @@ const EditClient = () => {
     poc1: { name: "", email: "", phone: "", designation: "" },
     poc2: { name: "", email: "", phone: "", designation: "" },
   });
-
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
@@ -53,6 +53,7 @@ const EditClient = () => {
   };
 
   const fetchSingleClient = async () => {
+    setLoading(true);
     try {
       const res = await getClientById(id);
       if (res?.success) {
@@ -86,9 +87,12 @@ const EditClient = () => {
             designation: c.poc2?.designation || "",
           },
         });
+        setLoading(false);
       }
     } catch (error) {
       setErrorMsg("Failed to fetch client details");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,7 +139,6 @@ const EditClient = () => {
     <div>
       <div className="mb-4 flex justify-between items-center">
         <h2 className="text-2xl font-semibold">Edit Client</h2>
-
         <button
           onClick={() => navigate("/admin/clientManagement/clients")}
           className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:opacity-90 transition"
@@ -155,203 +158,201 @@ const EditClient = () => {
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6 border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 shadow-"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <BasicDatePicker
-            name="empanelmentDate"
-            value={formData.empanelmentDate}
-            labelName="Empanelment Date"
-            handleChange={handleChange}
-            errors={errors}
-          />
+      <div className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 ">
+        {loading ? (
+          <FormSkeleton rows={6} />
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6 ">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <BasicDatePicker
+                name="empanelmentDate"
+                value={formData.empanelmentDate}
+                labelName="Empanelment Date"
+                handleChange={handleChange}
+                errors={errors}
+              />
 
-          <Input
-            labelName="Client Name"
-            name="clientName"
-            value={formData.clientName}
-            handleChange={handleChange}
-            errors={errors}
-          />
+              <Input
+                labelName="Client Name"
+                name="clientName"
+                value={formData.clientName}
+                handleChange={handleChange}
+                errors={errors}
+              />
 
-          <SelectField
-            label="Client Category"
-            name="clientCategory"
-            value={formData.clientCategory}
-            handleChange={handleChange}
-            options={options.clientCategories}
-            error={errors.clientCategory}
-          />
+              <SelectField
+                label="Client Category"
+                name="clientCategory"
+                value={formData.clientCategory}
+                handleChange={handleChange}
+                options={options.clientCategories}
+                error={errors.clientCategory}
+              />
 
-          <SelectField
-            label="Client Source"
-            name="clientSource"
-            value={formData.clientSource}
-            handleChange={handleChange}
-            options={options.clientSources}
-            error={errors.clientSource}
-          />
+              <SelectField
+                label="Client Source"
+                name="clientSource"
+                value={formData.clientSource}
+                handleChange={handleChange}
+                options={options.clientSources}
+                error={errors.clientSource}
+              />
 
-          <Input
-            labelName="Website"
-            name="website"
-            value={formData.website}
-            handleChange={handleChange}
-            errors={errors}
-          />
+              <Input
+                labelName="Website"
+                name="website"
+                value={formData.website}
+                handleChange={handleChange}
+                errors={errors}
+              />
 
-          <SelectField
-            label="Company Size"
-            name="companySize"
-            value={formData.companySize}
-            handleChange={handleChange}
-            options={options.companySizes}
-            error={errors.companySize}
-          />
+              <SelectField
+                label="Company Size"
+                name="companySize"
+                value={formData.companySize}
+                handleChange={handleChange}
+                options={options.companySizes}
+                error={errors.companySize}
+              />
 
-          <Input
-            labelName="Headquarter Address"
-            name="headquarterAddress"
-            value={formData.headquarterAddress}
-            handleChange={handleChange}
-            errors={errors}
-          />
+              <Input
+                labelName="Headquarter Address"
+                name="headquarterAddress"
+                value={formData.headquarterAddress}
+                handleChange={handleChange}
+                errors={errors}
+              />
 
-          <Input
-            labelName="Branch Address"
-            name="branchAddress"
-            value={formData.branchAddress}
-            handleChange={handleChange}
-            errors={errors}
-          />
+              <Input
+                labelName="Branch Address"
+                name="branchAddress"
+                value={formData.branchAddress}
+                handleChange={handleChange}
+                errors={errors}
+              />
 
-          <div className="relative w-full">
-            <textarea
-              name="aboutVendor"
-              rows={2}
-              value={formData.aboutVendor}
-              onChange={handleChange}
-              placeholder=" "
-              className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
+              <div className="relative w-full">
+                <textarea
+                  name="aboutVendor"
+                  rows={2}
+                  value={formData.aboutVendor}
+                  onChange={handleChange}
+                  placeholder=" "
+                  className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
                   border-gray-300 dark:border-gray-600 focus:border-black`}
-            />
-            <label
-              className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                />
+                <label
+                  className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
                       peer-placeholder-shown:scale-100  peer-placeholder-shown:top-1/2
                       peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
                       peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2
                       rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-            >
-              About Vendor
-            </label>
-          </div>
-          <div className="relative w-full">
-            <textarea
-              name="instructions"
-              rows={2}
-              value={formData.instructions}
-              onChange={handleChange}
-              placeholder=" "
-              className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
+                >
+                  About Vendor
+                </label>
+              </div>
+              <div className="relative w-full">
+                <textarea
+                  name="instructions"
+                  rows={2}
+                  value={formData.instructions}
+                  onChange={handleChange}
+                  placeholder=" "
+                  className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
                   border-gray-300 dark:border-gray-600 focus:border-black`}
-            />
-            <label
-              className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                />
+                <label
+                  className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
                       peer-placeholder-shown:scale-100  peer-placeholder-shown:top-1/2
                       peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
                       peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2
                       rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-            >
-              Instructions
-            </label>
-          </div>
+                >
+                  Instructions
+                </label>
+              </div>
 
-          <SelectField
-            label="Status"
-            name="status"
-            value={formData.status}
-            handleChange={handleChange}
-            options={options.statuses}
-            error={errors.status}
-          />
-        </div>
-
-        {/* ------------------- POC 1 ------------------- */}
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-2">POC - 1</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              labelName="Name"
-              name="poc1.name"
-              value={formData.poc1.name}
-              handleChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              labelName="Email"
-              name="poc1.email"
-              value={formData.poc1.email}
-              handleChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              labelName="Phone"
-              name="poc1.phone"
-              value={formData.poc1.phone}
-              handleChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              labelName="Designation"
-              name="poc1.designation"
-              value={formData.poc1.designation}
-              handleChange={handleChange}
-              errors={errors}
-            />
-          </div>
-        </div>
-
-        {/* ------------------- POC 2 ------------------- */}
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-2">POC - 2</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              labelName="Name"
-              name="poc2.name"
-              value={formData.poc2.name}
-              handleChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              labelName="Email"
-              name="poc2.email"
-              value={formData.poc2.email}
-              handleChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              labelName="Phone"
-              name="poc2.phone"
-              value={formData.poc2.phone}
-              handleChange={handleChange}
-              errors={errors}
-            />
-            <Input
-              labelName="Designation"
-              name="poc2.designation"
-              value={formData.poc2.designation}
-              handleChange={handleChange}
-              errors={errors}
-            />
-          </div>
-        </div>
-
-        <div className="flex justify-end">
-          <Button type="submit" text="Save" icon={<Save size={18} />} />
-        </div>
-      </form>
+              <SelectField
+                label="Status"
+                name="status"
+                value={formData.status}
+                handleChange={handleChange}
+                options={options.statuses}
+                error={errors.status}
+              />
+            </div>
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2">POC - 1</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  labelName="Name"
+                  name="poc1.name"
+                  value={formData.poc1.name}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+                <Input
+                  labelName="Email"
+                  name="poc1.email"
+                  value={formData.poc1.email}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+                <Input
+                  labelName="Phone"
+                  name="poc1.phone"
+                  value={formData.poc1.phone}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+                <Input
+                  labelName="Designation"
+                  name="poc1.designation"
+                  value={formData.poc1.designation}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+              </div>
+            </div>
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2">POC - 2</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  labelName="Name"
+                  name="poc2.name"
+                  value={formData.poc2.name}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+                <Input
+                  labelName="Email"
+                  name="poc2.email"
+                  value={formData.poc2.email}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+                <Input
+                  labelName="Phone"
+                  name="poc2.phone"
+                  value={formData.poc2.phone}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+                <Input
+                  labelName="Designation"
+                  name="poc2.designation"
+                  value={formData.poc2.designation}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <Button type="submit" text="Save" icon={<Save size={18} />} />
+            </div>
+          </form>
+        )}
+      </div>
     </div>
   );
 };

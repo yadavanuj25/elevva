@@ -16,6 +16,7 @@ import Spinner from "../../loaders/Spinner";
 import NoData from "../NoData";
 import StatusDropDown from "../StatusDropDown";
 import DateDisplay from "../DateDisplay";
+import TableSkeleton from "../../loaders/TableSkeleton";
 
 const getStickyClass = (columnId) => {
   switch (columnId) {
@@ -103,7 +104,8 @@ const TableLayout = ({
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={12} className="text-center py-10">
-                    <Spinner size={45} text="Loading clients..." />
+                    {/* <Spinner size={45} text="Loading clients..." /> */}
+                    <TableSkeleton rows={6} columns={8} />
                   </TableCell>
                 </TableRow>
               ) : sortedData.length > 0 ? (
