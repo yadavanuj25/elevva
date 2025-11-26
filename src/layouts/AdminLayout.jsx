@@ -22,7 +22,7 @@ const AdminLayout = () => {
 
       <div
         className={`flex flex-col flex-1 transition-all duration-300 ${
-          sidebarOpen ? "md:ml-64" : "md:ml-20"
+          sidebarOpen ? "md:ml-60" : "md:ml-16"
         }`}
       >
         <Header toggleSidebar={toggleSidebar} isOpen={sidebarOpen} />

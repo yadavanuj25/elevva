@@ -3,17 +3,14 @@ import { ChevronDown, Settings, LayoutDashboard, X, Users } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { AiOutlineDashboard } from "react-icons/ai";
-
 import logo from "../../assets/logo/logo.png";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { modules = [], role } = useAuth();
   const location = useLocation();
   const [openDropdowns, setOpenDropdowns] = useState({});
-
   const dashboardPath =
     role === "admin" ? "/admin/super-dashboard" : "/dashboard";
-
   const navSections = [
     {
       section: "MAIN MENU",
@@ -178,8 +175,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       <aside
         id="app-sidebar"
         className={`fixed top-0 left-0 h-screen bg-white dark:bg-darkBg border-r-none sm:border-r border-gray-300 dark:border-gray-600 shadow-sm z-50 transition-all duration-300 transform
-        ${isOpen ? "translate-x-0 w-64" : "-translate-x-full w-64"}
-        md:translate-x-0 ${isOpen ? "md:w-64" : "md:w-20"} flex flex-col`}
+        ${isOpen ? "translate-x-0 w-60" : "-translate-x-full w-60"}
+        md:translate-x-0 ${isOpen ? "md:w-60" : "md:w-16"} flex flex-col`}
       >
         {/* Header */}
         <div className="px-4 py-4 flex items-center justify-between border-b border-gray-300 dark:border-gray-600 flex-shrink-0">

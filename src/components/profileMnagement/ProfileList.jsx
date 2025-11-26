@@ -428,8 +428,6 @@ const ProfileList = () => {
                           <TableCell className="whitespace-nowrap dark:text-gray-300">
                             {(() => {
                               const skills = normalizeSkills(item.skills);
-
-                              // Split into chunks of 5
                               const chunked = [];
                               for (let i = 0; i < skills.length; i += 8) {
                                 chunked.push(skills.slice(i, i + 8));
