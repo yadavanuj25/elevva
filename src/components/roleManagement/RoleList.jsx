@@ -226,7 +226,7 @@ const RoleList = () => {
                       className="bg-[#f2f4f5] dark:bg-darkGray"
                     >
                       <Checkbox
-                        color="primary"
+                        color=" dark:text-white"
                         indeterminate={
                           numSelected > 0 && numSelected < rowCount
                         }
@@ -299,7 +299,7 @@ const RoleList = () => {
                         >
                           <TableCell padding="checkbox">
                             <Checkbox
-                              color="primary"
+                              color=" dark:text-white"
                               checked={isItemSelected}
                               onChange={() => handleCheckboxClick(row.id)}
                             />

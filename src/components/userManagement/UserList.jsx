@@ -222,7 +222,7 @@ const UserList = () => {
                         padding="checkbox"
                         className="bg-[#f2f4f5] dark:bg-darkGray"
                       >
-                        <Checkbox color="primary" />
+                        <Checkbox color=" dark:text-white" />
                       </TableCell>
                       {[
                         { id: "fullName", label: "Name" },
@@ -286,7 +286,7 @@ const UserList = () => {
                             padding="checkbox"
                             className="whitespace-nowrap  "
                           >
-                            <Checkbox color="primary" />
+                            <Checkbox color=" dark:text-white" />
                           </TableCell>
                           <TableCell className="whitespace-nowrap ">
                             <div className="flex items-center gap-2">

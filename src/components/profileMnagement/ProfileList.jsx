@@ -265,7 +265,7 @@ const ProfileList = () => {
                         padding="checkbox"
                         className="bg-[#f2f4f5] dark:bg-darkGray"
                       >
-                        <Checkbox color="primary" />
+                        <Checkbox color=" dark:text-white" />
                       </TableCell>
                       {[
                         { id: "favourite", label: "" },
@@ -339,7 +339,7 @@ const ProfileList = () => {
                             padding="checkbox"
                           >
                             <div className="flex flex-col items-center justify-center  ">
-                              <Checkbox color="primary" />
+                              <Checkbox color=" dark:text-white" />
 
                               {item.profileCode && (
                                 <small className="text-dark bg-light  p-[1px]   border-b border-dark  rounded font-[500]">
@@ -394,9 +394,7 @@ const ProfileList = () => {
                           <TableCell className="whitespace-nowrap  dark:text-gray-300">
                             {item.techStack}
                           </TableCell>
-                          <TableCell
-                            className={`relative whitespace-nowrap  dark:bg-darkGray`}
-                          >
+                          <TableCell className={`relative whitespace-nowrap  `}>
                             <StatusDropDown
                               rowId={item._id}
                               status={item.status}

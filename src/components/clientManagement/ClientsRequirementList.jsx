@@ -293,7 +293,7 @@ const ClientsRequirementsList = () => {
                     className=" bg-[#f2f4f5] dark:bg-darkGray"
                   >
                     <div className="flex items-center justify-center">
-                      <Checkbox color="primary" />
+                      <Checkbox color=" dark:text-white" />
                     </div>
                   </TableCell>
                   {[
@@ -359,7 +359,7 @@ const ClientsRequirementsList = () => {
                         padding="checkbox"
                       >
                         <div className="flex flex-col items-center justify-center ">
-                          <Checkbox color="primary" />
+                          <Checkbox color=" dark:text-white" />
                           {row.requirementCode && (
                             <small className="text-dark bg-light  p-[1px]   border-b border-dark  rounded font-[500]">
                               #{row.requirementCode}
@@ -392,7 +392,7 @@ const ClientsRequirementsList = () => {
                       <TableCell className="whitespace-nowrap dark:text-gray-300">
                         {row.techStack}
                       </TableCell>
-                      <TableCell className="relative whitespace-nowrap dark:bg-darkGray">
+                      <TableCell className="relative whitespace-nowrap">
                         <StatusDropDown
                           rowId={row._id}
                           status={row.positionStatus}

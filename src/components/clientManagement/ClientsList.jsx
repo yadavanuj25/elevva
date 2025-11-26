@@ -187,7 +187,6 @@ const ClientList = () => {
           addLink="/admin/clientManagement/add-client"
           title="Client"
         />
-
         {/* Pagination */}
         <CommonPagination
           total={pagination.total}
@@ -198,26 +197,7 @@ const ClientList = () => {
         />
         {viewMode === "grid" ? (
           <>
-            <GridLayout
-              data={sortedData}
-              loading={loading}
-              renderCard={(row) => (
-                <div className="p-4 border rounded-xl bg-white shadow">
-                  <h3 className="font-semibold text-lg">{row.clientName}</h3>
-                  <p>Status: {row.status}</p>
-                  <p>Email: {row.poc1.email}</p>
-
-                  <div className="flex gap-2 mt-3">
-                    <button onClick={() => navigate(`/edit/${row._id}`)}>
-                      Edit
-                    </button>
-                    <button onClick={() => navigate(`/view/${row._id}`)}>
-                      View
-                    </button>
-                  </div>
-                </div>
-              )}
-            />
+            <GridLayout data={sortedData} loading={loading} />
           </>
         ) : (
           <TableLayout

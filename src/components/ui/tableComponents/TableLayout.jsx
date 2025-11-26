@@ -54,7 +54,7 @@ const TableLayout = ({
                   padding="checkbox"
                   className="bg-[#f2f4f5] dark:bg-darkGray"
                 >
-                  <Checkbox color="primary" />
+                  <Checkbox color=" dark:text-white" />
                 </TableCell>
 
                 {/* Table Columns */}
@@ -114,7 +114,7 @@ const TableLayout = ({
                   >
                     {/* Row Checkbox */}
                     <TableCell padding="checkbox">
-                      <Checkbox color="primary" />
+                      <Checkbox color=" dark:text-white" />
                     </TableCell>
 
                     {/* Client Name + Avatar */}
