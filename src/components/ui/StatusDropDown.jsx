@@ -43,7 +43,7 @@ const StatusDropDown = ({
   setOpenStatusRow,
   statusOptions,
   handleStatusUpdate,
-  position = { left: "-left-4", top: "top-[50px]" },
+  position = { left: "-left-4", top: "top-[30px]" },
 }) => {
   const dropdownRef = useRef(null);
   const s = status?.toLowerCase() || "";
@@ -107,7 +107,7 @@ const StatusDropDown = ({
               <div
                 key={option}
                 onClick={() => handleStatusUpdate(rowId, option)}
-                className="px-4 py-3 text-sm cursor-pointer flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+                className="px-2 py-1.5 text-sm cursor-pointer flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
               >
                 <span className="font-medium">
                   {option.charAt(0).toUpperCase() + option.slice(1)}
