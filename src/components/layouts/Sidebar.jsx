@@ -119,7 +119,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       (m) => m.name?.toLowerCase() === moduleName.toLowerCase()
     );
   };
-
   // Check if user has access to a submodule
   const hasSubmoduleAccess = (parent, submodule) => {
     if (role === "superadmin") return true;
@@ -211,15 +210,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               {section.items.map((item) => {
                 if (!hasAccess(item.module)) return null;
                 const isActive = isParentActive(item);
-
                 return (
                   <li key={item.module} className="pr-2">
                     {!item.submodules ? (
                       <Link
                         to={item.path}
-                        onClick={() =>
-                          window.innerWidth < 768 && setIsOpen(false)
-                        }
+                        onClick={() => {
+                          if (!isOpen) setIsOpen(true);
+                          if (window.innerWidth < 768) setIsOpen(false);
+                        }}
                         className={`sidebar-link flex items-center px-4 py-1.5 mt-1 ${
                           isOpen ? "justify-between" : "justify-center"
                         } ${isActive ? "active" : ""}`}
@@ -277,10 +276,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                   <li key={sub.module}>
                                     <Link
                                       to={sub.path}
-                                      onClick={() =>
-                                        window.innerWidth < 768 &&
-                                        setIsOpen(false)
-                                      }
+                                      onClick={() => {
+                                        if (!isOpen) setIsOpen(true);
+                                        if (window.innerWidth < 768)
+                                          setIsOpen(false);
+                                      }}
                                       className={`group sidebar-sublink flex items-center gap-5 px-2 py-1.5 font-medium rounded-md transition ${
                                         isActiveSubMenu
                                           ? "active text-dark dark:text-white"
