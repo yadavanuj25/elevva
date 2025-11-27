@@ -14,19 +14,18 @@ import { Plus, Pencil, RefreshCcw } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import DateDisplay from "../ui/DateDisplay";
-import Spinner from "../loaders/Spinner";
 import NoData from "../ui/NoData";
-import ToolTip from "../ui/ToolTip";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
 import TableHeader from "../ui/tableComponents/TableHeader";
 import TableSkeleton from "../loaders/TableSkeleton";
+import { useMessage } from "../../auth/MessageContext";
 
 const RoleList = () => {
   const { token } = useAuth();
+  const { successMsg, errorMsg, showError } = useMessage();
   const navigate = useNavigate();
   const [roleData, setRoleData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("role_name");
   const [page, setPage] = useState(0);
@@ -41,7 +40,6 @@ const RoleList = () => {
   const getAllRoles = async () => {
     setLoading(true);
     try {
-      setError("");
       const res = await fetch(
         "https://crm-backend-qbz0.onrender.com/api/roles",
         {
@@ -56,11 +54,11 @@ const RoleList = () => {
       try {
         data = await res.json();
       } catch {
-        throw new Error("Invalid JSON response from server");
+        showError("Invalid JSON response from server");
       }
 
       if (!res.ok) {
-        throw new Error(data?.message || `Failed with status ${res.status}`);
+        showError(data?.message || `Failed with status ${res.status}`);
       }
       const rolesArray = Array.isArray(data?.data)
         ? data.data
@@ -94,9 +92,8 @@ const RoleList = () => {
           : "-",
       }));
       setRoleData(formatted);
-      console.log(" Parsed Roles:", formatted);
     } catch (err) {
-      setError(err.message || "Failed to load roles");
+      showError(err.message || "Failed to load roles");
     } finally {
       setLoading(false);
     }
@@ -187,6 +184,25 @@ const RoleList = () => {
         </h2>
         <RefreshButton fetchData={getAllRoles} />
       </div>
+      {errorMsg && (
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
+        </div>
+      )}
+
+      {successMsg && (
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
+               bg-green-50 text-green-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-green-600 font-semibold">✔ </span>
+          <p className="text-sm">{successMsg}</p>
+        </div>
+      )}
       <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
         {/* Search and Add */}
         <TableHeader

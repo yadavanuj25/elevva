@@ -73,8 +73,8 @@ const EditProfile = () => {
   });
   const [skillInput, setSkillInput] = useState("");
   const [errors, setErrors] = useState({});
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, showSuccess] = useState("");
+  const [errorMsg, showError] = useState("");
   const [loading, setLoading] = useState(false);
   const [resumePreview, setResumePreview] = useState(null);
   const [remoteResumeInfo, setRemoteResumeInfo] = useState(null);
@@ -87,7 +87,7 @@ const EditProfile = () => {
         try {
           URL.revokeObjectURL(resumePreview.url);
         } catch (e) {
-          setErrorMsg(e);
+          showError(e);
         }
       }
     };
@@ -168,11 +168,11 @@ const EditProfile = () => {
         }
         setLoading(false);
       } else {
-        setErrorMsg("Profile not found");
+        showError("Profile not found");
       }
     } catch (err) {
       console.error("Error fetching profile:", err);
-      setErrorMsg("Failed to fetch profile.");
+      showError("Failed to fetch profile.");
     } finally {
       setLoading(false);
     }
@@ -291,17 +291,15 @@ const EditProfile = () => {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSuccessMsg("");
-    setErrorMsg("");
+    showSuccess("");
+    showError("");
     setLoading(true);
-
     try {
       const validated = {
         ...formData,
         skills: Array.isArray(formData.skills) ? formData.skills : [],
       };
       await schema.validate(validated, { abortEarly: false });
-
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (key === "skills" && Array.isArray(value)) {
@@ -320,11 +318,8 @@ const EditProfile = () => {
       }
 
       const result = await updateProfile(id, formDataToSend);
-      setSuccessMsg(result.message || "Profile updated successfully!");
-      navigate("/admin/profilemanagement/profiles", {
-        state: { successMsg: "Profile updated successfully!" },
-        replace: true,
-      });
+      showSuccess(result.message || "Profile updated successfully!");
+      navigate("/admin/profilemanagement/profiles");
     } catch (err) {
       if (err.name === "ValidationError") {
         const validationErrors = {};
@@ -333,8 +328,7 @@ const EditProfile = () => {
         });
         setErrors(validationErrors);
       } else {
-        console.error("Update Error:", err);
-        setErrorMsg(
+        showError(
           err.message || "Something went wrong while updating profile."
         );
       }
@@ -359,15 +353,15 @@ const EditProfile = () => {
       </div>
 
       {errorMsg && (
-        <div className="mb-4 p-2 bg-red-100 text-center text-red-700 rounded">
-          {errorMsg}
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
         </div>
       )}
-      {successMsg && (
-        <div className="mb-4 p-2 bg-green-400 text-center text-md font-semibold text-white rounded">
-          {successMsg}
-        </div>
-      )}
+
       <div className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 ">
         {loading ? (
           <FormSkeleton rows={6} />

@@ -1,7 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { LayoutGrid, List } from "lucide-react";
-
-import { toast } from "react-toastify";
 import {
   getAllClients,
   updateClientStatus,
@@ -14,6 +12,7 @@ import GridLayout from "../ui/tableComponents/GridLayout";
 import TableLayout from "../ui/tableComponents/TableLayout";
 import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
+import { useMessage } from "../../auth/MessageContext";
 
 const columns = [
   { id: "clientName", label: "Client Name" },
@@ -29,6 +28,7 @@ const columns = [
 ];
 
 const ClientList = () => {
+  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const [clients, setClients] = useState([]);
   const [activeTab, setActiveTab] = useState("All");
   const [pagination, setPagination] = useState({
@@ -42,7 +42,6 @@ const ClientList = () => {
   const [orderBy, setOrderBy] = useState("clients.createdAt");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
   const statusOptions = ["active", "inactive", "on_hold", "terminated"];
@@ -80,7 +79,7 @@ const ClientList = () => {
         pages: data.pagination?.pages || 1,
       }));
     } catch (error) {
-      setErrorMsg(`Error fetching clients: ${error}`);
+      showError(`Error fetching clients: ${error}`);
     } finally {
       setLoading(false);
     }
@@ -169,12 +168,26 @@ const ClientList = () => {
         <h2 className="text-2xl font-semibold">All Clients</h2>
         <RefreshButton fetchData={fetchClients} />
       </div>
-
       {errorMsg && (
-        <div className="mb-4 p-2 text-red-600 bg-red-100 rounded">
-          {errorMsg}
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
         </div>
       )}
+
+      {successMsg && (
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
+               bg-green-50 text-green-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-green-600 font-semibold">✔ </span>
+          <p className="text-sm">{successMsg}</p>
+        </div>
+      )}
+
       {/* Tabs */}
       <Tabs
         statusTabs={statusTabs}

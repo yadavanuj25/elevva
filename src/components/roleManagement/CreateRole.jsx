@@ -3,8 +3,8 @@ import { ArrowLeft, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import * as yup from "yup";
-import { div } from "framer-motion/client";
 import Input from "../ui/Input";
+import { useMessage } from "../../auth/MessageContext";
 
 // Validation Schema
 const schema = yup.object().shape({
@@ -17,6 +17,7 @@ const schema = yup.object().shape({
 
 const CreateRole = () => {
   const { token } = useAuth();
+  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -38,7 +39,7 @@ const CreateRole = () => {
       await schema.validate(formData, { abortEarly: false });
       setLoading(true);
       if (!token) {
-        console.log("No token found. Please log in again.");
+        showError("No token found. Please log in again.");
         return;
       }
       const payload = {
@@ -59,11 +60,12 @@ const CreateRole = () => {
       );
       if (!res.ok) {
         const errorData = await res.json();
-        console.error("Error response:", errorData);
+        showError("Error response:", errorData);
         return;
       }
       const data = await res.json();
       navigate(`/admin/rolemanagement/edit-roles/${data.role._id}`);
+      showSuccess(data.message);
     } catch (error) {
       if (error.inner) {
         const validationErrors = {};
@@ -72,7 +74,7 @@ const CreateRole = () => {
         });
         setErrors(validationErrors);
       } else {
-        console.error("Error creating role:", error);
+        showError(error || "Error while creating role");
       }
     } finally {
       setLoading(false);
@@ -90,6 +92,15 @@ const CreateRole = () => {
           <ArrowLeft size={16} /> Back
         </button>
       </div>
+      {errorMsg && (
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
+        </div>
+      )}
       <div className="mx-auto bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-xl p-6 ">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

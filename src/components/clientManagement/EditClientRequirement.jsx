@@ -15,6 +15,7 @@ import {
 } from "../../services/clientServices";
 import BasicDatePicker from "../ui/BasicDatePicker";
 import FormSkeleton from "../loaders/FormSkeleton";
+import { useMessage } from "../../auth/MessageContext";
 
 const schema = yup.object().shape({
   client: yup.string().required("Client is required"),
@@ -35,6 +36,7 @@ const schema = yup.object().shape({
 
 const EditClientRequirement = () => {
   const { id } = useParams();
+  const { errorMsg, showSuccess, showError } = useMessage();
   const jobDescriptionRef = useRef("");
   const quillRef = useRef(null);
   const navigate = useNavigate();
@@ -65,8 +67,6 @@ const EditClientRequirement = () => {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
 
   useEffect(() => {
     fetchActiveClients();
@@ -102,7 +102,7 @@ const EditClientRequirement = () => {
       }
     } catch (error) {
       console.log(error);
-      setErrorMsg("Failed to load existing requirement");
+      showError("Failed to load existing requirement");
     } finally {
       setLoading(false);
     }
@@ -115,7 +115,7 @@ const EditClientRequirement = () => {
       setOptions(data.options);
     } catch (error) {
       console.error("Error fetching options:", error);
-      setErrorMsg("Failed to load dropdown options");
+      showError("Failed to load dropdown options");
     }
   };
   const fetchActiveClients = async () => {
@@ -171,8 +171,8 @@ const EditClientRequirement = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMsg("");
-    setSuccessMsg("");
+    showError("");
+    showSuccess("");
     const finalData = {
       ...formData,
       jobDescription: jobDescriptionRef.current,
@@ -184,9 +184,10 @@ const EditClientRequirement = () => {
       const res = await addClientsRequirement(finalData);
 
       if (res?.success) {
-        setSuccessMsg("Requirement updated successfully!");
+        showSuccess("Requirement updated successfully!");
+        navigate("/admin/clientmanagement/clientrequirements");
       } else {
-        setErrorMsg(res?.message || "Failed to update requirement");
+        showError(res?.message || "Failed to update requirement");
       }
     } catch (err) {
       const validationErrors = {};
@@ -210,13 +211,12 @@ const EditClientRequirement = () => {
       </div>
 
       {errorMsg && (
-        <div className="mb-4 p-2 bg-red-100 text-center text-red-700 rounded">
-          {errorMsg}
-        </div>
-      )}
-      {successMsg && (
-        <div className="mb-4 p-2 bg-green-500 text-center text-md font-semibold text-white rounded">
-          {successMsg}
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
         </div>
       )}
 

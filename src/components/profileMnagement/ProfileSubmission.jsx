@@ -7,6 +7,7 @@ import Input from "../ui/Input";
 import SelectField from "../ui/SelectField";
 import { useAuth } from "../../auth/AuthContext";
 import { addProfile } from "../../services/profileServices";
+import { useMessage } from "../../auth/MessageContext";
 
 const schema = yup.object().shape({
   resume: yup
@@ -47,7 +48,7 @@ const schema = yup.object().shape({
 });
 
 const ProfileSubmission = () => {
-  const { token } = useAuth();
+  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -73,8 +74,6 @@ const ProfileSubmission = () => {
   });
   const [skillInput, setSkillInput] = useState("");
   const [errors, setErrors] = useState({});
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSkillKeyDown = (e) => {
@@ -183,8 +182,8 @@ const ProfileSubmission = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSuccessMsg("");
-    setErrorMsg("");
+    showSuccess("");
+    showError("");
     try {
       await schema.validate(formData, { abortEarly: false });
       setLoading(true);
@@ -199,9 +198,9 @@ const ProfileSubmission = () => {
       const response = await addProfile(formDataToSend);
       console.log(response);
       if (!response.success) {
-        setErrorMsg(response.message);
+        showError(response.message);
       } else {
-        setSuccessMsg(response.message);
+        showSuccess(response.message);
         setFormData({
           resume: null,
           fullName: "",
@@ -230,7 +229,7 @@ const ProfileSubmission = () => {
         err.inner.forEach((e) => (validationErrors[e.path] = e.message));
         setErrors(validationErrors);
       } else {
-        setErrorMsg({
+        showError({
           api: err.message || "Failed to submit profile. Please try again.",
         });
       }
@@ -251,13 +250,12 @@ const ProfileSubmission = () => {
         </button>
       </div>
       {errorMsg && (
-        <div className="mb-4 p-2 bg-red-100 text-center text-red-700 rounded">
-          {errorMsg}
-        </div>
-      )}
-      {successMsg && (
-        <div className="mb-4 p-2 bg-green-400 text-center text-md font-semibold  text-white rounded">
-          {successMsg}
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
         </div>
       )}
       <form

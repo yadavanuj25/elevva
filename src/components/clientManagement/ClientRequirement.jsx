@@ -13,16 +13,7 @@ import {
   getRequirementsOptions,
 } from "../../services/clientServices";
 import BasicDatePicker from "../ui/BasicDatePicker";
-
-const techOptions = [
-  "React.js",
-  "Node.js",
-  "MongoDB",
-  "Express.js",
-  "Angular",
-  "Vue",
-  "Next.js",
-];
+import { useMessage } from "../../auth/MessageContext";
 
 const schema = yup.object().shape({
   client: yup.string().required("Client is required"),
@@ -42,6 +33,7 @@ const schema = yup.object().shape({
 });
 
 const ClientRequirement = () => {
+  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const jobDescriptionRef = useRef("");
   const quillRef = useRef(null);
   const navigate = useNavigate();
@@ -72,8 +64,6 @@ const ClientRequirement = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
 
   useEffect(() => {
     fetchActiveClients();
@@ -92,7 +82,7 @@ const ClientRequirement = () => {
       setOptions(data.options);
     } catch (error) {
       console.error("Error fetching options:", error);
-      setErrorMsg("Failed to load dropdown options");
+      showError("Failed to load dropdown options");
     }
   };
 
@@ -100,9 +90,6 @@ const ClientRequirement = () => {
     try {
       const res = await getActiveClients();
       const activeList = res.clients.filter((c) => c.status === "active");
-      const activeStatusList = activeList.map((client) => client._id);
-      console.log("Filtered Active Clients:", activeList);
-
       setActiveClients(activeList);
     } catch (error) {
       console.log(error);
@@ -177,15 +164,6 @@ const ClientRequirement = () => {
     }));
   };
 
-  // const toggleTechStack = (tech) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     techStack: prev.techStack.includes(tech)
-  //       ? prev.techStack.filter((t) => t !== tech)
-  //       : [...prev.techStack, tech],
-  //   }));
-  // };
-
   const handleQuillChange = (content, delta, source, editor) => {
     jobDescriptionRef.current = editor.getHTML();
     setErrors((prev) => ({ ...prev, jobDescription: "" }));
@@ -194,8 +172,8 @@ const ClientRequirement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setErrorMsg("");
-    setSuccessMsg("");
+    showError("");
+    showSuccess("");
     const finalData = {
       ...formData,
       jobDescription: jobDescriptionRef.current,
@@ -203,8 +181,12 @@ const ClientRequirement = () => {
     try {
       await schema.validate(finalData, { abortEarly: false });
       const res = await addClientsRequirement(finalData);
-      if (res?.success) setSuccessMsg(res.message);
-      else setErrorMsg(res?.message || "Failed to add client requirements");
+      if (res?.success) {
+        showSuccess(res.message);
+        navigate("/admin/clientmanagement/clientrequirements");
+      } else {
+        showError(res?.message || "Failed to add client requirements");
+      }
     } catch (err) {
       if (err?.inner && Array.isArray(err.inner)) {
         const newErrors = {};
@@ -214,7 +196,7 @@ const ClientRequirement = () => {
         });
         setErrors(newErrors);
       } else {
-        setErrorMsg("Validation error");
+        showError("Validation error");
       }
     }
   };
@@ -232,13 +214,12 @@ const ClientRequirement = () => {
       </div>
 
       {errorMsg && (
-        <div className="mb-4 p-2 bg-red-100 text-center text-red-700 rounded">
-          {errorMsg}
-        </div>
-      )}
-      {successMsg && (
-        <div className="mb-4 p-2 bg-green-500 text-center text-md font-semibold text-white rounded">
-          {successMsg}
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
         </div>
       )}
 

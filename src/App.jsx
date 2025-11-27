@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,7 +32,7 @@ import EditClientRequirement from "./components/clientManagement/EditClientRequi
 
 const App = () => {
   return (
-    <>
+    <div>
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -284,7 +284,7 @@ const App = () => {
           />
         </Route>
       </Routes>
-    </>
+    </div>
   );
 };
 

@@ -30,8 +30,10 @@ import CommonPagination from "../ui/tableComponents/CommonPagination";
 import TableSkeleton from "../loaders/TableSkeleton";
 import ErrorToast from "../ui/toaster/ErrorToast";
 import SuccessToast from "../ui/toaster/SuccessToast";
+import { useMessage } from "../../auth/MessageContext";
 
 const ClientsRequirementsList = () => {
+  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
   const [clients, setClients] = useState([]);
   const [requirements, setRequirements] = useState([]);
@@ -47,7 +49,6 @@ const ClientsRequirementsList = () => {
   const [orderBy, setOrderBy] = useState("requirements.createdAt");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   const [statusLoading, setStatusLoading] = useState(null);
   const [openStatusRow, setOpenStatusRow] = useState(null);
 
@@ -93,7 +94,7 @@ const ClientsRequirementsList = () => {
       }));
       setLoading(false);
     } catch (error) {
-      setErrorMsg(`Error fetching clients: ${error}`);
+      showError(`Error fetching clients: ${error}`);
     } finally {
       setLoading(false);
     }
@@ -119,7 +120,7 @@ const ClientsRequirementsList = () => {
         pages: data.pagination?.pages || 1,
       }));
     } catch (error) {
-      setErrorMsg(`Error fetching clients: ${error}`);
+      showError(`Error fetching clients: ${error}`);
     } finally {
       setLoading(false);
     }
@@ -258,8 +259,22 @@ const ClientsRequirementsList = () => {
       </div>
 
       {errorMsg && (
-        <div className="mb-4 p-2 text-red-600 bg-red-100 rounded">
-          {errorMsg}
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
+        </div>
+      )}
+
+      {successMsg && (
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
+               bg-green-50 text-green-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-green-600 font-semibold">✔ </span>
+          <p className="text-sm">{successMsg}</p>
         </div>
       )}
       {/* Tabs */}

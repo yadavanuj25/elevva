@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { ArrowLeft, Upload, Save, Eye, EyeOff, User } from "lucide-react";
 import Spinner from "../loaders/Spinner";
 import { createUser } from "../../services/userServices";
+import { useMessage } from "../../auth/MessageContext";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Name is required"),
@@ -43,6 +44,7 @@ const schema = yup.object().shape({
     ),
 });
 export default function UserManagement() {
+  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
   const { token } = useAuth();
   const [formData, setFormData] = useState({
@@ -65,8 +67,7 @@ export default function UserManagement() {
   const [allRoles, setAllRoles] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [fullCountryData, setFullCountryData] = useState([]);
@@ -208,79 +209,12 @@ export default function UserManagement() {
   const handleStatusToggle = (status) => {
     setFormData((prev) => ({ ...prev, status }));
   };
-  // Handle form submit
-  // const handleCreateUser = async (e) => {
-  //   e.preventDefault();
-  //   setErrors({});
-  //   setErrorMsg("");
-  //   setSuccessMsg("");
-  //   try {
-  //     await schema.validate(formData, { abortEarly: false });
-  //     const payload = {
-  //       fullName: formData.fullName,
-  //       email: formData.email,
-  //       password: formData.password,
-  //       phone: formData.phone,
-  //       role: formData.role,
-  //       dob: formData.dob,
-  //       country: formData.country,
-  //       state: formData.state,
-  //       address: formData.address,
-  //       zipcode: formData.zipcode,
-  //       status: formData.status,
-  //       about: formData.about,
-  //       sendWelcomeEmail: formData.sendWelcomeEmail,
-  //     };
-  //     const res = await fetch(
-  //       "https://crm-backend-qbz0.onrender.com/api/auth/register",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify(payload),
-  //       }
-  //     );
-  //     const data = await res.json();
-  //     if (!res.ok) {
-  //       throw new Error(data.message || "Failed to register user");
-  //     }
-  //     setSuccessMsg("User registered successfully!");
-  //     setFormData({
-  //       fullName: "",
-  //       email: "",
-  //       password: "",
-  //       phone: "",
-  //       dob: "",
-  //       address: "",
-  //       country: "",
-  //       state: "",
-  //       zipcode: "",
-  //       role: "",
-  //       about: "",
-  //       profileImage: null,
-  //       status: "active",
-  //       sendWelcomeEmail: true,
-  //     });
-  //     setProfilePreview(null);
-  //     setStates([]);
-  //   } catch (err) {
-  //     if (err.inner) {
-  //       const validationErrors = {};
-  //       err.inner.forEach((e) => (validationErrors[e.path] = e.message));
-  //       setErrors(validationErrors);
-  //     } else {
-  //       setErrorMsg(err.message);
-  //     }
-  //   }
-  // };
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
     setErrors({});
-    setErrorMsg("");
-    setSuccessMsg("");
+    showError("");
+    showSuccess("");
     try {
       await schema.validate(formData, { abortEarly: false });
       const payload = {
@@ -300,9 +234,9 @@ export default function UserManagement() {
       };
       const res = await createUser(payload);
       if (res?.success) {
-        setSuccessMsg("User registered successfully!");
+        showSuccess("User registered successfully!");
       } else {
-        setErrorMsg(res.message);
+        showError(res.message);
       }
       setFormData({
         fullName: "",
@@ -329,7 +263,7 @@ export default function UserManagement() {
         err.inner.forEach((e) => (validationErrors[e.path] = e.message));
         setErrors(validationErrors);
       } else {
-        setErrorMsg(err.message);
+        showError(err.message);
       }
     }
   };
@@ -361,13 +295,12 @@ export default function UserManagement() {
       </div>
 
       {errorMsg && (
-        <div className="mb-4 p-2 bg-red-100 text-center text-red-700 rounded">
-          {errorMsg}
-        </div>
-      )}
-      {successMsg && (
-        <div className="mb-4 p-2 bg-lightBottelGreen text-center text-bottelGreen rounded">
-          {successMsg}
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
         </div>
       )}
 

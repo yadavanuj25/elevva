@@ -6,6 +6,7 @@ import * as yup from "yup";
 import Button from "../ui/Button";
 import FormSkeleton from "../loaders/FormSkeleton";
 import TableSkeleton from "../loaders/TableSkeleton";
+import { useMessage } from "../../auth/MessageContext";
 
 const schema = yup.object().shape({
   name: yup.string().trim().required("Role name is required"),
@@ -18,6 +19,7 @@ const schema = yup.object().shape({
 
 const EditRole = () => {
   const { id } = useParams();
+  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [role, setRole] = useState({ name: "", description: "" });
@@ -25,8 +27,6 @@ const EditRole = () => {
   const [permissions, setPermissions] = useState([]);
   const [selected, setSelected] = useState({});
   const [loading, setLoading] = useState(false);
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     const fetchRole = async () => {
@@ -155,18 +155,15 @@ const EditRole = () => {
 
   const handleSave = async () => {
     setLoading(true);
-    setErrorMsg("");
-    setSuccessMsg("");
+    showError("");
+    showSuccess("");
 
     try {
       await schema.validate(role, { abortEarly: false });
-
-      // ✅ Collect selected permissions
       const selectedPermissions = [];
       permissions.forEach((perm) => {
         const mod = selected[perm.resource];
         if (!mod) return;
-
         if (mod.manage && perm.action === "manage") {
           selectedPermissions.push(perm._id);
         } else if (!mod.manage && mod[perm.action]) {
@@ -195,12 +192,12 @@ const EditRole = () => {
 
       const data = await res.json();
       if (!res.ok) {
-        setErrorMsg(data?.message || "Failed to update role.");
+        showError(data?.message || "Failed to update role.");
         return;
       }
 
-      setSuccessMsg("Role updated successfully!");
-      // setTimeout(() => navigate("/admin/rolemanagement/roles"), 1500);
+      showSuccess("Role updated successfully!");
+      navigate("/admin/rolemanagement/roles");
     } catch (error) {
       if (error.inner) {
         const validationErrors = {};
@@ -214,8 +211,8 @@ const EditRole = () => {
     } finally {
       setLoading(false);
       setTimeout(() => {
-        setSuccessMsg("");
-        setErrorMsg("");
+        showSuccess("");
+        showError("");
       }, 6000);
     }
   };
@@ -237,13 +234,12 @@ const EditRole = () => {
       </div>
       <div className="space-y-6">
         {errorMsg && (
-          <div className="mb-4 p-2 bg-red-100 text-center text-red-700 rounded">
-            {errorMsg}
-          </div>
-        )}
-        {successMsg && (
-          <div className="mb-4 p-2 bg-green-100 text-center text-green-700 rounded">
-            {successMsg}
+          <div
+            className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+          >
+            <span className="text-red-600 font-semibold">⚠ </span>
+            <p className="text-sm">{errorMsg}</p>
           </div>
         )}
 

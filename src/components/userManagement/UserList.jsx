@@ -24,9 +24,11 @@ import TableHeader from "../ui/tableComponents/TableHeader";
 import TableSkeleton from "../loaders/TableSkeleton";
 import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
+import { useMessage } from "../../auth/MessageContext";
 
 const UserList = () => {
   const navigate = useNavigate();
+  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const [allUsers, setAllUsers] = useState([]);
   const [pagination, setPagination] = useState({
     total: 0,
@@ -39,7 +41,6 @@ const UserList = () => {
   const [orderBy, setOrderBy] = useState("users.createdAt");
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
@@ -79,7 +80,7 @@ const UserList = () => {
         pages: data.pagination?.pages || 1,
       }));
     } catch (error) {
-      setErrorMsg(`"Errors  when fetching users" || ${error}`);
+      showError(`"Errors  when fetching users" || ${error}`);
     } finally {
       setLoading(false);
     }
@@ -187,8 +188,22 @@ const UserList = () => {
         </div>
         <div>
           {errorMsg && (
-            <div className="mb-4 p-2 bg-red-100 text-center text-red-700 rounded">
-              {errorMsg}
+            <div
+              className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+            >
+              <span className="text-red-600 font-semibold">⚠ </span>
+              <p className="text-sm">{errorMsg}</p>
+            </div>
+          )}
+
+          {successMsg && (
+            <div
+              className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
+               bg-green-50 text-green-700 shadow-sm animate-slideDown"
+            >
+              <span className="text-green-600 font-semibold">✔ </span>
+              <p className="text-sm">{successMsg}</p>
             </div>
           )}
 

@@ -7,6 +7,7 @@ import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 import { addClients, getAllOptions } from "../../services/clientServices";
 import BasicDatePicker from "../ui/BasicDatePicker";
+import { useMessage } from "../../auth/MessageContext";
 
 const schema = yup.object().shape({
   empanelmentDate: yup
@@ -56,6 +57,7 @@ const schema = yup.object().shape({
 
 const AddClient = () => {
   const navigate = useNavigate();
+  const { errorMsg, showSuccess, showError } = useMessage();
   const [formData, setFormData] = useState({
     empanelmentDate: new Date().toISOString().split("T")[0],
     clientName: "",
@@ -75,8 +77,6 @@ const AddClient = () => {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
@@ -85,12 +85,11 @@ const AddClient = () => {
 
   const fetchOptions = async () => {
     setLoading(true);
-    setErrorMsg("");
     try {
       const res = await getAllOptions();
       setOptions(res?.options || []);
     } catch (error) {
-      setErrorMsg(`"Failed to load options" || ${error}`);
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -141,8 +140,7 @@ const AddClient = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSuccessMsg("");
-    setErrorMsg("");
+
     try {
       const cleanedPoc2 = Object.fromEntries(
         Object.entries(formData.poc2).map(([k, v]) => [
@@ -175,10 +173,10 @@ const AddClient = () => {
 
       const res = await addClients(payload);
       if (res?.success) {
-        setSuccessMsg(res.message);
+        showSuccess(res.message || "Client added successfully");
         navigate("/admin/clientmanagement/clients");
       } else {
-        setErrorMsg(res?.message || "Failed to add client");
+        showError(res?.message || "Failed to add client");
       }
     } catch (err) {
       console.error("validation error", err);
@@ -190,7 +188,7 @@ const AddClient = () => {
         });
         setErrors(newErrors);
       } else {
-        setErrorMsg("Validation error");
+        showError("Validation error");
       }
     } finally {
       setLoading(false);
@@ -208,14 +206,14 @@ const AddClient = () => {
           <ArrowLeft size={16} /> Back
         </button>
       </div>
+
       {errorMsg && (
-        <div className="mb-4 p-2 bg-red-100 text-center text-red-700 rounded">
-          {errorMsg}
-        </div>
-      )}
-      {successMsg && (
-        <div className="mb-4 p-2 bg-green-400 text-center text-md font-semibold  text-white rounded">
-          {successMsg}
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
         </div>
       )}
 

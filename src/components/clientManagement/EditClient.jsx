@@ -12,32 +12,94 @@ import {
 } from "../../services/clientServices";
 import BasicDatePicker from "../ui/BasicDatePicker";
 import FormSkeleton from "../loaders/FormSkeleton";
+import { useMessage } from "../../auth/MessageContext";
+
+/* --------------------------------------------------
+   YUP VALIDATION SCHEMA
+-------------------------------------------------- */
+const schema = yup.object().shape({
+  empanelmentDate: yup
+    .string()
+    .required("Empanelment date is required")
+    .test(
+      "valid-date",
+      "Invalid date format",
+      (val) => !!val && !isNaN(Date.parse(val))
+    ),
+
+  clientName: yup.string().required("Client name is required"),
+  clientCategory: yup.string().required("Category is required"),
+  clientSource: yup.string().required("Source is required"),
+  // website: yup
+  //   .string()
+  //   .nullable()
+  //   .matches(
+  //     /^(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w .-]*)*\/?$/,
+  //     "Enter valid URL"
+  //   ),
+  linkedin: yup.string().nullable(),
+  headquarterAddress: yup.string().required("Headquarter address required"),
+  branchAddress: yup.string().nullable(),
+  companySize: yup.string().required("Company size is required"),
+
+  aboutVendor: yup.string().nullable(),
+  instructions: yup.string().nullable(),
+  status: yup.string().required("Status is required"),
+
+  poc1: yup.object().shape({
+    name: yup.string().required("POC1 name is required"),
+    email: yup
+      .string()
+      .email("Invalid POC1 email")
+      .required("POC1 email is required"),
+    phone: yup
+      .string()
+      .required("POC1 phone is required")
+      .matches(/^\d{10,15}$/, "POC1 phone must be 10–15 digits"),
+    designation: yup.string().required("POC1 designation is required"),
+  }),
+
+  poc2: yup.object().shape({
+    name: yup.string().nullable(),
+    email: yup.string().nullable().email("Invalid POC2 email"),
+    phone: yup.string().nullable(),
+    designation: yup.string().nullable(),
+  }),
+});
 
 const EditClient = () => {
   const navigate = useNavigate();
+  const { errorMsg, showSuccess, showError } = useMessage();
   const { id } = useParams();
 
+  /* --------------------------------------------------
+     STATES
+  -------------------------------------------------- */
   const [formData, setFormData] = useState({
     empanelmentDate: "",
     clientName: "",
     clientCategory: "",
     clientSource: "",
     website: "",
+    linkedin: "",
     headquarterAddress: "",
     branchAddress: "",
     companySize: "",
     aboutVendor: "",
     instructions: "",
     status: "active",
+
     poc1: { name: "", email: "", phone: "", designation: "" },
     poc2: { name: "", email: "", phone: "", designation: "" },
   });
+
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
   const [options, setOptions] = useState([]);
 
+  /* --------------------------------------------------
+     FETCH OPTIONS + SINGLE CLIENT
+  -------------------------------------------------- */
   useEffect(() => {
     fetchOptions();
     fetchSingleClient();
@@ -48,7 +110,7 @@ const EditClient = () => {
       const res = await getAllOptions();
       setOptions(res?.options || []);
     } catch (error) {
-      setErrorMsg("Failed to load dropdown options");
+      showError(error || "Failed to load dropdown options");
     }
   };
 
@@ -58,6 +120,7 @@ const EditClient = () => {
       const res = await getClientById(id);
       if (res?.success) {
         const c = res.client;
+
         setFormData({
           empanelmentDate: c.empanelmentDate
             ? c.empanelmentDate.split("T")[0]
@@ -66,6 +129,7 @@ const EditClient = () => {
           clientCategory: c.clientCategory || "",
           clientSource: c.clientSource || "",
           website: c.website || "",
+          linkedin: c.linkedin || "",
           headquarterAddress: c.headquarterAddress || "",
           branchAddress: c.branchAddress || "",
           companySize: c.companySize || "",
@@ -87,82 +151,93 @@ const EditClient = () => {
             designation: c.poc2?.designation || "",
           },
         });
-        setLoading(false);
       }
     } catch (error) {
-      setErrorMsg("Failed to fetch client details");
+      showError(error || "Failed to fetch client");
     } finally {
       setLoading(false);
     }
   };
 
+  /* --------------------------------------------------
+     HANDLE CHANGE
+  -------------------------------------------------- */
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name.startsWith("poc1.") || name.startsWith("poc2.")) {
-      const [pocKey, field] = name.split(".");
+
+    // For nested fields like poc1.name
+    if (name.includes(".")) {
+      const [parent, child] = name.split(".");
       setFormData((prev) => ({
         ...prev,
-        [pocKey]: { ...prev[pocKey], [field]: value },
+        [parent]: { ...prev[parent], [child]: value },
       }));
-      return;
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
-    setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSuccessMsg("");
-    setErrorMsg("");
-
     try {
-      const payload = { ...formData };
-      payload.poc2 = Object.fromEntries(
-        Object.entries(payload.poc2).map(([k, v]) => [k, v || undefined])
-      );
+      await schema.validate(formData, { abortEarly: false });
       setLoading(true);
-      const res = await updateClient(id, payload);
+      const res = await updateClient(id, formData);
       if (res?.success) {
-        setSuccessMsg("Client updated successfully");
-        setTimeout(() => navigate("/admin/clientManagement/clients"), 1000);
+        showSuccess("Client updated successfully");
+        navigate("/admin/clientManagement/clients");
       } else {
-        setErrorMsg(res?.message || "Failed to update client");
+        showError(res?.message || "Failed to update client");
       }
     } catch (err) {
-      setErrorMsg("Validation or server error");
+      if (err.inner) {
+        // Yup validation errors
+        const formattedErrors = {};
+        err.inner.forEach((e) => {
+          formattedErrors[e.path] = e.message;
+        });
+        setErrors(formattedErrors);
+      } else {
+        showError("Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  /* --------------------------------------------------
+     RENDER
+  -------------------------------------------------- */
   return (
     <div>
       <div className="mb-4 flex justify-between items-center">
         <h2 className="text-2xl font-semibold">Edit Client</h2>
+
         <button
           onClick={() => navigate("/admin/clientManagement/clients")}
-          className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:opacity-90 transition"
+          className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md"
         >
           <ArrowLeft size={16} /> Back
         </button>
       </div>
 
       {errorMsg && (
-        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
-          {errorMsg}
-        </div>
-      )}
-      {successMsg && (
-        <div className="mb-4 p-2 bg-green-500 text-white rounded">
-          {successMsg}
+        <div
+          className="mb-4 flex items-center gap-3 p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ Error:</span>
+          <p className="text-sm">{errorMsg}</p>
         </div>
       )}
 
-      <div className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 ">
+      <div className="border p-6 rounded-lg bg-white dark:bg-gray-800">
         {loading ? (
           <FormSkeleton rows={6} />
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6 ">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* MAIN FIELDS */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <BasicDatePicker
                 name="empanelmentDate"
@@ -206,6 +281,14 @@ const EditClient = () => {
                 errors={errors}
               />
 
+              <Input
+                labelName="LinkedIn"
+                name="linkedin"
+                value={formData.linkedin}
+                handleChange={handleChange}
+                errors={errors}
+              />
+
               <SelectField
                 label="Company Size"
                 name="companySize"
@@ -231,47 +314,6 @@ const EditClient = () => {
                 errors={errors}
               />
 
-              <div className="relative w-full">
-                <textarea
-                  name="aboutVendor"
-                  rows={2}
-                  value={formData.aboutVendor}
-                  onChange={handleChange}
-                  placeholder=" "
-                  className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
-                  border-gray-300 dark:border-gray-600 focus:border-black`}
-                />
-                <label
-                  className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
-                      peer-placeholder-shown:scale-100  peer-placeholder-shown:top-1/2
-                      peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
-                      peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2
-                      rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-                >
-                  About Vendor
-                </label>
-              </div>
-              <div className="relative w-full">
-                <textarea
-                  name="instructions"
-                  rows={2}
-                  value={formData.instructions}
-                  onChange={handleChange}
-                  placeholder=" "
-                  className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
-                  border-gray-300 dark:border-gray-600 focus:border-black`}
-                />
-                <label
-                  className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
-                      peer-placeholder-shown:scale-100  peer-placeholder-shown:top-1/2
-                      peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
-                      peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2
-                      rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-                >
-                  Instructions
-                </label>
-              </div>
-
               <SelectField
                 label="Status"
                 name="status"
@@ -281,72 +323,80 @@ const EditClient = () => {
                 error={errors.status}
               />
             </div>
-            <div className="mt-6">
-              <h3 className="text-lg font-semibold mb-2">POC - 1</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  labelName="Name"
-                  name="poc1.name"
-                  value={formData.poc1.name}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-                <Input
-                  labelName="Email"
-                  name="poc1.email"
-                  value={formData.poc1.email}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-                <Input
-                  labelName="Phone"
-                  name="poc1.phone"
-                  value={formData.poc1.phone}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-                <Input
-                  labelName="Designation"
-                  name="poc1.designation"
-                  value={formData.poc1.designation}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-              </div>
+
+            {/* POC 1 */}
+            <h3 className="text-lg font-semibold mt-6">POC - 1</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                labelName="Name"
+                name="poc1.name"
+                value={formData.poc1.name}
+                handleChange={handleChange}
+                errors={errors}
+              />
+
+              <Input
+                labelName="Email"
+                name="poc1.email"
+                value={formData.poc1.email}
+                handleChange={handleChange}
+                errors={errors}
+              />
+
+              <Input
+                labelName="Phone"
+                name="poc1.phone"
+                value={formData.poc1.phone}
+                handleChange={handleChange}
+                errors={errors}
+              />
+
+              <Input
+                labelName="Designation"
+                name="poc1.designation"
+                value={formData.poc1.designation}
+                handleChange={handleChange}
+                errors={errors}
+              />
             </div>
-            <div className="mt-6">
-              <h3 className="text-lg font-semibold mb-2">POC - 2</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  labelName="Name"
-                  name="poc2.name"
-                  value={formData.poc2.name}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-                <Input
-                  labelName="Email"
-                  name="poc2.email"
-                  value={formData.poc2.email}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-                <Input
-                  labelName="Phone"
-                  name="poc2.phone"
-                  value={formData.poc2.phone}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-                <Input
-                  labelName="Designation"
-                  name="poc2.designation"
-                  value={formData.poc2.designation}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-              </div>
+
+            {/* POC 2 */}
+            <h3 className="text-lg font-semibold mt-6">POC - 2</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                labelName="Name"
+                name="poc2.name"
+                value={formData.poc2.name}
+                handleChange={handleChange}
+                errors={errors}
+              />
+
+              <Input
+                labelName="Email"
+                name="poc2.email"
+                value={formData.poc2.email}
+                handleChange={handleChange}
+                errors={errors}
+              />
+
+              <Input
+                labelName="Phone"
+                name="poc2.phone"
+                value={formData.poc2.phone}
+                handleChange={handleChange}
+                errors={errors}
+              />
+
+              <Input
+                labelName="Designation"
+                name="poc2.designation"
+                value={formData.poc2.designation}
+                handleChange={handleChange}
+                errors={errors}
+              />
             </div>
+
+            {/* SUBMIT BUTTON */}
             <div className="flex justify-end">
               <Button type="submit" text="Save" icon={<Save size={18} />} />
             </div>

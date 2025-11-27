@@ -9,6 +9,7 @@ import { ArrowLeft, Upload, Save, Eye, EyeOff, User } from "lucide-react";
 import Spinner from "../loaders/Spinner";
 import FormSkeleton from "../loaders/FormSkeleton";
 import { getUserById } from "../../services/userServices";
+import { useMessage } from "../../auth/MessageContext";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Name is required"),
@@ -28,6 +29,7 @@ const schema = yup.object().shape({
 
 export default function EditUser() {
   const { id } = useParams();
+  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const { token } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -51,8 +53,7 @@ export default function EditUser() {
   const [allRoles, setAllRoles] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [loadingCountries, setLoadingCountries] = useState(false);
@@ -127,7 +128,7 @@ export default function EditUser() {
         if (user.profileImage) setProfilePreview(user.profileImage);
       }
     } catch (err) {
-      setErrorMsg(err);
+      showError(err);
     } finally {
       setLoading(false);
     }
@@ -217,8 +218,8 @@ export default function EditUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMsg("");
-    setSuccessMsg("");
+    showError("");
+    showSuccess("");
     try {
       await schema.validate(formData, { abortEarly: false });
       const payload = {
@@ -248,14 +249,14 @@ export default function EditUser() {
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to update user");
-      setSuccessMsg(" User updated successfully!");
+      showSuccess(" User updated successfully!");
     } catch (err) {
       if (err.inner) {
         const validationErrors = {};
         err.inner.forEach((e) => (validationErrors[e.path] = e.message));
         setErrors(validationErrors);
       } else {
-        setErrorMsg(err.message);
+        showError(err.message);
       }
     }
   };
@@ -274,18 +275,15 @@ export default function EditUser() {
           </button>
         </div>
       </div>
-
       {errorMsg && (
-        <div className="mb-4 p-2 bg-red-100 text-center text-red-700 rounded">
-          {errorMsg}
+        <div
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+        >
+          <span className="text-red-600 font-semibold">⚠ </span>
+          <p className="text-sm">{errorMsg}</p>
         </div>
       )}
-      {successMsg && (
-        <div className="mb-4 p-2 bg-green-100 text-center text-green-700 rounded">
-          {successMsg}
-        </div>
-      )}
-
       <div className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 ">
         {loading ? (
           <FormSkeleton rows={6} />
@@ -515,7 +513,7 @@ export default function EditUser() {
                 <SelectField
                   // id="state"
                   name="state"
-                  label="Country"
+                  label="State"
                   value={formData.state}
                   handleChange={handleChange}
                   options={states}
