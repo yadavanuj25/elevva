@@ -67,7 +67,6 @@ export default function UserManagement() {
   const [allRoles, setAllRoles] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [fullCountryData, setFullCountryData] = useState([]);
