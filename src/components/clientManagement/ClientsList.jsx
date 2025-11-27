@@ -42,9 +42,9 @@ const ClientList = () => {
   const [orderBy, setOrderBy] = useState("clients.createdAt");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [statusLoading, setStatusLoading] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [openStatusRow, setOpenStatusRow] = useState(null);
+  const [statusLoading, setStatusLoading] = useState(null);
   const statusOptions = ["active", "inactive", "on_hold", "terminated"];
   const [viewMode, setViewMode] = useState("list");
 
@@ -148,8 +148,6 @@ const ClientList = () => {
         status: newStatus,
       };
       const res = await updateClientStatus(id, payload);
-      SuccessToast(res?.message || "Status updated successfully");
-
       setClients((prev) =>
         prev.map((item) =>
           item._id === id ? { ...item, status: newStatus } : item
@@ -157,9 +155,9 @@ const ClientList = () => {
       );
       setStatusLoading(null);
       setOpenStatusRow(null);
+      SuccessToast(res?.message || "Status updated successfully");
     } catch (error) {
       ErrorToast(error.message || "Failed to update status");
-      setErrorMsg(error);
     } finally {
       setStatusLoading(null);
     }

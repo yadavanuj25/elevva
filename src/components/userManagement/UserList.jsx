@@ -22,6 +22,8 @@ import RefreshButton from "../ui/tableComponents/RefreshButton";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
 import TableHeader from "../ui/tableComponents/TableHeader";
 import TableSkeleton from "../loaders/TableSkeleton";
+import SuccessToast from "../ui/toaster/SuccessToast";
+import ErrorToast from "../ui/toaster/ErrorToast";
 
 const UserList = () => {
   const navigate = useNavigate();
@@ -40,8 +42,8 @@ const UserList = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [openStatusRow, setOpenStatusRow] = useState(null);
+  const [statusLoading, setStatusLoading] = useState(null);
   const statusOptions = ["active", "inactive"];
-  const [viewMode, setViewMode] = useState("list");
 
   useEffect(() => {
     fetchUsers();
@@ -155,20 +157,25 @@ const UserList = () => {
   }, [filteredData, order, orderBy]);
 
   const handleStatusUpdate = async (id, newStatus) => {
+    setStatusLoading(id);
     try {
       const payload = {
         status: newStatus,
       };
       const res = await updateUserStatus(id, payload);
-      console.log(res);
+
       setAllUsers((prev) =>
         prev.map((item) =>
           item._id === id ? { ...item, status: newStatus } : item
         )
       );
       setOpenStatusRow(null);
+      setStatusLoading(null);
+      SuccessToast(res?.message || "Status updated successfully");
     } catch (error) {
-      console.log(error);
+      ErrorToast(error.message || "Failed to update status");
+    } finally {
+      setStatusLoading(null);
     }
   };
   return (
@@ -319,6 +326,7 @@ const UserList = () => {
                               setOpenStatusRow={setOpenStatusRow}
                               statusOptions={statusOptions}
                               handleStatusUpdate={handleStatusUpdate}
+                              statusLoading={statusLoading}
                             />
                           </TableCell>
 

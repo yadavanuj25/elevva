@@ -28,6 +28,8 @@ import RefreshButton from "../ui/tableComponents/RefreshButton";
 import TableHeader from "../ui/tableComponents/TableHeader";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
 import TableSkeleton from "../loaders/TableSkeleton";
+import ErrorToast from "../ui/toaster/ErrorToast";
+import SuccessToast from "../ui/toaster/SuccessToast";
 
 const ClientsRequirementsList = () => {
   const navigate = useNavigate();
@@ -46,7 +48,9 @@ const ClientsRequirementsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [statusLoading, setStatusLoading] = useState(null);
   const [openStatusRow, setOpenStatusRow] = useState(null);
+
   const statusOptions = [
     "Open",
     "On Hold",
@@ -228,20 +232,22 @@ const ClientsRequirementsList = () => {
   }, [filteredData, order, orderBy]);
 
   const handleStatusUpdate = async (id, newStatus) => {
+    setStatusLoading(id);
     try {
       const payload = {
         positionStatus: newStatus,
       };
       const res = await updateRequirementStatus(id, payload);
-      console.log(res);
       setRequirements((prev) =>
         prev.map((item) =>
           item._id === id ? { ...item, positionStatus: newStatus } : item
         )
       );
+      setStatusLoading(null);
       setOpenStatusRow(null);
+      SuccessToast(res?.message || "Status updated successfully");
     } catch (error) {
-      console.log(error);
+      ErrorToast(error.message || "Failed to update status");
     }
   };
   return (
@@ -345,7 +351,7 @@ const ClientsRequirementsList = () => {
                 {loading ? (
                   <TableRow>
                     <TableCell colSpan={12} className="text-center py-10">
-                      <TableSkeleton rows={6}  />
+                      <TableSkeleton rows={6} />
                     </TableCell>
                   </TableRow>
                 ) : sortedData.length > 0 ? (
@@ -400,6 +406,7 @@ const ClientsRequirementsList = () => {
                           setOpenStatusRow={setOpenStatusRow}
                           statusOptions={statusOptions}
                           handleStatusUpdate={handleStatusUpdate}
+                          statusLoading={statusLoading}
                         />
                       </TableCell>
 

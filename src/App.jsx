@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import { ToastContainer, toast, Slide } from "react-toastify";
+import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -19,7 +18,6 @@ import CreateRole from "./components/roleManagement/CreateRole";
 import EditRole from "./components/roleManagement/EditRole";
 import EditUser from "./components/userManagement/EditUser";
 import ProfileSubmission from "./components/profileMnagement/ProfileSubmission";
-import ProfileList from "./components/profileMnagement/ProfileList";
 import EditProfile from "./components/profileMnagement/EditProfile";
 import Profiles from "./pages/Profiles";
 import ViewProfile from "./components/profileMnagement/ViewProfile";
@@ -37,7 +35,7 @@ const App = () => {
     <>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

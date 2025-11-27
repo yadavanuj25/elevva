@@ -39,6 +39,8 @@ import RefreshButton from "../ui/tableComponents/RefreshButton";
 import TableHeader from "../ui/tableComponents/TableHeader";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
 import TableSkeleton from "../loaders/TableSkeleton";
+import SuccessToast from "../ui/toaster/SuccessToast";
+import ErrorToast from "../ui/toaster/ErrorToast";
 
 const ProfileList = () => {
   const { token } = useAuth();
@@ -60,8 +62,8 @@ const ProfileList = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [favourites, setFavourites] = useState([]);
+  const [statusLoading, setStatusLoading] = useState(null);
   const [openStatusRow, setOpenStatusRow] = useState(null);
-  const [expandedRow, setExpandedRow] = useState(null);
 
   const statusOptions = ["Active", "In-active", "Banned", "Defaulter"];
   useEffect(() => {
@@ -216,20 +218,23 @@ const ProfileList = () => {
   };
 
   const handleStatusUpdate = async (id, newStatus) => {
+    setStatusLoading(id);
     try {
       const payload = {
         status: newStatus,
       };
       const res = await updateProfileStatus(id, payload);
-      console.log(res);
+
       setAllProfiles((prev) =>
         prev.map((item) =>
           item._id === id ? { ...item, status: newStatus } : item
         )
       );
       setOpenStatusRow(null);
+      setStatusLoading(null);
+      SuccessToast(res?.message || "Status updated successfully");
     } catch (error) {
-      console.log(error);
+      ErrorToast(error.message || "Failed to update status");
     }
   };
 
@@ -423,6 +428,7 @@ const ProfileList = () => {
                               setOpenStatusRow={setOpenStatusRow}
                               statusOptions={statusOptions}
                               handleStatusUpdate={handleStatusUpdate}
+                              statusLoading={statusLoading}
                             />
                           </TableCell>
                           <TableCell className="whitespace-nowrap dark:text-gray-300">

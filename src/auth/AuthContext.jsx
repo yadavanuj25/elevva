@@ -18,7 +18,8 @@ const PERMISSION_MAP = {
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loggingOut, setLoggingOut] = useState(false);
-
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user") || "null")
   );
@@ -30,13 +31,10 @@ export const AuthProvider = ({ children }) => {
     token
       ? localStorage.setItem("token", token)
       : localStorage.removeItem("token");
-
     user
       ? localStorage.setItem("user", JSON.stringify(user))
       : localStorage.removeItem("user");
-
     role ? localStorage.setItem("role", role) : localStorage.removeItem("role");
-
     modules?.length
       ? localStorage.setItem("modules", JSON.stringify(modules))
       : localStorage.removeItem("modules");
@@ -101,6 +99,7 @@ export const AuthProvider = ({ children }) => {
         modules,
         login,
         logout,
+        successMsg,
       }}
     >
       {children}
