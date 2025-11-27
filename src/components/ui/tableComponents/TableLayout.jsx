@@ -41,6 +41,7 @@ const TableLayout = ({
   statusOptions,
   handleStatusUpdate,
   formatDate,
+  statusLoading,
 }) => {
   const navigate = useNavigate();
   return (
@@ -143,6 +144,7 @@ const TableLayout = ({
                         setOpenStatusRow={setOpenStatusRow}
                         statusOptions={statusOptions}
                         handleStatusUpdate={handleStatusUpdate}
+                        statusLoading={statusLoading}
                       />
                     </TableCell>
                     <TableCell className="whitespace-nowrap dark:text-gray-300">

@@ -444,6 +444,12 @@
   margin: 0 auto 20px;
 }
 
+/* Toaster */
+
+
+/* Toster ends here */
+
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }

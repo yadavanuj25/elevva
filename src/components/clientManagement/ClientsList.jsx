@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { LayoutGrid, List } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
+import { toast } from "react-toastify";
 import {
   getAllClients,
   updateClientStatus,
@@ -12,6 +12,8 @@ import Tabs from "../ui/tableComponents/Tabs";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
 import GridLayout from "../ui/tableComponents/GridLayout";
 import TableLayout from "../ui/tableComponents/TableLayout";
+import SuccessToast from "../ui/toaster/SuccessToast";
+import ErrorToast from "../ui/toaster/ErrorToast";
 
 const columns = [
   { id: "clientName", label: "Client Name" },
@@ -27,7 +29,6 @@ const columns = [
 ];
 
 const ClientList = () => {
-  const navigate = useNavigate();
   const [clients, setClients] = useState([]);
   const [activeTab, setActiveTab] = useState("All");
   const [pagination, setPagination] = useState({
@@ -41,6 +42,7 @@ const ClientList = () => {
   const [orderBy, setOrderBy] = useState("clients.createdAt");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const statusOptions = ["active", "inactive", "on_hold", "terminated"];
@@ -138,21 +140,28 @@ const ClientList = () => {
         : bVal.localeCompare?.(aVal);
     });
   }, [filteredData, order, orderBy]);
+
   const handleStatusUpdate = async (id, newStatus) => {
+    setStatusLoading(id);
     try {
       const payload = {
         status: newStatus,
       };
       const res = await updateClientStatus(id, payload);
-      console.log(res);
+      SuccessToast(res?.message || "Status updated successfully");
+
       setClients((prev) =>
         prev.map((item) =>
           item._id === id ? { ...item, status: newStatus } : item
         )
       );
+      setStatusLoading(null);
       setOpenStatusRow(null);
     } catch (error) {
-      console.log(error);
+      ErrorToast(error.message || "Failed to update status");
+      setErrorMsg(error);
+    } finally {
+      setStatusLoading(null);
     }
   };
 
@@ -226,6 +235,7 @@ const ClientList = () => {
             statusOptions={statusOptions}
             handleStatusUpdate={handleStatusUpdate}
             formatDate={formatDate}
+            statusLoading={statusLoading}
           />
         )}
         <CommonPagination

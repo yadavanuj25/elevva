@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import Spinner from "../loaders/Spinner";
+import StatusLoader from "../loaders/StatusLoader";
 
 const getStatusColor = (s) => {
   switch (s) {
@@ -43,6 +45,7 @@ const StatusDropDown = ({
   setOpenStatusRow,
   statusOptions,
   handleStatusUpdate,
+  statusLoading,
   position = { left: "-left-4", top: "top-[30px]" },
 }) => {
   const dropdownRef = useRef(null);
@@ -63,27 +66,40 @@ const StatusDropDown = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openStatusRow, rowId, setOpenStatusRow]);
+  const isLoading = statusLoading === rowId;
 
   return (
     <div className="relative w-max" ref={dropdownRef}>
-      {/* STATUS BADGE */}
       <div
-        onClick={() => setOpenStatusRow(openStatusRow === rowId ? null : rowId)}
-        className={`w-max cursor-pointer px-2 py-1 text-xs text-center font-[500] text-white rounded-md flex items-center justify-between gap-2 ${getStatusColor(
-          s
-        )}`}
+        onClick={() =>
+          !isLoading && setOpenStatusRow(openStatusRow === rowId ? null : rowId)
+        }
+        className={`min-w-[80px] h-6 cursor-pointer px-1 py-1 
+  text-xs font-[500] text-white rounded-md 
+  flex items-center justify-between gap-2 ${getStatusColor(s)}`}
       >
-        <span>{status.charAt(0).toUpperCase() + status.slice(1) || "-"}</span>
-
-        {openStatusRow === rowId ? (
-          <ChevronUp size={16} />
-        ) : (
-          <ChevronDown size={16} />
+        <div className="w-full flex items-center justify-center">
+          {isLoading ? (
+            <StatusLoader color="#ffffff" size={5} />
+          ) : (
+            <span>
+              {status.charAt(0).toUpperCase() + status.slice(1) || "-"}
+            </span>
+          )}
+        </div>
+        {!isLoading && (
+          <>
+            {openStatusRow === rowId ? (
+              <ChevronUp size={16} />
+            ) : (
+              <ChevronDown size={16} />
+            )}
+          </>
         )}
       </div>
 
       {/* DROPDOWN PANEL */}
-      {openStatusRow === rowId && (
+      {openStatusRow === rowId && !isLoading && (
         <div
           className={`
             absolute
