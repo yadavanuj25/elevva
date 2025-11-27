@@ -224,7 +224,7 @@ const EditClient = () => {
 
       {errorMsg && (
         <div
-          className="mb-4 flex items-center gap-3 p-3 rounded-xl border border-red-300 
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
                bg-red-50 text-red-700 shadow-sm animate-slideDown"
         >
           <span className="text-red-600 font-semibold">⚠ Error:</span>
