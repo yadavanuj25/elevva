@@ -9,7 +9,7 @@ import DashboardStats from "../components/cards/DashboardStats";
 import PageTitle from "../hooks/PageTitle";
 
 const SuperDashboard = () => {
-  PageTitle("Elevva | Super-Dashboard");
+  PageTitle("Elevva | Dashboard");
   const { user } = useAuth();
 
   return (
