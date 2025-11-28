@@ -3,6 +3,7 @@ import * as yup from "yup";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { Save, Upload, User } from "lucide-react";
+import PageTitle from "../../hooks/PageTitle";
 // Yup validation schema
 const schema = yup.object().shape({
   company_logo: yup
@@ -34,6 +35,7 @@ const schema = yup.object().shape({
   company_gst: yup.string().required("GST number is required"),
 });
 const GeneralSettings = () => {
+  PageTitle("Elevva | Settings-General");
   const [formData, setFormData] = useState({
     company_logo: null,
     company_name: "",

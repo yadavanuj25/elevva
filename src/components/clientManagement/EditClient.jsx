@@ -13,6 +13,7 @@ import {
 import BasicDatePicker from "../ui/BasicDatePicker";
 import FormSkeleton from "../loaders/FormSkeleton";
 import { useMessage } from "../../auth/MessageContext";
+import PageTitle from "../../hooks/PageTitle";
 
 /* --------------------------------------------------
    YUP VALIDATION SCHEMA
@@ -68,6 +69,7 @@ const schema = yup.object().shape({
 });
 
 const EditClient = () => {
+  PageTitle("Elevva | Edit-Client");
   const navigate = useNavigate();
   const { errorMsg, showSuccess, showError } = useMessage();
   const { id } = useParams();

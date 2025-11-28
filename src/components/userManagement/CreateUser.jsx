@@ -9,6 +9,8 @@ import { ArrowLeft, Upload, Save, Eye, EyeOff, User } from "lucide-react";
 import Spinner from "../loaders/Spinner";
 import { createUser } from "../../services/userServices";
 import { useMessage } from "../../auth/MessageContext";
+import BasicDatePicker from "../ui/BasicDatePicker";
+import PageTitle from "../../hooks/PageTitle";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Name is required"),
@@ -44,6 +46,7 @@ const schema = yup.object().shape({
     ),
 });
 export default function UserManagement() {
+  PageTitle("Elevva | Add-User");
   const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
   const { token } = useAuth();
@@ -482,10 +485,9 @@ export default function UserManagement() {
               </select>
 
               <label
-                htmlFor="user_role"
-                className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                className={`absolute pointer-events-none  text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
       peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
-      peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+      peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
       ${
         errors.role
           ? "peer-focus:text-red-500"
@@ -500,13 +502,10 @@ export default function UserManagement() {
               )}
             </div>
 
-            <Input
-              // id="user_dob"
-              type="date"
+            <BasicDatePicker
               name="dob"
               value={formData.dob}
               handleChange={handleChange}
-              className="col-span-2 md:col-span-1"
               errors={errors}
               labelName="DOB"
             />
@@ -574,7 +573,7 @@ export default function UserManagement() {
             ? "top-2 scale-75 -translate-y-4 text-darkBg dark:text-white"
             : "peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2"
         }
-        peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+        peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4  peer-focus:font-[700]
         peer-focus:text-darkBg dark:peer-focus:text-white
         rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
       `}

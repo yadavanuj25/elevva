@@ -19,8 +19,10 @@ import RefreshButton from "../ui/tableComponents/RefreshButton";
 import TableHeader from "../ui/tableComponents/TableHeader";
 import TableSkeleton from "../loaders/TableSkeleton";
 import { useMessage } from "../../auth/MessageContext";
+import PageTitle from "../../hooks/PageTitle";
 
 const RoleList = () => {
+  PageTitle("Elevva | Roles");
   const { token } = useAuth();
   const { successMsg, errorMsg, showError } = useMessage();
   const navigate = useNavigate();

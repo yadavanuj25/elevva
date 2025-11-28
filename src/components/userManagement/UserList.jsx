@@ -25,8 +25,10 @@ import TableSkeleton from "../loaders/TableSkeleton";
 import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
 import { useMessage } from "../../auth/MessageContext";
+import PageTitle from "../../hooks/PageTitle";
 
 const UserList = () => {
+  PageTitle("Elevva | Users");
   const navigate = useNavigate();
   const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const [allUsers, setAllUsers] = useState([]);

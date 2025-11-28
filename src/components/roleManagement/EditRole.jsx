@@ -3,10 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Save, ArrowLeft } from "lucide-react";
 import roleBg from "../../assets/images/role.png";
 import * as yup from "yup";
-import Button from "../ui/Button";
+import Input from "../ui/Input";
 import FormSkeleton from "../loaders/FormSkeleton";
 import TableSkeleton from "../loaders/TableSkeleton";
 import { useMessage } from "../../auth/MessageContext";
+import PageTitle from "../../hooks/PageTitle";
 
 const schema = yup.object().shape({
   name: yup.string().trim().required("Role name is required"),
@@ -18,8 +19,9 @@ const schema = yup.object().shape({
 });
 
 const EditRole = () => {
+  PageTitle("Elevva | Edit-Role");
   const { id } = useParams();
-  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
+  const { errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [role, setRole] = useState({ name: "", description: "" });
@@ -255,42 +257,46 @@ const EditRole = () => {
 
                 <div className="grid grid-cols-1 gap-4">
                   {/* Role Name */}
-                  <div>
-                    <label className="block font-medium mb-1">Role Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={role.name || ""}
-                      onChange={handleChange}
-                      className={`w-full p-2 border ${
-                        errors.name ? "border-red-500" : "border-lightGray"
-                      } rounded-md focus:outline-none focus:border-gray-500 bg-transparent `}
-                    />
-                    {errors.name && (
-                      <p className="text-red-600 text-sm mt-1 font-medium">
-                        {errors.name}
-                      </p>
-                    )}
-                  </div>
+                  <Input
+                    type="text"
+                    name="name"
+                    value={role.name}
+                    handleChange={handleChange}
+                    className="col-span-2 md:col-span-1"
+                    errors={errors}
+                    labelName="Role name"
+                  />
 
                   {/* Description */}
-                  <div>
-                    <label className="block font-medium mb-1">
-                      Description
-                    </label>
+                  <div className="relative w-full">
                     <textarea
                       name="description"
-                      value={role.description || ""}
+                      rows={1}
+                      value={role.description}
                       onChange={handleChange}
-                      className={`w-full p-2 border ${
-                        errors.description
-                          ? "border-red-500"
-                          : "border-lightGray"
-                      } rounded-md focus:outline-none focus:border-gray-500 bg-transparent `}
-                      rows="1"
+                      placeholder=" "
+                      className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
+        ${
+          errors.description
+            ? "border-red-500"
+            : "border-gray-300 dark:border-gray-600 focus:border-black"
+        }`}
                     />
+                    <label
+                      className={`absolute pointer-events-none   text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+            peer-placeholder-shown:scale-100  peer-placeholder-shown:top-1/2
+            peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
+            ${
+              errors.description
+                ? "peer-focus:text-red-500 peer-placeholder-shown:-translate-y-[100%]"
+                : "peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2"
+            }
+            rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
+                    >
+                      Description
+                    </label>
                     {errors.description && (
-                      <p className="text-red-600 text-sm mt-1 font-medium">
+                      <p className="text-red-500 text-sm mt-1">
                         {errors.description}
                       </p>
                     )}
@@ -307,9 +313,7 @@ const EditRole = () => {
               </div>
             </div>
           )}
-
           {/* Permissions Table */}
-
           {loading ? (
             <TableSkeleton rows={4} columns={12} />
           ) : (

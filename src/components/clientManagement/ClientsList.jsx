@@ -13,6 +13,7 @@ import TableLayout from "../ui/tableComponents/TableLayout";
 import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
 import { useMessage } from "../../auth/MessageContext";
+import PageTitle from "../../hooks/PageTitle";
 
 const columns = [
   { id: "clientName", label: "Client Name" },
@@ -28,6 +29,7 @@ const columns = [
 ];
 
 const ClientList = () => {
+  PageTitle("Elevva | Clients");
   const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const [clients, setClients] = useState([]);
   const [activeTab, setActiveTab] = useState("All");

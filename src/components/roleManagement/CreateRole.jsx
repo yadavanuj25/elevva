@@ -5,6 +5,7 @@ import { useAuth } from "../../auth/AuthContext";
 import * as yup from "yup";
 import Input from "../ui/Input";
 import { useMessage } from "../../auth/MessageContext";
+import PageTitle from "../../hooks/PageTitle";
 
 // Validation Schema
 const schema = yup.object().shape({
@@ -16,6 +17,7 @@ const schema = yup.object().shape({
 });
 
 const CreateRole = () => {
+  PageTitle("Elevva | Add-Role");
   const { token } = useAuth();
   const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const [formData, setFormData] = useState({
@@ -141,9 +143,9 @@ const CreateRole = () => {
         }`}
               />
               <label
-                className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                className={`absolute pointer-events-none   text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
             peer-placeholder-shown:scale-100  peer-placeholder-shown:top-1/2
-            peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+            peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
             ${
               errors.description
                 ? "peer-focus:text-red-500 peer-placeholder-shown:-translate-y-[100%]"

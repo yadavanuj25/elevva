@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { addClients, getAllOptions } from "../../services/clientServices";
 import BasicDatePicker from "../ui/BasicDatePicker";
 import { useMessage } from "../../auth/MessageContext";
+import PageTitle from "../../hooks/PageTitle";
 
 const schema = yup.object().shape({
   empanelmentDate: yup
@@ -56,6 +57,7 @@ const schema = yup.object().shape({
 });
 
 const AddClient = () => {
+  PageTitle("Elevva | Add-Client");
   const navigate = useNavigate();
   const { errorMsg, showSuccess, showError } = useMessage();
   const [formData, setFormData] = useState({
@@ -292,6 +294,14 @@ const AddClient = () => {
             handleChange={handleChange}
             errors={errors}
           />
+          <SelectField
+            label="Status"
+            name="status"
+            value={formData.status}
+            handleChange={handleChange}
+            options={options.statuses}
+            error={errors.status}
+          />
 
           <div className="relative w-full">
             <textarea
@@ -304,9 +314,9 @@ const AddClient = () => {
                   border-gray-300 dark:border-gray-600 focus:border-black`}
             />
             <label
-              className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+              className={`absolute pointer-events-none  text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
                       peer-placeholder-shown:scale-100  peer-placeholder-shown:top-1/2
-                      peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+                      peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
                       peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2
                       rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
             >
@@ -326,22 +336,13 @@ const AddClient = () => {
             <label
               className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
                       peer-placeholder-shown:scale-100  peer-placeholder-shown:top-1/2
-                      peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+                      peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
                       peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2
                       rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
             >
               Instructions
             </label>
           </div>
-
-          <SelectField
-            label="Status"
-            name="status"
-            value={formData.status}
-            handleChange={handleChange}
-            options={options.statuses}
-            error={errors.status}
-          />
         </div>
 
         {/* POC 1 */}

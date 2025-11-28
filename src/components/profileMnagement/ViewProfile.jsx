@@ -28,6 +28,7 @@ import { getProfileById } from "../../services/profileServices";
 import NoData from "../ui/NoData";
 import ViewSection from "../ui/ViewSection";
 import ViewInfo from "../ui/ViewInfo";
+import PageTitle from "../../hooks/PageTitle";
 
 const IconButton = ({ title, icon }) => (
   <Tippy
@@ -46,6 +47,7 @@ const IconButton = ({ title, icon }) => (
 
 const ViewProfile = () => {
   const { id } = useParams();
+  PageTitle("Elevva | View-Profile");
   const { token } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);

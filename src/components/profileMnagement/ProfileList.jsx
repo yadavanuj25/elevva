@@ -41,8 +41,10 @@ import CommonPagination from "../ui/tableComponents/CommonPagination";
 import TableSkeleton from "../loaders/TableSkeleton";
 import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
+import PageTitle from "../../hooks/PageTitle";
 
 const ProfileList = () => {
+  PageTitle("Elevva | Profiles");
   const { token } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();

@@ -24,9 +24,11 @@ import ViewInfo from "../ui/ViewInfo";
 import ViewSection from "../ui/ViewSection";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
 import ViewTabs from "../ui/viewComponents/ViewTabs";
+import PageTitle from "../../hooks/PageTitle";
 
 const ViewClient = () => {
   const { id } = useParams();
+  PageTitle("Elevva | View-Client");
   const navigate = useNavigate();
   const [client, setClient] = useState(null);
   const [loading, setLoading] = useState(true);

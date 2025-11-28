@@ -31,8 +31,10 @@ import TableSkeleton from "../loaders/TableSkeleton";
 import ErrorToast from "../ui/toaster/ErrorToast";
 import SuccessToast from "../ui/toaster/SuccessToast";
 import { useMessage } from "../../auth/MessageContext";
+import PageTitle from "../../hooks/PageTitle";
 
 const ClientsRequirementsList = () => {
+  PageTitle("Elevva | Client Requirements");
   const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
   const [clients, setClients] = useState([]);

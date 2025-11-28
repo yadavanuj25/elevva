@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import PageTitle from "../../hooks/PageTitle";
 const EmailSettings = () => {
+  PageTitle("Elevva | Settings-Email");
   const [smtp, setSmtp] = useState(false);
   const [gmailer, setGmailer] = useState(true);
   return (

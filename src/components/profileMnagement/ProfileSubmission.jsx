@@ -8,6 +8,7 @@ import SelectField from "../ui/SelectField";
 import { useAuth } from "../../auth/AuthContext";
 import { addProfile } from "../../services/profileServices";
 import { useMessage } from "../../auth/MessageContext";
+import PageTitle from "../../hooks/PageTitle";
 
 const schema = yup.object().shape({
   resume: yup
@@ -48,6 +49,7 @@ const schema = yup.object().shape({
 });
 
 const ProfileSubmission = () => {
+  PageTitle("Elevva | Add-Profile");
   const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);

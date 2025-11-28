@@ -16,6 +16,7 @@ import {
 import BasicDatePicker from "../ui/BasicDatePicker";
 import FormSkeleton from "../loaders/FormSkeleton";
 import { useMessage } from "../../auth/MessageContext";
+import PageTitle from "../../hooks/PageTitle";
 
 const schema = yup.object().shape({
   client: yup.string().required("Client is required"),
@@ -35,6 +36,7 @@ const schema = yup.object().shape({
 });
 
 const EditClientRequirement = () => {
+  PageTitle("Elevva | Edit-Client Requirement");
   const { id } = useParams();
   const { errorMsg, showSuccess, showError } = useMessage();
   const jobDescriptionRef = useRef("");
@@ -440,13 +442,13 @@ const EditClientRequirement = () => {
                 />
                 <label
                   htmlFor="description"
-                  className={`absolute pointer-events-none font-medium text-sm text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                  className={`absolute pointer-events-none  text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
         ${
           formData.otherInformation
             ? "top-2 scale-75 -translate-y-4 text-darkBg dark:text-white"
             : "peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2"
         }
-        peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+        peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
         peer-focus:text-darkBg dark:peer-focus:text-white
         rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
       `}

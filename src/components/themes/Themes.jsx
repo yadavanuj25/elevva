@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Check } from "lucide-react";
+import PageTitle from "../../hooks/PageTitle";
 const colorThemes = [
   { name: "Light", value: "light", dark: "#2d7dfa", light: "#e3edff" },
   { name: "Dark", value: "dark", dark: "#2b4acb", light: "#fff4e6" },
@@ -15,6 +16,7 @@ const colorThemes = [
 ];
 
 const Themes = () => {
+  PageTitle("Elevva | Settings-Themes");
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const dropdownRef = useRef(null);
 
@@ -83,7 +85,7 @@ const Themes = () => {
                   backgroundColor: c.value === "dark" ? "black" : c.dark,
                 }}
               ></span>
-              <span className="text-md font-semibold text-darkGray">
+              <span className="text-md font-semibold text-darkGray dark:text-[#808080]">
                 {c.name}
               </span>
 

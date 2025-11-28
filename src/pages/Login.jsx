@@ -11,6 +11,7 @@ import login1 from "../assets/login/login1.png";
 import login2 from "../assets/login/login2.png";
 import login3 from "../assets/login/login3.png";
 import googleLogo from "../assets/images/google-logo.svg";
+import PageTitle from "../hooks/PageTitle";
 
 const schema = yup.object().shape({
   email: yup
@@ -21,6 +22,7 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
+  PageTitle("Elevva | Login");
   const [formdata, setFormdata] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -214,24 +216,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      {/* <div className="hidden md:flex justify-center items-center ">
-        <div className="relative flex items-center justify-center w-[100%] h-[100%] bg-blue-400">
-          <div className=" flex items-center justify-center p-10">
-            <div className="flex flex-col items-center gap-5 border ">
-              <h3>Empowering people through seamless HR management</h3>
-              <img
-                src={loginbg}
-                alt="Login Illustration"
-                className="w-1/2 h-1/2 object-cover rounded-xl shadow"
-              />
-              <h5>
-                Efficiently manage your workforce, streamline operations
-                effortlessly.
-              </h5>
-            </div>
-          </div>
-        </div>
-      </div> */}
+
       <div className="relative order-1 hidden md:flex justify-center items-center w-full backdrop-blur-xl bg-gradient-to-b from-[#0a60ee] to-[#203455] py-10">
         <img
           src={login3}
@@ -243,24 +228,7 @@ const Login = () => {
           alt="HR Illustration"
           className="absolute top-[-64px] left-[-64px]  object-contain drop-shadow-xl"
         />
-        {/* <div className="relative w-[80%]  rounded-3xl p-10  bg-gradient-to-b from-[#1869e7cf] to-[#2c475aa6] border border-white/30 ">
-        
-          <h3 className="text-white font-bold text-4xl leading-snug mb-5 text-center">
-            Supercharge Your Customer Relations With Elevva CRM.
-          </h3>
 
-          <div className="flex justify-center mb-5">
-            <img
-              src={loginbg}
-              alt="HR Illustration"
-              className=" object-contain drop-shadow-xl"
-            />
-          </div>
-
-          <h4 className="w-full text-white text-2xl font-semibold text-center  px-6 py-3 rounded-md inline-block mx-auto">
-            Everything You Need to Succeed.
-          </h4>
-        </div> */}
         <div className="relative w-[80%] rounded-3xl p-10 border border-white/30 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-[#1869e7cf] to-[#2c475aa6] backdrop-blur-md"></div>
           <div className="relative z-10">

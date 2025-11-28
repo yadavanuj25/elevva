@@ -37,9 +37,9 @@ const BasicDatePicker = ({
         />
 
         <label
-          className={`absolute pointer-events-none font-medium text-[15px] text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+          className={`absolute pointer-events-none  text-[15px] text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
             peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
-            peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+            peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 font-[700]
             ${
               hasError
                 ? "peer-focus:text-red-500"

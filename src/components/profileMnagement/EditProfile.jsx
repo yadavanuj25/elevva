@@ -8,6 +8,7 @@ import { useAuth } from "../../auth/AuthContext";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProfileById, updateProfile } from "../../services/profileServices";
 import FormSkeleton from "../loaders/FormSkeleton";
+import PageTitle from "../../hooks/PageTitle";
 
 const schema = yup.object().shape({
   resume: yup
@@ -48,6 +49,7 @@ const schema = yup.object().shape({
 });
 const BASE_URL = "https://crm-backend-qbz0.onrender.com";
 const EditProfile = () => {
+  PageTitle("Elevva | Edit-Profile");
   const { id } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);

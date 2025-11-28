@@ -10,6 +10,8 @@ import Spinner from "../loaders/Spinner";
 import FormSkeleton from "../loaders/FormSkeleton";
 import { getUserById } from "../../services/userServices";
 import { useMessage } from "../../auth/MessageContext";
+import BasicDatePicker from "../ui/BasicDatePicker";
+import PageTitle from "../../hooks/PageTitle";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Name is required"),
@@ -28,6 +30,7 @@ const schema = yup.object().shape({
 });
 
 export default function EditUser() {
+  PageTitle("Elevva | Edit-User");
   const { id } = useParams();
   const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const { token } = useAuth();
@@ -471,10 +474,9 @@ export default function EditUser() {
                   </select>
 
                   <label
-                    // htmlFor="user_role"
-                    className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                    className={`absolute pointer-events-none  text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
                   peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
-                   peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+                   peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4  peer-focus:font-[700]
                    ${
                      errors.role
                        ? "peer-focus:text-red-500"
@@ -488,19 +490,16 @@ export default function EditUser() {
                     <p className="text-red-500 text-sm mt-1">{errors.role}</p>
                   )}
                 </div>
-                <Input
-                  // id="user_dob"
-                  type="date"
+
+                <BasicDatePicker
                   name="dob"
                   value={formData.dob}
                   handleChange={handleChange}
-                  className="col-span-2 md:col-span-1"
                   errors={errors}
                   labelName="DOB"
                 />
 
                 <SelectField
-                  // id="country"
                   name="country"
                   label="Country"
                   value={formData.country}
@@ -511,7 +510,6 @@ export default function EditUser() {
                 />
 
                 <SelectField
-                  // id="state"
                   name="state"
                   label="State"
                   value={formData.state}
@@ -520,7 +518,6 @@ export default function EditUser() {
                   error={errors.state}
                 />
                 <Input
-                  // id="user_address"
                   type="text"
                   name="address"
                   value={formData.address}
@@ -530,7 +527,6 @@ export default function EditUser() {
                   labelName="Address"
                 />
                 <Input
-                  // id="user_zipcode"
                   type="text"
                   name="zipcode"
                   value={formData.zipcode}
@@ -543,7 +539,6 @@ export default function EditUser() {
                 <div className="col-span-2">
                   <div className="relative w-full">
                     <textarea
-                      // id="user_about"
                       name="about"
                       rows={4}
                       value={formData.about}
@@ -552,14 +547,13 @@ export default function EditUser() {
                       className="block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition border-gray-300 dark:border-gray-600 focus:border-black"
                     />
                     <label
-                      // htmlFor="user_about"
-                      className={`absolute pointer-events-none font-medium text-sm text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
+                      className={`absolute pointer-events-none   text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
         ${
           formData.about
             ? "top-2 scale-75 -translate-y-4 text-darkBg dark:text-white"
             : "peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2"
         }
-        peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
+        peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
         peer-focus:text-darkBg dark:peer-focus:text-white
         rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
       `}

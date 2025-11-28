@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import Themes from "../components/themes/Themes";
 import GeneralSettings from "../components/userManagement/GeneralSettings";
 import EmailSettings from "../components/userManagement/EmailSettings";
+import PageTitle from "../hooks/PageTitle";
 
 const Settings = () => {
+  PageTitle("Elevva | Settings-General");
   const [activeTab, setActiveTab] = useState("General");
   const tabs = ["General", "Themes", "Email"];
 

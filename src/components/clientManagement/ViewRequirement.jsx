@@ -24,9 +24,11 @@ import { getRequirementById } from "../../services/clientServices";
 import ViewInfo from "../ui/ViewInfo";
 import ViewSection from "../ui/ViewSection";
 import ViewBlock from "../ui/ViewBlock";
+import PageTitle from "../../hooks/PageTitle";
 
 const ViewRequirement = () => {
   const { id } = useParams();
+  PageTitle("Elevva | View-Client Requirement");
   const navigate = useNavigate();
 
   const [requirement, setRequirement] = useState(null);

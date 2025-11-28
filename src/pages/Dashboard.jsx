@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth } from "../auth/AuthContext";
+import PageTitle from "../hooks/PageTitle";
 import DashboardCard from "../components/cards/DashboardCard";
 import img1 from "../assets/images/d1.png";
 import img2 from "../assets/images/d2.png";
@@ -7,37 +8,8 @@ import img3 from "../assets/images/d3.png";
 import img4 from "../assets/images/d4.png";
 import DashboardStats from "../components/cards/DashboardStats";
 
-const products = [
-  {
-    id: 1,
-    name: "Apple Juice",
-    category: "Juice",
-    price: "999",
-    stock: 25,
-  },
-  {
-    id: 2,
-    name: "Lemon Juice",
-    category: "Juice",
-    price: "150",
-    stock: 50,
-  },
-  {
-    id: 3,
-    name: "Banana shake",
-    category: "Shake",
-    price: "899",
-    stock: 30,
-  },
-  {
-    id: 4,
-    name: "Grapes juice",
-    category: "Juice",
-    price: "499",
-    stock: 10,
-  },
-];
 const Dashboard = () => {
+  PageTitle("Elevva | Dashboard");
   const { user } = useAuth();
 
   return (
