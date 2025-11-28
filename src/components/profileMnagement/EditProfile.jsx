@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FolderClosed, Save, X, ArrowLeft } from "lucide-react";
+import { FolderClosed, Trash2, Eye } from "lucide-react";
+import { Save, X, ArrowLeft } from "lucide-react";
 import * as yup from "yup";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
@@ -9,6 +10,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getProfileById, updateProfile } from "../../services/profileServices";
 import FormSkeleton from "../loaders/FormSkeleton";
 import PageTitle from "../../hooks/PageTitle";
+import previewResumeImg from "../../assets/images/dummy-resume.jpg";
 
 const schema = yup.object().shape({
   resume: yup
@@ -78,9 +80,16 @@ const EditProfile = () => {
   const [successMsg, showSuccess] = useState("");
   const [errorMsg, showError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [profileCode, setProfileCode] = useState("");
   const [resumePreview, setResumePreview] = useState(null);
-  const [remoteResumeInfo, setRemoteResumeInfo] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(
+    "https://staging.ecodedash.com/cias/public/candidate_resume/1764306208-Vishal_Chauhan.pdf"
+  );
+  const [remoteResume, setRemoteResume] = useState(null);
   const [removeExistingResume, setRemoveExistingResume] = useState(false);
+  const [showResumePopup, setShowResumePopup] = useState(false);
+
+  const [selectedResume, setSelectedResume] = useState(null);
 
   useEffect(() => {
     if (id) fetchProfileById(id);
@@ -131,6 +140,7 @@ const EditProfile = () => {
       const res = await getProfileById(userId);
       if (res.success && res.profile) {
         const p = res.profile;
+        setProfileCode(p.profileCode);
         const skills = normalizeSkills(p.skills);
         setFormData((prev) => ({
           ...prev,
@@ -155,19 +165,17 @@ const EditProfile = () => {
         }));
 
         if (p.resume && p.resume.path) {
-          const url = buildRemoteUrl(p.resume.path);
-          const info = {
+          const url = `https://crm-backend-qbz0.onrender.com${p.resume.path}`;
+          setRemoteResume({
             url,
-            name: p.resume.originalName || p.resume.filename || "Resume",
-            type: p.resume.mimetype || "application/pdf",
-          };
-          setRemoteResumeInfo(info);
-          setResumePreview({ ...info, isBlob: false });
-          setRemoveExistingResume(false);
+            name: p.resume.originalName || "Resume.pdf",
+          });
+          // setPreviewUrl(url);
         } else {
-          setRemoteResumeInfo(null);
-          setResumePreview(null);
+          setRemoteResume(null);
+          // setPreviewUrl(null);
         }
+
         setLoading(false);
       } else {
         showError("Profile not found");
@@ -178,41 +186,6 @@ const EditProfile = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleBoxClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileSelect = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.type !== "application/pdf") {
-      setErrors((prev) => ({ ...prev, resume: "Only PDF files allowed" }));
-      return;
-    }
-    if (file.size > 50 * 1024 * 1024) {
-      setErrors((prev) => ({ ...prev, resume: "File must be under 50MB" }));
-      return;
-    }
-    if (resumePreview && resumePreview.isBlob && resumePreview.url) {
-      try {
-        URL.revokeObjectURL(resumePreview.url);
-      } catch (e) {}
-    }
-
-    const blobUrl = URL.createObjectURL(file);
-    setFormData((prev) => ({ ...prev, resume: file }));
-    setResumePreview({
-      url: blobUrl,
-      name: file.name,
-      type: file.type,
-      isBlob: true,
-    });
-    setRemoteResumeInfo(null);
-    setRemoveExistingResume(false);
-    setErrors((prev) => ({ ...prev, resume: "" }));
   };
 
   const handleAddSkill = (raw) => {
@@ -263,31 +236,22 @@ const EditProfile = () => {
         : "";
     }
     setFormData((prev) => ({ ...prev, [name]: newValue }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+  const handleResumeSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  const handleRemoveSelectedFile = (e) => {
-    e?.stopPropagation();
-    if (resumePreview && resumePreview.isBlob && resumePreview.url) {
-      try {
-        URL.revokeObjectURL(resumePreview.url);
-      } catch (err) {}
+    if (file.type !== "application/pdf") {
+      alert("Only PDF allowed");
+      return;
     }
-    setFormData((prev) => ({ ...prev, resume: null }));
-    if (remoteResumeInfo) {
-      setResumePreview({ ...remoteResumeInfo, isBlob: false });
-      setRemoveExistingResume(false);
-    } else {
-      setResumePreview(null);
-      setRemoteResumeInfo(null);
-      setRemoveExistingResume(true);
+    if (selectedResume && previewUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(previewUrl);
     }
-  };
-
-  const handleMarkRemoveExisting = () => {
-    setRemoveExistingResume(true);
-    setResumePreview(null);
-    setRemoteResumeInfo(null);
-    setFormData((prev) => ({ ...prev, resume: null }));
+    const blobUrl = URL.createObjectURL(file);
+    setSelectedResume(file);
+    setPreviewUrl(blobUrl);
   };
 
   const handleUpdateProfile = async (e) => {
@@ -368,137 +332,150 @@ const EditProfile = () => {
         {loading ? (
           <FormSkeleton rows={6} />
         ) : (
-          <form onSubmit={handleUpdateProfile} className="space-y-6 ">
+          <form onSubmit={handleUpdateProfile}>
             {/* Resume Upload + Preview */}
-            <div>
-              <div
-                onClick={handleBoxClick}
-                className={`border rounded-md bg-gray-50 dark:bg-gray-800 p-4 text-center cursor-pointer ${
-                  errors.resume
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                }`}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".pdf"
-                  className="hidden"
-                  onChange={handleFileSelect}
-                />
-                {!formData.resume && !resumePreview && (
-                  <>
+            <div className=" bg-white dark:bg-gray-800 mb-4">
+              <label className="block font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                Resume (PDF Only)
+                <span className="text-red-600"> *</span>
+              </label>
+              <div className="grid grid-cols-[3fr,2fr] gap-8 ">
+                {/* UPLOAD CARD */}
+                <div
+                  className="cursor-pointer border-2 border-dashed border-gray-300 dark:border-gray-700
+    rounded-2xl p-8 flex flex-col items-center justify-center text-center
+    hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-gray-700/40 
+    transition-all group"
+                  onClick={() => fileInputRef.current.click()}
+                >
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    accept="application/pdf"
+                    className="hidden"
+                    onChange={handleResumeSelect}
+                  />
+
+                  {/* Icon Wrapper */}
+                  <div className="w-20 h-20 rounded-full bg-blue-50 dark:bg-gray-700 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <FolderClosed
-                      className="mx-auto text-dark mb-2"
-                      size={24}
+                      size={42}
+                      className="text-blue-500 dark:text-gray-300"
                     />
-                    <p className="text-gray-600 font-semibold">
-                      Click to Upload Resume
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Only PDF (max 50 MB)
-                    </p>
-                  </>
-                )}
-
-                {(formData.resume || resumePreview) && (
-                  <div className="text-left">
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <p className="text-gray-800 dark:text-gray-200 font-medium">
-                          {formData.resume
-                            ? formData.resume.name
-                            : resumePreview?.name || "Uploaded Resume"}
-                        </p>
-                        {formData.resume && (
-                          <p className="text-sm text-gray-500">
-                            {(formData.resume.size / (1024 * 1024)).toFixed(2)}{" "}
-                            MB
-                          </p>
-                        )}
-                        {!formData.resume && remoteResumeInfo && (
-                          <p className="text-sm text-gray-500">
-                            Previewing remote resume
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {formData.resume && (
-                          <button
-                            type="button"
-                            className="text-sm px-3 py-1 bg-red-100 text-red-700 rounded"
-                            onClick={handleRemoveSelectedFile}
-                          >
-                            Remove
-                          </button>
-                        )}
-
-                        {!formData.resume && remoteResumeInfo && (
-                          <button
-                            type="button"
-                            className="text-sm px-3 py-1 bg-red-100 text-red-700 rounded"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleMarkRemoveExisting();
-                            }}
-                          >
-                            Remove Remote
-                          </button>
-                        )}
-
-                        {resumePreview && resumePreview.url && (
-                          <a
-                            href={resumePreview.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded"
-                          >
-                            View
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Embedded PDF preview (option 2) */}
-                    {resumePreview &&
-                      resumePreview.type === "application/pdf" &&
-                      resumePreview.url && (
-                        <div className="mt-3 h-64 border rounded overflow-hidden">
-                          <iframe
-                            src={resumePreview.url}
-                            title="Resume Preview"
-                            className="w-full h-full"
-                          />
-                        </div>
-                      )}
-
-                    {/* Non-PDF fallback */}
-                    {resumePreview &&
-                      resumePreview.type !== "application/pdf" &&
-                      resumePreview.url && (
-                        <div className="mt-3">
-                          <a
-                            href={resumePreview.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-blue-600 underline text-sm"
-                          >
-                            {resumePreview.name || "Download file"}
-                          </a>
-                        </div>
-                      )}
                   </div>
-                )}
+
+                  {/* If no file */}
+                  {!previewUrl && !remoteResume && (
+                    <>
+                      <p className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                        Upload your Resume
+                      </p>
+                      <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                        PDF • Max 50 MB
+                      </p>
+                    </>
+                  )}
+
+                  {/* When file uploaded */}
+                  {(previewUrl || remoteResume) && (
+                    <div className="w-full flex flex-col items-center">
+                      <p className="font-semibold text-gray-900 dark:text-gray-100 text-lg truncate max-w-[90%]">
+                        {selectedResume?.name ||
+                          remoteResume?.name ||
+                          "Resume.pdf"}
+                      </p>
+
+                      {selectedResume && (
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          {(selectedResume.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      )}
+
+                      <p
+                        className="mt-3 px-3 py-1 rounded-full bg-green-100 dark:bg-green-700/40 
+                        text-green-700 dark:text-green-300 text-xs font-medium"
+                      >
+                        Uploaded
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* PREVIEW BOX */}
+                <div
+                  className="relative w-full h-[250px] border border-gray-300 dark:border-gray-600 rounded-2xl bg-gray-200/40 dark:bg-gray-800/40 
+backdrop-blur-md overflow-hidden shadow-md"
+                >
+                  {!previewUrl && !remoteResume ? (
+                    <div className="h-full flex flex-col items-center justify-center text-gray-500">
+                      <Eye size={42} className="opacity-50 mb-2" />
+                      <p className="text-sm">No resume uploaded</p>
+                    </div>
+                  ) : (
+                    <>
+                      <img
+                        src={previewResumeImg}
+                        alt="Resume Preview"
+                        className="w-full h-full object-cover rounded-xl"
+                      />
+
+                      {/* Dark overlay */}
+                      <div className="absolute inset-0 bg-black/70"></div>
+                      <button
+                        onClick={() => setShowResumePopup(true)}
+                        className="absolute inset-0 flex items-center justify-center  transition-opacity"
+                      >
+                        <div className="px-4 py-2 bg-white text-black rounded-md shadow-lg  flex items-center gap-2 transition">
+                          <Eye size={26} />
+                          <span className="font-semibold">View Resume</span>
+                        </div>
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
               {errors.resume && (
-                <p className="text-red-500 text-sm mt-1">{errors.resume}</p>
+                <p className="text-red-500 text-sm mt-2">{errors.resume}</p>
               )}
             </div>
+            {showResumePopup && (
+              <div className="fixed  inset-0 bg-black/80  flex items-center justify-center z-[9999] p-2 animate-fadeIn">
+                <div className="relative bg-white dark:bg-gray-900 w-full max-w-4xl rounded-xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                  {/* Close button */}
+                  <button
+                    className="absolute top-1 right-4 p-1 rounded-full bg-red-500 dark:bg-gray-800 
+                 text-white dark:text-gray-300 hover:bg-red-700 hover:text-white 
+                 transition-all shadow-md"
+                    onClick={() => setShowResumePopup(false)}
+                  >
+                    <X size={20} />
+                  </button>
+
+                  {/* Header */}
+                  <div className="flex items-center justify-center py-2 border-b border-gray-200 dark:border-gray-700">
+                    <h2 className="text-center text-lg font-semibold text-gray-800 dark:text-gray-200">
+                      {selectedResume?.name ||
+                        remoteResume?.name ||
+                        "Resume.pdf"}
+                    </h2>
+                    <p className="px-2"> - ({profileCode})</p>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4">
+                    <iframe
+                      src={previewUrl || remoteResume?.url}
+                      className="w-full h-[600px] rounded-lg border border-gray-200 dark:border-gray-700"
+                      title="Full Resume Preview"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Personal Info */}
-            <section>
-              <h3 className="text-lg font-semibold mb-3 border-b pb-1">
+            <section className="my-3">
+              <h3 className="text-lg font-semibold mb-4 border-b pb-1">
                 Personal Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -548,8 +525,8 @@ const EditProfile = () => {
             </section>
 
             {/* Professional Info */}
-            <section>
-              <h3 className="text-lg font-semibold mb-3 border-b pb-1">
+            <section className="my-3">
+              <h3 className="text-lg font-semibold mb-4 border-b pb-1">
                 Professional Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -639,7 +616,10 @@ const EditProfile = () => {
 
                 {/* Skills */}
                 <div className="col-span-2">
-                  <label className="block font-medium mb-1">Skills *</label>
+                  <label className="block font-semibold mb-1">
+                    Skills
+                    <span className="text-red-600"> *</span>
+                  </label>
                   <div
                     className={`flex flex-wrap gap-2 border rounded-md p-2 min-h-[48px] ${
                       errors.skills ? "border-red-500" : "border-gray-300"
@@ -679,8 +659,8 @@ const EditProfile = () => {
             </section>
 
             {/* Additional Info */}
-            <section>
-              <h3 className="text-lg font-semibold mb-3 border-b pb-1">
+            <section className="my-3">
+              <h3 className="text-lg font-semibold mb-4 border-b pb-1">
                 Additional Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
