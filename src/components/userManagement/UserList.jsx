@@ -30,7 +30,7 @@ import PageTitle from "../../hooks/PageTitle";
 const UserList = () => {
   PageTitle("Elevva | Users");
   const navigate = useNavigate();
-  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
+  const { successMsg, errorMsg, showError } = useMessage();
   const [allUsers, setAllUsers] = useState([]);
   const [pagination, setPagination] = useState({
     total: 0,
@@ -61,12 +61,10 @@ const UserList = () => {
         searchQuery
       );
       const userData = data.users || [];
-
       const uniqueStatuses = [
         "All",
         ...new Set(userData.map((r) => r.status || "unknown")),
       ];
-
       const tabsWithCounts = uniqueStatuses.map((status) => ({
         name: status,
         count:
@@ -145,7 +143,6 @@ const UserList = () => {
         })
       );
     }
-
     return data;
   }, [allUsers, activeTab, searchQuery]);
 
@@ -166,12 +163,14 @@ const UserList = () => {
         status: newStatus,
       };
       const res = await updateUserStatus(id, payload);
-
-      setAllUsers((prev) =>
-        prev.map((item) =>
+      setAllUsers((prev) => {
+        const updatedUsers = prev.map((item) =>
           item._id === id ? { ...item, status: newStatus } : item
-        )
-      );
+        );
+        updateStatusTabs(updatedUsers);
+        return updatedUsers;
+      });
+
       setOpenStatusRow(null);
       setStatusLoading(null);
       SuccessToast(res?.message || "Status updated successfully");
@@ -181,6 +180,23 @@ const UserList = () => {
       setStatusLoading(null);
     }
   };
+  const updateStatusTabs = (updatedUsers) => {
+    const statuses = [
+      ...new Set(updatedUsers.map((r) => r.status || "unknown")),
+    ];
+    const uniqueStatuses = ["All", ...statuses.sort()];
+
+    const tabsWithCounts = uniqueStatuses.map((status) => ({
+      name: status,
+      count:
+        status === "All"
+          ? updatedUsers.length
+          : updatedUsers.filter((r) => r.status === status).length,
+    }));
+
+    setStatusTabs(tabsWithCounts);
+  };
+
   return (
     <>
       <div>
@@ -208,17 +224,12 @@ const UserList = () => {
               <p className="text-sm">{successMsg}</p>
             </div>
           )}
-
-          {/* Tabs */}
           <Tabs
             statusTabs={statusTabs}
             activeTab={activeTab}
             handleTabChange={handleTabChange}
           />
-
           <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
-            {/* Search Box */}
-
             <TableHeader
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
@@ -226,7 +237,6 @@ const UserList = () => {
               title="User"
             />
 
-            {/* Pgination */}
             <CommonPagination
               total={pagination.total}
               page={pagination.page}
@@ -235,7 +245,6 @@ const UserList = () => {
               onLimitChange={handleChangeRowsPerPage}
             />
 
-            {/* Table */}
             <TableContainer className="rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600">
               <div
                 className={`overflow-x-auto ${

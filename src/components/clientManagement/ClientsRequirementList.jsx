@@ -233,25 +233,43 @@ const ClientsRequirementsList = () => {
         : bVal?.toString().localeCompare(aVal);
     });
   }, [filteredData, order, orderBy]);
-
   const handleStatusUpdate = async (id, newStatus) => {
     setStatusLoading(id);
     try {
-      const payload = {
-        positionStatus: newStatus,
-      };
+      const payload = { positionStatus: newStatus };
       const res = await updateRequirementStatus(id, payload);
-      setRequirements((prev) =>
-        prev.map((item) =>
+      setRequirements((prev) => {
+        const updatedRequirements = prev.map((item) =>
           item._id === id ? { ...item, positionStatus: newStatus } : item
-        )
-      );
+        );
+        updateStatusTabs(updatedRequirements);
+        return updatedRequirements;
+      });
       setStatusLoading(null);
       setOpenStatusRow(null);
       SuccessToast(res?.message || "Status updated successfully");
     } catch (error) {
       ErrorToast(error.message || "Failed to update status");
     }
+  };
+  const updateStatusTabs = (updatedRequirements) => {
+    // const uniqueStatuses = [
+    //   "All",
+    //   ...new Set(updatedRequirements.map((r) => r.positionStatus || "unknown")),
+    // ];
+    const statuses = [
+      ...new Set(updatedRequirements.map((r) => r.positionStatus || "unknown")),
+    ];
+    const uniqueStatuses = ["All", ...statuses.sort()];
+    const tabsWithCounts = uniqueStatuses.map((status) => ({
+      name: status,
+      count:
+        status === "All"
+          ? updatedRequirements.length
+          : updatedRequirements.filter((r) => r.positionStatus === status)
+              .length,
+    }));
+    setStatusTabs(tabsWithCounts);
   };
   return (
     <>

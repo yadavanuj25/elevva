@@ -149,11 +149,13 @@ const ClientList = () => {
         status: newStatus,
       };
       const res = await updateClientStatus(id, payload);
-      setClients((prev) =>
-        prev.map((item) =>
+      setClients((prev) => {
+        const updatedClients = prev.map((item) =>
           item._id === id ? { ...item, status: newStatus } : item
-        )
-      );
+        );
+        updateStatusTabs(updatedClients);
+        return updatedClients;
+      });
       setStatusLoading(null);
       setOpenStatusRow(null);
       SuccessToast(res?.message || "Status updated successfully");
@@ -162,6 +164,26 @@ const ClientList = () => {
     } finally {
       setStatusLoading(null);
     }
+  };
+  const updateStatusTabs = (updatedClients) => {
+    // const uniqueStatuses = [
+    //   "All",
+    //   ...new Set(updatedClients.map((r) => r.status || "unknown")),
+    // ];
+    const statuses = [
+      ...new Set(updatedClients.map((r) => r.status || "unknown")),
+    ];
+    const uniqueStatuses = ["All", ...statuses.sort()];
+
+    const tabsWithCounts = uniqueStatuses.map((status) => ({
+      name: status,
+      count:
+        status === "All"
+          ? updatedClients.length
+          : updatedClients.filter((r) => r.status === status).length,
+    }));
+
+    setStatusTabs(tabsWithCounts);
   };
 
   return (

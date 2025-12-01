@@ -226,18 +226,35 @@ const ProfileList = () => {
         status: newStatus,
       };
       const res = await updateProfileStatus(id, payload);
-
-      setAllProfiles((prev) =>
-        prev.map((item) =>
+      setAllProfiles((prev) => {
+        const updatedProfiles = prev.map((item) =>
           item._id === id ? { ...item, status: newStatus } : item
-        )
-      );
+        );
+        updateStatusTabs(updatedProfiles);
+        return updatedProfiles;
+      });
       setOpenStatusRow(null);
       setStatusLoading(null);
       SuccessToast(res?.message || "Status updated successfully");
     } catch (error) {
       ErrorToast(error.message || "Failed to update status");
     }
+  };
+  const updateStatusTabs = (updatedProfiles) => {
+    const statuses = [
+      ...new Set(updatedProfiles.map((r) => r.status || "unknown")),
+    ];
+    const uniqueStatuses = ["All", ...statuses.sort()];
+
+    const tabsWithCounts = uniqueStatuses.map((status) => ({
+      name: status,
+      count:
+        status === "All"
+          ? updatedProfiles.length
+          : updatedProfiles.filter((r) => r.status === status).length,
+    }));
+
+    setStatusTabs(tabsWithCounts);
   };
 
   return (
