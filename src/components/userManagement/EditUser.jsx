@@ -252,6 +252,7 @@ export default function EditUser() {
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to update user");
+      navigate("/admin/usermanagement/users");
       showSuccess(" User updated successfully!");
     } catch (err) {
       if (err.inner) {

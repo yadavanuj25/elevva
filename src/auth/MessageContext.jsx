@@ -1,7 +1,5 @@
 import { createContext, useContext, useState } from "react";
-
 const AppContext = createContext();
-
 export const MessageProvider = ({ children }) => {
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
