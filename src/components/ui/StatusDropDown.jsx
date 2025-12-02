@@ -18,8 +18,10 @@ const getStatusColor = (s) => {
 
     case "in-active":
     case "inactive":
+    case "dead":
       return "bg-red-600";
 
+    case "prosepective":
     case "on hold":
     case "on_hold":
     case "defaulter":
@@ -31,6 +33,7 @@ const getStatusColor = (s) => {
       return "bg-blue-500";
 
     case "filled":
+    case "Filled":
       return "bg-orange-600";
 
     default:

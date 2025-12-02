@@ -50,7 +50,47 @@ const UserList = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [pagination.page, pagination.limit, searchQuery]);
+  }, [pagination.page, pagination.limit, activeTab]);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchUsers();
+    }, 500);
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery]);
+
+  // const fetchUsers = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const data = await getAllUsers(
+  //       pagination.page,
+  //       pagination.limit,
+  //       activeTab,
+  //       searchQuery
+  //     );
+  //     setAllUsers(data.users || []);
+  //     setPagination((prev) => ({
+  //       ...prev,
+  //       total: data.pagination?.total || 0,
+  //       pages: data.pagination?.pages || 1,
+  //     }));
+  //     const globalCounts = data.counts?.global || {};
+  //     const tabsWithCounts = [{ name: "All", count: globalCounts.total || 0 }];
+  //     Object.keys(globalCounts).forEach((key) => {
+  //       if (key !== "total") {
+  //         tabsWithCounts.push({
+  //           name: key,
+  //           count: globalCounts[key] || 0,
+  //         });
+  //       }
+  //     });
+  //     setStatusTabs(tabsWithCounts);
+  //   } catch (error) {
+  //     showError(error.message || "Error fetching users");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const fetchUsers = async () => {
     try {
@@ -58,29 +98,28 @@ const UserList = () => {
       const data = await getAllUsers(
         pagination.page,
         pagination.limit,
+        activeTab,
         searchQuery
       );
-      const userData = data.users || [];
-      const uniqueStatuses = [
-        "All",
-        ...new Set(userData.map((r) => r.status || "unknown")),
-      ];
-      const tabsWithCounts = uniqueStatuses.map((status) => ({
-        name: status,
-        count:
-          status === "All"
-            ? userData.length
-            : userData.filter((r) => r.status === status).length,
-      }));
       setAllUsers(data.users || []);
-      setStatusTabs(tabsWithCounts);
       setPagination((prev) => ({
         ...prev,
         total: data.pagination?.total || 0,
         pages: data.pagination?.pages || 1,
       }));
+      const globalCounts = data.counts?.global || {};
+      let statuses = Object.keys(globalCounts).filter((k) => k !== "total");
+      statuses.sort((a, b) => a.localeCompare(b));
+      const tabsWithCounts = [
+        { name: "All", count: globalCounts.total || 0 },
+        ...statuses.map((s) => ({
+          name: s,
+          count: globalCounts[s] || 0,
+        })),
+      ];
+      setStatusTabs(tabsWithCounts);
     } catch (error) {
-      showError(`"Errors  when fetching users" || ${error}`);
+      showError(error.message || "Error fetching users");
     } finally {
       setLoading(false);
     }
@@ -129,20 +168,6 @@ const UserList = () => {
     if (activeTab !== "All") {
       data = data.filter((c) => c.status === activeTab);
     }
-
-    if (searchQuery.trim() !== "") {
-      const query = searchQuery.toLowerCase();
-      data = data.filter((user) =>
-        Object.values(user).some((value) => {
-          if (Array.isArray(value)) {
-            return value.some((item) =>
-              item.toString().toLowerCase().includes(query)
-            );
-          }
-          return value?.toString().toLowerCase().includes(query);
-        })
-      );
-    }
     return data;
   }, [allUsers, activeTab, searchQuery]);
 
@@ -170,7 +195,6 @@ const UserList = () => {
         updateStatusTabs(updatedUsers);
         return updatedUsers;
       });
-
       setOpenStatusRow(null);
       setStatusLoading(null);
       SuccessToast(res?.message || "Status updated successfully");
@@ -180,20 +204,17 @@ const UserList = () => {
       setStatusLoading(null);
     }
   };
+
   const updateStatusTabs = (updatedUsers) => {
-    const statuses = [
-      ...new Set(updatedUsers.map((r) => r.status || "unknown")),
+    let statuses = [...new Set(updatedUsers.map((u) => u.status || "unknown"))];
+    statuses.sort((a, b) => a.localeCompare(b));
+    const tabsWithCounts = [
+      { name: "All", count: updatedUsers.length },
+      ...statuses.map((status) => ({
+        name: status,
+        count: updatedUsers.filter((u) => u.status === status).length,
+      })),
     ];
-    const uniqueStatuses = ["All", ...statuses.sort()];
-
-    const tabsWithCounts = uniqueStatuses.map((status) => ({
-      name: status,
-      count:
-        status === "All"
-          ? updatedUsers.length
-          : updatedUsers.filter((r) => r.status === status).length,
-    }));
-
     setStatusTabs(tabsWithCounts);
   };
 

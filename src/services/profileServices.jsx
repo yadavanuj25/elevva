@@ -1,5 +1,7 @@
 import { fetchHandler } from "../fatchHandler/fetchHandler";
 
+const profileStatuses = ["Active", "In-active", "Banned", "Defaulter"];
+
 export const getAllProfiles = (
   page = 1,
   limit = 5,
@@ -7,11 +9,14 @@ export const getAllProfiles = (
   search = ""
 ) => {
   let url = `/api/profiles?page=${page}&limit=${limit}`;
-  if (tab === "Active") url += "&status=Active";
-  if (tab === "InActive") url += "&status=Inactive";
-  if (tab === "Banned") url += "&status=Banned";
-  if (tab === "Defaulter") url += "&status=Defaulter";
-  if (search.trim() !== "") url += `&search=${encodeURIComponent(search)}`;
+
+  const tabLower = tab.toLowerCase();
+  if (profileStatuses.includes(tabLower)) {
+    url += `&status=${tabLower}`;
+  }
+  if (search.trim() !== "") {
+    url += `&search=${encodeURIComponent(search)}`;
+  }
   return fetchHandler(url);
 };
 

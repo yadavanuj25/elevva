@@ -9,6 +9,7 @@ const getTabsColor = (s) => {
       return "text-[#1abe17]";
 
     case "cancelled":
+    case "Cancelled":
     case "terminated":
     case "banned":
     case "Banned":
@@ -17,8 +18,10 @@ const getTabsColor = (s) => {
     case "in-active":
     case "In-active":
     case "inactive":
+    case "dead":
       return "text-red-600";
 
+    case "Prospective":
     case "on hold":
     case "On Hold":
     case "on_hold":
@@ -32,6 +35,7 @@ const getTabsColor = (s) => {
       return "text-blue-500";
 
     case "filled":
+    case "Filled":
       return "text-orange-600";
 
     default:

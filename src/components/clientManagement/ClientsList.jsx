@@ -30,7 +30,7 @@ const columns = [
 
 const ClientList = () => {
   PageTitle("Elevva | Clients");
-  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
+  const { successMsg, errorMsg, showError } = useMessage();
   const [clients, setClients] = useState([]);
   const [activeTab, setActiveTab] = useState("All");
   const [pagination, setPagination] = useState({
@@ -46,46 +46,83 @@ const ClientList = () => {
   const [loading, setLoading] = useState(false);
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
-  const statusOptions = ["active", "inactive", "on_hold", "terminated"];
+  const statusOptions = ["active", "dead", "prosepective", "terminated"];
   const [viewMode, setViewMode] = useState("list");
 
   useEffect(() => {
     fetchClients();
-  }, [pagination.page, pagination.limit, searchQuery]);
+  }, [pagination.page, pagination.limit, searchQuery, activeTab]);
 
   const fetchClients = async () => {
     try {
       setLoading(true);
-      const data = await getAllClients(
+      const response = await getAllClients(
         pagination.page,
         pagination.limit,
+        activeTab,
         searchQuery
       );
-      const allClients = data.clients || [];
-      const uniqueStatuses = [
-        "All",
-        ...new Set(allClients.map((r) => r.status || "Unknown")),
-      ];
+      const allClients = response.clients || [];
+      const statusesFromAPI = allClients.map(
+        (item) => item.status || "Unknown"
+      );
+      statusesFromAPI.sort((a, b) => a.localeCompare(b));
+      const uniqueStatuses = ["All", ...new Set(statusesFromAPI)];
       const tabsWithCounts = uniqueStatuses.map((status) => ({
         name: status,
         count:
           status === "All"
             ? allClients.length
-            : allClients.filter((r) => r.status === status).length,
+            : allClients.filter((c) => c.status === status).length,
       }));
       setClients(allClients);
       setStatusTabs(tabsWithCounts);
       setPagination((prev) => ({
         ...prev,
-        total: data.pagination?.total || 0,
-        pages: data.pagination?.pages || 1,
+        total: response.pagination?.total || 0,
+        pages: response.pagination?.pages || 1,
       }));
     } catch (error) {
-      showError(`Error fetching clients: ${error}`);
+      showError(`Error fetching clients: ${error.message || error}`);
     } finally {
       setLoading(false);
     }
   };
+
+  //  const fetchClients = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await getAllClients(
+  //       pagination.page,
+  //       pagination.limit,
+  //       activeTab,
+  //       searchQuery
+  //     );
+  //     const allClients = response.clients || [];
+  //     const globalCounts = response.counts?.global || {};
+  // let statuses = Object.keys(globalCounts).filter((k) => k !== "total");
+  // statuses.sort((a, b) => a.localeCompare(b));
+  //     const tabsWithCounts = [
+  //       { name: "All", count: globalCounts.total || 0 },
+  //       ...statuses.map((s) => ({
+  //         name: s,
+  //         count: globalCounts[s] || 0,
+  //       })),
+  //     ];
+  //     setClients(allClients);
+  //     setStatusTabs(tabsWithCounts);
+  //     setPagination((prev) => ({
+  //       ...prev,
+  //       total: response.pagination?.total || 0,
+  //       pages: response.pagination?.pages || 1,
+  //     }));
+  //   } catch (error) {
+  //     showError(`${error.message || error}`);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setPagination((prev) => ({ ...prev, page: 1 }));
@@ -117,17 +154,11 @@ const ClientList = () => {
       year: "numeric",
     });
   };
+
   const filteredData = useMemo(() => {
     let data = [...clients];
     if (activeTab !== "All") {
       data = data.filter((c) => c.status === activeTab);
-    }
-
-    if (searchQuery.trim() !== "") {
-      const q = searchQuery.toLowerCase();
-      data = data.filter((c) =>
-        Object.values(c).some((v) => v?.toString().toLowerCase().includes(q))
-      );
     }
     return data;
   }, [clients, activeTab, searchQuery]);
@@ -166,23 +197,17 @@ const ClientList = () => {
     }
   };
   const updateStatusTabs = (updatedClients) => {
-    // const uniqueStatuses = [
-    //   "All",
-    //   ...new Set(updatedClients.map((r) => r.status || "unknown")),
-    // ];
-    const statuses = [
-      ...new Set(updatedClients.map((r) => r.status || "unknown")),
+    let statuses = [
+      ...new Set(updatedClients.map((u) => u.status || "unknown")),
     ];
-    const uniqueStatuses = ["All", ...statuses.sort()];
-
-    const tabsWithCounts = uniqueStatuses.map((status) => ({
-      name: status,
-      count:
-        status === "All"
-          ? updatedClients.length
-          : updatedClients.filter((r) => r.status === status).length,
-    }));
-
+    statuses.sort((a, b) => a.localeCompare(b));
+    const tabsWithCounts = [
+      { name: "All", count: updatedClients.length },
+      ...statuses.map((status) => ({
+        name: status,
+        count: updatedClients.filter((u) => u.status === status).length,
+      })),
+    ];
     setStatusTabs(tabsWithCounts);
   };
 

@@ -11,6 +11,7 @@ import { getProfileById, updateProfile } from "../../services/profileServices";
 import FormSkeleton from "../loaders/FormSkeleton";
 import PageTitle from "../../hooks/PageTitle";
 import previewResumeImg from "../../assets/images/dummy-resume.jpg";
+import { useMessage } from "../../auth/MessageContext";
 
 const schema = yup.object().shape({
   resume: yup
@@ -50,9 +51,11 @@ const schema = yup.object().shape({
   description: yup.string().nullable(),
 });
 const BASE_URL = "https://crm-backend-qbz0.onrender.com";
+
 const EditProfile = () => {
   PageTitle("Elevva | Edit-Profile");
   const { id } = useParams();
+  const { showError, showSuccess, errorMsg } = useMessage();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
@@ -77,8 +80,6 @@ const EditProfile = () => {
   });
   const [skillInput, setSkillInput] = useState("");
   const [errors, setErrors] = useState({});
-  const [successMsg, showSuccess] = useState("");
-  const [errorMsg, showError] = useState("");
   const [loading, setLoading] = useState(false);
   const [profileCode, setProfileCode] = useState("");
   const [resumePreview, setResumePreview] = useState(null);
@@ -422,6 +423,7 @@ backdrop-blur-md overflow-hidden shadow-md"
                       {/* Dark overlay */}
                       <div className="absolute inset-0 bg-black/70"></div>
                       <button
+                        type="button"
                         onClick={() => setShowResumePopup(true)}
                         className="absolute inset-0 flex items-center justify-center  transition-opacity"
                       >

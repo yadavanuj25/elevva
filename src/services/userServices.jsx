@@ -2,8 +2,8 @@ import { fetchHandler } from "../fatchHandler/fetchHandler";
 
 export const getAllUsers = (page = 1, limit = 5, tab = "All", search = "") => {
   let url = `/api/users?page=${page}&limit=${limit}`;
-  if (tab === "Active") url += "&status=active";
-  if (tab === "InActive") url += "&status=inactive";
+  if (tab.toLowerCase() === "active") url += "&status=active";
+  if (tab.toLowerCase() === "inactive") url += "&status=inactive";
   if (search.trim() !== "") url += `&search=${encodeURIComponent(search)}`;
   return fetchHandler(url);
 };

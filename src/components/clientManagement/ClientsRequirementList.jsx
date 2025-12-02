@@ -73,6 +73,7 @@ const ClientsRequirementsList = () => {
       const data = await getAllRequirements(
         pagination.page,
         pagination.limit,
+        activeTab,
         searchQuery
       );
       const allRequirements = data.requirements || [];
@@ -81,6 +82,7 @@ const ClientsRequirementsList = () => {
         "All",
         ...new Set(allRequirements.map((r) => r.positionStatus || "Unknown")),
       ];
+      uniqueStatuses.sort((a, b) => a.localeCompare(b));
       const tabsWithCounts = uniqueStatuses.map((status) => ({
         name: status,
         count:
@@ -161,7 +163,7 @@ const ClientsRequirementsList = () => {
       case "action":
         return "sticky -right-[0.1px] z-20";
       case "requirementPriority":
-        return "sticky right-[114px] z-20";
+        return "sticky right-[116px] z-20";
       default:
         return "";
     }
@@ -193,32 +195,6 @@ const ClientsRequirementsList = () => {
 
     if (activeTab !== "All") {
       data = data.filter((c) => c.positionStatus === activeTab);
-    }
-
-    if (searchQuery.trim() !== "") {
-      const q = searchQuery.toLowerCase();
-
-      const deepSearch = (obj) => {
-        return Object.values(obj).some((val) => {
-          if (!val) return false;
-
-          if (typeof val === "string" || typeof val === "number") {
-            return val.toString().toLowerCase().includes(q);
-          }
-
-          if (Array.isArray(val)) {
-            return val.some((item) =>
-              item.toString().toLowerCase().includes(q)
-            );
-          }
-
-          if (typeof val === "object") return deepSearch(val);
-
-          return false;
-        });
-      };
-
-      data = data.filter((item) => deepSearch(item));
     }
 
     return data;
@@ -253,22 +229,18 @@ const ClientsRequirementsList = () => {
     }
   };
   const updateStatusTabs = (updatedRequirements) => {
-    // const uniqueStatuses = [
-    //   "All",
-    //   ...new Set(updatedRequirements.map((r) => r.positionStatus || "unknown")),
-    // ];
-    const statuses = [
-      ...new Set(updatedRequirements.map((r) => r.positionStatus || "unknown")),
+    let statuses = [
+      ...new Set(updatedRequirements.map((u) => u.positionStatus || "unknown")),
     ];
-    const uniqueStatuses = ["All", ...statuses.sort()];
-    const tabsWithCounts = uniqueStatuses.map((status) => ({
-      name: status,
-      count:
-        status === "All"
-          ? updatedRequirements.length
-          : updatedRequirements.filter((r) => r.positionStatus === status)
-              .length,
-    }));
+    statuses.sort((a, b) => a.localeCompare(b));
+    const tabsWithCounts = [
+      { name: "All", count: updatedRequirements.length },
+      ...statuses.map((status) => ({
+        name: status,
+        count: updatedRequirements.filter((u) => u.positionStatus === status)
+          .length,
+      })),
+    ];
     setStatusTabs(tabsWithCounts);
   };
   return (

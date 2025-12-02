@@ -1,6 +1,6 @@
 import React from "react";
-import { CirclePlus } from "lucide-react";
 import { FaCirclePlus } from "react-icons/fa6";
+import { CirclePlus, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const TableHeader = ({ searchQuery, onSearchChange, addLink, title }) => {
@@ -23,7 +23,7 @@ const TableHeader = ({ searchQuery, onSearchChange, addLink, title }) => {
         className="px-2 py-1.5 flex gap-1 items-center bg-dark text-white rounded-md "
       >
         <span>
-          <FaCirclePlus size={18} />
+          <Plus size={15} />
         </span>
         <span>Add New {title}</span>
       </Link>

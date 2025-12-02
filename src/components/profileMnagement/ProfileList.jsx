@@ -42,13 +42,14 @@ import TableSkeleton from "../loaders/TableSkeleton";
 import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
 import PageTitle from "../../hooks/PageTitle";
+import { useMessage } from "../../auth/MessageContext";
 
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
   const { token } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [successMsg, setSuccessMsg] = useState("");
+  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const [allProfiles, setAllProfiles] = useState([]);
   const [pagination, setPagination] = useState({
     total: 0,
@@ -61,7 +62,6 @@ const ProfileList = () => {
   const [orderBy, setOrderBy] = useState("profiles.createdAt");
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [favourites, setFavourites] = useState([]);
   const [statusLoading, setStatusLoading] = useState(null);
@@ -70,9 +70,9 @@ const ProfileList = () => {
   const statusOptions = ["Active", "In-active", "Banned", "Defaulter"];
   useEffect(() => {
     if (location.state?.successMsg) {
-      setSuccessMsg(location.state.successMsg);
+      showSuccess(location.state.successMsg);
       const timer = setTimeout(() => {
-        setSuccessMsg("");
+        showSuccess("");
         navigate(location.pathname, { replace: true });
       }, 5000);
       return () => clearTimeout(timer);
@@ -81,7 +81,7 @@ const ProfileList = () => {
 
   useEffect(() => {
     fetchProfiles();
-  }, [pagination.page, pagination.limit, searchQuery]);
+  }, [pagination.page, pagination.limit, searchQuery, activeTab]);
 
   const fetchProfiles = async () => {
     try {
@@ -89,21 +89,22 @@ const ProfileList = () => {
       const data = await getAllProfiles(
         pagination.page,
         pagination.limit,
+        activeTab,
         searchQuery
       );
       const profilesData = data.profiles || [];
       setAllProfiles(data.profiles || []);
-      const uniqueStatuses = [
-        "All",
-        ...new Set(profilesData.map((r) => r.status || "unknown")),
-      ];
-
+      const statusesFromAPI = profilesData.map(
+        (item) => item.status || "Unknown"
+      );
+      statusesFromAPI.sort((a, b) => a.localeCompare(b));
+      const uniqueStatuses = ["All", ...new Set(statusesFromAPI)];
       const tabsWithCounts = uniqueStatuses.map((status) => ({
         name: status,
         count:
           status === "All"
             ? profilesData.length
-            : profilesData.filter((r) => r.status === status).length,
+            : profilesData.filter((c) => c.status === status).length,
       }));
       setStatusTabs(tabsWithCounts);
       setPagination((prev) => ({
@@ -112,7 +113,7 @@ const ProfileList = () => {
         pages: data.pagination?.pages || 1,
       }));
     } catch (error) {
-      setErrorMsg(`"Errors  when fetching clients" || ${error}`);
+      showError(`"Errors  when fetching clients" || ${error}`);
     } finally {
       setLoading(false);
     }
@@ -150,19 +151,7 @@ const ProfileList = () => {
     if (activeTab !== "All") {
       data = data.filter((c) => c.status === activeTab);
     }
-    if (searchQuery.trim() !== "") {
-      const query = searchQuery.toLowerCase();
-      data = data.filter((profile) =>
-        Object.values(profile).some((value) => {
-          if (Array.isArray(value)) {
-            return value.some((item) =>
-              item.toString().toLowerCase().includes(query)
-            );
-          }
-          return value?.toString().toLowerCase().includes(query);
-        })
-      );
-    }
+
     return data;
   }, [allProfiles, activeTab, searchQuery]);
 
@@ -241,19 +230,17 @@ const ProfileList = () => {
     }
   };
   const updateStatusTabs = (updatedProfiles) => {
-    const statuses = [
-      ...new Set(updatedProfiles.map((r) => r.status || "unknown")),
+    let statuses = [
+      ...new Set(updatedProfiles.map((u) => u.status || "unknown")),
     ];
-    const uniqueStatuses = ["All", ...statuses.sort()];
-
-    const tabsWithCounts = uniqueStatuses.map((status) => ({
-      name: status,
-      count:
-        status === "All"
-          ? updatedProfiles.length
-          : updatedProfiles.filter((r) => r.status === status).length,
-    }));
-
+    statuses.sort((a, b) => a.localeCompare(b));
+    const tabsWithCounts = [
+      { name: "All", count: updatedProfiles.length },
+      ...statuses.map((status) => ({
+        name: status,
+        count: updatedProfiles.filter((u) => u.status === status).length,
+      })),
+    ];
     setStatusTabs(tabsWithCounts);
   };
 
@@ -264,14 +251,23 @@ const ProfileList = () => {
           <h2 className="text-2xl font-semibold ">All Profiles</h2>
           <RefreshButton fetchData={fetchProfiles} />
         </div>
-        {successMsg && (
-          <div className="mb-4 p-2 bg-green-400 text-center text-md font-semibold  text-white rounded">
-            {successMsg}
+        {errorMsg && (
+          <div
+            className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+          >
+            <span className="text-red-600 font-semibold">⚠ </span>
+            <p className="text-sm">{errorMsg}</p>
           </div>
         )}
-        {errorMsg && (
-          <div className="mb-4 p-2 bg-red-100 text-center text-red-700 rounded">
-            {errorMsg}
+
+        {successMsg && (
+          <div
+            className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
+               bg-green-50 text-green-700 shadow-sm animate-slideDown"
+          >
+            <span className="text-green-600 font-semibold">✔ </span>
+            <p className="text-sm">{successMsg}</p>
           </div>
         )}
         <div>

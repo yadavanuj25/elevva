@@ -1,11 +1,37 @@
 import { fetchHandler } from "../fatchHandler/fetchHandler";
 
+const clientStatuses = ["active", "dead", "prospective", "terminated"];
+const requirementStatuses = [
+  "Open",
+  "On Hold",
+  "In Progress",
+  "Filled",
+  "Cancelled",
+  "Closed",
+];
+
 export const getActiveClients = () => {
   return fetchHandler(`/api/clients?status=active`);
 };
 export const updateClientStatus = (id, status) => {
   return fetchHandler(`/api/clients/${id}`, "PUT", status);
 };
+
+// export const getAllClients = (
+//   page = 1,
+//   limit = 5,
+//   tab = "All",
+//   search = ""
+// ) => {
+//   let url = `/api/clients?page=${page}&limit=${limit}`;
+//   if (tab.toLowerCase() === "active") url += "&status=active";
+//   if (tab.toLowerCase() === "inactive") url += "&status=inactive";
+//   if (tab.toLowerCase() === "dead") url += "&status=dead";
+//   if (tab.toLowerCase() === "prospective") url += "&status=prospective";
+//   if (tab.toLowerCase() === "terminated") url += "&status=terminated";
+//   if (search.trim() !== "") url += `&search=${encodeURIComponent(search)}`;
+//   return fetchHandler(url);
+// };
 
 export const getAllClients = (
   page = 1,
@@ -14,9 +40,13 @@ export const getAllClients = (
   search = ""
 ) => {
   let url = `/api/clients?page=${page}&limit=${limit}`;
-  if (tab === "Active") url += "&status=active";
-  if (tab === "InActive") url += "&status=inactive";
-  if (search.trim() !== "") url += `&search=${encodeURIComponent(search)}`;
+  const tabLower = tab.toLowerCase();
+  if (clientStatuses.includes(tabLower)) {
+    url += `&status=${tabLower}`;
+  }
+  if (search.trim() !== "") {
+    url += `&search=${encodeURIComponent(search)}`;
+  }
   return fetchHandler(url);
 };
 
@@ -32,7 +62,8 @@ export const addClients = (clientData) =>
 export const updateClient = (id, clientData) =>
   fetchHandler(`/api/clients/${id}`, "PUT", clientData);
 
-// Requirements
+// --------- Requirements ---------
+
 export const getRequirementById = (id) =>
   fetchHandler(`/api/requirements/${id}`);
 
@@ -54,9 +85,12 @@ export const getAllRequirements = (
   search = ""
 ) => {
   let url = `/api/requirements?page=${page}&limit=${limit}`;
-  if (tab === "Active") url += "&status=active";
-  if (tab === "InActive") url += "&status=inactive";
-  if (search.trim() !== "") url += `&search=${encodeURIComponent(search)}`;
+  const tabLower = tab.toLowerCase();
+  if (requirementStatuses.includes(tabLower)) {
+    url += `&status=${tabLower}`;
+  }
+  if (search.trim() !== "") {
+    url += `&search=${encodeURIComponent(search)}`;
+  }
   return fetchHandler(url);
 };
-// return fetchHandler("/api/requirements");
