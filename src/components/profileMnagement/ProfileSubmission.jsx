@@ -198,42 +198,40 @@ const ProfileSubmission = () => {
         }
       });
       const response = await addProfile(formDataToSend);
-      console.log(response);
       if (!response.success) {
-        showError(response.message);
-      } else {
-        showSuccess(response.message);
-        setFormData({
-          resume: null,
-          fullName: "",
-          email: "",
-          phone: "",
-          alternatePhone: "",
-          preferredLocation: "",
-          currentLocation: "",
-          currentCompany: "",
-          totalExp: "",
-          currentCTC: "",
-          expectedCTC: "",
-          workMode: "",
-          noticePeriod: "",
-          status: "",
-          skills: [],
-          techStack: "",
-          candidateSource: "",
-          description: "",
-        });
-        navigate("/admin/profilemanagement/profiles");
+        showError(response.message || "Something went wrong");
+        return;
       }
+      showSuccess(response.message);
+      setFormData({
+        resume: null,
+        fullName: "",
+        email: "",
+        phone: "",
+        alternatePhone: "",
+        preferredLocation: "",
+        currentLocation: "",
+        currentCompany: "",
+        totalExp: "",
+        currentCTC: "",
+        expectedCTC: "",
+        workMode: "",
+        noticePeriod: "",
+        status: "",
+        skills: [],
+        techStack: "",
+        candidateSource: "",
+        description: "",
+      });
+
+      navigate("/admin/profilemanagement/profiles");
     } catch (err) {
       if (err.name === "ValidationError") {
         const validationErrors = {};
         err.inner.forEach((e) => (validationErrors[e.path] = e.message));
         setErrors(validationErrors);
       } else {
-        showError({
-          api: err.message || "Failed to submit profile. Please try again.",
-        });
+        showError(err.message || "Failed to submit profile. Please try again.");
       }
     } finally {
       setLoading(false);
