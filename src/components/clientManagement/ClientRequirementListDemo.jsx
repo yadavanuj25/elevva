@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/client.css";
 
-const ClientsList = () => {
+const ClientsRequirementsList = () => {
   // State Management
   const [clients, setClients] = useState([]);
   const [stats, setStats] = useState(null);
@@ -642,4 +642,4 @@ const ClientsList = () => {
   );
 };
 
-export default ClientsList;
+export default ClientsRequirementsList;

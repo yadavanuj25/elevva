@@ -1,27 +1,53 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useAuth } from "../auth/AuthContext";
 import PageTitle from "../hooks/PageTitle";
 import DashboardCard from "../components/cards/DashboardCard";
+import DashboardStats from "../components/cards/DashboardStats";
 import img1 from "../assets/images/d1.png";
 import img2 from "../assets/images/d2.png";
 import img3 from "../assets/images/d3.png";
 import img4 from "../assets/images/d4.png";
-import DashboardStats from "../components/cards/DashboardStats";
 
+const quotes = [
+  "Today is going to be awesome! 🚀",
+  "Time to fill some positions! 👥💼",
+  "Keep being awesome! ✨",
+  "Make sure you get to everything you need to get done! ✅🕒",
+  "Great work today! Don't forget to eat dinner! 😴",
+];
 const Dashboard = () => {
   PageTitle("Elevva | Dashboard");
   const { user } = useAuth();
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return "Good Morning";
+    if (hour >= 12 && hour < 16) return "Good Afternoon";
+    if (hour >= 16 && hour < 20) return "Good Evening";
+    return "Good Night";
+  };
+
+  const getQuote = () => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return quotes[0];
+    if (hour >= 12 && hour < 15) return quotes[1];
+    if (hour >= 15 && hour < 16) return quotes[2];
+    if (hour >= 16 && hour < 20) return quotes[3];
+    if (hour >= 20 && hour < 24) return quotes[4];
+    return quotes[0];
+  };
+
+  const quoteToShow = useMemo(() => getQuote(), []);
 
   return (
     <div className=" space-y-6">
       {/* Stats Cards */}
-      <h2 className="text-2xl font-semibold  mb-1">Dashboard</h2>
+      {/* <h2 className="text-2xl font-semibold  mb-1">Dashboard</h2> */}
       <div className="flex justify-between items-center bg-[#31415f] p-6 rounded-md text-white font-golos">
         <div>
-          <h2 className="text-2xl font-semibold mb-1">
-            Welcome Back , {user?.fullName}
+          <h2 className="text-2xl font-[500] mb-1">
+            {getGreeting()} , {user?.fullName.split(" ")[0]}
           </h2>
-          <p>14 New Companies Subscribed Today !!!</p>
+          <p className="opacity-90">{quoteToShow}</p>
         </div>
         <div className="flex gap-2 font-semibold">
           <button className="bg-dark text-white px-2 py-1 rounded-md">

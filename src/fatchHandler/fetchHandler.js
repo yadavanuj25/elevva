@@ -1,39 +1,3 @@
-// const BASE_URL = "https://crm-backend-qbz0.onrender.com";
-// export const fetchHandler = async (
-//   url,
-//   method = "GET",
-//   data = null,
-//   headers = {}
-// ) => {
-//   try {
-//     const token = localStorage.getItem("token");
-//     const options = {
-//       method,
-//       headers: {
-//         "Content-Type": "application/json",
-//         ...(token && { Authorization: `Bearer ${token}` }),
-//         ...headers,
-//       },
-//     };
-//     if (data) {
-//       options.body = JSON.stringify(data);
-//     }
-//     const response = await fetch(`${BASE_URL}${url}`, options);
-//     if (!response.ok) {
-//       const errorData = await response.json().catch(() => ({}));
-//       throw new Error(
-//         errorData.message || `HTTP Error! Status: ${response.status}`
-//       );
-//     }
-//     return await response.json();
-//   } catch (error) {
-//     console.error("Fetch Error:", error.message);
-//     throw error;
-//   }
-// };
-
-// src/services/fetchHandler/fetchHandler.js
-
 const BASE_URL = "https://crm-backend-qbz0.onrender.com";
 
 export const fetchHandler = async (

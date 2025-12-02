@@ -121,11 +121,14 @@ const TableLayout = ({
                           </div>
                         )}
                         <div className="flex flex-col items-start gap-1">
-                          <p className="flex items-center gap-1 dark:text-gray-300 font-semibold">
+                          <Link
+                            className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-dark"
+                            to={`/admin/clientmanagement/edit-client/${row._id}`}
+                          >
                             <AtSign size={14} />
                             {row.clientName.charAt(0).toUpperCase() +
                               row.clientName.slice(1)}
-                          </p>
+                          </Link>
                         </div>
                       </div>
                     </TableCell>
@@ -152,14 +155,11 @@ const TableLayout = ({
                     </TableCell>
                     <TableCell className="whitespace-nowrap dark:text-gray-300">
                       <div>
-                        <Link
-                          className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-dark"
-                          to={`/admin/clientmanagement/edit-client/${row._id}`}
-                        >
+                        <p className="flex items-center gap-1  dark:text-gray-300 font-semibold ">
                           <AtSign size={14} />
                           {row.poc1.name.charAt(0).toUpperCase() +
                             row.poc1.name.slice(1)}
-                        </Link>
+                        </p>
 
                         <p className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300">
                           <Mail size={14} /> {row.poc1.email}

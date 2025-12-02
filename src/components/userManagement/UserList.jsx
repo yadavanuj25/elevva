@@ -254,7 +254,7 @@ const UserList = () => {
             <TableHeader
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
-              addLink="/admin/usermanagement/create-user"
+              addLink="/admin/usermanagement/add-user"
               title="User"
             />
 

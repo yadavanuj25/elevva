@@ -6,7 +6,10 @@ import Button from "../ui/Button";
 import Input from "../ui/Input";
 import SelectField from "../ui/SelectField";
 import { useAuth } from "../../auth/AuthContext";
-import { addProfile } from "../../services/profileServices";
+import {
+  addProfile,
+  checkDuplicateProfile,
+} from "../../services/profileServices";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 
@@ -18,7 +21,7 @@ const schema = yup.object().shape({
       return value && value.type === "application/pdf";
     })
     .test("fileSize", "File size must be less than 50MB", (value) => {
-      return value && value.size <= 50 * 1024 * 1024;
+      return value && value.size <= 1 * 1024 * 1024;
     }),
   fullName: yup.string().required("Full name is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -50,8 +53,9 @@ const schema = yup.object().shape({
 
 const ProfileSubmission = () => {
   PageTitle("Elevva | Add-Profile");
-  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
+  const { token } = useAuth();
+  const { errorMsg, showSuccess, showError } = useMessage();
   const fileInputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [formData, setFormData] = useState({
@@ -77,17 +81,62 @@ const ProfileSubmission = () => {
   const [skillInput, setSkillInput] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const debounceTimer = useRef(null);
 
+  // const checkDuplicate = async (field, value) => {
+  //   try {
+  //     const res = await checkDuplicateProfile(field, value);
+  //     return await res.json();
+  //   } catch (err) {
+  //     return { success: false, message: "Server error" };
+  //   }
+  // };
+  const checkDuplicate = async (field, value) => {
+    try {
+      const res = await fetch(
+        `https://crm-backend-qbz0.onrender.com/api/profiles/check-duplicate?${field}=${value}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return await res.json();
+    } catch (err) {
+      return { success: false, message: "Server error" };
+    }
+  };
+  const handleDuplicateCheck = (field, value) => {
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(async () => {
+      if (!value) return;
+      const response = await checkDuplicate(field, value);
+      if (!response || response.success === false) {
+        return;
+      }
+      if (response.exists) {
+        setErrors((prev) => ({
+          ...prev,
+          [field]: response.message,
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          [field]: "",
+        }));
+      }
+    }, 600);
+  };
   const handleSkillKeyDown = (e) => {
     if (e.key === "Enter" && skillInput.trim()) {
       e.preventDefault();
       const skill = skillInput.trim();
-
       setErrors((prev) => ({
         ...prev,
         skills: "",
       }));
-
       setFormData((prev) => {
         if (!prev.skills.includes(skill)) {
           return { ...prev, skills: [...prev.skills, skill] };
@@ -104,13 +153,10 @@ const ProfileSubmission = () => {
       skills: prev.skills.filter((s) => s !== skill),
     }));
   };
-
   // Resume
-
   const handleBoxClick = () => {
     fileInputRef.current.click();
   };
-
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     validateAndSetFile(file);
@@ -126,19 +172,17 @@ const ProfileSubmission = () => {
     setIsDragging(true);
   };
   const handleDragLeave = () => setIsDragging(false);
-
   const validateAndSetFile = (file) => {
     if (!file) return;
     if (file.type !== "application/pdf") {
       setErrors((prev) => ({ ...prev, resume: "Only pdf allowed" }));
       return;
     }
-    if (file.size > 50 * 1024 * 1024) {
+    if (file.size > 1 * 1024 * 1024) {
       setErrors((prev) => ({
         ...prev,
-        resume: "File size must be less than 50MB!",
+        resume: "File size must be less than 1MB!",
       }));
-
       return;
     }
     setFormData((prev) => ({ ...prev, resume: file }));
@@ -147,7 +191,6 @@ const ProfileSubmission = () => {
       resume: "",
     }));
   };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     let newValue = value;
@@ -179,13 +222,23 @@ const ProfileSubmission = () => {
       ...prev,
       [name]: errorMsg,
     }));
+    if (name === "email" && newValue.length > 5) {
+      handleDuplicateCheck("email", newValue);
+    }
+    if (name === "phone" && newValue.length === 10) {
+      handleDuplicateCheck("phone", newValue);
+    }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
     showSuccess("");
     showError("");
+    const hasErrors = Object.values(errors).some(
+      (err) => err && err.length > 0
+    );
+    if (hasErrors) {
+      return;
+    }
     try {
       await schema.validate(formData, { abortEarly: false });
       setLoading(true);
@@ -223,7 +276,6 @@ const ProfileSubmission = () => {
         candidateSource: "",
         description: "",
       });
-
       navigate("/admin/profilemanagement/profiles");
     } catch (err) {
       if (err.name === "ValidationError") {

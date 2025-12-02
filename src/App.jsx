@@ -176,7 +176,7 @@ const App = () => {
             }
           />
           <Route
-            path="/admin/rolemanagement/create-roles"
+            path="/admin/rolemanagement/add-roles"
             element={
               <ProtectedRoute allowedModules={["users", "roles"]}>
                 <CreateRole />
@@ -201,7 +201,7 @@ const App = () => {
             }
           />
           <Route
-            path="/admin/usermanagement/create-user"
+            path="/admin/usermanagement/add-user"
             element={
               <ProtectedRoute allowedModules={["users"]}>
                 <CreateUser />
@@ -254,6 +254,7 @@ const App = () => {
             path="/admin/clientmanagement/clientrequirements"
             element={
               <ProtectedRoute allowedModules={["users"]}>
+                {/* <ClientsRequirementsList /> */}
                 <ClientsRequirementsList />
               </ProtectedRoute>
             }

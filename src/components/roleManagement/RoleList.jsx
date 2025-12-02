@@ -210,7 +210,7 @@ const RoleList = () => {
         <TableHeader
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}
-          addLink="/admin/rolemanagement/create-roles"
+          addLink="/admin/rolemanagement/add-roles"
           title="Role"
         />
         <>

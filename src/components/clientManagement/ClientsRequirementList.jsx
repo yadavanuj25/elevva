@@ -284,9 +284,7 @@ const ClientsRequirementsList = () => {
           title="Requirement"
         />
         <div className="filter flex items-center justify-between">
-          <div>
-            <Filter clients={clients} />
-          </div>
+          <div>{/* <Filter clients={clients} /> */}</div>
           {/* Pagination */}
           <CommonPagination
             total={pagination.total}

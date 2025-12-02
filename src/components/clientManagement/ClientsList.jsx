@@ -51,7 +51,14 @@ const ClientList = () => {
 
   useEffect(() => {
     fetchClients();
-  }, [pagination.page, pagination.limit, searchQuery, activeTab]);
+  }, [pagination.page, pagination.limit, activeTab]);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchClients();
+    }, 500);
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery]);
 
   const fetchClients = async () => {
     try {

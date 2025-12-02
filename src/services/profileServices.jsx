@@ -31,3 +31,6 @@ export const updateProfile = (id, profileData) =>
 export const updateProfileStatus = (id, status) => {
   return fetchHandler(`/api/profiles/${id}`, "PUT", status);
 };
+
+export const checkDuplicateProfile = (field, value) =>
+  fetchHandler(`/api/profiles/check-duplicate?${field}=${value}`);
