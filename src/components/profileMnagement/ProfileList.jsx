@@ -415,11 +415,15 @@ const ProfileList = () => {
                                 </div>
                               )}
                               <div>
-                                <p className="flex items-center gap-1  dark:text-gray-300 font-semibold">
+                                <Link
+                                  className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-dark"
+                                  to={`/admin/profilemanagement/edit-profile/${item._id}`}
+                                >
                                   <AtSign size={14} />
                                   {item.fullName.charAt(0).toUpperCase() +
                                     item.fullName.slice(1)}
-                                </p>
+                                </Link>
+
                                 <p className="flex items-center gap-1 text-gray-600 dark:text-gray-300 text-sm">
                                   <Mail size={14} />
                                   {item.email}

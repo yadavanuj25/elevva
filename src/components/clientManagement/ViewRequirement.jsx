@@ -25,6 +25,7 @@ import ViewInfo from "../ui/ViewInfo";
 import ViewSection from "../ui/ViewSection";
 import ViewBlock from "../ui/ViewBlock";
 import PageTitle from "../../hooks/PageTitle";
+import { BarLoader } from "react-spinners";
 
 const ViewRequirement = () => {
   const { id } = useParams();
@@ -91,12 +92,10 @@ const ViewRequirement = () => {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <h2 className="text-2xl font-semibold">Requirement Info</h2>
-          {!loading && requirement ? (
+          {requirement && (
             <p className="text-dark bg-light dark:bg-white text-[12px] px-[2px] py-0 border-b border-dark rounded font-[500]">
               #{requirement.requirementCode}
             </p>
-          ) : (
-            <Spinner size={20} color="#3b82f6" />
           )}
         </div>
 
@@ -113,12 +112,19 @@ const ViewRequirement = () => {
       <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600">
         {loading ? (
           <div className="h-screen flex justify-center items-center text-center py-10">
-            <Spinner size={50} color="#3b82f6" text="Loading..." />
+            <div className="w-[200px] text-black dark:text-white bg-gray-300 dark:bg-gray-700 rounded-full">
+              <BarLoader
+                height={6}
+                width={200}
+                color="currentColor"
+                cssOverride={{ borderRadius: "999px" }}
+              />
+            </div>
           </div>
         ) : client ? (
           <div className="space-y-8">
             {/* TOP HEADER */}
-            <div className="p-6 rounded-lg border border-gray-300 dark:border-gray-600 flex justify-between items-center">
+            <div className="p-4 rounded-lg border border-gray-300 dark:border-gray-600 flex justify-between items-center">
               <div className="flex items-center gap-5">
                 <div className="w-16 h-16 flex items-center justify-center rounded-lg border-b-[3px] border-dark bg-light dark:bg-white text-3xl font-semibold text-dark">
                   {client.clientName.slice(0, 2).toUpperCase()}
@@ -132,7 +138,7 @@ const ViewRequirement = () => {
                     {requirement.techStack}
                   </p>
                   <span
-                    className={`inline-block mt-2 px-2 py-1 text-xs font-[500] text-white rounded-md  ${getTabsColor(
+                    className={`inline-block  px-2 py-0.5 text-xs font-[500] text-white rounded-md  ${getTabsColor(
                       requirement.positionStatus
                     )}`}
                   >

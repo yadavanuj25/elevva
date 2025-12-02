@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -152,11 +152,14 @@ const TableLayout = ({
                     </TableCell>
                     <TableCell className="whitespace-nowrap dark:text-gray-300">
                       <div>
-                        <p className="flex items-center gap-1 font-semibold dark:text-gray-300">
+                        <Link
+                          className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-dark"
+                          to={`/admin/clientmanagement/edit-client/${row._id}`}
+                        >
                           <AtSign size={14} />
                           {row.poc1.name.charAt(0).toUpperCase() +
                             row.poc1.name.slice(1)}
-                        </p>
+                        </Link>
 
                         <p className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300">
                           <Mail size={14} /> {row.poc1.email}
@@ -233,112 +236,3 @@ const TableLayout = ({
 };
 
 export default TableLayout;
-
-// import React from "react";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow,
-//   TableSortLabel,
-//   Checkbox,
-// } from "@mui/material";
-
-// import TableSkeleton from "../../loaders/TableSkeleton";
-// import NoData from "../NoData";
-
-// const getStickyClass = (columnId) => {
-//   switch (columnId) {
-//     case "action":
-//       return "sticky right-0 z-20 bg-[#f2f4f5] dark:bg-darkGray";
-//     case "status1":
-//       return "sticky right-[128px] bg-[#f2f4f5] dark:bg-darkGray";
-//     default:
-//       return "";
-//   }
-// };
-// const TableLayout = ({
-//   loading = false,
-//   columns = [],
-//   order,
-//   orderBy,
-//   handleSort,
-//   rows = [],
-//   renderRow,
-// }) => {
-//   return (
-//     <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600">
-//       <div className="overflow-x-auto">
-//         <Table className="min-w-full">
-//           <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-20">
-//             <TableRow>
-//               <TableCell
-//                 padding="checkbox"
-//                 className="bg-[#f2f4f5] dark:bg-darkGray"
-//               >
-//                 <Checkbox />
-//               </TableCell>
-//               {columns.map((col) => (
-//                 <TableCell
-//                   key={col.id}
-//                   className={`whitespace-nowrap font-bold text-darkBg dark:text-white
-//                   bg-[#f2f4f5] dark:bg-darkGray
-//                   ${col.sticky ? getStickyClass(col.id) : ""}`}
-//                 >
-//                   {col.sortable ? (
-//                     <TableSortLabel
-//                       active={orderBy === col.id}
-//                       direction={orderBy === col.id ? order : "asc"}
-//                       onClick={() => handleSort(col.id)}
-//                       sx={{
-//                         color: "inherit !important",
-//                         "& .MuiTableSortLabel-icon": {
-//                           opacity: 1,
-//                           color: "currentColor !important",
-//                         },
-//                       }}
-//                     >
-//                       <strong>{col.label}</strong>
-//                     </TableSortLabel>
-//                   ) : (
-//                     <strong>{col.label}</strong>
-//                   )}
-//                 </TableCell>
-//               ))}
-//             </TableRow>
-//           </TableHead>
-//           <TableBody>
-//             {loading ? (
-//               <TableRow>
-//                 <TableCell colSpan={columns.length + 1} className="py-10">
-//                   <TableSkeleton rows={6} columns={columns.length} />
-//                 </TableCell>
-//               </TableRow>
-//             ) : rows.length === 0 ? (
-//               <TableRow>
-//                 <TableCell colSpan={columns.length + 1} className="py-10">
-//                   <NoData title="No Data Found" />
-//                 </TableCell>
-//               </TableRow>
-//             ) : (
-//               rows.map((row) => (
-//                 <TableRow
-//                   key={row._id}
-//                   className="hover:bg-lightGray dark:hover:bg-darkGray"
-//                 >
-//                   <TableCell padding="checkbox">
-//                     <Checkbox />
-//                   </TableCell>
-//                   {renderRow(row)}
-//                 </TableRow>
-//               ))
-//             )}
-//           </TableBody>
-//         </Table>
-//       </div>
-//     </TableContainer>
-//   );
-// };
-// export default TableLayout;

@@ -394,11 +394,14 @@ const ClientsRequirementsList = () => {
                             </div>
                           )}
                           <div>
-                            <p className="flex items-center gap-1  dark:text-gray-300 font-semibold">
+                            <Link
+                              className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-dark"
+                              to={`/admin/clientmanagement/edit-requirement/${row._id}`}
+                            >
                               <AtSign size={14} />
                               {row.client.clientName.charAt(0).toUpperCase() +
                                 row.client.clientName.slice(1)}
-                            </p>
+                            </Link>
                           </div>
                         </div>
                       </TableCell>
