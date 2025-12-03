@@ -98,7 +98,7 @@ const TableLayout = ({
                     <TableSkeleton rows={6} />
                   </TableCell>
                 </TableRow>
-              ) : sortedData.length > 0 ? (
+              ) : !loading && sortedData.length > 0 ? (
                 sortedData.map((row) => (
                   <TableRow
                     key={row._id}

@@ -7,21 +7,17 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  TablePagination,
   Checkbox,
 } from "@mui/material";
-import { Pencil, RefreshCcw, Plus, AtSign, Eye, Trash } from "lucide-react";
+import { Pencil, AtSign, Eye, Trash } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import Spinner from "../loaders/Spinner";
 import NoData from "../ui/NoData";
-import ToolTip from "../ui/ToolTip";
 import DateDisplay from "../ui/DateDisplay";
 import {
   getAllClients,
   getAllRequirements,
   updateRequirementStatus,
 } from "../../services/clientServices";
-import Filter from "../ui/Filter";
 import StatusDropDown from "../ui/StatusDropDown";
 import Tabs from "../ui/tableComponents/Tabs";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
@@ -35,7 +31,7 @@ import PageTitle from "../../hooks/PageTitle";
 
 const ClientsRequirementsList = () => {
   PageTitle("Elevva | Client Requirements");
-  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
+  const { successMsg, errorMsg, showError } = useMessage();
   const navigate = useNavigate();
   const [clients, setClients] = useState([]);
   const [requirements, setRequirements] = useState([]);
@@ -284,7 +280,36 @@ const ClientsRequirementsList = () => {
           title="Requirement"
         />
         <div className="filter flex items-center justify-between">
-          <div>{/* <Filter clients={clients} /> */}</div>
+          <div
+            class="inline-flex rounded-base shadow-xs -space-x-px"
+            role="group"
+          >
+            <button
+              type="button"
+              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-l-md text-sm  px-2  py-1 focus:outline-none"
+            >
+              Profile
+            </button>
+            <button
+              type="button"
+              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   text-sm  px-2 py-1 focus:outline-none"
+            >
+              Settings
+            </button>
+            <button
+              type="button"
+              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
+            >
+              Message
+            </button>
+            <button
+              type="button"
+              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-r-md text-sm  px-2 py-1 focus:outline-none"
+            >
+              Status
+            </button>
+          </div>
+
           {/* Pagination */}
           <CommonPagination
             total={pagination.total}
@@ -359,7 +384,7 @@ const ClientsRequirementsList = () => {
                       <TableSkeleton rows={6} />
                     </TableCell>
                   </TableRow>
-                ) : sortedData.length > 0 ? (
+                ) : !loading && sortedData.length > 0 ? (
                   sortedData.map((row) => (
                     <TableRow
                       key={row._id}

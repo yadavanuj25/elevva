@@ -293,7 +293,7 @@ const RoleList = () => {
                         <TableSkeleton rows={6} />
                       </TableCell>
                     </TableRow>
-                  ) : paginatedData.length > 0 ? (
+                  ) : !loading && paginatedData.length > 0 ? (
                     paginatedData.map((row) => {
                       const isItemSelected = isSelected(row.id);
                       return (
