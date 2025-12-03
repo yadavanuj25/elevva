@@ -249,7 +249,6 @@ const ProfileList = () => {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-semibold ">All Profiles</h2>
-          <RefreshButton fetchData={fetchProfiles} />
         </div>
         {errorMsg && (
           <div
@@ -286,14 +285,45 @@ const ProfileList = () => {
               addLink="/admin/profilemanagement/add-profile"
               title="Profile"
             />
+
+            <div className="filter flex items-center justify-between">
+              <div
+                class="inline-flex rounded-base shadow-xs -space-x-px"
+                role="group"
+              >
+                <button
+                  type="button"
+                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-l-md text-sm  px-2  py-1 focus:outline-none"
+                >
+                  Profile
+                </button>
+                <button
+                  type="button"
+                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   text-sm  px-2 py-1 focus:outline-none"
+                >
+                  Settings
+                </button>
+                <button
+                  type="button"
+                  // onClick={() => navigate("/admin/clientmanagement/clients/stats")}
+                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
+                >
+                  Stats
+                </button>
+                <RefreshButton fetchData={fetchProfiles} />
+              </div>
+
+              {/* Pagination */}
+              <CommonPagination
+                total={pagination.total}
+                page={pagination.page}
+                limit={pagination.limit}
+                onPageChange={handleChangePage}
+                onLimitChange={handleChangeRowsPerPage}
+              />
+            </div>
             {/* Pgination */}
-            <CommonPagination
-              total={pagination.total}
-              page={pagination.page}
-              limit={pagination.limit}
-              onPageChange={handleChangePage}
-              onLimitChange={handleChangeRowsPerPage}
-            />
+
             {/* Table */}
             <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 ">
               <div

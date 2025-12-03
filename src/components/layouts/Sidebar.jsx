@@ -4,6 +4,11 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { AiOutlineDashboard } from "react-icons/ai";
 import logo from "../../assets/logo/logo.png";
+import { FaUsers, FaUnlockAlt, FaHandshake } from "react-icons/fa";
+import { MdDashboard } from "react-icons/md";
+import { FaBriefcase, FaGears } from "react-icons/fa6";
+import { ImProfile } from "react-icons/im";
+import { CiUnlock } from "react-icons/ci";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { modules = [], role } = useAuth();
@@ -19,7 +24,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           module: "dashboard",
           path: dashboardPath,
           label: "Dashboard",
-          icon: <LayoutDashboard size={16} />,
+          icon: <MdDashboard size={16} />,
         },
       ],
     },
@@ -30,13 +35,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           module: "users",
           path: "/admin/usermanagement/users",
           label: "Manage Users",
-          icon: <Users size={16} />,
+          icon: <FaUsers size={16} />,
         },
         {
           module: "users",
           path: "/admin/rolemanagement/roles",
           label: "Roles & Permission",
-          icon: <AiOutlineDashboard size={16} />,
+          icon: <FaUnlockAlt size={16} />,
         },
       ],
     },
@@ -47,13 +52,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           module: "users",
           path: "/admin/clientmanagement/clients",
           label: "Manage Clients",
-          icon: <Users size={16} />,
+          icon: <FaHandshake size={16} />,
         },
         {
           module: "users",
           path: "/admin/clientmanagement/clientrequirements",
           label: "Clients Requirement",
-          icon: <Users size={16} />,
+          icon: <FaBriefcase size={16} />,
         },
       ],
     },
@@ -95,7 +100,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           module: "profile",
           path: "/admin/profilemanagement/profiles",
           label: "Profiles",
-          icon: <LayoutDashboard size={16} />,
+          icon: <ImProfile size={16} />,
         },
       ],
     },
@@ -106,7 +111,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           module: "settings",
           path: "/admin/settings",
           label: "Settings",
-          icon: <Settings size={16} />,
+          icon: <FaGears size={16} />,
         },
       ],
     },

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { LayoutGrid, List } from "lucide-react";
 import {
   getAllClients,
@@ -30,6 +31,7 @@ const columns = [
 
 const ClientList = () => {
   PageTitle("Elevva | Clients");
+  const navigate = useNavigate();
   const { successMsg, errorMsg, showError } = useMessage();
   const [clients, setClients] = useState([]);
   const [activeTab, setActiveTab] = useState("All");
@@ -222,7 +224,7 @@ const ClientList = () => {
     <>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">All Clients</h2>
-        <RefreshButton fetchData={fetchClients} />
+        {/* <RefreshButton fetchData={fetchClients} /> */}
       </div>
       {errorMsg && (
         <div
@@ -277,14 +279,46 @@ const ClientList = () => {
           addLink="/admin/clientManagement/add-client"
           title="Client"
         />
+
+        <div className="filter flex items-center justify-between">
+          <div
+            class="inline-flex rounded-base shadow-xs -space-x-px"
+            role="group"
+          >
+            <button
+              type="button"
+              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-l-md text-sm  px-2  py-1 focus:outline-none"
+            >
+              Profile
+            </button>
+            <button
+              type="button"
+              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   text-sm  px-2 py-1 focus:outline-none"
+            >
+              Settings
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/admin/clientmanagement/clients/stats")}
+              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
+            >
+              Stats
+            </button>
+            <RefreshButton fetchData={fetchClients} />
+          </div>
+
+          {/* Pagination */}
+          <CommonPagination
+            total={pagination.total}
+            page={pagination.page}
+            limit={pagination.limit}
+            onPageChange={handleChangePage}
+            onLimitChange={handleChangeRowsPerPage}
+          />
+        </div>
+
         {/* Pagination */}
-        <CommonPagination
-          total={pagination.total}
-          page={pagination.page}
-          limit={pagination.limit}
-          onPageChange={handleChangePage}
-          onLimitChange={handleChangeRowsPerPage}
-        />
+
         {viewMode === "grid" ? (
           <>
             <GridLayout data={sortedData} loading={loading} />

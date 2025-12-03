@@ -223,7 +223,6 @@ const UserList = () => {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-semibold ">All Users</h2>
-          <RefreshButton fetchData={fetchUsers} />
         </div>
         <div>
           {errorMsg && (
@@ -258,13 +257,44 @@ const UserList = () => {
               title="User"
             />
 
-            <CommonPagination
-              total={pagination.total}
-              page={pagination.page}
-              limit={pagination.limit}
-              onPageChange={handleChangePage}
-              onLimitChange={handleChangeRowsPerPage}
-            />
+            <div className="filter flex items-center justify-between">
+              <div
+                class="inline-flex rounded-base shadow-xs -space-x-px"
+                role="group"
+              >
+                <button
+                  type="button"
+                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-l-md text-sm  px-2  py-1 focus:outline-none"
+                >
+                  Profile
+                </button>
+                <button
+                  type="button"
+                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   text-sm  px-2 py-1 focus:outline-none"
+                >
+                  Settings
+                </button>
+                <button
+                  type="button"
+                  // onClick={() =>
+                  //   navigate("/admin/clientmanagement/clients/stats")
+                  // }
+                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
+                >
+                  Stats
+                </button>
+                <RefreshButton fetchData={fetchUsers} />
+              </div>
+
+              {/* Pagination */}
+              <CommonPagination
+                total={pagination.total}
+                page={pagination.page}
+                limit={pagination.limit}
+                onPageChange={handleChangePage}
+                onLimitChange={handleChangeRowsPerPage}
+              />
+            </div>
 
             <TableContainer className="rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600">
               <div

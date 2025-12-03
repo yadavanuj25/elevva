@@ -82,7 +82,7 @@ html.dark .css-h7cjts-MuiButtonBase-root-MuiIconButton-root.Mui-disabled {
   padding:11px !important;
 }
 
-.tippy-box[data-theme~="custom"] {
+/* .tippy-box[data-theme~="custom"] {
   background-color: var(--tooltip-bg-light);
   color: var(--tooltip-text-light);
   font-size: 12px;
@@ -90,15 +90,15 @@ html.dark .css-h7cjts-MuiButtonBase-root-MuiIconButton-root.Mui-disabled {
   border-radius: 6px;
   padding: 1px 8px;
 }
+.tippy-box[data-theme~="custom"][data-placement^="top"] > .tippy-arrow::before {
+  border-top-color: var(--tooltip-bg-light);
+} */
 
 html.dark .tippy-box[data-theme~="custom"] {
   background-color: var(--tooltip-bg-dark);
   color: var(--tooltip-text-dark);
 }
 
-.tippy-box[data-theme~="custom"][data-placement^="top"] > .tippy-arrow::before {
-  border-top-color: var(--tooltip-bg-light);
-}
 
 html.dark
   .tippy-box[data-theme~="custom"][data-placement^="top"]

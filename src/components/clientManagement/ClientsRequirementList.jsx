@@ -243,7 +243,7 @@ const ClientsRequirementsList = () => {
     <>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">All Requirements</h2>
-        <RefreshButton fetchData={fetchRequirements} />
+        {/* <RefreshButton fetchData={fetchRequirements} /> */}
       </div>
 
       {errorMsg && (
@@ -298,16 +298,12 @@ const ClientsRequirementsList = () => {
             </button>
             <button
               type="button"
+              // onClick={() => navigate("/admin/clientmanagement/clients/stats")}
               class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
             >
-              Message
+              Stats
             </button>
-            <button
-              type="button"
-              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-r-md text-sm  px-2 py-1 focus:outline-none"
-            >
-              Status
-            </button>
+            <RefreshButton fetchData={fetchRequirements} />
           </div>
 
           {/* Pagination */}
