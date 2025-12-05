@@ -255,7 +255,7 @@ const ProfileList = () => {
             className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
                bg-red-50 text-red-700 shadow-sm animate-slideDown"
           >
-            <span className="text-red-600 font-semibold">⚠ </span>
+            <span className=" font-semibold">⚠ </span>
             <p className="text-sm">{errorMsg}</p>
           </div>
         )}
@@ -263,9 +263,9 @@ const ProfileList = () => {
         {successMsg && (
           <div
             className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
-               bg-green-50 text-green-700 shadow-sm animate-slideDown"
+               bg-[#28a745] text-white shadow-sm animate-slideDown"
           >
-            <span className="text-green-600 font-semibold">✔ </span>
+            <span className=" font-semibold">✔ </span>
             <p className="text-sm">{successMsg}</p>
           </div>
         )}
@@ -305,7 +305,9 @@ const ProfileList = () => {
                 </button>
                 <button
                   type="button"
-                  // onClick={() => navigate("/admin/clientmanagement/clients/stats")}
+                  onClick={() =>
+                    navigate("/admin/profilemanagement/profiles/stats")
+                  }
                   class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
                 >
                   Stats

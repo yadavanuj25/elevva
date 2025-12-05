@@ -12,6 +12,7 @@ import {
   getActiveClients,
   getRequirementsOptions,
   getRequirementById,
+  updateClientsRequirement,
 } from "../../services/clientServices";
 import BasicDatePicker from "../ui/BasicDatePicker";
 import FormSkeleton from "../loaders/FormSkeleton";
@@ -43,6 +44,7 @@ const EditClientRequirement = () => {
   const quillRef = useRef(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    clientId: "",
     client: "",
     requirementPriority: "",
     positionStatus: "",
@@ -68,6 +70,7 @@ const EditClientRequirement = () => {
     priorities: [],
   });
   const [loading, setLoading] = useState(false);
+  const [disable, setDisable] = useState(false);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -83,9 +86,11 @@ const EditClientRequirement = () => {
       const res = await getRequirementById(id);
       if (res?.success && res?.requirement) {
         const r = res.requirement;
+        console.log(r.client.clientName);
         jobDescriptionRef.current = r.jobDescription;
         setFormData({
-          client: r.client || "",
+          clientId: r.client._id,
+          client: r.client.clientName || "",
           requirementPriority: r.requirementPriority || "",
           positionStatus: r.positionStatus || "",
           techStack: r.techStack || "",
@@ -116,8 +121,7 @@ const EditClientRequirement = () => {
       if (!data?.options) return;
       setOptions(data.options);
     } catch (error) {
-      console.error("Error fetching options:", error);
-      showError("Failed to load dropdown options");
+      showError(error);
     }
   };
   const fetchActiveClients = async () => {
@@ -175,6 +179,7 @@ const EditClientRequirement = () => {
     e.preventDefault();
     showError("");
     showSuccess("");
+    setDisable(true);
     const finalData = {
       ...formData,
       jobDescription: jobDescriptionRef.current,
@@ -182,11 +187,9 @@ const EditClientRequirement = () => {
 
     try {
       await schema.validate(finalData, { abortEarly: false });
-
-      const res = await addClientsRequirement(finalData);
-
+      const res = await updateClientsRequirement(id, finalData);
       if (res?.success) {
-        showSuccess("Requirement updated successfully!");
+        showSuccess(res.message || "Requirement updated successfully!");
         navigate("/admin/clientmanagement/clientrequirements");
       } else {
         showError(res?.message || "Failed to update requirement");
@@ -197,6 +200,8 @@ const EditClientRequirement = () => {
         validationErrors[e.path] = e.message;
       });
       setErrors(validationErrors);
+    } finally {
+      setDisable(false);
     }
   };
 
@@ -215,9 +220,9 @@ const EditClientRequirement = () => {
       {errorMsg && (
         <div
           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+               bg-[#d72b16] text-white shadow-sm animate-slideDown"
         >
-          <span className="text-red-600 font-semibold">⚠ </span>
+          <span className=" font-semibold">⚠ </span>
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}
@@ -241,7 +246,7 @@ const EditClientRequirement = () => {
               handleChange={handleChange}
               error={errors.client}
             /> */}
-                <div className="relative w-full">
+                {/* <div className="relative w-full">
                   <select
                     name="client"
                     value={formData.client}
@@ -285,7 +290,14 @@ const EditClientRequirement = () => {
                   {errors.client && (
                     <p className="text-red-500 text-sm mt-1">{errors.client}</p>
                   )}
-                </div>
+                </div> */}
+                <input
+                  type="text"
+                  value={formData.client}
+                  readOnly
+                  className="w-full border px-3 py-2 rounded bg-gray-100 cursor-not-allowed"
+                />
+
                 <SelectField
                   name="requirementPriority"
                   label="Requirement Priority"
@@ -458,7 +470,11 @@ const EditClientRequirement = () => {
               </div>
             </div>
             <div className="flex justify-end">
-              <Button type="submit" text="Save" icon={<Save size={18} />} />
+              <Button
+                type="submit"
+                text="Save"
+                icon={<Save size={18} loading={disable} />}
+              />
             </div>
           </form>
         )}

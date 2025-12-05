@@ -29,7 +29,10 @@ import ClientRequirement from "./components/clientManagement/ClientRequirement";
 import ClientsRequirementsList from "./components/clientManagement/ClientsRequirementList";
 import ViewRequirement from "./components/clientManagement/ViewRequirement";
 import EditClientRequirement from "./components/clientManagement/EditClientRequirement";
-import ClientStats from "./components/stats/ClientStats";
+import ClientStats from "./components/clientManagement/ClientStats";
+import ProfileStats from "./components/stats/ProfileStats";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
   return (
@@ -56,6 +59,22 @@ const App = () => {
           element={
             <PublicRoute>
               <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoute>
+              <ForgotPassword />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/reset-password/:token"
+          element={
+            <PublicRoute>
+              <ResetPassword />
             </PublicRoute>
           }
         />
@@ -163,6 +182,14 @@ const App = () => {
             element={
               <ProtectedRoute allowedModules={["profile"]}>
                 <ViewProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/profilemanagement/profiles/stats"
+            element={
+              <ProtectedRoute allowedModules={["profile"]}>
+                <ProfileStats />
               </ProtectedRoute>
             }
           />

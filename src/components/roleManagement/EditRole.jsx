@@ -240,7 +240,7 @@ const EditRole = () => {
             className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
                bg-red-50 text-red-700 shadow-sm animate-slideDown"
           >
-            <span className="text-red-600 font-semibold">⚠ </span>
+            <span className=" font-semibold">⚠ </span>
             <p className="text-sm">{errorMsg}</p>
           </div>
         )}

@@ -56,13 +56,13 @@ export default function EditUser() {
   const [allRoles, setAllRoles] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [loadingCountries, setLoadingCountries] = useState(false);
   const [loadingRole, setLoadingRole] = useState(false);
   const [profilePreview, setProfilePreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [disable, setDisable] = useState(false);
 
   useEffect(() => {
     getAllRoles();
@@ -223,6 +223,7 @@ export default function EditUser() {
     e.preventDefault();
     showError("");
     showSuccess("");
+    setDisable(true);
     try {
       await schema.validate(formData, { abortEarly: false });
       const payload = {
@@ -253,7 +254,7 @@ export default function EditUser() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to update user");
       navigate("/admin/usermanagement/users");
-      showSuccess(" User updated successfully!");
+      showSuccess(data.message || " User updated successfully!");
     } catch (err) {
       if (err.inner) {
         const validationErrors = {};
@@ -262,6 +263,8 @@ export default function EditUser() {
       } else {
         showError(err.message);
       }
+    } finally {
+      setDisable(false);
     }
   };
   const togglePassword = () => setShowPassword(!showPassword);
@@ -282,9 +285,9 @@ export default function EditUser() {
       {errorMsg && (
         <div
           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+               bg-[#d72b16] text-white shadow-sm animate-slideDown"
         >
-          <span className="text-red-600 font-semibold">⚠ </span>
+          <span className=" font-semibold">⚠ </span>
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}
@@ -354,7 +357,7 @@ export default function EditUser() {
                     className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
                       formData.status === "active"
                         ? "bg-green-600 text-white shadow-sm"
-                        : "text-gray-600 hover:bg-green-50"
+                        : "text-gray-600 hover:bg-[#28a745]"
                     }`}
                   >
                     Active
@@ -569,6 +572,7 @@ export default function EditUser() {
                     type="submit"
                     text="Update"
                     icon={<Save size={18} />}
+                    loading={disable}
                   />
                 </div>
               </div>

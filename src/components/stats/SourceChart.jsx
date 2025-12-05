@@ -19,7 +19,7 @@ const SourceChart = ({ stats }) => {
   }));
 
   return (
-    <div className="w-full bg-white dark:bg-gray-900 p-5 rounded-lg  border border-gray-300 dark:border-gray-600">
+    <div className="w-full bg-white dark:bg-darkBg p-5 rounded-lg  border border-gray-300 dark:border-gray-600">
       <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
         Clients by Source
       </h3>

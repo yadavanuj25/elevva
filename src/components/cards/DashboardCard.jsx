@@ -18,7 +18,7 @@ const DashboardCard = ({
     },
     green: {
       border: "border-green-500",
-      bg: "bg-green-50",
+      bg: "bg-[#28a745]",
       accent: "bg-green-600",
       text: "text-green-600",
     },

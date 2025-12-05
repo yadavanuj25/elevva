@@ -142,6 +142,7 @@ const AddClient = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+    setLoading(true);
 
     try {
       const cleanedPoc2 = Object.fromEntries(
@@ -181,7 +182,6 @@ const AddClient = () => {
         showError(res?.message || "Failed to add client");
       }
     } catch (err) {
-      console.error("validation error", err);
       if (err?.inner && Array.isArray(err.inner)) {
         const newErrors = {};
         err.inner.forEach((e) => {
@@ -212,9 +212,9 @@ const AddClient = () => {
       {errorMsg && (
         <div
           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+               bg-[#d72b16] text-white shadow-sm animate-slideDown"
         >
-          <span className="text-red-600 font-semibold">⚠ </span>
+          <span className=" font-semibold">⚠ </span>
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}
@@ -424,7 +424,12 @@ const AddClient = () => {
         </div>
 
         <div className="col-span-2 flex justify-end">
-          <Button type="submit" text="Save" icon={<Save size={18} />} />
+          <Button
+            type="submit"
+            text="Save"
+            icon={<Save size={18} />}
+            loading={loading}
+          />
         </div>
       </form>
     </div>

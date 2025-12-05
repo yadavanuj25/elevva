@@ -35,7 +35,7 @@ const schema = yup.object().shape({
 
 const ClientRequirement = () => {
   PageTitle("Elevva | Add-Client Requirement");
-  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
+  const { errorMsg, showSuccess, showError } = useMessage();
   const jobDescriptionRef = useRef("");
   const quillRef = useRef(null);
   const navigate = useNavigate();
@@ -64,8 +64,8 @@ const ClientRequirement = () => {
     workModes: [],
     priorities: [],
   });
-
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchActiveClients();
@@ -176,6 +176,7 @@ const ClientRequirement = () => {
     setErrors({});
     showError("");
     showSuccess("");
+    setLoading(true);
     const finalData = {
       ...formData,
       jobDescription: jobDescriptionRef.current,
@@ -200,6 +201,8 @@ const ClientRequirement = () => {
       } else {
         showError("Validation error");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -218,9 +221,9 @@ const ClientRequirement = () => {
       {errorMsg && (
         <div
           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+               bg-[#d72b16] text-white shadow-sm animate-slideDown"
         >
-          <span className="text-red-600 font-semibold">⚠ </span>
+          <span className=" font-semibold">⚠ </span>
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}
@@ -444,7 +447,12 @@ const ClientRequirement = () => {
           </div>
         </div>
         <div className="flex justify-end">
-          <Button type="submit" text="Save" icon={<Save size={18} />} />
+          <Button
+            type="submit"
+            text="Save"
+            icon={<Save size={18} />}
+            loading={loading}
+          />
         </div>
       </form>
     </>

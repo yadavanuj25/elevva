@@ -322,9 +322,9 @@ const EditProfile = () => {
       {errorMsg && (
         <div
           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+               bg-[#d72b16] text-white shadow-sm animate-slideDown"
         >
-          <span className="text-red-600 font-semibold">⚠ </span>
+          <span className=" font-semibold">⚠ </span>
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}
@@ -394,7 +394,7 @@ const EditProfile = () => {
 
                       <p
                         className="mt-3 px-3 py-1 rounded-full bg-green-100 dark:bg-green-700/40 
-                        text-green-700 dark:text-green-300 text-xs font-medium"
+                        text-white dark:text-green-300 text-xs font-medium"
                       >
                         Uploaded
                       </p>

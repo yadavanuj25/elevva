@@ -47,7 +47,7 @@ const schema = yup.object().shape({
 });
 export default function UserManagement() {
   PageTitle("Elevva | Add-User");
-  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
+  const { errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
   const { token } = useAuth();
   const [formData, setFormData] = useState({
@@ -76,20 +76,19 @@ export default function UserManagement() {
   const [loadingCountries, setLoadingCountries] = useState(false);
   const [loadingRole, setLoadingRole] = useState(false);
   const [profilePreview, setProfilePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  // const [disable, setDisable] = useState(false);
 
   useEffect(() => {
     getAllRoles();
   }, []);
-
   useEffect(() => {
     getAllCountries();
   }, []);
-
   useEffect(() => {
     getAllStates();
   }, [formData.country, fullCountryData]);
 
-  // Fetch all roles
   const getAllRoles = async () => {
     try {
       setLoadingRole(true);
@@ -116,7 +115,6 @@ export default function UserManagement() {
       setLoadingRole(false);
     }
   };
-  // Fetch all countries
   const getAllCountries = async () => {
     try {
       setLoadingCountries(true);
@@ -132,7 +130,6 @@ export default function UserManagement() {
       setLoadingCountries(false);
     }
   };
-  // Fetch states when country changes
   const getAllStates = async () => {
     if (!formData.country) {
       setStates([]);
@@ -161,7 +158,6 @@ export default function UserManagement() {
       setStates([]);
     }
   };
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "phone" || name === "zipcode") {
@@ -180,7 +176,6 @@ export default function UserManagement() {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
-  //handle image change
   const handleProfileImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -207,7 +202,6 @@ export default function UserManagement() {
       reader.readAsDataURL(file);
     }
   };
-  // Handle Status toggle
   const handleStatusToggle = (status) => {
     setFormData((prev) => ({ ...prev, status }));
   };
@@ -217,6 +211,7 @@ export default function UserManagement() {
     setErrors({});
     showError("");
     showSuccess("");
+    setLoading(true);
     try {
       await schema.validate(formData, { abortEarly: false });
       const payload = {
@@ -267,6 +262,8 @@ export default function UserManagement() {
       } else {
         showError(err.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -299,9 +296,9 @@ export default function UserManagement() {
       {errorMsg && (
         <div
           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+               bg-[#d72b16] text-white shadow-sm animate-slideDown"
         >
-          <span className="text-red-600 font-semibold">⚠ </span>
+          <span className=" font-semibold">⚠ </span>
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}
@@ -368,7 +365,7 @@ export default function UserManagement() {
                 className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
                   formData.status === "active"
                     ? "bg-green-600 text-white shadow-sm"
-                    : "text-gray-600 hover:bg-green-50"
+                    : "text-gray-600 hover:bg-[#28a745]"
                 }`}
               >
                 Active
@@ -606,7 +603,12 @@ export default function UserManagement() {
             </div>
 
             <div className="col-span-2 flex justify-end">
-              <Button type="submit" text="Save" icon={<Save size={18} />} />
+              <Button
+                type="submit"
+                text="Save"
+                icon={<Save size={18} />}
+                loading={loading}
+              />
             </div>
           </div>
         </div>

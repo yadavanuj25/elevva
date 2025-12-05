@@ -74,6 +74,9 @@ export const getRequirementsOptions = () => {
 export const addClientsRequirement = (clientData) =>
   fetchHandler("/api/requirements", "POST", clientData);
 
+export const updateClientsRequirement = (id, clientData) =>
+  fetchHandler(`/api/requirements/${id}`, "PUT", clientData);
+
 export const updateRequirementStatus = (id, status) => {
   return fetchHandler(`/api/requirements/${id}`, "PUT", status);
 };

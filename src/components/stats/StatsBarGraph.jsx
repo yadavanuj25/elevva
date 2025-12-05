@@ -15,14 +15,13 @@ const COLORS = ["#3b82f6", "#06b6d4", "#10b981", "#f59e0b", "#ef4444"];
 
 const StatsBarGraph = ({ stats }) => {
   if (!stats?.byCategory) return null;
-
   const data = stats.byCategory.slice(0, 5).map((cat) => ({
     name: cat._id,
     value: cat.count,
   }));
 
   return (
-    <div className="w-full bg-white dark:bg-gray-900 p-5 rounded-lg border border-gray-300 dark:border-gray-600">
+    <div className="w-full  p-5 bg-white dark:bg-darkBg rounded-lg border border-gray-300 dark:border-gray-600">
       <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
         Clients by Category
       </h3>

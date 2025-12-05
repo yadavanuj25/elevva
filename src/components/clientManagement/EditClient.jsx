@@ -14,10 +14,6 @@ import BasicDatePicker from "../ui/BasicDatePicker";
 import FormSkeleton from "../loaders/FormSkeleton";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
-
-/* --------------------------------------------------
-   YUP VALIDATION SCHEMA
--------------------------------------------------- */
 const schema = yup.object().shape({
   empanelmentDate: yup
     .string()
@@ -73,10 +69,6 @@ const EditClient = () => {
   const navigate = useNavigate();
   const { errorMsg, showSuccess, showError } = useMessage();
   const { id } = useParams();
-
-  /* --------------------------------------------------
-     STATES
-  -------------------------------------------------- */
   const [formData, setFormData] = useState({
     empanelmentDate: "",
     clientName: "",
@@ -94,14 +86,11 @@ const EditClient = () => {
     poc1: { name: "", email: "", phone: "", designation: "" },
     poc2: { name: "", email: "", phone: "", designation: "" },
   });
-
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
+  const [disable, setDisable] = useState(false);
 
-  /* --------------------------------------------------
-     FETCH OPTIONS + SINGLE CLIENT
-  -------------------------------------------------- */
   useEffect(() => {
     fetchOptions();
     fetchSingleClient();
@@ -161,13 +150,8 @@ const EditClient = () => {
     }
   };
 
-  /* --------------------------------------------------
-     HANDLE CHANGE
-  -------------------------------------------------- */
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // For nested fields like poc1.name
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
       setFormData((prev) => ({
@@ -182,9 +166,9 @@ const EditClient = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+    setDisable(true);
     try {
       await schema.validate(formData, { abortEarly: false });
-      setLoading(true);
       const res = await updateClient(id, formData);
       if (res?.success) {
         showSuccess("Client updated successfully");
@@ -194,7 +178,6 @@ const EditClient = () => {
       }
     } catch (err) {
       if (err.inner) {
-        // Yup validation errors
         const formattedErrors = {};
         err.inner.forEach((e) => {
           formattedErrors[e.path] = e.message;
@@ -204,13 +187,10 @@ const EditClient = () => {
         showError("Something went wrong");
       }
     } finally {
-      setLoading(false);
+      setDisable(false);
     }
   };
 
-  /* --------------------------------------------------
-     RENDER
-  -------------------------------------------------- */
   return (
     <div>
       <div className="mb-4 flex justify-between items-center">
@@ -227,9 +207,9 @@ const EditClient = () => {
       {errorMsg && (
         <div
           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-red-50 text-red-700 shadow-sm animate-slideDown"
+               bg-[#d72b16] text-white shadow-sm animate-slideDown"
         >
-          <span className="text-red-600 font-semibold">⚠ Error:</span>
+          <span className=" font-semibold">⚠ </span>
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}
@@ -400,7 +380,12 @@ const EditClient = () => {
 
             {/* SUBMIT BUTTON */}
             <div className="flex justify-end">
-              <Button type="submit" text="Save" icon={<Save size={18} />} />
+              <Button
+                type="submit"
+                text="Save"
+                icon={<Save size={18} />}
+                loading={disable}
+              />
             </div>
           </form>
         )}

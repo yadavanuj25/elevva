@@ -554,7 +554,7 @@ export default function Home() {
           }`}
         >
           <div className="text-center mb-16">
-            <div className="inline-block mb-4 px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+            <div className="inline-block mb-4 px-4 py-2 bg-green-100 text-white rounded-full text-sm font-semibold">
               PRICING
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
