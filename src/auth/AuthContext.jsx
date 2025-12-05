@@ -58,7 +58,6 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       setLoggingOut(true);
-
       const res = await fetch(
         "https://crm-backend-qbz0.onrender.com/api/auth/logout",
         {

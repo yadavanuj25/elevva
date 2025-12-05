@@ -47,10 +47,9 @@ const LightDarkMode = ({ onToggle }) => {
   }, [theme]);
 
   const toggleTheme = () => {
-    // Only toggle between light/dark
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
     localStorage.setItem("theme", theme === "light" ? "dark" : "light");
-    window.dispatchEvent(new Event("storage")); // trigger sync
+    window.dispatchEvent(new Event("storage"));
   };
 
   return (
@@ -65,9 +64,9 @@ const LightDarkMode = ({ onToggle }) => {
       >
         <button
           onClick={toggleTheme}
-          className="w-8 h-8 flex justify-center items-center rounded-full transition hover:bg-gray-200 dark:hover:bg-gray-700"
+          className="w-8 h-8 flex justify-center items-center rounded-full transition "
         >
-          {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+          {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
         </button>
       </Tippy>
     </>

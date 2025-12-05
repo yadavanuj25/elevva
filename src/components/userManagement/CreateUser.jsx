@@ -32,18 +32,15 @@ const schema = yup.object().shape({
   state: yup.string().required("State is required"),
   profileImage: yup
     .mixed()
-    .test(
-      "fileType",
-      "Allowed formats: jpeg, jpg, png",
-      (value) =>
-        !value ||
-        (value && ["image/jpeg", "image/jpg", "image/png"].includes(value.type))
-    )
-    .test(
-      "fileSize",
-      "Max size is 1 MB",
-      (value) => !value || (value && value.size <= 1024 * 1024)
-    ),
+    .nullable()
+    .test("fileType", "Allowed formats: jpeg, jpg, png", (value) => {
+      if (!value) return true;
+      return ["image/jpeg", "image/jpg", "image/png"].includes(value.type);
+    })
+    .test("fileSize", "Max size is 1 MB", (value) => {
+      if (!value) return true;
+      return value.size <= 1 * 1024 * 1024;
+    }),
 });
 export default function UserManagement() {
   PageTitle("Elevva | Add-User");
@@ -77,7 +74,6 @@ export default function UserManagement() {
   const [loadingRole, setLoadingRole] = useState(false);
   const [profilePreview, setProfilePreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  // const [disable, setDisable] = useState(false);
 
   useEffect(() => {
     getAllRoles();
@@ -298,7 +294,7 @@ export default function UserManagement() {
           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
                bg-[#d72b16] text-white shadow-sm animate-slideDown"
         >
-          <span className=" font-semibold">⚠ </span>
+          <span className=" font-semibold">⚠ {"  "}</span>
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}

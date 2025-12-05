@@ -17,8 +17,8 @@ const IconButton = ({ title, icon: Icon, badge }) => (
     duration={100}
     theme="custom"
   >
-    <div className="relative w-8 h-8 flex justify-center items-center rounded-full transition hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
-      <Icon size={20} />
+    <div className="relative w-8 h-8 flex justify-center items-center rounded-full transition  cursor-pointer">
+      <Icon size={18} />
       {badge && (
         <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-4 h-4 flex items-center justify-center rounded-full border border-white dark:border-gray-800">
           {badge}
@@ -90,7 +90,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 flex items-center bg-white dark:bg-darkBg justify-between px-3 py-3 border-b border-gray-300 dark:border-gray-600">
+    <header className="sticky top-0 z-40 flex items-center bg-white dark:bg-darkBg justify-between px-3 py-2 border-b border-gray-300 dark:border-gray-600">
       {/* Left */}
       <div className="flex gap-5 items-center text-md font-medium">
         <button
@@ -111,41 +111,48 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
       {/* Right */}
       <div className="flex items-center gap-3 relative" ref={popupRef}>
-        <IconButton title="Notification" icon={Bell} badge={1} />
-        <div className="h-6 w-[1px] bg-lightGray dark:bg-darkGray" />
-        <LightDarkMode />
-        <div className="h-6 w-[1px] bg-lightGray dark:bg-darkGray" />
+        <div className="h-9 w-9 flex justify-center items-center  border border-gray-300 dark:border-gray-600 rounded-md">
+          <IconButton title="Notification" icon={Bell} badge={1} />
+        </div>
+
+        <div className="h-9 w-9 flex justify-center items-center  border border-gray-300 dark:border-gray-600 rounded-md">
+          <LightDarkMode />
+        </div>
 
         {/* Profile */}
         <div
           className="flex gap-3 items-center cursor-pointer"
           onClick={() => setPopupOpen((prev) => !prev)}
         >
-          <div className="h-8 w-8 flex justify-center items-center text-dark border border-gray-300 dark:border-gray-600 rounded-md">
-            <User size={20} />
-          </div>
-          <div className="hidden md:block">
-            <h4 className="text-dark font-bold mb-0.5">{user?.fullName}</h4>
-            <p className="text-xs text-center text-darkGray dark:text-white">
-              {user?.role?.name}
-            </p>
+          <div className="h-9 w-9 flex justify-center items-center  border border-gray-300 dark:border-gray-600 rounded-md">
+            {user?.profileImage ? (
+              <User size={18} />
+            ) : (
+              <img
+                src="https://staging.ecodedash.com/cias/assets/dist/img/userimg.png"
+                alt="image"
+              />
+            )}
           </div>
         </div>
 
         {/* Popup */}
         {popupOpen && (
           <div className="absolute right-0 top-full mt-3 w-72 px-6 py-6 font-semibold bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
-            <div className="flex flex-col items-center space-y-2">
+            <div className="flex flex-col items-center ">
               <p className="w-10 h-10 flex justify-center items-center text-white text-lg font-bold bg-dark border border-gray-300 dark:border-gray-600 rounded-full">
                 {user?.fullName?.charAt(0).toUpperCase()}
               </p>
               <p className="text-xl font-extrabold text-darkGray dark:text-lightGray">
                 {user?.fullName}
               </p>
+              <p className="text-sm text-center text-darkGray dark:text-white">
+                {user?.role?.name}
+              </p>
               <p className="text-xs text-darkGray dark:text-lightGray">
                 {user?.email}
               </p>
-              <button className="px-4 py-1 bg-lightGray dark:bg-darkGray border border-darkGray dark:border-lightGray rounded-lg">
+              <button className="mt-2 px-4 py-1 bg-lightGray dark:bg-darkGray border border-darkGray dark:border-lightGray rounded-lg">
                 Manage your account
               </button>
             </div>

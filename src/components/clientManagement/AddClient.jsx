@@ -214,7 +214,7 @@ const AddClient = () => {
           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
                bg-[#d72b16] text-white shadow-sm animate-slideDown"
         >
-          <span className=" font-semibold">⚠ </span>
+          <span className=" font-semibold">⚠ {"  "}</span>
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}

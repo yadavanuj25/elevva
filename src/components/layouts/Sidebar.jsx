@@ -183,7 +183,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         md:translate-x-0 ${isOpen ? "md:w-60" : "md:w-16"} flex flex-col`}
       >
         {/* Header */}
-        <div className="px-4 py-4 flex items-center justify-between border-b border-gray-300 dark:border-gray-600 flex-shrink-0">
+        <div className="px-4 py-2.5 flex items-center justify-between border-b border-gray-300 dark:border-gray-600 flex-shrink-0">
           <div className="w-full flex items-center justify-between p-0 sm:p-0.5">
             <Link
               to="/"

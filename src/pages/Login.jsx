@@ -305,9 +305,8 @@
 // export default Login;
 
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import axios from "axios";
 import { Mail, Eye, EyeOff } from "lucide-react";
 import { FaFacebookF, FaTwitter } from "react-icons/fa";
 import { useAuth } from "../auth/AuthContext";
@@ -318,7 +317,6 @@ import logo from "../assets/logo/logo.png";
 import login3 from "../assets/login/login3.png";
 import googleLogo from "../assets/images/google-logo.svg";
 import PageTitle from "../hooks/PageTitle";
-import SuccessPage from "./SuccessPage";
 
 const schema = yup.object().shape({
   email: yup
@@ -330,16 +328,17 @@ const schema = yup.object().shape({
 
 const Login = () => {
   PageTitle("Elevva | Login");
-  const { showSuccess, showError, errorMsg, successMsg } = useMessage();
-  const [formdata, setFormdata] = useState({ email: "", password: "" });
-  const [tab, setTab] = useState("Login");
+  const { showSuccess, showError, errorMsg } = useMessage();
+  const [formdata, setFormdata] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [forgotEmail, setForgotEmail] = useState("");
-  const [forgotLoading, setForgotLoading] = useState(false);
 
   const API_FORGOT_URL =
     "https://crm-backend-qbz0.onrender.com/api/auth/forgot-password";
@@ -372,7 +371,6 @@ const Login = () => {
         return;
       }
       await login(data);
-      showSuccess("Login successful!");
       const userRole = data.user.role?.name?.toLowerCase() || "user";
       if (userRole === "admin") navigate("/admin/super-dashboard");
       else navigate("/dashboard");
@@ -393,34 +391,6 @@ const Login = () => {
     }
   };
 
-  const handleForgotEmailChange = (e) => {
-    setForgotEmail(e.target.value);
-  };
-
-  const handleForgotSubmit = async (e) => {
-    e.preventDefault();
-    showError("");
-    showSuccess("");
-    if (!forgotEmail) {
-      showError("Email is required");
-      return;
-    }
-
-    setForgotLoading(true);
-    try {
-      const res = await axios.post(API_FORGOT_URL, { email: forgotEmail });
-      if (res?.data?.success) {
-        setTab("SuccessPage");
-      } else {
-        showError(res?.data?.message || "Something went wrong");
-      }
-    } catch (err) {
-      showError(err.response?.data?.message || "Failed to send reset link");
-    } finally {
-      setForgotLoading(false);
-    }
-  };
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-[45%_55%] min-h-screen bg-white dark:bg-gray-900">
       <div className="order-2 flex items-center justify-center">
@@ -431,22 +401,13 @@ const Login = () => {
           </div>
 
           <div className="w-full rounded-xl p-3 sm:p-12 border border-gray-300">
-            {successMsg && (
-              <div
-                className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
-               bg-[#28a745] text-white shadow-sm animate-slideDown"
-              >
-                <span className=" font-semibold">✔ </span>
-                <p className="text-sm">{successMsg}</p>
-              </div>
-            )}
             {errorMsg && (
               <div
                 className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
                bg-[#d72b16] text-white shadow-sm animate-slideDown"
               >
-                <span className=" font-semibold">⚠ </span>
-                <p className="text-sm">{errorMsg}</p>
+                <span className=" font-semibold">⚠ {"  "}</span>
+                <p className="text-sm"> {errorMsg}</p>
               </div>
             )}
 
@@ -502,7 +463,15 @@ const Login = () => {
 
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" className="w-4 h-4 accent-[#3282ff]" />
+                  <input
+                    type="checkbox"
+                    name="rememberMe"
+                    checked={formdata.rememberMe}
+                    onChange={(e) =>
+                      setFormdata({ ...formdata, rememberMe: e.target.checked })
+                    }
+                    className="w-4 h-4 accent-[#3282ff]"
+                  />
                   Remember me
                 </label>
 
