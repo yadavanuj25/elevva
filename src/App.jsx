@@ -33,6 +33,7 @@ import ClientStats from "./components/clientManagement/ClientStats";
 import ProfileStats from "./components/stats/ProfileStats";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import LockScreen from "./components/ui/lockScreen/LockScreen";
 
 const App = () => {
   return (
@@ -59,6 +60,14 @@ const App = () => {
           element={
             <PublicRoute>
               <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/lock-screen"
+          element={
+            <PublicRoute>
+              <LockScreen />
             </PublicRoute>
           }
         />
@@ -99,6 +108,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+
           {/* Reports */}
           <Route
             path="/admin/reports"

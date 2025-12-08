@@ -1,14 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { Menu, Settings, LogOut, Bell, CircleHelp, User } from "lucide-react";
+import {
+  Menu,
+  Settings,
+  LogOut,
+  Bell,
+  User,
+  Maximize,
+  Minimize,
+} from "lucide-react";
 import { RiMenuFold3Line, RiMenuUnfold3Line } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
 import LightDarkMode from "../themes/LightDarkMode";
 import Tippy from "@tippyjs/react";
 import { useAuth } from "../../auth/AuthContext";
 
-const IconButton = ({ title, icon: Icon, badge }) => (
+const IconButton = ({ title, icon: Icon, badge, onClick }) => (
   <Tippy
     content={title}
     placement="top"
@@ -17,7 +25,10 @@ const IconButton = ({ title, icon: Icon, badge }) => (
     duration={100}
     theme="custom"
   >
-    <div className="relative w-8 h-8 flex justify-center items-center rounded-full transition  cursor-pointer">
+    <div
+      onClick={onClick}
+      className="relative w-8 h-8 flex justify-center items-center rounded-full transition cursor-pointer"
+    >
       <Icon size={18} />
       {badge && (
         <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-4 h-4 flex items-center justify-center rounded-full border border-white dark:border-gray-800">
@@ -33,6 +44,21 @@ const Header = ({ toggleSidebar, isOpen }) => {
   const popupRef = useRef(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const { user, logout } = useAuth();
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", handler);
+    return () => document.removeEventListener("fullscreenchange", handler);
+  }, []);
+
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -69,12 +95,8 @@ const Header = ({ toggleSidebar, isOpen }) => {
     });
 
     if (!result.isConfirmed) return;
-
     const success = await logout();
-
-    if (success) {
-      navigate("/login");
-    }
+    if (success) navigate("/login");
   };
 
   const menuItems = [
@@ -84,9 +106,9 @@ const Header = ({ toggleSidebar, isOpen }) => {
       text: "Account Settings",
       path: "/admin/account-settings",
     },
-    { icon: Bell, text: "Notifications", path: "/admin/notifications" },
     { icon: Settings, text: "Settings", path: "/admin/settings" },
-    { icon: CircleHelp, text: "Help Center", path: "/admin/help" },
+    // { icon: CircleHelp, text: "Help Center", path: "/admin/help" },
+    // { icon: Bell, text: "Notifications", path: "/admin/notifications" },
   ];
 
   return (
@@ -103,7 +125,8 @@ const Header = ({ toggleSidebar, isOpen }) => {
             <RiMenuUnfold3Line size={20} />
           )}
         </button>
-        <div className="hidden sm:block ">
+
+        <div className="hidden sm:block">
           Welcome to Elevva{" "}
           <span className="text-dark font-semibold"> {user?.fullName}</span>
         </div>
@@ -111,11 +134,21 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
       {/* Right */}
       <div className="flex items-center gap-3 relative" ref={popupRef}>
-        <div className="h-9 w-9 flex justify-center items-center  border border-gray-300 dark:border-gray-600 rounded-md">
+        {/*  Fullscreen Button */}
+        <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md">
+          <IconButton
+            title={isFullscreen ? "Exit Full Screen" : "Full Screen"}
+            icon={isFullscreen ? Minimize : Maximize}
+            onClick={toggleFullScreen}
+          />
+        </div>
+        {/* Notification */}
+        <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md">
           <IconButton title="Notification" icon={Bell} badge={1} />
         </div>
 
-        <div className="h-9 w-9 flex justify-center items-center  border border-gray-300 dark:border-gray-600 rounded-md">
+        {/* Theme */}
+        <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md">
           <LightDarkMode />
         </div>
 
@@ -124,7 +157,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
           className="flex gap-3 items-center cursor-pointer"
           onClick={() => setPopupOpen((prev) => !prev)}
         >
-          <div className="h-9 w-9 flex justify-center items-center  border border-gray-300 dark:border-gray-600 rounded-md">
+          <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md">
             {user?.profileImage ? (
               <User size={18} />
             ) : (
@@ -139,25 +172,41 @@ const Header = ({ toggleSidebar, isOpen }) => {
         {/* Popup */}
         {popupOpen && (
           <div className="absolute right-0 top-full mt-3 w-72 px-6 py-6 font-semibold bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
-            <div className="flex flex-col items-center ">
-              <p className="w-10 h-10 flex justify-center items-center text-white text-lg font-bold bg-dark border border-gray-300 dark:border-gray-600 rounded-full">
-                {user?.fullName?.charAt(0).toUpperCase()}
-              </p>
-              <p className="text-xl font-extrabold text-darkGray dark:text-lightGray">
-                {user?.fullName}
-              </p>
-              <p className="text-sm text-center text-darkGray dark:text-white">
-                {user?.role?.name}
-              </p>
-              <p className="text-xs text-darkGray dark:text-lightGray">
-                {user?.email}
-              </p>
-              <button className="mt-2 px-4 py-1 bg-lightGray dark:bg-darkGray border border-darkGray dark:border-lightGray rounded-lg">
+            <div className="flex  items-center gap-5">
+              <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-dark">
+                {user?.profileImage ? (
+                  <img
+                    src={user.profileImage}
+                    alt="profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-white text-lg font-bold">
+                    {user?.fullName?.charAt(0)?.toUpperCase()}
+                  </span>
+                )}
+              </div>
+
+              <div>
+                <p className="text-lg font-bold text-darkGray dark:text-lightGray">
+                  {user?.fullName}
+                </p>
+                {/* <p className="text-sm  text-darkGray dark:text-white">
+                  {user?.role?.name}
+                </p> */}
+                <p className="text-xs text-darkGray dark:text-lightGray">
+                  {user?.email}
+                </p>
+              </div>
+
+              {/* <button className="mt-2 px-4 py-1 bg-lightGray dark:bg-darkGray border border-darkGray dark:border-lightGray rounded-lg">
                 Manage your account
-              </button>
+              </button> */}
             </div>
-            <hr className="my-2 border-gray-300 dark:border-gray-600" />
-            <ul className="flex flex-col space-y-1">
+
+            <hr className="my-4 border-gray-300 dark:border-gray-600" />
+
+            <ul className="flex flex-col ">
               {menuItems.map((item, i) => (
                 <li key={i}>
                   <button
@@ -172,7 +221,9 @@ const Header = ({ toggleSidebar, isOpen }) => {
                   </button>
                 </li>
               ))}
+
               <hr className="my-2 border-gray-200 dark:border-gray-700" />
+
               <li>
                 <button
                   onClick={handleLogout}

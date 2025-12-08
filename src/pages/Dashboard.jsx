@@ -96,9 +96,9 @@ const Dashboard = () => {
           isPositive={false}
         />
       </div>
-      <div>
+      {/* <div>
         <DashboardStats />
-      </div>
+      </div> */}
     </div>
   );
 };

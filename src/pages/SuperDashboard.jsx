@@ -96,9 +96,9 @@ const SuperDashboard = () => {
           isPositive={false}
         />
       </div>
-      <div>
+      {/* <div>
         <DashboardStats />
-      </div>
+      </div> */}
     </div>
   );
 };
