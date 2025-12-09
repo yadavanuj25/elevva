@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import axios from "axios";
 import { Mail } from "lucide-react";
 import Input from "../components/ui/Input";
 import { useMessage } from "../auth/MessageContext";
@@ -9,7 +8,9 @@ import loginbg from "../assets/login/login4.png";
 import logo from "../assets/logo/logo.png";
 import login3 from "../assets/login/login3.png";
 import PageTitle from "../hooks/PageTitle";
-import SuccessPage from "./SuccessPage";
+import VerifyPage from "../pages/VerifyPage";
+import { forgotPassword } from "../services/authServices";
+import LoginCard from "../components/cards/LoginCard";
 
 const schema = yup.object().shape({
   email: yup
@@ -20,17 +21,12 @@ const schema = yup.object().shape({
 
 const ForgotPassword = () => {
   PageTitle("Elevva | Forgot Password");
-
-  const { showError, showSuccess, errorMsg, successMsg } = useMessage();
+  const { showError, showSuccess } = useMessage();
   const navigate = useNavigate();
-
   const [tab, setTab] = useState("ForgotPassword");
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
-  const API_FORGOT_URL =
-    "https://crm-backend-qbz0.onrender.com/api/auth/forgot-password";
 
   const handleChange = (e) => {
     setEmail(e.target.value);
@@ -54,12 +50,13 @@ const ForgotPassword = () => {
     }
     setLoading(true);
     try {
-      const res = await axios.post(API_FORGOT_URL, { email });
+      const res = await forgotPassword(email);
+      console.log(res);
 
-      if (res?.data?.success) {
-        setTab("Reset");
+      if (res?.success) {
+        setTab("VerifyEmail");
       } else {
-        const msg = res.data?.message || "Something went wrong";
+        const msg = res?.message || "Something went wrong";
         showError(msg);
         setErrors({ email: msg });
       }
@@ -112,9 +109,8 @@ const ForgotPassword = () => {
                       loading ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
-                    {loading ? "Sending..." : "Send Reset Link"}
+                    {loading ? "Sending..." : "Send Reset Instructions"}
                   </button>
-
                   <p
                     className="text-sm text-[#3282ff] mt-4 cursor-pointer hover:underline"
                     onClick={() => navigate("/login")}
@@ -125,38 +121,13 @@ const ForgotPassword = () => {
               </div>
             )}
 
-            {tab === "Reset" && <SuccessPage email={email} />}
+            {tab === "VerifyEmail" && <VerifyPage email={email} />}
           </div>
         </div>
       </div>
 
       {/* RIGHT SECTION */}
-      <div className="relative order-1 hidden md:flex justify-center items-center w-full backdrop-blur-xl bg-gradient-to-b from-[#0a60ee] to-[#203455] py-10">
-        <img src={login3} alt="" className="absolute bottom-6 right-3" />
-        <img
-          src={login3}
-          alt=""
-          className="absolute top-[-64px] left-[-64px]"
-        />
-
-        <div className="relative w-[80%] rounded-3xl p-10 border border-white/30 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1869e7cf] to-[#2c475aa6] backdrop-blur-md"></div>
-
-          <div className="relative z-10">
-            <h3 className="text-white font-bold text-4xl leading-snug mb-5 text-center">
-              Supercharge Your Customer Relations With Elevva CRM.
-            </h3>
-
-            <div className="flex justify-center mb-5">
-              <img src={loginbg} alt="" className="object-contain" />
-            </div>
-
-            <h4 className="text-white text-2xl font-semibold text-center">
-              Everything You Need to Succeed.
-            </h4>
-          </div>
-        </div>
-      </div>
+      <LoginCard />
     </div>
   );
 };

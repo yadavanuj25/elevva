@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { useAuth } from "./auth/AuthContext";
+import { useLocation, Navigate } from "react-router-dom";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/Login";
@@ -33,9 +35,17 @@ import ClientStats from "./components/clientManagement/ClientStats";
 import ProfileStats from "./components/stats/ProfileStats";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import LockScreen from "./components/ui/lockScreen/LockScreen";
+import LockScreen from "./pages/LockScreen";
 
 const App = () => {
+  const location = useLocation();
+  const { user } = useAuth();
+  const isLocked = user?.isLocked === true;
+  const current = location.pathname;
+
+  if (isLocked && current !== "/lock-screen") {
+    return <Navigate to="/lock-screen" replace />;
+  }
   return (
     <div>
       <ToastContainer
@@ -55,6 +65,8 @@ const App = () => {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Home />} />
+        <Route path="/lock-screen" element={<LockScreen />} />
+
         <Route
           path="/login"
           element={

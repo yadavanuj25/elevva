@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const SuccessPage = ({ email }) => {
+const VerifyPage = ({ email }) => {
   const navigate = useNavigate();
   return (
     <div className="w-full max-w-lg mx-auto text-center py-10 px-6">
@@ -24,24 +24,21 @@ const SuccessPage = ({ email }) => {
       </div>
 
       {/* Title */}
-      <h1 className="text-2xl font-semibold text-gray-900">
-        Verify Your Email
-      </h1>
+      <h1 className="text-2xl font-semibold text-gray-900">Check Your Email</h1>
 
       <p className="text-gray-600 mt-3 leading-relaxed">
-        We've sent a link to your email{" "}
-        <span className="font-semibold text-gray-900">{email}</span>. Please
-        follow the link inside to continue.
+        We've sent a reset link to your email{" "}
+        <span className="font-semibold text-gray-900">{email}</span>
       </p>
 
       <button
         onClick={() => navigate("/login")}
         className="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg "
       >
-        Skip Now
+        Back to Login
       </button>
     </div>
   );
 };
 
-export default SuccessPage;
+export default VerifyPage;

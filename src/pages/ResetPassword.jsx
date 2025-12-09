@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Input from "../components/ui/Input";
 import loginbg from "../assets/login/login4.png";
 import logo from "../assets/logo/logo.png";
@@ -8,12 +8,12 @@ import PageTitle from "../hooks/PageTitle";
 import { Eye, EyeOff } from "lucide-react";
 import * as Yup from "yup";
 import { resetPassword } from "../services/authServices";
+import LoginCard from "../components/cards/LoginCard";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
     .required("Password is required")
     .min(6, "Password must be at least 6 characters"),
-
   confirmPassword: Yup.string()
     .required("Confirm Password is required")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
@@ -97,16 +97,20 @@ const ResetPassword = () => {
           </div>
 
           <div className="w-full rounded-xl p-3 sm:p-12 border border-gray-300">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-              Reset Password
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2">
+              Set New Password
             </h2>
-
             <p className="text-sm text-gray-500 mb-6">
-              Enter your new password below.
+              Choosing strong password keeps hacker's at bay !
             </p>
-
             {errors.general && (
-              <p className="text-red-500 text-sm mb-3">{errors.general}</p>
+              <div
+                className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+               bg-[#d72b16] text-white shadow-sm animate-slideDown"
+              >
+                <span className=" font-semibold">⚠ {"  "}</span>
+                <p className="text-sm">{errors.general}</p>
+              </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -175,7 +179,6 @@ const ResetPassword = () => {
                   )
                 }
               />
-
               <button
                 type="submit"
                 disabled={loading}
@@ -186,40 +189,17 @@ const ResetPassword = () => {
                 {loading ? "Updating..." : "Reset Password"}
               </button>
             </form>
-          </div>
-        </div>
-      </div>
 
-      <div className="relative order-1 hidden md:flex justify-center items-center w-full backdrop-blur-xl bg-gradient-to-b from-[#0a60ee] to-[#203455] py-10">
-        <img
-          src={login3}
-          alt="HR Illustration"
-          className="absolute bottom-6 right-3  object-contain drop-shadow-xl"
-        />
-        <img
-          src={login3}
-          alt="HR Illustration"
-          className="absolute top-[-64px] left-[-64px]  object-contain drop-shadow-xl"
-        />
-        <div className="relative w-[80%] rounded-3xl p-10 border border-white/30 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1869e7cf] to-[#2c475aa6] backdrop-blur-md"></div>
-          <div className="relative z-10">
-            <h3 className="text-white font-bold text-4xl leading-snug mb-5 text-center">
-              Supercharge Your Customer Relations With Elevva CRM.
-            </h3>
-            <div className="flex justify-center mb-5">
-              <img
-                src={loginbg}
-                alt="HR Illustration"
-                className="object-contain drop-shadow-xl"
-              />
-            </div>
-            <h4 className="w-full text-white text-2xl font-semibold text-center px-6 py-3 rounded-md inline-block mx-auto">
-              Everything You Need to Succeed.
-            </h4>
+            <Link
+              to="/login"
+              className="w-full flex justify-center items-center font-semibold text-blue-500 mt-4"
+            >
+              Back to Login
+            </Link>
           </div>
         </div>
       </div>
+      <LoginCard />
     </div>
   );
 };

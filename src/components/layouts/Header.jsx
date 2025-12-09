@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
-  Menu,
   Settings,
   LogOut,
   Bell,
   User,
   Maximize,
   Minimize,
+  LockKeyhole,
 } from "lucide-react";
 import { RiMenuFold3Line, RiMenuUnfold3Line } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
@@ -43,7 +43,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
   const navigate = useNavigate();
   const popupRef = useRef(null);
   const [popupOpen, setPopupOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout, lockScreen } = useAuth();
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -107,8 +107,6 @@ const Header = ({ toggleSidebar, isOpen }) => {
       path: "/admin/account-settings",
     },
     { icon: Settings, text: "Settings", path: "/admin/settings" },
-    // { icon: CircleHelp, text: "Help Center", path: "/admin/help" },
-    // { icon: Bell, text: "Notifications", path: "/admin/notifications" },
   ];
 
   return (
@@ -191,17 +189,11 @@ const Header = ({ toggleSidebar, isOpen }) => {
                 <p className="text-lg font-bold text-darkGray dark:text-lightGray">
                   {user?.fullName}
                 </p>
-                {/* <p className="text-sm  text-darkGray dark:text-white">
-                  {user?.role?.name}
-                </p> */}
+
                 <p className="text-xs text-darkGray dark:text-lightGray">
                   {user?.email}
                 </p>
               </div>
-
-              {/* <button className="mt-2 px-4 py-1 bg-lightGray dark:bg-darkGray border border-darkGray dark:border-lightGray rounded-lg">
-                Manage your account
-              </button> */}
             </div>
 
             <hr className="my-4 border-gray-300 dark:border-gray-600" />
@@ -222,8 +214,16 @@ const Header = ({ toggleSidebar, isOpen }) => {
                 </li>
               ))}
 
+              <li>
+                <button
+                  onClick={lockScreen}
+                  className="w-full flex gap-5 items-center px-3 py-2 text-left hover:bg-lightGray dark:hover:bg-darkGray transition rounded-md"
+                >
+                  <LockKeyhole size={18} />
+                  <p className="text-sm">Lock Sceen</p>
+                </button>
+              </li>
               <hr className="my-2 border-gray-200 dark:border-gray-700" />
-
               <li>
                 <button
                   onClick={handleLogout}

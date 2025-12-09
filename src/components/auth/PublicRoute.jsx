@@ -3,8 +3,8 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 
 export default function PublicRoute({ children }) {
-  const { token, role } = useAuth();
-  if (token) {
+  const { user, token, role } = useAuth();
+  if (token && !user?.isLocked) {
     const userRole = role?.toLowerCase();
     if (userRole === "superadmin" || userRole === "admin") {
       return <Navigate to="/admin/super-dashboard" replace />;

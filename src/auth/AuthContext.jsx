@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+
+import axios from "axios";
 const AuthContext = createContext();
 const PERMISSION_MAP = {
   "6902f14821ac553ab13fa9a5": "dashboard",
@@ -20,6 +22,9 @@ export const AuthProvider = ({ children }) => {
   const [loggingOut, setLoggingOut] = useState(false);
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user") || "null")
+  );
+  const [isLocked, setIsLocked] = useState(
+    JSON.parse(localStorage.getItem("isLocked")) || false
   );
   const [role, setRole] = useState(localStorage.getItem("role") || "");
   const [modules, setModules] = useState(
@@ -87,15 +92,69 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const lockScreen = async () => {
+    try {
+      const res = await axios.post(
+        "https://crm-backend-qbz0.onrender.com/api/auth/lock-screen",
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (res.data.success) {
+        setIsLocked(true);
+        localStorage.setItem("isLocked", true);
+        setUser(res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      }
+    } catch (error) {
+      console.error("Lock failed", error);
+    }
+  };
+
+  const unlockScreen = async (password) => {
+    try {
+      const response = await fetch(
+        "https://crm-backend-qbz0.onrender.com/api/auth/unlock-screen",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ password }),
+        }
+      );
+      const data = await response.json();
+      if (data.success) {
+        setIsLocked(false);
+        localStorage.setItem("isLocked", "false");
+        const updatedUser = data.user
+          ? data.user
+          : { ...user, isLocked: false };
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        return { success: true };
+      }
+      return { success: false };
+    } catch (error) {
+      console.error("Unlock failed:", error);
+      return { success: false };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
         token,
         user,
+        setUser,
         role,
         modules,
         login,
         logout,
+        isLocked,
+        lockScreen,
+        unlockScreen,
       }}
     >
       {children}

@@ -1,7 +1,6 @@
 import React from "react";
 const Input = ({
   type = "text",
-  // id,
   value,
   name,
   handleChange,

@@ -7,8 +7,9 @@ export default function ProtectedRoute({
   allowedRoles = [],
   allowedSubmodules = [],
 }) {
-  const { token, role, modules } = useAuth();
+  const { user, token, role, modules } = useAuth();
   if (!token) return <Navigate to="/" replace />;
+  if (user?.isLocked) return <Navigate to="/lock-screen" replace />;
   if (role?.toLowerCase() === "superadmin") return children;
   if (
     allowedRoles.length &&
