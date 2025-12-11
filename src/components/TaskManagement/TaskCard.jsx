@@ -13,6 +13,12 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
     Medium: " text-yellow-800 border-yellow-300",
     Low: " text-green-800 border-green-300",
   };
+  const priority = {
+    Critical: "bg-red-900  border-red-300",
+    High: " bg-red-600 border-orange-300",
+    Medium: " bg-yellow-600 border-yellow-300",
+    Low: " bg-green-600 border-green-300",
+  };
 
   const handleMetricsSubmit = async (e) => {
     e.preventDefault();
@@ -48,12 +54,22 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
   border-gray-200 dark:border-gray-700
   hover:shadow-md transition-shadow`}
     >
-      {/* Title */}
-      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
-        {task.requirement?.client?.clientName}
-      </p>
+      <div className="flex items-center justify-between ">
+        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          {task.requirement?.client?.clientName}
+        </p>
 
-      <p className="text-xs text-gray-700 dark:text-gray-300 mb-1">
+        <span
+          className={`
+      text-xs text-white font-semibold px-2 py-1 rounded-full
+      ${priority[task.priority]}
+    `}
+        >
+          {task.priority}
+        </span>
+      </div>
+
+      <p className="text-sm text-gray-700 dark:text-gray-300 ">
         {task.requirement?.techStack}
       </p>
 
@@ -74,7 +90,7 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
               key={idx}
               className="flex flex-col items-center text-gray-600 dark:text-gray-300"
             >
-              <span>{metric.label}:</span>
+              <span>{metric.label}</span>
               <span className="font-bold text-gray-900 dark:text-white">
                 {metric.value}
               </span>
@@ -185,8 +201,11 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
       )}
 
       {/* Footer */}
-      <div className="mt-4">
+      <div className="flex justify-between  items-center mt-4">
         <p className="text-xs text-gray-500 dark:text-gray-400">
+          {task.taskCode}
+        </p>
+        <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
           {task.assignedBy?.fullName}
         </p>
       </div>
