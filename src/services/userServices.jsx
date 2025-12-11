@@ -1,6 +1,6 @@
 import { fetchHandler } from "../fatchHandler/fetchHandler";
 
-export const getAllUsers = (page = 1, limit = 5, tab = "All", search = "") => {
+export const getAllUsers = (page = 1, limit = 25, tab = "All", search = "") => {
   let url = `/api/users?page=${page}&limit=${limit}`;
   if (tab.toLowerCase() === "active") url += "&status=active";
   if (tab.toLowerCase() === "inactive") url += "&status=inactive";

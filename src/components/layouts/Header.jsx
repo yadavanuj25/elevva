@@ -9,6 +9,7 @@ import {
   Maximize,
   Minimize,
   LockKeyhole,
+  Lock,
 } from "lucide-react";
 import { RiMenuFold3Line, RiMenuUnfold3Line } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
@@ -132,6 +133,13 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
       {/* Right */}
       <div className="flex items-center gap-3 relative" ref={popupRef}>
+        <div
+          className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md"
+          accordion
+          onClick={lockScreen}
+        >
+          <IconButton title="Lock Screen" icon={LockKeyhole} />
+        </div>
         {/*  Fullscreen Button */}
         <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md">
           <IconButton
@@ -141,6 +149,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
           />
         </div>
         {/* Notification */}
+
         <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md">
           <IconButton title="Notification" icon={Bell} badge={1} />
         </div>

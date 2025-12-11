@@ -28,6 +28,7 @@ import ErrorToast from "../ui/toaster/ErrorToast";
 import SuccessToast from "../ui/toaster/SuccessToast";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
+import AssignModal from "../modals/AssignModal";
 
 const ClientsRequirementsList = () => {
   PageTitle("Elevva | Client Requirements");
@@ -35,7 +36,7 @@ const ClientsRequirementsList = () => {
   const navigate = useNavigate();
   const [clients, setClients] = useState([]);
   const [requirements, setRequirements] = useState([]);
-  const [activeTab, setActiveTab] = useState("All");
+  const [activeTab, setActiveTab] = useState("Open");
   const [statusTabs, setStatusTabs] = useState([]);
   const [pagination, setPagination] = useState({
     total: 0,
@@ -49,6 +50,8 @@ const ClientsRequirementsList = () => {
   const [loading, setLoading] = useState(false);
   const [statusLoading, setStatusLoading] = useState(null);
   const [openStatusRow, setOpenStatusRow] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [openAssignModal, setOpenAssignModal] = useState(false);
 
   const statusOptions = [
     "Open",
@@ -58,6 +61,7 @@ const ClientsRequirementsList = () => {
     "Cancelled",
     "Closed",
   ];
+
   useEffect(() => {
     fetchRequirements();
     fetchClients();
@@ -205,6 +209,19 @@ const ClientsRequirementsList = () => {
         : bVal?.toString().localeCompare(aVal);
     });
   }, [filteredData, order, orderBy]);
+
+  const isAllSelected =
+    selectedRows.length === sortedData.length && sortedData.length > 0;
+
+  const handleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedRows([]);
+    } else {
+      const allIds = sortedData.map((row) => row._id);
+      setSelectedRows(allIds);
+    }
+  };
+
   const handleStatusUpdate = async (id, newStatus) => {
     setStatusLoading(id);
     try {
@@ -224,6 +241,7 @@ const ClientsRequirementsList = () => {
       ErrorToast(error.message || "Failed to update status");
     }
   };
+
   const updateStatusTabs = (updatedRequirements) => {
     let statuses = [
       ...new Set(updatedRequirements.map((u) => u.positionStatus || "unknown")),
@@ -239,6 +257,33 @@ const ClientsRequirementsList = () => {
     ];
     setStatusTabs(tabsWithCounts);
   };
+
+  const handleSelectRow = (id) => {
+    setSelectedRows((prev) =>
+      prev.includes(id) ? prev.filter((row) => row !== id) : [...prev, id]
+    );
+  };
+
+  const selectedRequirements = requirements.filter((r) =>
+    selectedRows.includes(r._id)
+  );
+
+  const handleAssignSave = async (selectedOption) => {
+    try {
+      await assignApi({
+        ids: selectedRows,
+        option: selectedOption,
+      });
+
+      alert("Assigned successfully!");
+      setOpenAssignModal(false);
+      setSelectedRows([]);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to assign");
+    }
+  };
+
   return (
     <>
       <div className="flex justify-between items-center mb-4">
@@ -293,12 +338,17 @@ const ClientsRequirementsList = () => {
             <button
               type="button"
               class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   text-sm  px-2 py-1 focus:outline-none"
+              onClick={() => {
+                if (selectedRows.length === 0) {
+                  return alert("Please select at least one requirement!");
+                }
+                setOpenAssignModal(true);
+              }}
             >
-              Settings
+              Assign
             </button>
             <button
               type="button"
-              // onClick={() => navigate("/admin/clientmanagement/clients/stats")}
               class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
             >
               Stats
@@ -320,12 +370,16 @@ const ClientsRequirementsList = () => {
             <Table className="min-w-full">
               <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-20">
                 <TableRow>
-                  <TableCell
-                    padding="checkbox"
-                    className=" bg-[#f2f4f5] dark:bg-darkGray"
-                  >
+                  <TableCell className="whitespace-nowrap" padding="checkbox">
                     <div className="flex items-center justify-center">
-                      <Checkbox color=" dark:text-white" />
+                      <Checkbox
+                        checked={isAllSelected}
+                        indeterminate={
+                          selectedRows.length > 0 &&
+                          selectedRows.length < sortedData.length
+                        }
+                        onChange={handleSelectAll}
+                      />
                     </div>
                   </TableCell>
                   {[
@@ -390,10 +444,13 @@ const ClientsRequirementsList = () => {
                         className="whitespace-nowrap"
                         padding="checkbox"
                       >
-                        <div className="flex flex-col items-center justify-center ">
-                          <Checkbox color=" dark:text-white" />
+                        <div className="flex flex-col items-center justify-center">
+                          <Checkbox
+                            checked={selectedRows.includes(row._id)}
+                            onChange={() => handleSelectRow(row._id)}
+                          />
                           {row.requirementCode && (
-                            <small className="text-dark bg-light  p-[1px]   border-b border-dark  rounded font-[500]">
+                            <small className="text-dark bg-light p-[1px] border-b border-dark rounded font-[500]">
                               #{row.requirementCode}
                             </small>
                           )}
@@ -533,6 +590,13 @@ const ClientsRequirementsList = () => {
           onLimitChange={handleChangeRowsPerPage}
         />
       </div>
+
+      <AssignModal
+        open={openAssignModal}
+        onClose={() => setOpenAssignModal(false)}
+        selectedRequirements={selectedRequirements}
+        onSubmit={handleAssignSave}
+      />
     </>
   );
 };

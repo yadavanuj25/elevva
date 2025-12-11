@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import PageTitle from "../hooks/PageTitle";
 import DashboardCard from "../components/cards/DashboardCard";
@@ -18,6 +19,7 @@ const quotes = [
 const SuperDashboard = () => {
   PageTitle("Elevva | Dashboard");
   const { user } = useAuth();
+  const navigate = useNavigate();
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) return "Good Morning";
@@ -50,8 +52,11 @@ const SuperDashboard = () => {
           <p className="opacity-90">{quoteToShow}</p>
         </div>
         <div className="flex gap-2 font-semibold">
-          <button className="bg-dark text-white px-2 py-1 rounded-md">
-            Companies
+          <button
+            className="bg-dark text-white px-2 py-1 rounded-md"
+            onClick={() => navigate("/taskboard")}
+          >
+            To Do List
           </button>
           <button className="bg-white text-black px-2 py-1 rounded-md">
             All Packages

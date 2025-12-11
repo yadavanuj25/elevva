@@ -97,3 +97,6 @@ export const getAllRequirements = (
   }
   return fetchHandler(url);
 };
+
+export const assignRequirement = (clientData) =>
+  fetchHandler("/api/tasks/assign", "POST", clientData);

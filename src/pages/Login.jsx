@@ -50,8 +50,14 @@ const Login = () => {
   //   setLoading(true);
   //   try {
   //     await schema.validate(formdata, { abortEarly: false });
-  //     const response = await loginUser(formdata);
-  //     console.log(response);
+  //     const response = await fetch(
+  //       "https://crm-backend-qbz0.onrender.com/api/auth/login",
+  //       {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify(formdata),
+  //       }
+  //     );
   //     const data = await response.json();
   //     if (!response.ok || !data.token || !data.user) {
   //       showError(data.message || "Invalid credentials");
@@ -84,8 +90,12 @@ const Login = () => {
     showError("");
     showSuccess("");
     setLoading(true);
+
     try {
+      // 1️⃣ Validate form
       await schema.validate(formdata, { abortEarly: false });
+
+      // 2️⃣ Login API call
       const response = await fetch(
         "https://crm-backend-qbz0.onrender.com/api/auth/login",
         {
@@ -94,15 +104,26 @@ const Login = () => {
           body: JSON.stringify(formdata),
         }
       );
+
       const data = await response.json();
+
       if (!response.ok || !data.token || !data.user) {
         showError(data.message || "Invalid credentials");
         return;
       }
+
+      // 3️⃣ Store user & token in context
       await login(data);
-      const userRole = data.user.role?.name?.toLowerCase() || "user";
-      if (userRole === "admin") navigate("/admin/super-dashboard");
-      else navigate("/dashboard");
+
+      // 4️⃣ Redirect based on lock status
+      if (data.user.isLocked) {
+        navigate("/lock-screen", { replace: true });
+      } else {
+        const userRole = data.user.role?.name?.toLowerCase() || "user";
+        if (userRole === "admin")
+          navigate("/admin/super-dashboard", { replace: true });
+        else navigate("/dashboard", { replace: true });
+      }
     } catch (err) {
       if (err.name === "ValidationError") {
         const newErrors = {};

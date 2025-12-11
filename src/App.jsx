@@ -36,6 +36,9 @@ import ProfileStats from "./components/stats/ProfileStats";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import LockScreen from "./pages/LockScreen";
+import MyTaskDashboard from "./components/MyTaskBoard/MyTaskDashboard";
+import Tasks from "./pages/Tasks";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
 
 const App = () => {
   const location = useLocation();
@@ -99,10 +102,12 @@ const App = () => {
             </PublicRoute>
           }
         />
-        <Route path="/unauthorized" element={<div>Access Denied</div>} />
+
+        {/* <Route path="/unauthorized" element={<UnauthorizedPage />} /> */}
 
         {/* Private routes with layout */}
         <Route element={<AdminLayout />}>
+          <Route path="/unauthorized" element={<UnauthorizedPage />} />
           <Route
             path="/admin/super-dashboard"
             element={
@@ -338,6 +343,17 @@ const App = () => {
             element={
               <ProtectedRoute allowedModules={["users"]}>
                 <ViewRequirement />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Task management */}
+
+          <Route
+            path="/taskboard"
+            element={
+              <ProtectedRoute>
+                <Tasks />
               </ProtectedRoute>
             }
           />

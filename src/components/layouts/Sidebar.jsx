@@ -165,6 +165,34 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, setIsOpen]);
 
+  const filteredSections = navSections
+    .map((section) => {
+      const filteredItems = section.items
+        .map((item) => {
+          // If no submodules, include only if has access
+          if (!item.submodules) {
+            return hasAccess(item.module) ? item : null;
+          }
+
+          // If has submodules, filter submodules
+          const filteredSubmodules = item.submodules.filter((sub) =>
+            hasSubmoduleAccess(item.module, sub.module)
+          );
+
+          // If no allowed submodules, remove the entire item
+          if (filteredSubmodules.length === 0) return null;
+
+          return { ...item, submodules: filteredSubmodules };
+        })
+        .filter(Boolean); // remove null items
+
+      // Remove entire section if empty
+      return filteredItems.length > 0
+        ? { ...section, items: filteredItems }
+        : null;
+    })
+    .filter(Boolean);
+
   return (
     <>
       {/* Overlay for mobile */}
@@ -204,7 +232,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
         {/* Navigation */}
         <ul className="flex-1 overflow-y-auto py-3 space-y-2">
-          {navSections.map((section) => (
+          {filteredSections.map((section) => (
             <div key={section.section}>
               {isOpen && section.section && (
                 <h4 className="px-4 pb-2 text-[13px] font-medium  dark:text-gray-300 uppercase tracking-wide  bg-white dark:bg-darkBg z-10">

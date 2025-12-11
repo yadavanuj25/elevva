@@ -29,7 +29,7 @@ const RoleList = () => {
   const [roleData, setRoleData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("role_name");
+  const [orderBy, setOrderBy] = useState("roles.createdAt");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [searchQuery, setSearchQuery] = useState("");
