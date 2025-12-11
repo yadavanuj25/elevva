@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import TaskQuickViewModal from "../TaskManagement/TaskQuickViewModal";
 import { updateMetrics, updateTaskStatus } from "../../services/taskServices";
-import Input from "../ui/Input";
 
 const TaskCard = ({ task, onClick, onRefresh }) => {
   const [showMetricsForm, setShowMetricsForm] = useState(false);
@@ -44,131 +43,79 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
     <div
       className={`border-2 ${
         priorityColors[task.priority]
-      } rounded-lg p-3 cursor-pointer hover:shadow-lg transition-shadow`}
+      } rounded-lg p-3 cursor-pointer 
+  bg-white dark:bg-[#1e2533] 
+  border-gray-200 dark:border-gray-700
+  hover:shadow-md transition-shadow`}
     >
-      {/* <div className="flex justify-between items-start mb-2">
-        <span className="text-xs font-mono text-gray-600">{task.taskCode}</span>
-        <span
-          className={`text-xs px-2 py-1 rounded ${
-            priorityColors[task.priority]
-          }`}
-        >
-          {task.priority}
-        </span>
-      </div> */}
-
-      <p className="text-sm font-semibold text-gray-900 mb-2">
+      {/* Title */}
+      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
         {task.requirement?.client?.clientName}
       </p>
-      <p className="text-xs text-gray-700 mb-3">
+
+      <p className="text-xs text-gray-700 dark:text-gray-300 mb-1">
         {task.requirement?.techStack}
       </p>
-      <p className="text-xs text-gray-900 mb-3">
+
+      <p className="text-xs text-gray-900 dark:text-gray-200 mb-3">
         {task.requirement?.requirementCode}
       </p>
 
       {/* Metrics */}
-      <div className="shadow-md rounded py-2 mb-3 text-xs">
+      <div className="shadow rounded-md py-2 mb-3 text-xs bg-gray-100 dark:bg-[#202b3a]">
         <div className="grid grid-cols-4 gap-2">
-          <div className="flex flex-col items-center">
-            <span className="text-gray-600">Sourced</span>
-            <span className="font-bold ml-1">
-              {task.metrics.profilesSourced}
-            </span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-gray-600">Screened</span>
-            <span className="font-bold ml-1">
-              {task.metrics.profilesScreened}
-            </span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-gray-600">Submitted</span>
-            <span className="font-bold ml-1">
-              {task.metrics.profilesSubmitted}
-            </span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-gray-600">Accepted</span>
-            <span className="font-bold ml-1">
-              {task.metrics.profilesAcceptedBySales}
-            </span>
-          </div>
+          {[
+            { label: "Sourced", value: task.metrics.profilesSourced },
+            { label: "Screened", value: task.metrics.profilesScreened },
+            { label: "Submitted", value: task.metrics.profilesSubmitted },
+            { label: "Accepted", value: task.metrics.profilesAcceptedBySales },
+          ].map((metric, idx) => (
+            <div
+              key={idx}
+              className="flex flex-col items-center text-gray-600 dark:text-gray-300"
+            >
+              <span>{metric.label}:</span>
+              <span className="font-bold text-gray-900 dark:text-white">
+                {metric.value}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Actions */}
+      {/* Form to Update Metrics */}
       {showMetricsForm ? (
         <form
           onSubmit={handleMetricsSubmit}
-          className="space-y-2 grid grid-cols-2 gap-2"
+          className="space-y-2"
           onClick={(e) => e.stopPropagation()}
         >
-          <input
-            type="number"
-            placeholder="Profile Sourced"
-            value={metrics.profilesSourced}
-            onChange={(e) =>
-              setMetrics({
-                ...metrics,
-                profilesSourced: parseInt(e.target.value),
-              })
-            }
-            className="w-full border rounded py-1 px-2 text-sm"
-            min="0"
-          />
-          <input
-            type="number"
-            placeholder="Screened"
-            value={metrics.profilesScreened}
-            onChange={(e) =>
-              setMetrics({
-                ...metrics,
-                profilesScreened: parseInt(e.target.value) || 0,
-              })
-            }
-            className="w-full border rounded py-1 px-2 text-sm"
-            min="0"
-          />
-          <input
-            type="number"
-            placeholder="Submitted"
-            value={metrics.profilesSubmitted}
-            onChange={(e) =>
-              setMetrics({
-                ...metrics,
-                profilesSubmitted: parseInt(e.target.value) || 0,
-              })
-            }
-            className="w-full border rounded py-1 px-2 text-sm"
-            min="0"
-          />
-          <input
-            type="number"
-            placeholder="Accepted"
-            value={metrics.profilesAcceptedBySales}
-            onChange={(e) =>
-              setMetrics({
-                ...metrics,
-                profilesAcceptedBySales: parseInt(e.target.value) || 0,
-              })
-            }
-            className="w-full border rounded py-1 px-2 text-sm"
-            min="0"
-          />
-          <input
-            type="number"
-            placeholder="To Client"
-            value={metrics.profilesSubmittedToClient}
-            onChange={(e) =>
-              setMetrics({
-                ...metrics,
-                profilesSubmittedToClient: parseInt(e.target.value) || 0,
-              })
-            }
-            className="w-full border rounded py-1 px-2 text-sm"
-            min="0"
-          />
+          {[
+            { key: "profilesSourced", placeholder: "Sourced" },
+            { key: "profilesScreened", placeholder: "Screened" },
+            { key: "profilesSubmitted", placeholder: "Submitted" },
+            { key: "profilesAcceptedBySales", placeholder: "Accepted" },
+            { key: "profilesSubmittedToClient", placeholder: "To Client" },
+          ].map((field, i) => (
+            <input
+              key={i}
+              type="number"
+              placeholder={field.placeholder}
+              value={metrics[field.key]}
+              onChange={(e) =>
+                setMetrics({
+                  ...metrics,
+                  [field.key]: parseInt(e.target.value) || 0,
+                })
+              }
+              min="0"
+              className="w-full border rounded py-1 px-2 text-sm 
+            bg-white dark:bg-[#1e2738] 
+            text-gray-900 dark:text-white 
+            border-gray-300 dark:border-gray-600"
+            />
+          ))}
+
           <div className="flex gap-2">
             <button
               type="submit"
@@ -189,32 +136,37 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
           </div>
         </form>
       ) : (
-        <div className="space-y-2 ">
+        <div className="space-y-2">
+          {/* Status Dropdown */}
           <select
             value={task.status}
             onChange={(e) => {
               e.stopPropagation();
               handleStatusChange(e.target.value);
             }}
-            className="w-full border rounded py-1 px-2 text-sm"
+            className="w-full border rounded py-1 px-2 text-sm 
+          bg-white dark:bg-[#1e2738] 
+          text-gray-900 dark:text-white 
+          border-gray-300 dark:border-gray-600"
           >
             <option value="Assigned">Assigned</option>
             <option value="In Progress">In Progress</option>
-
             <option value="Completed">Completed</option>
           </select>
+
+          {/* Buttons */}
           <div className="grid grid-cols-3 gap-2">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setShowMetricsForm(true);
               }}
-              className="w-full bg-blue-600 text-white py-1 px-3 rounded text-sm hover:bg-blue-700"
+              className="bg-blue-600 text-white py-1 px-3 rounded text-sm hover:bg-blue-700"
             >
               Update
             </button>
             <button
-              className="w-full bg-green-600 text-white py-1 px-3 rounded text-sm hover:bg-green-700"
+              className="bg-green-600 text-white py-1 px-3 rounded text-sm hover:bg-green-700"
               onClick={(e) => {
                 e.stopPropagation();
                 setShowQuickView(true);
@@ -223,7 +175,7 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
               View
             </button>
             <button
-              className="w-full bg-gray-600 text-white py-1 px-3 rounded text-sm hover:bg-gray-700"
+              className="bg-gray-600 text-white py-1 px-3 rounded text-sm hover:bg-gray-700"
               onClick={onClick}
             >
               Action
@@ -232,9 +184,14 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
         </div>
       )}
 
-      <div className=" mt-4">
-        <p className="text-xs text-gray-500 ">{task.assignedBy?.fullName}</p>
+      {/* Footer */}
+      <div className="mt-4">
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          {task.assignedBy?.fullName}
+        </p>
       </div>
+
+      {/* Quick View Modal */}
       {showQuickView && (
         <TaskQuickViewModal
           task={task}
