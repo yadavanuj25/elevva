@@ -1,6 +1,5 @@
 import React from "react";
 const SelectField = ({
-  // id,
   name,
   label,
   value,
@@ -13,7 +12,6 @@ const SelectField = ({
     <div className="col-span-2 md:col-span-1">
       <div className="relative w-full">
         <select
-          // id={id}
           name={name}
           value={value}
           onChange={handleChange}
@@ -42,7 +40,6 @@ const SelectField = ({
         </select>
 
         <label
-          // htmlFor={id}
           className={`absolute pointer-events-none font-bold text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
             peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
             peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4

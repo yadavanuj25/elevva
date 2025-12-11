@@ -1,5 +1,5 @@
 import React from "react";
-import MyTaskDashboard from "../components/MyTaskBoard/MyTaskDashboard";
+import MyTaskDashboard from "../components/TaskManagement/MyTaskDashboard";
 
 const Tasks = () => {
   return (

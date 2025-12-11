@@ -36,7 +36,6 @@ import ProfileStats from "./components/stats/ProfileStats";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import LockScreen from "./pages/LockScreen";
-import MyTaskDashboard from "./components/MyTaskBoard/MyTaskDashboard";
 import Tasks from "./pages/Tasks";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 
