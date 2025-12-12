@@ -9,7 +9,15 @@ import {
   TableSortLabel,
   Checkbox,
 } from "@mui/material";
-import { Pencil, AtSign, Eye, Trash } from "lucide-react";
+import {
+  Pencil,
+  AtSign,
+  Eye,
+  Trash,
+  File,
+  Send,
+  ChartNoAxesCombined,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import NoData from "../ui/NoData";
 import DateDisplay from "../ui/DateDisplay";
@@ -29,6 +37,7 @@ import SuccessToast from "../ui/toaster/SuccessToast";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import AssignModal from "../modals/AssignModal";
+import GroupButton from "../ui/buttons/GroupButton";
 
 const ClientsRequirementsList = () => {
   PageTitle("Elevva | Client Requirements");
@@ -325,37 +334,24 @@ const ClientsRequirementsList = () => {
           title="Requirement"
         />
         <div className="filter flex items-center justify-between">
-          <div
-            class="inline-flex rounded-base shadow-xs -space-x-px"
-            role="group"
-          >
-            <button
-              type="button"
-              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-l-md text-sm  px-2  py-1 focus:outline-none"
-            >
-              Profile
-            </button>
-            <button
-              type="button"
-              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   text-sm  px-2 py-1 focus:outline-none"
+          <div className="inline-flex" role="group">
+            <GroupButton text="Profile" icon={<File size={16} />} />
+            <GroupButton
+              text="Assign"
+              icon={<Send size={16} />}
               onClick={() => {
                 if (selectedRows.length === 0) {
                   return alert("Please select at least one requirement!");
                 }
                 setOpenAssignModal(true);
               }}
-            >
-              Assign
-            </button>
-            <button
-              type="button"
-              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
-            >
-              Stats
-            </button>
+            />
+            <GroupButton
+              text="Stats"
+              icon={<ChartNoAxesCombined size={16} />}
+            />
             <RefreshButton fetchData={fetchRequirements} />
           </div>
-
           {/* Pagination */}
           <CommonPagination
             total={pagination.total}
@@ -370,7 +366,10 @@ const ClientsRequirementsList = () => {
             <Table className="min-w-full">
               <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-20">
                 <TableRow>
-                  <TableCell className="whitespace-nowrap" padding="checkbox">
+                  <TableCell
+                    className="whitespace-nowrap bg-[#f2f4f5] dark:bg-darkGray"
+                    padding="checkbox"
+                  >
                     <div className="flex items-center justify-center">
                       <Checkbox
                         checked={isAllSelected}

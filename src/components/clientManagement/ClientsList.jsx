@@ -1,6 +1,12 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { LayoutGrid, List } from "lucide-react";
+import {
+  File,
+  LayoutGrid,
+  List,
+  Settings,
+  ChartNoAxesCombined,
+} from "lucide-react";
 import {
   getAllClients,
   updateClientStatus,
@@ -15,6 +21,7 @@ import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
+import GroupButton from "../ui/buttons/GroupButton";
 
 const columns = [
   { id: "clientName", label: "Client Name" },
@@ -281,29 +288,14 @@ const ClientList = () => {
         />
 
         <div className="filter flex items-center justify-between">
-          <div
-            class="inline-flex rounded-base shadow-xs -space-x-px"
-            role="group"
-          >
-            <button
-              type="button"
-              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-l-md text-sm  px-2  py-1 focus:outline-none"
-            >
-              Profile
-            </button>
-            <button
-              type="button"
-              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   text-sm  px-2 py-1 focus:outline-none"
-            >
-              Settings
-            </button>
-            <button
-              type="button"
+          <div className="inline-flex" role="group">
+            <GroupButton text="Profile" icon={<File size={16} />} />
+            <GroupButton text="Settings" icon={<Settings size={16} />} />
+            <GroupButton
+              text="Stats"
+              icon={<ChartNoAxesCombined size={16} />}
               onClick={() => navigate("/admin/clientmanagement/clients/stats")}
-              class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
-            >
-              Stats
-            </button>
+            />
             <RefreshButton fetchData={fetchClients} />
           </div>
 

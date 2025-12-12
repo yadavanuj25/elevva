@@ -6,6 +6,7 @@ import {
   getOpenRequirements,
   getUsers,
 } from "../../services/taskServices";
+import SearchableSelect from "../ui/SearchableSelect";
 
 const AssignTaskView = () => {
   const [requirements, setRequirements] = useState([]);
@@ -82,71 +83,44 @@ const AssignTaskView = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6 ">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Requirement */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-                Select Requirement <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={formData.requirementId}
-                onChange={(e) =>
-                  setFormData({ ...formData, requirementId: e.target.value })
-                }
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-[#273246] text-gray-700 dark:text-gray-100 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                required
-              >
-                <option value="">Select a requirement</option>
-                {requirements.map((req) => (
-                  <option key={req._id} value={req._id}>
-                    {req.requirementCode} - {req.techStack} (
-                    {req?.client?.clientName})
-                  </option>
-                ))}
-              </select>
-            </div>
+            <SearchableSelect
+              label="Select Requirement"
+              options={requirements.map((req) => ({
+                value: req._id,
+                label: `${req?.client?.clientName} - ${req.techStack}  - ${req.requirementCode}`,
+              }))}
+              value={formData.requirementId}
+              onChange={(value) =>
+                setFormData({ ...formData, requirementId: value })
+              }
+            />
 
-            {/* Assign To */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-                Assign To <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={formData.assignedTo}
-                onChange={(e) =>
-                  setFormData({ ...formData, assignedTo: e.target.value })
-                }
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-[#273246] text-gray-700 dark:text-gray-100 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                required
-              >
-                <option value="">Select a user</option>
-                {users.map((user) => (
-                  <option key={user._id} value={user._id}>
-                    {user.fullName} — {user.email}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <SearchableSelect
+              label="Assign To"
+              options={users.map((user) => ({
+                value: user._id,
+                label: `${user.fullName} — ${user.email}`,
+              }))}
+              value={formData.assignedTo}
+              onChange={(value) =>
+                setFormData({ ...formData, assignedTo: value })
+              }
+            />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Priority */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-                Priority <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={formData.priority}
-                onChange={(e) =>
-                  setFormData({ ...formData, priority: e.target.value })
-                }
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-[#273246] text-gray-700 dark:text-gray-100 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                required
-              >
-                <option value="Critical">Critical</option>
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
-            </div>
+            <SearchableSelect
+              label="Priority"
+              options={[
+                { value: "Critical", label: "Critical" },
+                { value: "High", label: "High" },
+                { value: "Medium", label: "Medium" },
+                { value: "Low", label: "Low" },
+              ]}
+              value={formData.priority}
+              onChange={(value) =>
+                setFormData({ ...formData, priority: value })
+              }
+            />
 
             {/* Due Date */}
             <div>
@@ -159,23 +133,22 @@ const AssignTaskView = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, dueDate: e.target.value })
                 }
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-[#273246] text-gray-700 dark:text-gray-100 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 transition"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-[#273246] text-gray-700 dark:text-gray-100 rounded-lg px-4 py-3  focus:outline-none transition"
                 min={new Date().toISOString().split("T")[0]}
               />
             </div>
           </div>
 
-          {/* Notes */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-              Notes / Instructions
+              Notes
             </label>
             <textarea
               value={formData.notes}
               onChange={(e) =>
                 setFormData({ ...formData, notes: e.target.value })
               }
-              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-[#273246] text-gray-700 dark:text-gray-100 rounded-lg px-4 py-3 h-32 focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-[#273246] text-gray-700 dark:text-gray-100 rounded-lg px-4 py-3 h-32 focus:outline-none transition"
               placeholder="Any special instructions for the HR..."
             />
           </div>

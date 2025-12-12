@@ -3,6 +3,8 @@ import { getMyTasks } from "../../services/taskServices";
 import SummaryCard from "../TaskManagement/SummaryCard.jsx";
 import TaskColumn from "../TaskManagement/TaskColumn.jsx";
 import TaskDetailModal from "./TaskDetailModal.jsx";
+import { BarLoader } from "react-spinners";
+import { Activity } from "lucide-react";
 
 const MyTasksDashboard = () => {
   const [tasks, setTasks] = useState([]);
@@ -32,8 +34,15 @@ const MyTasksDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="text-xl text-gray-600">Loading tasks...</div>
+      <div className="h-[70vh] flex justify-center items-center text-center py-10">
+        <div className="w-[200px] text-black dark:text-white bg-gray-300 dark:bg-gray-700 rounded-full">
+          <BarLoader
+            height={6}
+            width={200}
+            color="currentColor"
+            cssOverride={{ borderRadius: "999px" }}
+          />
+        </div>
       </div>
     );
   }
@@ -41,18 +50,30 @@ const MyTasksDashboard = () => {
   return (
     <div>
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <SummaryCard title="Total Tasks" count={summary.total} color="blue" />
-        <SummaryCard title="Assigned" count={summary.assigned} color="yellow" />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-6">
+        <SummaryCard
+          title="Total Tasks"
+          count={summary.total}
+          color="blue"
+          icon="tasks"
+        />
+        <SummaryCard
+          title="Assigned"
+          count={summary.assigned}
+          color="yellow"
+          icon="assigned"
+        />
         <SummaryCard
           title="In Progress"
           count={summary.inProgress}
           color="purple"
+          icon="inprogress"
         />
         <SummaryCard
           title="Completed"
           count={summary.completed}
           color="green"
+          icon="completed"
         />
       </div>
 

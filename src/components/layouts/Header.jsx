@@ -28,7 +28,9 @@ const IconButton = ({ title, icon: Icon, badge, onClick }) => (
   >
     <div
       onClick={onClick}
-      className="relative w-8 h-8 flex justify-center items-center rounded-full transition cursor-pointer"
+      className={`relative w-8 h-8 flex justify-center items-center rounded-full transition cursor-pointer ${
+        title === "Notification" ? "animate-tada" : ""
+      }`}
     >
       <Icon size={18} />
       {badge && (
@@ -150,7 +152,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
         </div>
         {/* Notification */}
 
-        <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md">
+        <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md ">
           <IconButton title="Notification" icon={Bell} badge={1} />
         </div>
 

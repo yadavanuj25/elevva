@@ -8,10 +8,10 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
   const [showQuickView, setShowQuickView] = useState(false);
 
   const priorityColors = {
-    Critical: " text-red-800 border-red-300",
-    High: " text-orange-800 border-orange-300",
-    Medium: " text-yellow-800 border-yellow-300",
-    Low: " text-green-800 border-green-300",
+    Critical: " text-red-800 border-red-500",
+    High: " text-orange-800 border-red-300",
+    Medium: " text-yellow-800 border-yellow-500",
+    Low: " text-green-800 border-green-500",
   };
   const priority = {
     Critical: "bg-red-900  border-red-300",
@@ -47,9 +47,7 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
 
   return (
     <div
-      className={`border-2 ${
-        priorityColors[task.priority]
-      } rounded-lg p-3 cursor-pointer 
+      className={`border-2 ${priorityColors[task.priority]} rounded-lg p-3 
   bg-white dark:bg-[#1e2533] 
   border-gray-200 dark:border-gray-700
   hover:shadow-md transition-shadow`}
@@ -205,8 +203,9 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
         <p className="text-xs text-gray-500 dark:text-gray-400">
           {task.taskCode}
         </p>
-        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-          Assigned by : {task.assignedBy?.fullName}
+        <p className="text-xs  text-gray-500 dark:text-gray-400">
+          Assigned by :{" "}
+          <span className="font-semibold">{task.assignedBy?.fullName}</span>
         </p>
       </div>
 

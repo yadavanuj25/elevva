@@ -23,6 +23,18 @@ export default {
         bottelGreen: "#007672",
         lightBottelGreen: "#b2f1e89c",
       },
+      keyframes: {
+        tada: {
+          "0%": { transform: "scale(1)" },
+          "10%, 20%": { transform: "scale(0.9) rotate(-3deg)" },
+          "30%, 50%, 70%": { transform: "scale(1.1) rotate(3deg)" },
+          "40%, 60%": { transform: "scale(1.1) rotate(-3deg)" },
+          "100%": { transform: "scale(1) rotate(0)" },
+        },
+      },
+      animation: {
+        tada: "tada 2s ease-in-out infinite",
+      },
     },
   },
   plugins: [],

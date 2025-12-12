@@ -1,15 +1,18 @@
 import React from "react";
 
-const GroupButton = ({ text }) => {
+const GroupButton = ({ text, icon, onClick }) => {
   return (
-    <div>
-      <button
-        type="button"
-        class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-l-md text-sm  px-2  py-1 focus:outline-none"
-      >
-        {text}
-      </button>
-    </div>
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex items-center gap-1 px-3 py-1 text-sm  
+                  border border-gray-300 dark:border-gray-600
+                 focus:ring-none  focus:outline-none
+                 first:rounded-l-md last:rounded-r-md"
+    >
+      {icon}
+      <span>{text}</span>
+    </button>
   );
 };
 

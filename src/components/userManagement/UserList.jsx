@@ -10,7 +10,14 @@ import {
   TableSortLabel,
   Checkbox,
 } from "@mui/material";
-import { Pencil, Mail, AtSign, List, LayoutGrid } from "lucide-react";
+import {
+  Pencil,
+  Mail,
+  AtSign,
+  File,
+  Settings,
+  ChartNoAxesCombined,
+} from "lucide-react";
 import DateDisplay from "../ui/DateDisplay";
 import Spinner from "../loaders/Spinner";
 import NoData from "../ui/NoData";
@@ -26,6 +33,7 @@ import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
+import GroupButton from "../ui/buttons/GroupButton";
 
 const UserList = () => {
   PageTitle("Elevva | Users");
@@ -58,39 +66,6 @@ const UserList = () => {
     }, 500);
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
-
-  // const fetchUsers = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const data = await getAllUsers(
-  //       pagination.page,
-  //       pagination.limit,
-  //       activeTab,
-  //       searchQuery
-  //     );
-  //     setAllUsers(data.users || []);
-  //     setPagination((prev) => ({
-  //       ...prev,
-  //       total: data.pagination?.total || 0,
-  //       pages: data.pagination?.pages || 1,
-  //     }));
-  //     const globalCounts = data.counts?.global || {};
-  //     const tabsWithCounts = [{ name: "All", count: globalCounts.total || 0 }];
-  //     Object.keys(globalCounts).forEach((key) => {
-  //       if (key !== "total") {
-  //         tabsWithCounts.push({
-  //           name: key,
-  //           count: globalCounts[key] || 0,
-  //         });
-  //       }
-  //     });
-  //     setStatusTabs(tabsWithCounts);
-  //   } catch (error) {
-  //     showError(error.message || "Error fetching users");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const fetchUsers = async () => {
     try {
@@ -258,31 +233,14 @@ const UserList = () => {
             />
 
             <div className="filter flex items-center justify-between">
-              <div
-                class="inline-flex rounded-base shadow-xs -space-x-px"
-                role="group"
-              >
-                <button
-                  type="button"
-                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-l-md text-sm  px-2  py-1 focus:outline-none"
-                >
-                  Profile
-                </button>
-                <button
-                  type="button"
-                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   text-sm  px-2 py-1 focus:outline-none"
-                >
-                  Settings
-                </button>
-                <button
-                  type="button"
-                  // onClick={() =>
-                  //   navigate("/admin/clientmanagement/clients/stats")
-                  // }
-                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
-                >
-                  Stats
-                </button>
+              <div className="inline-flex" role="group">
+                <GroupButton text="Profile" icon={<File size={16} />} />
+                <GroupButton text="Settings" icon={<Settings size={16} />} />
+                <GroupButton
+                  text="Stats"
+                  icon={<ChartNoAxesCombined size={16} />}
+                />
+
                 <RefreshButton fetchData={fetchUsers} />
               </div>
 

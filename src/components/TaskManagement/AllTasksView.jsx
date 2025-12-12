@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAllTasks } from "../../services/taskServices";
+import { BarLoader } from "react-spinners";
+import { User } from "lucide-react";
 
 const AllTasksView = () => {
   const [tasks, setTasks] = useState([]);
@@ -20,6 +22,7 @@ const AllTasksView = () => {
       setLoading(true);
 
       const response = await getAllTasks(filters);
+      console.log(response);
 
       if (response?.tasks) {
         setTasks(response.tasks);
@@ -39,7 +42,19 @@ const AllTasksView = () => {
     return acc;
   }, {});
 
-  if (loading) return <div className="text-center py-8">Loading...</div>;
+  if (loading)
+    return (
+      <div className="h-[70vh] flex justify-center items-center text-center py-10">
+        <div className="w-[200px] text-black dark:text-white bg-gray-300 dark:bg-gray-700 rounded-full">
+          <BarLoader
+            height={6}
+            width={200}
+            color="currentColor"
+            cssOverride={{ borderRadius: "999px" }}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <div>
@@ -125,18 +140,21 @@ const AllTasksView = () => {
           {Object.keys(groupedTasks).map((user) => (
             <div
               key={user}
-              className="bg-white dark:bg-transparent rounded-xl shadow-md border border-gray-300 dark:border-gray-600 p-5 hover:shadow-lg transition"
+              className="bg-white dark:bg-transparent rounded-xl shadow-md border border-gray-300 dark:border-gray-600 p-3 hover:shadow-lg transition"
             >
-              <h2 className="text-lg font-semibold  mb-4">👤 {user}</h2>
+              <h2 className="flex items-center gap-2 text-lg font-semibold  mb-2">
+                {" "}
+                <User size={20} /> {user}
+              </h2>
 
               <div className="space-y-4">
                 {groupedTasks[user].map((task) => (
                   <div
                     key={task._id}
-                    className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-100 dark:bg-[#31415f] shadow-sm"
+                    className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-200 dark:bg-[#31415f] "
                   >
                     <div className="text-sm font-medium ">
-                      Task Code: {task.taskCode}
+                      Client Name: {task.requirement.client.clientName}
                     </div>
 
                     <div className="text-xs text-gray-500 dark:text-gray-200 mt-1">
@@ -171,12 +189,16 @@ const AllTasksView = () => {
                       </span>
                     </div>
 
-                    <div className="mt-3 text-xs text-gray-700">
+                    <div className="flex items-center justify-between mt-1 mb-2 text-xs text-gray-700">
                       <div>Sourced: {task.metrics.profilesSourced}</div>
                       <div>
                         To Client: {task.metrics.profilesSubmittedToClient}
                       </div>
                     </div>
+
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {task.taskCode}
+                    </p>
                   </div>
                 ))}
               </div>

@@ -14,15 +14,14 @@ import {
 import {
   Pencil,
   Eye,
-  Plus,
   Star,
   AtSign,
   Mail,
   Phone,
-  RefreshCcw,
   Trash,
-  ChevronUp,
-  ChevronDown,
+  File,
+  Settings,
+  ChartNoAxesCombined,
 } from "lucide-react";
 import { useAuth } from "../../auth/AuthContext";
 import DateDisplay from "../ui/DateDisplay";
@@ -43,6 +42,7 @@ import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
 import PageTitle from "../../hooks/PageTitle";
 import { useMessage } from "../../auth/MessageContext";
+import GroupButton from "../ui/buttons/GroupButton";
 
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
@@ -287,31 +287,14 @@ const ProfileList = () => {
             />
 
             <div className="filter flex items-center justify-between">
-              <div
-                class="inline-flex rounded-base shadow-xs -space-x-px"
-                role="group"
-              >
-                <button
-                  type="button"
-                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   rounded-l-md text-sm  px-2  py-1 focus:outline-none"
-                >
-                  Profile
-                </button>
-                <button
-                  type="button"
-                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft   text-sm  px-2 py-1 focus:outline-none"
-                >
-                  Settings
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    navigate("/admin/profilemanagement/profiles/stats")
-                  }
-                  class=" bg-neutral-primary-soft border border-gray-300 dark:border-gray-600 hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft    text-sm  px-2 py-1 focus:outline-none"
-                >
-                  Stats
-                </button>
+              <div className="inline-flex" role="group">
+                <GroupButton text="Profile" icon={<File size={16} />} />
+                <GroupButton text="Settings" icon={<Settings size={16} />} />
+                <GroupButton
+                  text="Stats"
+                  icon={<ChartNoAxesCombined size={16} />}
+                />
+
                 <RefreshButton fetchData={fetchProfiles} />
               </div>
 
