@@ -61,7 +61,7 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
 
         <span
           className={`
-      text-xs text-white font-semibold px-2 py-1 rounded-full
+      text-xs text-white  px-2.5 py-0.5 rounded-full
       ${priority[task.priority]}
     `}
         >
@@ -205,8 +205,8 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
         <p className="text-xs text-gray-500 dark:text-gray-400">
           {task.taskCode}
         </p>
-        <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-          {task.assignedBy?.fullName}
+        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+          Assigned by : {task.assignedBy?.fullName}
         </p>
       </div>
 
