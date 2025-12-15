@@ -146,12 +146,10 @@ const ClientsRequirementsList = () => {
       await axios.delete(`${API_BASE_URL}/clients/${clientId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert("Client deleted successfully");
+
       fetchClients();
       fetchStats(); // Refresh stats
-    } catch (err) {
-      alert(err.response?.data?.message || "Error deleting client");
-    }
+    } catch (err) {}
   };
 
   // Get Status Color

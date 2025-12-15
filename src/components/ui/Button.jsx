@@ -14,8 +14,8 @@ const Button = ({
       disabled={loading}
       onClick={handleClick}
       className={`
-        w-max flex items-center gap-2 py-1.5 px-3 rounded transition 
-        bg-[var(--dark)] text-white
+        w-max flex items-center gap-2 py-1.5 px-3 rounded transition-all duration-200 ease-in-out
+        bg-[var(--dark)] text-white  hover:bg-[#222]
         ${loading ? "opacity-60 cursor-not-allowed" : ""}
         ${className}
       `}

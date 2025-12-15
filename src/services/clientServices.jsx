@@ -62,6 +62,28 @@ export const addClients = (clientData) =>
 export const updateClient = (id, clientData) =>
   fetchHandler(`/api/clients/${id}`, "PUT", clientData);
 
+export const getClientSettings = () => {
+  return fetchHandler("/api/clients/options");
+};
+
+export const getClientsWithFilters = (filters = {}) => {
+  const params = new URLSearchParams();
+  params.append("page", filters.page || 1);
+  params.append("limit", filters.limit || 10);
+  if (filters.search) params.append("search", filters.search);
+  if (filters.clientCategory)
+    params.append("clientCategory", filters.clientCategory);
+  if (filters.clientSource) params.append("clientSource", filters.clientSource);
+  if (filters.companySize) params.append("companySize", filters.companySize);
+  if (filters.status) params.append("status", filters.status);
+
+  return fetchHandler(`/api/clients?${params.toString()}`);
+};
+
+export const getClientStats = () => {
+  return fetchHandler("/api/clients/stats");
+};
+
 // --------- Requirements ---------
 
 export const getRequirementById = (id) =>

@@ -56,7 +56,7 @@ const AssignTaskView = () => {
     };
     try {
       await assignTask(payload);
-      alert("Task assigned successfully!");
+
       setFormData({
         requirementId: "",
         assignedTo: "",
@@ -65,7 +65,6 @@ const AssignTaskView = () => {
         notes: "",
       });
     } catch (error) {
-      alert(error.response?.data?.message || "Error assigning task");
     } finally {
       setLoading(false);
     }

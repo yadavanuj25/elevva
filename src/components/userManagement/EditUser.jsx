@@ -12,6 +12,7 @@ import { getUserById } from "../../services/userServices";
 import { useMessage } from "../../auth/MessageContext";
 import BasicDatePicker from "../ui/BasicDatePicker";
 import PageTitle from "../../hooks/PageTitle";
+import BackButton from "../ui/buttons/BackButton";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Name is required"),
@@ -274,12 +275,7 @@ export default function EditUser() {
       <div className="mb-4 flex justify-between items-center ">
         <h2 className="text-2xl font-semibold">Edit User</h2>
         <div className="flex items-center gap-3 mt-3 sm:mt-0">
-          <button
-            onClick={() => navigate("/admin/usermanagement/users")}
-            className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:opacity-90 transition"
-          >
-            <ArrowLeft size={16} /> Back
-          </button>
+          <BackButton onClick={() => navigate("/admin/usermanagement/users")} />
         </div>
       </div>
       {errorMsg && (

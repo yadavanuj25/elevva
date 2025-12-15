@@ -6,12 +6,10 @@ import Button from "../ui/Button";
 import Input from "../ui/Input";
 import SelectField from "../ui/SelectField";
 import { useAuth } from "../../auth/AuthContext";
-import {
-  addProfile,
-  checkDuplicateProfile,
-} from "../../services/profileServices";
+import { addProfile } from "../../services/profileServices";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
+import BackButton from "../ui/buttons/BackButton";
 
 const schema = yup.object().shape({
   resume: yup
@@ -83,14 +81,6 @@ const ProfileSubmission = () => {
   const [loading, setLoading] = useState(false);
   const debounceTimer = useRef(null);
 
-  // const checkDuplicate = async (field, value) => {
-  //   try {
-  //     const res = await checkDuplicateProfile(field, value);
-  //     return await res.json();
-  //   } catch (err) {
-  //     return { success: false, message: "Server error" };
-  //   }
-  // };
   const checkDuplicate = async (field, value) => {
     try {
       const res = await fetch(
@@ -294,12 +284,9 @@ const ProfileSubmission = () => {
     <div>
       <div className="mb-4 flex justify-between items-center ">
         <h2 className="text-2xl font-semibold">Profile Submissions</h2>
-        <button
+        <BackButton
           onClick={() => navigate("/admin/profilemanagement/profiles")}
-          className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:opacity-90 transition"
-        >
-          <ArrowLeft size={16} /> Back
-        </button>
+        />
       </div>
       {errorMsg && (
         <div

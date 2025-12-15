@@ -17,6 +17,8 @@ import NoData from "../NoData";
 import StatusDropDown from "../StatusDropDown";
 import DateDisplay from "../DateDisplay";
 import TableSkeleton from "../../loaders/TableSkeleton";
+import EditButton from "../buttons/EditButton";
+import ViewButton from "../buttons/ViewButton";
 
 const getStickyClass = (columnId) => {
   switch (columnId) {
@@ -191,29 +193,23 @@ const TableLayout = ({
                     </TableCell>
                     <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                       <div className="flex gap-2 items-center">
-                        <button
-                          className="text-white bg-dark px-1 py-1 rounded"
+                        <EditButton
                           onClick={() =>
                             navigate(
                               `/admin/clientmanagement/edit-client/${row._id}`
                             )
                           }
-                        >
-                          <Pencil size={18} />
-                        </button>
+                        />
 
-                        <button
-                          className="text-white bg-[#1abe17] px-1 py-1 rounded"
+                        <ViewButton
                           onClick={() =>
                             navigate(
                               `/admin/clientmanagement/view-client/${row._id}`
                             )
                           }
-                        >
-                          <Eye size={18} />
-                        </button>
+                        />
 
-                        <button className="text-white bg-red-600 px-1 py-1 rounded">
+                        <button className="text-white bg-red-600 px-1 py-1 rounded hover:bg-[#222]">
                           <Trash size={18} />
                         </button>
                       </div>

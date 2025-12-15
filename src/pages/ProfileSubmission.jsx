@@ -50,7 +50,6 @@ const ProfileSubmission = () => {
   const handleResumeUpload = async (e) => {
     const file = e.target.files[0];
     if (!file || file.type !== "application/pdf") {
-      alert("Please upload a PDF file only!");
       return;
     }
 
@@ -80,7 +79,6 @@ const ProfileSubmission = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Profile Submitted:", formData);
-    alert("Profile submitted successfully!");
   };
 
   return (

@@ -19,12 +19,12 @@ const LightDarkMode = ({ onToggle }) => {
     html.classList.add(theme);
 
     const themeSettings = {
-      light: { light: "#e3edff", dark: "#2d7dfa" },
-      dark: { light: "#fff4e6", dark: "#2b4acb" },
+      light: { light: "#e3edff", dark: "#1b84ff" },
+      dark: { light: "#fff4e6", dark: "#1b84ff" },
       bottelGreen: { light: "#b2f1e89c", dark: "#007672" },
-      blue: { light: "#d2e0fa", dark: "#2b4acb" },
+      blue: { light: "#d2e0fa", dark: "#1b84ff" },
       red: { light: "#fff4e6", dark: "#ff0008" },
-      purple: { light: "#ebd7fa", dark: "#642ab5" },
+      purple: { light: "#ebd7fa", dark: "#800080" },
     };
 
     const selected = themeSettings[theme] || themeSettings.light;

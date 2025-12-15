@@ -12,8 +12,6 @@ import {
   Checkbox,
 } from "@mui/material";
 import {
-  Pencil,
-  Eye,
   Star,
   AtSign,
   Mail,
@@ -25,8 +23,6 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../auth/AuthContext";
 import DateDisplay from "../ui/DateDisplay";
-import Spinner from "../loaders/Spinner";
-import ToolTip from "../ui/ToolTip";
 import NoData from "../ui/NoData";
 import {
   getAllProfiles,
@@ -43,6 +39,8 @@ import ErrorToast from "../ui/toaster/ErrorToast";
 import PageTitle from "../../hooks/PageTitle";
 import { useMessage } from "../../auth/MessageContext";
 import GroupButton from "../ui/buttons/GroupButton";
+import EditButton from "../ui/buttons/EditButton";
+import ViewButton from "../ui/buttons/ViewButton";
 
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
@@ -293,8 +291,10 @@ const ProfileList = () => {
                 <GroupButton
                   text="Stats"
                   icon={<ChartNoAxesCombined size={16} />}
+                  onClick={() =>
+                    navigate("/admin/profilemanagement/profiles/stats")
+                  }
                 />
-
                 <RefreshButton fetchData={fetchProfiles} />
               </div>
 
@@ -517,27 +517,21 @@ const ProfileList = () => {
 
                           <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                             <div className="flex gap-2 items-center">
-                              <button
-                                className="text-white bg-dark px-1 py-1 rounded"
+                              <EditButton
                                 onClick={() =>
                                   navigate(
                                     `/admin/profilemanagement/edit-profile/${item._id}`
                                   )
                                 }
-                              >
-                                <Pencil size={18} />
-                              </button>
-                              <button
-                                className="text-white bg-[#1abe17] px-1 py-1 rounded"
+                              />
+                              <ViewButton
                                 onClick={() =>
                                   navigate(
                                     `/admin/profilemanagement/view-profile/${item._id}`
                                   )
                                 }
-                              >
-                                <Eye size={18} />
-                              </button>
-                              <button className="text-white bg-red-600 px-1 py-1 rounded">
+                              />
+                              <button className="text-white bg-red-600 px-1 py-1 rounded hover:bg-[#222]">
                                 <Trash size={18} />
                               </button>
                             </div>

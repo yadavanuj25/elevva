@@ -6,12 +6,12 @@ export const MessageProvider = ({ children }) => {
 
   const showSuccess = (msg) => {
     setSuccessMsg(msg);
-    setTimeout(() => setSuccessMsg(""), 8000);
+    setTimeout(() => setSuccessMsg(""), 5000);
   };
 
   const showError = (msg) => {
     setErrorMsg(msg);
-    setTimeout(() => setErrorMsg(""), 8000);
+    setTimeout(() => setErrorMsg(""), 5000);
   };
 
   return (

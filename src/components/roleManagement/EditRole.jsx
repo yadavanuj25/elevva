@@ -8,6 +8,8 @@ import FormSkeleton from "../loaders/FormSkeleton";
 import TableSkeleton from "../loaders/TableSkeleton";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
+import Button from "../ui/Button";
+import BackButton from "../ui/buttons/BackButton";
 
 const schema = yup.object().shape({
   name: yup.string().trim().required("Role name is required"),
@@ -227,12 +229,7 @@ const EditRole = () => {
         <h2 className="text-2xl font-semibold ">
           Role & Permission Management
         </h2>
-        <button
-          onClick={() => navigate("/admin/rolemanagement/roles")}
-          className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:opacity-90 transition"
-        >
-          <ArrowLeft size={16} /> Back
-        </button>
+        <BackButton onClick={() => navigate("/admin/rolemanagement/roles")} />
       </div>
       <div className="space-y-6">
         {errorMsg && (
@@ -379,19 +376,13 @@ const EditRole = () => {
                 </table>
               </div>
 
-              <div className="flex justify-end  mt-2">
-                <button
-                  onClick={handleSave}
-                  disabled={loading}
-                  className={`flex items-center  bg-dark text-white font-medium px-4 py-2 rounded-md transition ${
-                    loading
-                      ? "opacity-70 cursor-not-allowed"
-                      : "hover:opacity-90"
-                  }`}
-                >
-                  <Save size={18} />
-                  <span>{loading ? "Saving..." : "Save"}</span>
-                </button>
+              <div className="col-span-2 flex justify-end mt-2">
+                <Button
+                  type="submit"
+                  text="Save"
+                  icon={<Save size={18} />}
+                  loading={loading}
+                />
               </div>
             </>
           )}

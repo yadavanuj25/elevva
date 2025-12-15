@@ -53,12 +53,12 @@ const Dashboard = () => {
         </div>
         <div className="flex gap-2 font-semibold">
           <button
-            className="bg-dark text-white px-2 py-1 rounded-md"
+            className="bg-dark text-white px-2 py-1 rounded-md hover:bg-[#222] transition"
             onClick={() => navigate("/taskboard")}
           >
             To Do List
           </button>
-          <button className="bg-white text-black px-2 py-1 rounded-md">
+          <button className="bg-white text-black px-2 py-1 rounded-md hover:bg-[#222] hover:text-white transition">
             All Packages
           </button>
         </div>

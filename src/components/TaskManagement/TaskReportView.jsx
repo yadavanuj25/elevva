@@ -21,7 +21,6 @@ const TaskReportView = () => {
       const response = await getTasksReport(params.toString());
       setReport(response.report);
     } catch (error) {
-      alert("Error fetching report");
     } finally {
       setLoading(false);
     }

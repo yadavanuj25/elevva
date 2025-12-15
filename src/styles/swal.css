@@ -1,0 +1,47 @@
+/* Swal Popup */
+.swal-popup {
+  border-radius: 12px;
+  padding: 1rem;
+  width: 380px;
+}
+
+/* Title */
+.swal-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: #111827;
+}
+
+/* Text */
+.swal-text {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+/* Success / Error icon */
+.swal-icon {
+  font-size:10px;
+  margin-top: 0.5rem;
+}
+
+/* Confirm Button */
+.swal-confirm {
+  background-color: #16a34a;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.swal-confirm:hover {
+  background-color: #15803d;
+}
+
+/* Cancel Button */
+.swal-cancel {
+  background-color: #e5e7eb;
+  color: #111827;
+  padding: 8px 16px;
+  border-radius: 6px;
+}

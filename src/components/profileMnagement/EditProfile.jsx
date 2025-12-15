@@ -12,6 +12,7 @@ import FormSkeleton from "../loaders/FormSkeleton";
 import PageTitle from "../../hooks/PageTitle";
 import previewResumeImg from "../../assets/images/dummy-resume.jpg";
 import { useMessage } from "../../auth/MessageContext";
+import BackButton from "../ui/buttons/BackButton";
 
 const schema = yup.object().shape({
   resume: yup
@@ -244,7 +245,6 @@ const EditProfile = () => {
     if (!file) return;
 
     if (file.type !== "application/pdf") {
-      alert("Only PDF allowed");
       return;
     }
     if (selectedResume && previewUrl.startsWith("blob:")) {
@@ -309,13 +309,9 @@ const EditProfile = () => {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-semibold">Edit Profile</h2>
         <div className="flex items-center gap-3 mt-3 sm:mt-0">
-          <button
+          <BackButton
             onClick={() => navigate("/admin/profilemanagement/profiles")}
-            className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:opacity-90 transition"
-            type="button"
-          >
-            <ArrowLeft size={16} /> Back
-          </button>
+          />
         </div>
       </div>
 

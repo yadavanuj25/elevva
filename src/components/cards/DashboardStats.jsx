@@ -14,7 +14,7 @@ import {
 import { ChevronDown, Calendar } from "lucide-react";
 
 const red = "#E21E0F";
-const blue = "#2d7dfa";
+const blue = "#1b84ff";
 const yellow = "#F6A400";
 
 const DashboardStats = () => {

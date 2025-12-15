@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MetricCard from "../TaskManagement/MetricCard";
 import { addTaskFeedback, addTaskRejection } from "../../services/taskServices";
+import { X } from "lucide-react";
 
 const TaskDetailModal = ({ task, onClose, onRefresh }) => {
   const [activeTab, setActiveTab] = useState("details");
@@ -12,10 +13,20 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
     reason: "",
     stage: "Sales Review",
   });
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    setVisible(true);
+  }, []);
+
+  const handleClose = () => {
+    setVisible(false);
+    setTimeout(onClose, 200);
+  };
 
   const handleAddFeedback = async () => {
     if (!feedback.trim()) {
-      alert("Please enter feedback");
+     
       return;
     }
     const payload = {
@@ -24,17 +35,17 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
     };
     try {
       await addTaskFeedback(task._id, payload);
-      alert("Feedback added successfully!");
+    
       setFeedback("");
       onRefresh();
     } catch (error) {
-      alert("Error adding feedback");
+    
     }
   };
 
   const handleAddRejection = async () => {
     if (!rejection.candidateName || !rejection.reason) {
-      alert("Please fill all rejection fields");
+     
       return;
     }
     const payload = {
@@ -45,7 +56,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
     };
     try {
       await addTaskRejection(task._id, payload);
-      alert("Rejection recorded successfully!");
+     
       setRejection({
         candidateName: "",
         rejectedBy: "Sales",
@@ -54,25 +65,33 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
       });
       onRefresh();
     } catch (error) {
-      alert("Error recording rejection");
+    
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="bg-blue-600 text-white p-6 rounded-t-lg">
-          <div className="flex justify-between items-start">
-            <div>
-              <h2 className="text-2xl font-bold">{task.taskCode}</h2>
-              <p className="text-blue-100 mt-1">{task.requirement?.workRole}</p>
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4
+        transition-opacity duration-200
+        ${visible ? "opacity-100" : "opacity-0"}
+        bg-black bg-opacity-90`}
+    >
+      <div
+        className={`bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto
+          transform transition-all duration-200
+          ${visible ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
+      >
+        <div className="bg-dark text-white px-5 py-3 rounded-t-lg">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <h2 className="text-xl font-semibold">{task?.taskCode}</h2>-{" "}
+              <p>{task?.requirement?.techStack}</p>
             </div>
             <button
-              onClick={onClose}
-              className="text-white hover:text-gray-200 text-2xl"
+              onClick={handleClose}
+              className="text-red-600 bg-white p-1 rounded-full hover:bg-gray-100 "
             >
-              ×
+              <X size={20} />
             </button>
           </div>
         </div>
@@ -84,7 +103,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
               onClick={() => setActiveTab("details")}
               className={`py-3 px-4 ${
                 activeTab === "details"
-                  ? "border-b-2 border-blue-600 text-blue-600 font-medium"
+                  ? "border-b-2 border-dark text-dark font-medium"
                   : "text-gray-600"
               }`}
             >
@@ -94,7 +113,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
               onClick={() => setActiveTab("feedback")}
               className={`py-3 px-4 ${
                 activeTab === "feedback"
-                  ? "border-b-2 border-blue-600 text-blue-600 font-medium"
+                  ? "border-b-2 border-dark text-dark font-medium"
                   : "text-gray-600"
               }`}
             >
@@ -104,7 +123,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
               onClick={() => setActiveTab("rejections")}
               className={`py-3 px-4 ${
                 activeTab === "rejections"
-                  ? "border-b-2 border-blue-600 text-blue-600 font-medium"
+                  ? "border-b-2 border-dark text-dark font-medium"
                   : "text-gray-600"
               }`}
             >
@@ -196,7 +215,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                   </select>
                   <button
                     onClick={handleAddFeedback}
-                    className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+                    className="bg-dark text-white px-6 py-2 rounded hover:opacity-70"
                   >
                     Add Feedback
                   </button>
@@ -220,7 +239,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                           </span>
                         </div>
                         <p className="text-sm text-gray-700">{fb.message}</p>
-                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded mt-2 inline-block">
+                        <span className="text-xs bg-light text-dark px-2 py-1 rounded mt-2 inline-block">
                           {fb.type}
                         </span>
                       </div>
@@ -289,7 +308,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                   />
                   <button
                     onClick={handleAddRejection}
-                    className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700"
+                    className="bg-dark text-white px-6 py-2 rounded hover:opacity-70"
                   >
                     Record Rejection
                   </button>

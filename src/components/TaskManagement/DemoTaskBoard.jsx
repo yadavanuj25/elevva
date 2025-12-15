@@ -124,7 +124,6 @@ const MyTasksDashboard = () => {
       setSummary(response.data.summary);
     } catch (error) {
       console.error("Error fetching tasks:", error);
-      alert("Error loading tasks");
     } finally {
       setLoading(false);
     }
@@ -258,22 +257,18 @@ const TaskCard = ({ task, onClick, onRefresh }) => {
     e.preventDefault();
     try {
       await api.put(`/tasks/${task._id}/metrics`, metrics);
-      alert("Metrics updated successfully!");
+
       setShowMetricsForm(false);
       onRefresh();
-    } catch (error) {
-      alert("Error updating metrics");
-    }
+    } catch (error) {}
   };
 
   const handleStatusChange = async (status) => {
     try {
       await api.put(`/tasks/${task._id}/status`, { status });
-      alert("Status updated!");
+
       onRefresh();
-    } catch (error) {
-      alert("Error updating status");
-    }
+    } catch (error) {}
   };
 
   return (
@@ -494,7 +489,6 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
 
   const handleAddFeedback = async () => {
     if (!feedback.trim()) {
-      alert("Please enter feedback");
       return;
     }
     try {
@@ -502,22 +496,19 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
         message: feedback,
         type: feedbackType,
       });
-      alert("Feedback added successfully!");
+
       setFeedback("");
       onRefresh();
-    } catch (error) {
-      alert("Error adding feedback");
-    }
+    } catch (error) {}
   };
 
   const handleAddRejection = async () => {
     if (!rejection.candidateName || !rejection.reason) {
-      alert("Please fill all rejection fields");
       return;
     }
     try {
       await api.post(`/tasks/${task._id}/rejection`, rejection);
-      alert("Rejection recorded successfully!");
+
       setRejection({
         candidateName: "",
         rejectedBy: "Sales",
@@ -525,9 +516,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
         stage: "Sales Review",
       });
       onRefresh();
-    } catch (error) {
-      alert("Error recording rejection");
-    }
+    } catch (error) {}
   };
 
   return (

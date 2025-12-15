@@ -38,6 +38,9 @@ import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import AssignModal from "../modals/AssignModal";
 import GroupButton from "../ui/buttons/GroupButton";
+import EditButton from "../ui/buttons/EditButton";
+import ViewButton from "../ui/buttons/ViewButton";
+import CustomSwal from "../../utils/CustomSwal";
 
 const ClientsRequirementsList = () => {
   PageTitle("Elevva | Client Requirements");
@@ -283,21 +286,30 @@ const ClientsRequirementsList = () => {
         ids: selectedRows,
         option: selectedOption,
       });
-
-      alert("Assigned successfully!");
       setOpenAssignModal(false);
       setSelectedRows([]);
     } catch (error) {
       console.error(error);
-      alert("Failed to assign");
     }
+  };
+
+  const handleAssignClick = () => {
+    if (selectedRows.length === 0) {
+      CustomSwal.fire({
+        text: "Please select at least one requirement",
+        icon: "error",
+        timer: 1500,
+        showConfirmButton: true,
+      });
+      return;
+    }
+    setOpenAssignModal(true);
   };
 
   return (
     <>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">All Requirements</h2>
-        {/* <RefreshButton fetchData={fetchRequirements} /> */}
       </div>
 
       {errorMsg && (
@@ -339,12 +351,7 @@ const ClientsRequirementsList = () => {
             <GroupButton
               text="Assign"
               icon={<Send size={16} />}
-              onClick={() => {
-                if (selectedRows.length === 0) {
-                  return alert("Please select at least one requirement!");
-                }
-                setOpenAssignModal(true);
-              }}
+              onClick={handleAssignClick}
             />
             <GroupButton
               text="Stats"
@@ -543,27 +550,22 @@ const ClientsRequirementsList = () => {
                       {/* Action */}
                       <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                         <div className="flex gap-2 items-center">
-                          <button
-                            className="text-white bg-dark px-1 py-1 rounded"
+                          <EditButton
                             onClick={() =>
                               navigate(
                                 `/admin/clientmanagement/edit-requirement/${row._id}`
                               )
                             }
-                          >
-                            <Pencil size={18} />
-                          </button>
-                          <button
-                            className="text-white bg-[#1abe17] px-1 py-1 rounded"
+                          />
+                          <ViewButton
                             onClick={() =>
                               navigate(
                                 `/admin/clientmanagement/view-requirement/${row._id}`
                               )
                             }
-                          >
-                            <Eye size={18} />
-                          </button>
-                          <button className="text-white bg-red-600 px-1 py-1 rounded">
+                          />
+
+                          <button className="text-white bg-red-600 px-1 py-1 rounded hover:bg-[#222]">
                             <Trash size={18} />
                           </button>
                         </div>

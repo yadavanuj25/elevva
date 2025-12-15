@@ -6,6 +6,8 @@ import * as yup from "yup";
 import Input from "../ui/Input";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
+import Button from "../ui/Button";
+import BackButton from "../ui/buttons/BackButton";
 
 // Validation Schema
 const schema = yup.object().shape({
@@ -87,12 +89,7 @@ const CreateRole = () => {
     <div>
       <div className="mb-4 flex justify-between items-center">
         <h2 className="text-2xl font-semibold">Role & Permission Management</h2>
-        <button
-          onClick={() => navigate("/admin/rolemanagement/roles")}
-          className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:opacity-90 transition"
-        >
-          <ArrowLeft size={16} /> Back
-        </button>
+        <BackButton onClick={() => navigate("/admin/rolemanagement/roles")} />
       </div>
       {errorMsg && (
         <div
@@ -163,18 +160,13 @@ const CreateRole = () => {
             </div>
           </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <button
+          <div className="col-span-2 flex justify-end">
+            <Button
               type="submit"
-              disabled={loading}
-              className={`flex items-center gap-2 bg-dark text-white font-medium px-4 py-2 rounded-md transition ${
-                loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90"
-              }`}
-            >
-              <Save size={18} />
-              <span>{loading ? "Saving..." : "Save"}</span>
-            </button>
+              text="Save"
+              icon={<Save size={18} />}
+              loading={loading}
+            />
           </div>
         </form>
       </div>

@@ -34,3 +34,12 @@ export const updateProfileStatus = (id, status) => {
 
 export const checkDuplicateProfile = (field, value) =>
   fetchHandler(`/api/profiles/check-duplicate?${field}=${value}`);
+
+export const getProfileStats = ({ userId, startDate, endDate }) => {
+  const query = new URLSearchParams();
+  if (userId) query.append("userId", userId);
+  if (startDate) query.append("startDate", startDate);
+  if (endDate) query.append("endDate", endDate);
+
+  return fetchHandler(`/api/profiles/stats?${query.toString()}`);
+};

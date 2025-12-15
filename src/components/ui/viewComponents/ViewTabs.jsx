@@ -48,7 +48,7 @@ const ViewTabs = () => {
                 ${
                   activeTab === tab.id
                     ? " text-blue-700  border-b-2 border-blue-600"
-                    : " text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500"
+                    : " text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-[#222]"
                 }
               `}
             >

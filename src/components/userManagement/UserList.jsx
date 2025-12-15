@@ -34,6 +34,8 @@ import ErrorToast from "../ui/toaster/ErrorToast";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import GroupButton from "../ui/buttons/GroupButton";
+import EditButton from "../ui/buttons/EditButton";
+import ViewButton from "../ui/buttons/ViewButton";
 
 const UserList = () => {
   PageTitle("Elevva | Users");
@@ -398,16 +400,13 @@ const UserList = () => {
 
                           <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray">
                             <div className="flex gap-2 items-center">
-                              <button
+                              <EditButton
                                 onClick={() =>
                                   navigate(
                                     `/admin/usermanagement/edit-user/${row._id}`
                                   )
                                 }
-                                className="text-white bg-dark px-1 py-1 rounded"
-                              >
-                                <Pencil size={18} />
-                              </button>
+                              />
                             </div>
                           </TableCell>
                         </TableRow>
@@ -418,10 +417,7 @@ const UserList = () => {
                           colSpan={15}
                           className="py-10 text-center bg-white dark:bg-darkBg"
                         >
-                          <NoData
-                            title="No Data Found"
-                            // description="There are currently no users in the system."
-                          />
+                          <NoData title="No Data Found" />
                         </TableCell>
                       </TableRow>
                     )}

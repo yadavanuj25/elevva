@@ -9,6 +9,7 @@ import { addClients, getAllOptions } from "../../services/clientServices";
 import BasicDatePicker from "../ui/BasicDatePicker";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
+import BackButton from "../ui/buttons/BackButton";
 
 const schema = yup.object().shape({
   empanelmentDate: yup
@@ -201,12 +202,9 @@ const AddClient = () => {
     <div>
       <div className="mb-4 flex justify-between items-center ">
         <h2 className="text-2xl font-semibold">Add Client</h2>
-        <button
+        <BackButton
           onClick={() => navigate("/admin/clientManagement/clients")}
-          className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:opacity-90 transition"
-        >
-          <ArrowLeft size={16} /> Back
-        </button>
+        />
       </div>
 
       {errorMsg && (

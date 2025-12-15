@@ -20,6 +20,7 @@ import TableHeader from "../ui/tableComponents/TableHeader";
 import TableSkeleton from "../loaders/TableSkeleton";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
+import EditButton from "../ui/buttons/EditButton";
 
 const RoleList = () => {
   PageTitle("Elevva | Roles");
@@ -326,16 +327,13 @@ const RoleList = () => {
                             <DateDisplay date={row.updated_date} />
                           </TableCell>
                           <TableCell className="whitespace-nowrap sticky right-0 bg-[#f2f4f5] dark:bg-darkGray dark:text-white z-20">
-                            <button
-                              className="text-white bg-dark px-1.5 py-1 rounded hover:opacity-90"
+                            <EditButton
                               onClick={() =>
                                 navigate(
                                   `/admin/rolemanagement/edit-roles/${row.id}`
                                 )
                               }
-                            >
-                              <Pencil size={18} />
-                            </button>
+                            />
                           </TableCell>
                         </TableRow>
                       );
@@ -343,10 +341,7 @@ const RoleList = () => {
                   ) : (
                     <TableRow>
                       <TableCell colSpan={12}>
-                        <NoData
-                          title="No Data Found"
-                          // description="There are currently no roles in the system."
-                        />
+                        <NoData title="No Data Found" />
                       </TableCell>
                     </TableRow>
                   )}

@@ -1,8 +1,8 @@
 import React from "react";
 
 const MetricCard = ({ label, value }) => (
-  <div className="bg-gray-50 rounded p-3 text-center">
-    <p className="text-2xl font-bold text-blue-600">{value}</p>
+  <div className="bg-gray-200 rounded p-3 text-center">
+    <p className="text-2xl font-bold text-dark">{value}</p>
     <p className="text-xs text-gray-600 mt-1">{label}</p>
   </div>
 );

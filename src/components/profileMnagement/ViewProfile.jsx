@@ -32,6 +32,8 @@ import ViewSection from "../ui/ViewSection";
 import ViewInfo from "../ui/ViewInfo";
 import PageTitle from "../../hooks/PageTitle";
 import { BarLoader } from "react-spinners";
+import BackButton from "../ui/buttons/BackButton";
+import EditButton from "../ui/buttons/EditButton";
 
 const IconButton = ({ title, icon }) => (
   <Tippy
@@ -139,24 +141,18 @@ const ViewProfile = () => {
                 </div>
 
                 <div className="flex items-center gap-3 mt-3 sm:mt-0">
-                  <button
+                  <EditButton
                     onClick={() =>
                       navigate(
                         `/admin/profilemanagement/edit-profile/${profile._id}`
                       )
                     }
-                    className="flex items-center gap-2 px-3 py-1.5 bg-dark text-white text-sm rounded-md hover:opacity-90 transition"
-                  >
-                    <Pencil size={16} /> Edit
-                  </button>
-                  <button
+                  />
+                  <BackButton
                     onClick={() =>
                       navigate("/admin/profilemanagement/profiles")
                     }
-                    className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:opacity-90 transition"
-                  >
-                    <ArrowLeft size={16} /> Back
-                  </button>
+                  />
                 </div>
               </div>
               {/* Grid Layout */}
