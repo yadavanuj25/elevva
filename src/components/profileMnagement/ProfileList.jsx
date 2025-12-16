@@ -65,7 +65,7 @@ const ProfileList = () => {
   const [statusLoading, setStatusLoading] = useState(null);
   const [openStatusRow, setOpenStatusRow] = useState(null);
 
-  const statusOptions = ["Active", "In-active", "Banned", "Defaulter"];
+  const statusOptions = ["Active", "In-active", "Banned"];
   useEffect(() => {
     if (location.state?.successMsg) {
       showSuccess(location.state.successMsg);

@@ -389,7 +389,7 @@ const EditProfile = () => {
                       )}
 
                       <p
-                        className="mt-3 px-3 py-1 rounded-full bg-green-100 dark:bg-green-700/40 
+                        className="mt-3 px-3 py-1 rounded-full bg-green-500 dark:bg-green-700/40 
                         text-white dark:text-green-300 text-xs font-medium"
                       >
                         Uploaded
@@ -423,7 +423,7 @@ backdrop-blur-md overflow-hidden shadow-md"
                         onClick={() => setShowResumePopup(true)}
                         className="absolute inset-0 flex items-center justify-center  transition-opacity"
                       >
-                        <div className="px-4 py-2 bg-white text-black rounded-md shadow-lg  flex items-center gap-2 transition">
+                        <div className="px-4 py-2 bg-white text-black rounded-md shadow-lg  flex items-center gap-2 hover:bg-gray-500 hover:text-white transition">
                           <Eye size={26} />
                           <span className="font-semibold">View Resume</span>
                         </div>
@@ -600,7 +600,7 @@ backdrop-blur-md overflow-hidden shadow-md"
                   label="Candidate Status"
                   value={formData.status}
                   handleChange={handleChange}
-                  options={["Active", "In-active", "Banned", "Defaulter"]}
+                  options={["Active", "In-active", "Banned"]}
                   error={errors.status}
                 />
                 <Input

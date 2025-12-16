@@ -475,7 +475,7 @@ const ProfileSubmission = () => {
               label="Candidate Status"
               value={formData.status}
               handleChange={handleChange}
-              options={["Active", "Inactive", "Banned", "Defaulter"]}
+              options={["Active", "Inactive", "Banned"]}
               error={errors.status}
             />
             <Input
