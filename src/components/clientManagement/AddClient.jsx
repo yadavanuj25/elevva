@@ -140,11 +140,67 @@ const AddClient = () => {
     }
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setErrors({});
+  //   setLoading(true);
+  //   try {
+  //     const cleanedPoc2 = Object.fromEntries(
+  //       Object.entries(formData.poc2).map(([k, v]) => [
+  //         k,
+  //         v === "" ? undefined : v,
+  //       ])
+  //     );
+  //     const cleanedData = {
+  //       ...formData,
+  //       poc2: cleanedPoc2,
+  //     };
+  //     await schema.validate(cleanedData, { abortEarly: false });
+  //     setLoading(true);
+  //     const payload = {
+  //       empanelmentDate: cleanedData.empanelmentDate,
+  //       clientName: cleanedData.clientName,
+  //       clientCategory: cleanedData.clientCategory,
+  //       clientSource: cleanedData.clientSource,
+  //       website: cleanedData.website,
+  //       linkedin: cleanedData.linkedin,
+  //       headquarterAddress: cleanedData.headquarterAddress,
+  //       branchAddress: cleanedData.branchAddress,
+  //       companySize: cleanedData.companySize,
+  //       aboutVendor: cleanedData.aboutVendor,
+  //       instructions: cleanedData.instructions,
+  //       status: cleanedData.status,
+  //       poc1: { ...cleanedData.poc1 },
+  //       poc2: { ...cleanedData.poc2 },
+  //     };
+
+  //     const res = await addClients(payload);
+  //     if (res?.success) {
+  //       showSuccess(res.message || "Client added successfully");
+  //       navigate("/admin/clientmanagement/clients");
+  //     } else {
+  //       showError(res?.message || "Failed to add client");
+  //     }
+  //   } catch (err) {
+  //     if (err?.inner && Array.isArray(err.inner)) {
+  //       const newErrors = {};
+  //       err.inner.forEach((e) => {
+  //         const path = (e.path || "").replace(/\[(\w+)\]/g, ".$1");
+  //         newErrors[path] = e.message;
+  //       });
+  //       setErrors(newErrors);
+  //     } else {
+  //       showError("Validation error");
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
     setLoading(true);
-
     try {
       const cleanedPoc2 = Object.fromEntries(
         Object.entries(formData.poc2).map(([k, v]) => [
@@ -190,9 +246,18 @@ const AddClient = () => {
           newErrors[path] = e.message;
         });
         setErrors(newErrors);
-      } else {
-        showError("Validation error");
+        return;
       }
+      // ✅ 1. API field errors
+      if (err?.errors && typeof err.errors === "object") {
+        setErrors(err.errors);
+        return;
+      }
+
+      // ✅ 2. Yup validation errors
+
+      // ✅ 3. Real fallback
+      showError(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -312,7 +377,7 @@ const AddClient = () => {
                   border-gray-300 dark:border-gray-600 focus:border-black`}
             />
             <label
-              className={`absolute pointer-events-none  text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+              className={`absolute pointer-events-none font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
                       peer-placeholder-shown:scale-100  peer-placeholder-shown:top-1/2
                       peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
                       peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2
