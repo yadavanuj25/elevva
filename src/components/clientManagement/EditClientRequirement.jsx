@@ -166,16 +166,97 @@ const EditClientRequirement = () => {
     }),
     []
   );
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let newValue = value;
+    let errorMsg = "";
+    if (["budget", "totalPositions"].includes(name)) {
+      const cleanValue = ["budget"].includes(name)
+        ? value.replace(/,/g, "")
+        : value.replace(/\D/g, "");
+      if (["budget", "totalPositions"].includes(name) && value !== cleanValue) {
+        errorMsg = "Only numbers are allowed";
+      }
+      if (["budget"].includes(name)) {
+        if (cleanValue && !isNaN(cleanValue)) {
+          newValue = new Intl.NumberFormat("en-IN").format(Number(cleanValue));
+        } else {
+          newValue = "";
+        }
+      } else {
+        newValue = cleanValue;
+      }
+    }
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: newValue,
+    }));
+    setErrors((prev) => ({
+      ...prev,
+      [name]: errorMsg,
     }));
   };
+
   const handleQuillChange = (content, delta, source, editor) => {
     jobDescriptionRef.current = editor.getHTML();
   };
+  // const parseBackendFieldError = (message) => {
+  //   if (!message) return null;
+
+  //   const cleaned = message.replace("Validation failed:", "").trim();
+  //   const [field, error] = cleaned.split(": ");
+
+  //   if (!field || !error) return null;
+
+  //   return { field: field.trim(), message: error.trim() };
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setErrors({});
+  //   setDisable(true);
+
+  //   const finalData = {
+  //     ...formData,
+  //     jobDescription: jobDescriptionRef.current,
+  //   };
+
+  //   try {
+  //     await schema.validate(finalData, { abortEarly: false });
+
+  //     const res = await updateClientsRequirement(id, finalData);
+
+  //     if (res?.success) {
+  //       showSuccess(res.message || "Updated successfully");
+  //       navigate("/admin/clientmanagement/clientrequirements");
+  //     }
+  //   } catch (err) {
+  //     //  Extract backend message safely (Axios)
+  //     const apiMessage = err?.response?.data?.message || err?.message || "";
+
+  //     const parsed = parseBackendFieldError(apiMessage);
+
+  //     if (parsed) {
+  //       setErrors({
+  //         [parsed.field]: parsed.message,
+  //       });
+  //       return;
+  //     }
+
+  //     showError(apiMessage || "Something went wrong");
+  //   } finally {
+  //     setDisable(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     showError("");
@@ -185,7 +266,6 @@ const EditClientRequirement = () => {
       ...formData,
       jobDescription: jobDescriptionRef.current,
     };
-
     try {
       await schema.validate(finalData, { abortEarly: false });
       const res = await updateClientsRequirement(id, finalData);
@@ -200,6 +280,7 @@ const EditClientRequirement = () => {
       err.inner?.forEach((e) => {
         validationErrors[e.path] = e.message;
       });
+      console.log(err);
       setErrors(validationErrors);
     } finally {
       setDisable(false);

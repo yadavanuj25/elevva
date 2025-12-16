@@ -15,9 +15,6 @@ import {
   CalendarDays,
 } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
-import Spinner from "../loaders/Spinner";
-import Tippy from "@tippyjs/react";
-import ToolTip from "../ui/ToolTip";
 import NoData from "../ui/NoData";
 import { getClientById } from "../../services/clientServices";
 import ViewInfo from "../ui/ViewInfo";
