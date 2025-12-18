@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Check } from "lucide-react";
 import PageTitle from "../../hooks/PageTitle";
 const colorThemes = [
-  { name: "Light", value: "light", dark: "#1b84ff", light: "#e3edff" },
-  { name: "Dark", value: "dark", dark: "#1b84ff", light: "#fff4e6" },
+  { name: "Light", value: "light", dark: "#25499f", light: "#e3edff" },
+  { name: "Dark", value: "dark", dark: "#25499f", light: "#fff4e6" },
   {
     name: "Bottle Green",
     value: "bottelGreen",
