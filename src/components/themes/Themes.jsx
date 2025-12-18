@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Check } from "lucide-react";
 import PageTitle from "../../hooks/PageTitle";
 const colorThemes = [
-  { name: "Light", value: "light", dark: "#25499f", light: "#e3edff" },
+  { name: "Default", value: "light", dark: "#25499f", light: "#e3edff" },
   { name: "Dark", value: "dark", dark: "#25499f", light: "#fff4e6" },
   {
     name: "Bottle Green",
@@ -11,7 +11,12 @@ const colorThemes = [
     light: "#b2f1e89c",
   },
   { name: "Orange", value: "orange", dark: "#fb6506", light: "#fff4e6" },
-  { name: "Red", value: "red", dark: "#ff0008", light: "#fff4e6" },
+  {
+    name: "Midnight Blue Teal",
+    value: "red",
+    dark: "#07385D",
+    light: "#fff4e6",
+  },
   { name: "Purple", value: "purple", dark: "#800080", light: "#ebd7fa" },
 ];
 
@@ -27,7 +32,7 @@ const Themes = () => {
       "dark",
       "bottelGreen",
       "orange",
-      "red",
+      "midnight_blue_teal",
       "purple"
     );
     html.classList.add(theme);

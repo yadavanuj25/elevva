@@ -12,8 +12,8 @@ const LightDarkMode = ({ onToggle }) => {
       "light",
       "dark",
       "bottelGreen",
-      "blue",
-      "red",
+      "midnight_blue_teal",
+      "orange",
       "purple"
     );
     html.classList.add(theme);
@@ -22,8 +22,8 @@ const LightDarkMode = ({ onToggle }) => {
       light: { light: "#e3edff", dark: "#25499f" },
       dark: { light: "#fff4e6", dark: "#25499f" },
       bottelGreen: { light: "#b2f1e89c", dark: "#007672" },
-      blue: { light: "#d2e0fa", dark: "#25499f" },
-      red: { light: "#fff4e6", dark: "#ff0008" },
+      midnight_blue_teal: { light: "#d2e0fa", dark: "#07385D" },
+      orange: { light: "#fff4e6", dark: "#fb6506" },
       purple: { light: "#ebd7fa", dark: "#800080" },
     };
 

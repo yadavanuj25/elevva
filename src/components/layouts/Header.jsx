@@ -118,7 +118,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
       <div className="flex gap-5 items-center text-md font-medium">
         <button
           onClick={toggleSidebar}
-          className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+          className="p-2 rounded-full text-white hover:bg-gray-700  transition-all"
         >
           {isOpen ? (
             <RiMenuFold3Line size={20} />
@@ -135,15 +135,11 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
       {/* Right */}
       <div className="flex items-center gap-3 relative" ref={popupRef}>
-        <div
-          className="h-8 w-8 flex justify-center items-center border border-gray-300  rounded-md"
-          accordion
-          onClick={lockScreen}
-        >
+        <div className="header-icons" accordion onClick={lockScreen}>
           <IconButton title="Lock Screen" icon={LockKeyhole} />
         </div>
         {/*  Fullscreen Button */}
-        <div className="h-8 w-8 flex justify-center items-center border border-gray-300  rounded-md">
+        <div className="header-icons">
           <IconButton
             title={isFullscreen ? "Exit Full Screen" : "Full Screen"}
             icon={isFullscreen ? Minimize : Maximize}
@@ -152,12 +148,12 @@ const Header = ({ toggleSidebar, isOpen }) => {
         </div>
         {/* Notification */}
 
-        <div className="h-8 w-8 flex justify-center items-center border border-gray-300  rounded-md ">
+        <div className="header-icons">
           <IconButton title="Notification" icon={Bell} badge={1} />
         </div>
 
         {/* Theme */}
-        <div className="h-8 w-8 flex justify-center items-center border border-gray-300  rounded-md">
+        <div className="header-icons">
           <LightDarkMode />
         </div>
 
@@ -166,7 +162,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
           className="flex gap-3 items-center cursor-pointer"
           onClick={() => setPopupOpen((prev) => !prev)}
         >
-          <div className="h-8 w-8 flex justify-center items-center border border-gray-300  rounded-md">
+          <div className="header-icons">
             {user?.profileImage ? (
               <User size={15} />
             ) : (

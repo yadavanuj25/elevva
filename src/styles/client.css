@@ -1,3 +1,18 @@
+
+/* Header */
+
+.header-icons{
+  height:32px;
+  width:32px;
+  border-radius:6px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:white;
+  color:black;
+  border:1px solid white;
+}
+
 .clients-list-container {
   padding: 20px;
   max-width: 1400px;
@@ -230,18 +245,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 15px;
+  
 }
 
 .filter-tag {
-  background: #dbeafe;
-  color: #1e40af;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  background: #d1e0f5;
+    padding: 2px 8px;
+    border-radius: 15px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .filter-tag button {
@@ -252,6 +266,19 @@
   cursor: pointer;
   padding: 0;
   line-height: 1;
+}
+
+
+/* Clear button */
+.clear-btn{
+background: #fac7c7;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: red;
 }
 
 /* Results Summary */
@@ -439,6 +466,17 @@
   animation: spin 1s linear infinite;
   margin: 0 auto 20px;
 }
+
+
+/* Form */
+
+.form-section-subtitle{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:12px;
+  padding-bottom:6px;
+}
+
 
 @keyframes spin {
   to { transform: rotate(360deg); }
