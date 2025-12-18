@@ -128,8 +128,8 @@ const CreateRole = () => {
               className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
         ${
           errors.description
-            ? "border-red-500"
-            : "border-gray-300 dark:border-gray-600 focus:border-black"
+            ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/30"
+            : "border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-dark/30"
         }`}
             />
             <label

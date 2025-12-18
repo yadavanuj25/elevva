@@ -30,6 +30,7 @@ import { BarLoader } from "react-spinners";
 import NoData from "../../ui/NoData";
 import StatsCards from "./StatsCrads";
 import UserBarChart from "./UserBarChart";
+import SelectField from "../../ui/SelectField";
 
 const STATUS_COLORS = {
   Active: "#22c55e",
@@ -158,12 +159,18 @@ const ProfileStats = ({ userId: defaultuserId }) => {
         <h2 className="text-2xl font-semibold">Filter Profile Stats</h2>
       </div>
       <div className="bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-lg p-4">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+          {/* Filters – take all available space */}
           <div className="md:col-span-4">
-            <SearchableSelect
+            <SelectField
+              name="userId"
+              label="Users"
               value={filters.userId}
-              onChange={(val) =>
-                setFilters((prev) => ({ ...prev, userId: val }))
+              handleChange={(e) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }))
               }
               options={[
                 { value: "", label: "All Users" },
@@ -177,7 +184,7 @@ const ProfileStats = ({ userId: defaultuserId }) => {
             />
           </div>
 
-          <div className="md:col-span-3">
+          <div className="md:col-span-4">
             <BasicDatePicker
               name="startDate"
               labelName="Start Date"
@@ -186,29 +193,33 @@ const ProfileStats = ({ userId: defaultuserId }) => {
             />
           </div>
 
-          <div className="md:col-span-3">
-            <BasicDatePicker
-              name="endDate"
-              labelName="End Date"
-              value={filters.endDate}
-              handleChange={handleChange}
-            />
-          </div>
+          <div className="md:col-span-4 flex gap-4">
+            <div className="flex-1">
+              <BasicDatePicker
+                name="endDate"
+                labelName="End Date"
+                value={filters.endDate}
+                handleChange={handleChange}
+              />
+            </div>
 
-          <div className="md:col-span-2 flex gap-2 justify-end">
-            <button
-              onClick={fetchStats}
-              className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
-            >
-              <Search size={20} />
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={fetchStats}
+                className="h-[46px] px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
+              >
+                <Search size={18} />
+              </button>
 
-            <button
-              onClick={resetFilters}
-              className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md"
-            >
-              <RefreshCw size={20} />
-            </button>
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="h-[46px] px-3 bg-gray-200 dark:bg-gray-700 rounded-md"
+              >
+                <RefreshCw size={18} />
+              </button>
+            </div>
           </div>
         </div>
       </div>

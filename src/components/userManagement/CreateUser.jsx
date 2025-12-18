@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import SelectField from "../ui/SelectField";
 import * as yup from "yup";
-import { ArrowLeft, Upload, Save, Eye, EyeOff, User } from "lucide-react";
-import Spinner from "../loaders/Spinner";
+import { Upload, Save, Eye, EyeOff, User } from "lucide-react";
 import { createUser } from "../../services/userServices";
 import { useMessage } from "../../auth/MessageContext";
 import BasicDatePicker from "../ui/BasicDatePicker";
@@ -278,6 +277,15 @@ export default function UserManagement() {
     setShowPassword(true);
   };
 
+  const roleOptions = useMemo(() => {
+    if (!Array.isArray(allRoles)) return [];
+
+    return allRoles.map((role) => ({
+      label: role.name,
+      value: role._id,
+    }));
+  }, [allRoles]);
+
   return (
     <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
       <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
@@ -380,7 +388,6 @@ export default function UserManagement() {
         <div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
-              // id="user_name"
               type="text"
               name="fullName"
               value={formData.fullName}
@@ -402,7 +409,6 @@ export default function UserManagement() {
 
             <div className="relative w-full">
               <Input
-                // id="user_password"
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
@@ -418,7 +424,6 @@ export default function UserManagement() {
                   </span>
                 }
               />
-
               <button
                 type="button"
                 onClick={generatePassword}
@@ -429,7 +434,6 @@ export default function UserManagement() {
             </div>
 
             <Input
-              // id="user_phone"
               type="tel"
               name="phone"
               value={formData.phone}
@@ -438,58 +442,16 @@ export default function UserManagement() {
               errors={errors}
               labelName="Phone"
             />
-            <div className="relative w-full">
-              <select
-                id="user_role"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className={`block w-full p-[14px] text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition 
-      ${
-        errors.role
-          ? "border-red-500"
-          : "border-gray-300 dark:border-gray-600 focus:border-black"
-      }`}
-              >
-                <option value="" disabled hidden>
-                  Select role
-                </option>
 
-                {loadingRole ? (
-                  <option disabled>
-                    {" "}
-                    <Spinner size={20} />{" "}
-                  </option>
-                ) : (
-                  allRoles.map((role) => (
-                    <option
-                      key={role._id}
-                      value={role._id}
-                      className="text-darkBg"
-                    >
-                      {role.name}
-                    </option>
-                  ))
-                )}
-              </select>
-
-              <label
-                className={`absolute pointer-events-none  text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
-      peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
-      peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
-      ${
-        errors.role
-          ? "peer-focus:text-red-500"
-          : "peer-focus:text-darkBg dark:peer-focus:text-white"
-      } rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-              >
-                Role
-              </label>
-
-              {errors.role && (
-                <p className="text-red-500 text-sm mt-1">{errors.role}</p>
-              )}
-            </div>
+            <SelectField
+              name="role"
+              label="Role"
+              value={formData.role}
+              options={roleOptions}
+              handleChange={handleChange}
+              loading={loadingRole}
+              error={errors.role}
+            />
 
             <BasicDatePicker
               name="dob"
@@ -500,7 +462,6 @@ export default function UserManagement() {
             />
 
             <SelectField
-              // id="country"
               name="country"
               label="Country"
               value={formData.country}
@@ -551,11 +512,9 @@ export default function UserManagement() {
                   onChange={handleChange}
                   placeholder=" "
                   className="block p-[14px] w-full text-sm bg-transparent rounded-md border  appearance-none focus:outline-none peer transition
-        
-          border-gray-300 dark:border-gray-600 focus:border-black"
+          border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-dark/30"
                 />
                 <label
-                  htmlFor="about"
                   className={`absolute pointer-events-none font-medium text-sm text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
         ${
           formData.about

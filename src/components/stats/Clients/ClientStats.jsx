@@ -100,21 +100,25 @@ const ClientStats = () => {
             title="Total Clients"
             value={stats.total}
             icon={<FaHandshake size={20} />}
+            color="#222"
           />
           <Card
             title="Added This Month"
             value={stats.recentAdditions}
             icon={<IoCalendarNumberSharp size={20} />}
+            color="#222"
           />
           <Card
             title="Active Clients"
             value={stats.byStatus?.find((s) => s._id === "active")?.count || 0}
             icon={<PiWaveSineBold size={20} />}
+            color="#222"
           />
           <Card
             title="Top Category"
             value={stats.byCategory?.[0]?._id || "N/A"}
             icon={<FaTrophy size={20} />}
+            color="#222"
           />
         </div>
       )}

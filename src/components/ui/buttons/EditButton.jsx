@@ -5,10 +5,10 @@ const EditButton = ({ onClick }) => {
   return (
     <>
       <button
-        className="text-white bg-dark px-1 py-1 rounded hover:bg-[#222]"
+        className="flex items-center gap-2 text-white bg-dark px-2 py-0.5 rounded hover:bg-[#222]"
         onClick={onClick}
       >
-        <Pencil size={18} />
+        <Pencil size={16} /> Edit
       </button>
     </>
   );

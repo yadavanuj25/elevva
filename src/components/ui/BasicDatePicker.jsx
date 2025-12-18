@@ -29,8 +29,8 @@ const BasicDatePicker = ({
           className={`block w-full text-sm bg-transparent rounded-md appearance-none focus:outline-none peer transition border p-[14px]
             ${
               hasError
-                ? "border-red-500"
-                : "border-gray-300 dark:border-gray-600 focus:border-black"
+                ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/30"
+                : "border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-dark/30"
             }
             dark:text-white
           `}

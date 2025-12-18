@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import SelectField from "../ui/SelectField";
 import * as yup from "yup";
-import { ArrowLeft, Upload, Save, Eye, EyeOff, User } from "lucide-react";
-import Spinner from "../loaders/Spinner";
+import { Upload, Save, Eye, EyeOff, User } from "lucide-react";
 import FormSkeleton from "../loaders/FormSkeleton";
 import { getUserById } from "../../services/userServices";
 import { useMessage } from "../../auth/MessageContext";
@@ -33,7 +32,7 @@ const schema = yup.object().shape({
 export default function EditUser() {
   PageTitle("Elevva | Edit-User");
   const { id } = useParams();
-  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
+  const { errorMsg, showSuccess, showError } = useMessage();
   const { token } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -269,6 +268,14 @@ export default function EditUser() {
     }
   };
   const togglePassword = () => setShowPassword(!showPassword);
+  const roleOptions = useMemo(() => {
+    if (!Array.isArray(allRoles)) return [];
+
+    return allRoles.map((role) => ({
+      label: role.name,
+      value: role._id,
+    }));
+  }, [allRoles]);
 
   return (
     <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
@@ -298,7 +305,6 @@ export default function EditUser() {
           >
             {/* User Profile */}
             <div className="p-6 flex flex-col items-center gap-4 border border-gray-300 dark:border-gray-600 rounded-md">
-              {/* Profile Image Upload */}
               <div className="flex flex-col items-center  rounded-md space-y-2 col-span-2">
                 <div
                   className={`border rounded-full p-1 ${
@@ -438,58 +444,15 @@ export default function EditUser() {
                   errors={errors}
                   labelName="Phone"
                 />
-                <div className="relative w-full">
-                  <select
-                    // id="user_role"
-                    name="role"
-                    value={formData.role._id}
-                    onChange={handleChange}
-                    className={`block w-full p-[14px] text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition 
-      ${
-        errors.role
-          ? "border-red-500"
-          : "border-gray-300 dark:border-gray-600 focus:border-black"
-      }`}
-                  >
-                    <option value="" disabled hidden>
-                      Select role
-                    </option>
-
-                    {loadingRole ? (
-                      <option disabled>
-                        {" "}
-                        <Spinner size={20} />{" "}
-                      </option>
-                    ) : (
-                      allRoles.map((role) => (
-                        <option
-                          key={role._id}
-                          value={role._id}
-                          className="text-darkBg"
-                        >
-                          {role.name}
-                        </option>
-                      ))
-                    )}
-                  </select>
-
-                  <label
-                    className={`absolute pointer-events-none  text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
-                  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
-                   peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4  peer-focus:font-[700]
-                   ${
-                     errors.role
-                       ? "peer-focus:text-red-500"
-                       : "peer-focus:text-darkBg dark:peer-focus:text-white"
-                   } rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-                  >
-                    Role
-                  </label>
-
-                  {errors.role && (
-                    <p className="text-red-500 text-sm mt-1">{errors.role}</p>
-                  )}
-                </div>
+                <SelectField
+                  name="role"
+                  label="Role"
+                  value={formData.role}
+                  options={roleOptions}
+                  handleChange={handleChange}
+                  loading={loadingRole}
+                  error={errors.role}
+                />
 
                 <BasicDatePicker
                   name="dob"
@@ -544,7 +507,7 @@ export default function EditUser() {
                       value={formData.about}
                       onChange={handleChange}
                       placeholder=" "
-                      className="block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition border-gray-300 dark:border-gray-600 focus:border-black"
+                      className="block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-dark/30"
                     />
                     <label
                       className={`absolute pointer-events-none   text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2

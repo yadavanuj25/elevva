@@ -24,10 +24,10 @@ const Input = ({
             ${icon ? "pr-10" : ""}  
             ${
               hasError
-                ? "border-red-500"
-                : "border-gray-300 dark:border-gray-600"
+                ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/30"
+                : "border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-dark/30"
             }
-            dark:text-white`}
+            dark:text-white `}
         />
         <label
           className={`absolute pointer-events-none  text-[15px] text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2

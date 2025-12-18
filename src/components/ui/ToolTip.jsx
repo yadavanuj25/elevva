@@ -4,7 +4,14 @@ import "tippy.js/dist/tippy.css";
 import "tippy.js/dist/backdrop.css";
 import "tippy.js/animations/shift-away.css";
 
-const ToolTip = ({ title, icon, badge, placement = "top", isViewRefresh }) => (
+const ToolTip = ({
+  title,
+  icon,
+  badge,
+  placement = "top",
+  isViewRefresh,
+  bgColor,
+}) => (
   <Tippy
     content={title}
     placement={placement}
@@ -14,7 +21,7 @@ const ToolTip = ({ title, icon, badge, placement = "top", isViewRefresh }) => (
     theme="custom-dark"
   >
     <div
-      className={`relative flex justify-center items-center px-2 py-2 border border-gray-300 dark:border-gray-600 text-sm ${
+      className={`relative flex justify-center items-center px-2 py-2 border border-gray-300 dark:border-gray-600 text-sm  ${
         isViewRefresh ? "rounded-md" : "rounded-r-md"
       } cursor-pointer hover:bg-[#222] hover:text-white`}
     >

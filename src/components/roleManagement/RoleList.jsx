@@ -339,13 +339,16 @@ const RoleList = () => {
                             <DateDisplay date={row.updated_date} />
                           </TableCell>
                           <TableCell className="whitespace-nowrap sticky right-0 bg-[#f2f4f5] dark:bg-darkGray dark:text-white z-20">
-                            <EditButton
+                            <button
+                              className=" text-white bg-dark px-1 py-1 rounded hover:bg-[#222]"
                               onClick={() =>
                                 navigate(
                                   `/admin/rolemanagement/edit-roles/${row.id}`
                                 )
                               }
-                            />
+                            >
+                              <Pencil size={16} />
+                            </button>
                           </TableCell>
                         </TableRow>
                       );
