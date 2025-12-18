@@ -271,15 +271,17 @@
 
 /* Clear button */
 .clear-btn{
-background: #fac7c7;
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 12px;
+    background: #e8d5d5;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight:600;
     display: flex;
     align-items: center;
     gap: 6px;
-    color: red;
+    color: #800504;
 }
+
 
 /* Results Summary */
 .results-summary {

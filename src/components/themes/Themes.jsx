@@ -13,7 +13,7 @@ const colorThemes = [
   { name: "Orange", value: "orange", dark: "#fb6506", light: "#fff4e6" },
   {
     name: "Midnight Blue Teal",
-    value: "red",
+    value: "midnight_blue_teal",
     dark: "#07385D",
     light: "#fff4e6",
   },

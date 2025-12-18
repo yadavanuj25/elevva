@@ -8,6 +8,7 @@ import {
   ChartNoAxesCombined,
   Search,
   RefreshCcw,
+  X,
 } from "lucide-react";
 import {
   getAllClients,
