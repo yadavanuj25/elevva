@@ -15,7 +15,7 @@ const colorThemes = [
     name: "Midnight Blue Teal",
     value: "midnight_blue_teal",
     dark: "#07385D",
-    light: "#fff4e6",
+    light: "#badef9",
   },
   { name: "Purple", value: "purple", dark: "#800080", light: "#ebd7fa" },
 ];

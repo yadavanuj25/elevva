@@ -23,7 +23,7 @@ const LightDarkMode = ({ onToggle }) => {
       dark: { light: "#fff4e6", dark: "#25499f" },
       bottelGreen: { light: "#b2f1e89c", dark: "#007672" },
       orange: { light: "#fff4e6", dark: "#fb6506" },
-      midnight_blue_teal: { light: "#d2e0fa", dark: "#07385D" },
+      midnight_blue_teal: { light: "#badef9", dark: "#07385D" },
       purple: { light: "#ebd7fa", dark: "#800080" },
     };
 
