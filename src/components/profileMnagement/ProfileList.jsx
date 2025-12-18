@@ -39,8 +39,7 @@ import ErrorToast from "../ui/toaster/ErrorToast";
 import PageTitle from "../../hooks/PageTitle";
 import { useMessage } from "../../auth/MessageContext";
 import GroupButton from "../ui/buttons/GroupButton";
-import EditButton from "../ui/buttons/EditButton";
-import ViewButton from "../ui/buttons/ViewButton";
+import ActionMenu from "../ui/buttons/ActionMenu";
 
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
@@ -388,7 +387,7 @@ const ProfileList = () => {
                       sortedData.map((item) => (
                         <TableRow
                           key={item._id}
-                          className="hover:bg-lightGray dark:hover:bg-darkGray"
+                          className="hover:bg-[#f2f4f5] dark:hover:bg-darkGray"
                         >
                           <TableCell
                             className="whitespace-nowrap"
@@ -515,7 +514,7 @@ const ProfileList = () => {
                             <DateDisplay date={item.updatedAt} />
                           </TableCell>
 
-                          <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
+                          {/* <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                             <div className="flex gap-2 items-center">
                               <EditButton
                                 onClick={() =>
@@ -535,6 +534,23 @@ const ProfileList = () => {
                                 <Trash size={18} />
                               </button>
                             </div>
+                          </TableCell> */}
+                          <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
+                            <ActionMenu
+                              onEdit={() =>
+                                navigate(
+                                  `/admin/profilemanagement/edit-profile/${item._id}`
+                                )
+                              }
+                              onView={() =>
+                                navigate(
+                                  `/admin/profilemanagement/view-profile/${item._id}`
+                                )
+                              }
+                              onDelete={() => {
+                                console.log("Delete", item._id);
+                              }}
+                            />
                           </TableCell>
                         </TableRow>
                       ))

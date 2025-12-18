@@ -29,6 +29,7 @@ import EditClient from "./components/clientManagement/EditClient";
 import ViewClient from "./components/clientManagement/ViewClient";
 import ClientRequirement from "./components/clientManagement/ClientRequirement";
 import ClientsRequirementsList from "./components/clientManagement/ClientsRequirementList";
+// import ClientsRequirementsList from "./components/clientManagement/ClientRequirementListDemo";
 import ViewRequirement from "./components/clientManagement/ViewRequirement";
 import EditClientRequirement from "./components/clientManagement/EditClientRequirement";
 import ClientStats from "./components/stats/Clients/ClientStats";

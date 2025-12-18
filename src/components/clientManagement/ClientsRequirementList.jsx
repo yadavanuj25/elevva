@@ -9,15 +9,7 @@ import {
   TableSortLabel,
   Checkbox,
 } from "@mui/material";
-import {
-  Pencil,
-  AtSign,
-  Eye,
-  Trash,
-  File,
-  Send,
-  ChartNoAxesCombined,
-} from "lucide-react";
+import { AtSign, Trash, File, Send, ChartNoAxesCombined } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import NoData from "../ui/NoData";
 import DateDisplay from "../ui/DateDisplay";
@@ -41,6 +33,7 @@ import GroupButton from "../ui/buttons/GroupButton";
 import EditButton from "../ui/buttons/EditButton";
 import ViewButton from "../ui/buttons/ViewButton";
 import CustomSwal from "../../utils/CustomSwal";
+import ActionMenu from "../ui/buttons/ActionMenu";
 
 const ClientsRequirementsList = () => {
   PageTitle("Elevva | Client Requirements");
@@ -59,7 +52,7 @@ const ClientsRequirementsList = () => {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("requirements.createdAt");
   const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [statusLoading, setStatusLoading] = useState(null);
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -108,7 +101,6 @@ const ClientsRequirementsList = () => {
         total: data.pagination?.total || 0,
         pages: data.pagination?.pages || 1,
       }));
-      setLoading(false);
     } catch (error) {
       showError(`Error fetching clients: ${error}`);
     } finally {
@@ -118,7 +110,7 @@ const ClientsRequirementsList = () => {
 
   const fetchClients = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const data = await getAllClients(
         pagination.page,
         pagination.limit,
@@ -137,8 +129,6 @@ const ClientsRequirementsList = () => {
       }));
     } catch (error) {
       showError(`Error fetching clients: ${error}`);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -175,7 +165,7 @@ const ClientsRequirementsList = () => {
       case "action":
         return "sticky -right-[0.1px] z-20";
       case "requirementPriority":
-        return "sticky right-[116px] z-20";
+        return "sticky right-[66.44px] z-20";
       default:
         return "";
     }
@@ -280,18 +270,18 @@ const ClientsRequirementsList = () => {
     selectedRows.includes(r._id)
   );
 
-  const handleAssignSave = async (selectedOption) => {
-    try {
-      await assignApi({
-        ids: selectedRows,
-        option: selectedOption,
-      });
-      setOpenAssignModal(false);
-      setSelectedRows([]);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const handleAssignSave = async (selectedOption) => {
+  //   try {
+  //     await assignApi({
+  //       ids: selectedRows,
+  //       option: selectedOption,
+  //     });
+  //     setOpenAssignModal(false);
+  //     setSelectedRows([]);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handleAssignClick = () => {
     if (selectedRows.length === 0) {
@@ -304,6 +294,15 @@ const ClientsRequirementsList = () => {
       return;
     }
     setOpenAssignModal(true);
+  };
+
+  const getInitials = (name = "") => {
+    return name
+      .split(" ")
+      .slice(0, 2)
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase();
   };
 
   return (
@@ -345,6 +344,7 @@ const ClientsRequirementsList = () => {
           addLink="/admin/clientmanagement/add-clientRequirement"
           title="Requirement"
         />
+
         <div className="filter flex items-center justify-between">
           <div className="inline-flex" role="group">
             <GroupButton text="Profile" icon={<File size={16} />} />
@@ -391,6 +391,7 @@ const ClientsRequirementsList = () => {
                   {[
                     { id: "clientName", label: "Client Name" },
                     { id: "techStack", label: "Tech Stack" },
+                    { id: "assignedUsers", label: "Assigned To" },
                     { id: "positionStatus", label: "Status" },
                     { id: "experience", label: "Experience" },
                     { id: "budget", label: "Budget" },
@@ -444,7 +445,7 @@ const ClientsRequirementsList = () => {
                   sortedData.map((row) => (
                     <TableRow
                       key={row._id}
-                      className="hover:bg-lightGray dark:hover:bg-darkGray"
+                      className="hover:bg-[#f2f4f5] dark:hover:bg-darkGray"
                     >
                       <TableCell
                         className="whitespace-nowrap"
@@ -490,6 +491,86 @@ const ClientsRequirementsList = () => {
                       <TableCell className="whitespace-nowrap dark:text-gray-300">
                         {row.techStack}
                       </TableCell>
+
+                      <TableCell className="whitespace-nowrap">
+                        {row.assignedUsers?.length ? (
+                          <div className="flex items-center relative">
+                            {row.assignedUsers.slice(0, 3).map((user) => (
+                              <div
+                                key={user._id}
+                                className="
+        relative -ml-2 first:ml-0
+        transition-all duration-200
+        hover:z-50 hover:-translate-y-1
+      "
+                              >
+                                <div
+                                  className="
+          w-7 h-7 rounded-full
+          bg-green-400 text-xs font-semibold
+          flex items-center justify-center
+          border-2 border-white dark:border-darkBg
+        "
+                                  title={user.fullName}
+                                >
+                                  {getInitials(user.fullName)}
+                                </div>
+                              </div>
+                            ))}
+
+                            {row.assignedUsers.length > 3 && (
+                              <div
+                                className="
+        relative -ml-2
+        transition-all duration-200
+        hover:z-50 hover:-translate-y-1
+        group
+      "
+                              >
+                                <div
+                                  className="
+          w-7 h-7 rounded-full
+          bg-gray-200 dark:bg-gray-700
+          text-gray-700 dark:text-gray-200
+          border-2 border-white dark:border-darkBg
+          flex items-center justify-center
+          text-xs font-semibold cursor-pointer
+        "
+                                >
+                                  +{row.assignedUsers.length - 3}
+                                </div>
+
+                                <div
+                                  className="
+          absolute left-0 top-9
+          z-50 hidden group-hover:block
+          bg-white dark:bg-darkBg
+          border border-gray-300 dark:border-gray-600
+          shadow-lg rounded-md
+          px-3 py-2
+          min-w-[180px]
+          text-sm
+        "
+                                >
+                                  {row.assignedUsers.map((user) => (
+                                    <div
+                                      key={user._id}
+                                      className="py-1 text-gray-700 dark:text-gray-200 whitespace-nowrap"
+                                    >
+                                      {user.fullName}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <span className=" text-xs text-darkBg dark:text-white">
+                            Not Assigned
+                          </span>
+                        )}
+                      </TableCell>
+
                       <TableCell className="relative whitespace-nowrap">
                         <StatusDropDown
                           rowId={row._id}
@@ -547,34 +628,28 @@ const ClientsRequirementsList = () => {
                         </div>
                       </TableCell>
 
-                      {/* Action */}
                       <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
-                        <div className="flex gap-2 items-center">
-                          <EditButton
-                            onClick={() =>
-                              navigate(
-                                `/admin/clientmanagement/edit-requirement/${row._id}`
-                              )
-                            }
-                          />
-                          <ViewButton
-                            onClick={() =>
-                              navigate(
-                                `/admin/clientmanagement/view-requirement/${row._id}`
-                              )
-                            }
-                          />
-
-                          <button className="text-white bg-red-600 px-1 py-1 rounded hover:bg-[#222]">
-                            <Trash size={18} />
-                          </button>
-                        </div>
+                        <ActionMenu
+                          onEdit={() =>
+                            navigate(
+                              `/admin/clientmanagement/edit-requirement/${row._id}`
+                            )
+                          }
+                          onView={() =>
+                            navigate(
+                              `/admin/clientmanagement/view-requirement/${row._id}`
+                            )
+                          }
+                          onDelete={() => {
+                            console.log("Delete", row._id);
+                          }}
+                        />
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={12} className="py-10 text-center">
+                    <TableCell colSpan={10} className="py-10 text-center">
                       <NoData title="No Data Found" />
                     </TableCell>
                   </TableRow>
@@ -596,7 +671,7 @@ const ClientsRequirementsList = () => {
         open={openAssignModal}
         onClose={() => setOpenAssignModal(false)}
         selectedRequirements={selectedRequirements}
-        onSubmit={handleAssignSave}
+        // onSubmit={handleAssignSave}
       />
     </>
   );

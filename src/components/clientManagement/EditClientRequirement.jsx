@@ -288,9 +288,9 @@ const EditClientRequirement = () => {
   };
 
   return (
-    <>
-      <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Clients Requirement</h2>
+    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
+        <h2 className="text-2xl font-semibold">Update Requirement</h2>
         <BackButton
           onClick={() => navigate("/admin/clientManagement/ClientRequirements")}
         />
@@ -306,70 +306,16 @@ const EditClientRequirement = () => {
         </div>
       )}
 
-      <div className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 ">
+      <div>
         {loading ? (
           <FormSkeleton rows={6} />
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6 ">
             <div className="section">
-              <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
                 Basic Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* <SelectField
-              name="client"
-              label="Client"
-              value={formData.client}
-              options={activeClients}
-              // options={["691c640497c1e09c60e33c9d", "sdsdh45"]}
-              handleChange={handleChange}
-              error={errors.client}
-            /> */}
-                {/* <div className="relative w-full">
-                  <select
-                    name="client"
-                    value={formData.client}
-                    onChange={handleChange}
-                    className={`block w-full p-[14px] text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition 
-            ${
-              errors.client
-                ? "border-red-500"
-                : "border-gray-300 dark:border-gray-600 focus:border-black"
-            } dark:text-white`}
-                  >
-                    <option value="" disabled hidden>
-                      --- Select ---
-                    </option>
-                    <>
-                      {activeClients.map((client, i) => (
-                        <option
-                          key={i}
-                          value={client._id}
-                          className="text-darkBg"
-                        >
-                          {client.clientName}
-                        </option>
-                      ))}
-                    </>
-                  </select>
-                  <label
-                    className={`absolute pointer-events-none font-bold text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
-            peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2
-            peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
-            ${
-              errors.client
-                ? "peer-focus:text-red-500"
-                : "peer-focus:text-darkBg dark:peer-focus:text-white"
-            }
-            rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-                  >
-                    Client
-                  </label>
-
-                  {errors.client && (
-                    <p className="text-red-500 text-sm mt-1">{errors.client}</p>
-                  )}
-                </div> */}
                 <input
                   type="text"
                   value={formData.client}
@@ -405,7 +351,7 @@ const EditClientRequirement = () => {
             </div>
 
             <div className="section">
-              <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
                 Work Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -448,7 +394,7 @@ const EditClientRequirement = () => {
             </div>
 
             <div className="section">
-              <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
                 Budget Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -517,7 +463,7 @@ const EditClientRequirement = () => {
             </div>
 
             <div className="section">
-              <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
                 Other Information
               </h3>
               <div className="relative w-full">
@@ -551,14 +497,14 @@ const EditClientRequirement = () => {
             <div className="flex justify-end">
               <Button
                 type="submit"
-                text="Save"
+                text="Update"
                 icon={<Save size={18} loading={disable} />}
               />
             </div>
           </form>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

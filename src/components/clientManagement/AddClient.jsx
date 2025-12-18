@@ -10,6 +10,7 @@ import BasicDatePicker from "../ui/BasicDatePicker";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
+import UseScrollOnError from "../../hooks/UseScrollOnError";
 
 const schema = yup.object().shape({
   empanelmentDate: yup
@@ -77,10 +78,11 @@ const AddClient = () => {
     poc1: { name: "", email: "", phone: "", designation: "" },
     poc2: { name: "", email: "", phone: "", designation: "" },
   });
-
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
+
+  UseScrollOnError(errors);
 
   useEffect(() => {
     fetchOptions();
@@ -140,63 +142,6 @@ const AddClient = () => {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setErrors({});
-  //   setLoading(true);
-  //   try {
-  //     const cleanedPoc2 = Object.fromEntries(
-  //       Object.entries(formData.poc2).map(([k, v]) => [
-  //         k,
-  //         v === "" ? undefined : v,
-  //       ])
-  //     );
-  //     const cleanedData = {
-  //       ...formData,
-  //       poc2: cleanedPoc2,
-  //     };
-  //     await schema.validate(cleanedData, { abortEarly: false });
-  //     setLoading(true);
-  //     const payload = {
-  //       empanelmentDate: cleanedData.empanelmentDate,
-  //       clientName: cleanedData.clientName,
-  //       clientCategory: cleanedData.clientCategory,
-  //       clientSource: cleanedData.clientSource,
-  //       website: cleanedData.website,
-  //       linkedin: cleanedData.linkedin,
-  //       headquarterAddress: cleanedData.headquarterAddress,
-  //       branchAddress: cleanedData.branchAddress,
-  //       companySize: cleanedData.companySize,
-  //       aboutVendor: cleanedData.aboutVendor,
-  //       instructions: cleanedData.instructions,
-  //       status: cleanedData.status,
-  //       poc1: { ...cleanedData.poc1 },
-  //       poc2: { ...cleanedData.poc2 },
-  //     };
-
-  //     const res = await addClients(payload);
-  //     if (res?.success) {
-  //       showSuccess(res.message || "Client added successfully");
-  //       navigate("/admin/clientmanagement/clients");
-  //     } else {
-  //       showError(res?.message || "Failed to add client");
-  //     }
-  //   } catch (err) {
-  //     if (err?.inner && Array.isArray(err.inner)) {
-  //       const newErrors = {};
-  //       err.inner.forEach((e) => {
-  //         const path = (e.path || "").replace(/\[(\w+)\]/g, ".$1");
-  //         newErrors[path] = e.message;
-  //       });
-  //       setErrors(newErrors);
-  //     } else {
-  //       showError("Validation error");
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -248,15 +193,10 @@ const AddClient = () => {
         setErrors(newErrors);
         return;
       }
-      // ✅ 1. API field errors
       if (err?.errors && typeof err.errors === "object") {
         setErrors(err.errors);
         return;
       }
-
-      // ✅ 2. Yup validation errors
-
-      // ✅ 3. Real fallback
       showError(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -264,9 +204,9 @@ const AddClient = () => {
   };
 
   return (
-    <div>
-      <div className="mb-4 flex justify-between items-center ">
-        <h2 className="text-2xl font-semibold">Add Client</h2>
+    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600 ">
+        <h2 className="text-2xl font-semibold">Add New Client</h2>
         <BackButton
           onClick={() => navigate("/admin/clientManagement/clients")}
         />
@@ -282,10 +222,7 @@ const AddClient = () => {
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6 border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 "
-      >
+      <form onSubmit={handleSubmit} className="space-y-6 ">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <BasicDatePicker
             name="empanelmentDate"
@@ -489,7 +426,7 @@ const AddClient = () => {
         <div className="col-span-2 flex justify-end">
           <Button
             type="submit"
-            text="Save"
+            text="Submit"
             icon={<Save size={18} />}
             loading={loading}
           />

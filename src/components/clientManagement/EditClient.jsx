@@ -15,6 +15,7 @@ import FormSkeleton from "../loaders/FormSkeleton";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
+import UseScrollOnError from "../../hooks/UseScrollOnError";
 const schema = yup.object().shape({
   empanelmentDate: yup
     .string()
@@ -91,6 +92,8 @@ const EditClient = () => {
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const [disable, setDisable] = useState(false);
+
+  UseScrollOnError(errors);
 
   useEffect(() => {
     fetchOptions();
@@ -172,20 +175,29 @@ const EditClient = () => {
       await schema.validate(formData, { abortEarly: false });
       const res = await updateClient(id, formData);
       if (res?.success) {
-        showSuccess("Client updated successfully");
+        showSuccess(res.message || "Client updated successfully");
         navigate("/admin/clientManagement/clients");
-      } else {
-        showError(res?.message || "Failed to update client");
+        return;
       }
+      if (res?.errors && typeof res.errors === "object") {
+        setErrors(res.errors);
+        return;
+      }
+
+      showError(res?.message || "Failed to update client");
     } catch (err) {
-      if (err.inner) {
+      if (err?.inner && Array.isArray(err.inner)) {
         const formattedErrors = {};
         err.inner.forEach((e) => {
-          formattedErrors[e.path] = e.message;
+          const path = (e.path || "").replace(/\[(\w+)\]/g, ".$1");
+          formattedErrors[path] = e.message;
         });
         setErrors(formattedErrors);
-      } else {
-        showError("Something went wrong");
+        return;
+      }
+      if (err?.errors && typeof err.errors === "object") {
+        setErrors(err.errors);
+        return;
       }
     } finally {
       setDisable(false);
@@ -193,9 +205,9 @@ const EditClient = () => {
   };
 
   return (
-    <div>
-      <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Edit Client</h2>
+    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
+        <h2 className="text-2xl font-semibold">Update Client</h2>
 
         <BackButton
           onClick={() => navigate("/admin/clientManagement/clients")}
@@ -212,7 +224,7 @@ const EditClient = () => {
         </div>
       )}
 
-      <div className="border p-6 rounded-lg bg-white dark:bg-gray-800">
+      <div>
         {loading ? (
           <FormSkeleton rows={6} />
         ) : (
@@ -380,7 +392,7 @@ const EditClient = () => {
             <div className="flex justify-end">
               <Button
                 type="submit"
-                text="Save"
+                text="Update"
                 icon={<Save size={18} />}
                 loading={disable}
               />

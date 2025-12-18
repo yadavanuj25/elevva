@@ -281,9 +281,9 @@ const ProfileSubmission = () => {
   };
 
   return (
-    <div>
-      <div className="mb-4 flex justify-between items-center ">
-        <h2 className="text-2xl font-semibold">Profile Submissions</h2>
+    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600 ">
+        <h2 className="text-2xl font-semibold">Add New Profle</h2>
         <BackButton
           onClick={() => navigate("/admin/profilemanagement/profiles")}
         />
@@ -297,10 +297,7 @@ const ProfileSubmission = () => {
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6 border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 "
-      >
+      <form onSubmit={handleSubmit} className="space-y-6 ">
         {/* Resume Upload */}
         <div>
           <div
@@ -588,7 +585,7 @@ const ProfileSubmission = () => {
         <div className="flex justify-end">
           <Button
             type="submit"
-            text={loading ? "Submitting..." : "Save"}
+            text={loading ? "Submitting..." : "Submit"}
             icon={<Save size={18} />}
             disabled={loading}
           />

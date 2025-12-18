@@ -24,6 +24,8 @@ import ViewTabs from "../ui/viewComponents/ViewTabs";
 import PageTitle from "../../hooks/PageTitle";
 import { BarLoader } from "react-spinners";
 import BackButton from "../ui/buttons/BackButton";
+import EditButton from "../ui/buttons/EditButton";
+import ToolTip from "../ui/ToolTip";
 
 const ViewClient = () => {
   const { id } = useParams();
@@ -91,7 +93,18 @@ const ViewClient = () => {
             </p>
           )}
         </div>
-        <RefreshButton fetchData={fetchClientById} />
+        {/* <RefreshButton fetchData={fetchClientById} /> */}
+        <button
+          className="flex items-center gap-2 "
+          onClick={() => fetchClientById()}
+        >
+          <ToolTip
+            title="Refresh"
+            placement="top"
+            icon={<RefreshCcw size={16} />}
+            isViewRefresh="true"
+          />
+        </button>
       </div>
 
       {/* MAIN CARD */}
@@ -134,17 +147,14 @@ const ViewClient = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 mt-3 sm:mt-0">
-                <button
+              <div className="flex items-center gap-2 mt-3 sm:mt-0">
+                <EditButton
                   onClick={() =>
                     navigate(
                       `/admin/clientmanagement/edit-client/${client._id}`
                     )
                   }
-                  className="flex items-center gap-2 px-3 py-1.5 bg-dark text-white text-sm rounded-md hover:bg-[#222]"
-                >
-                  <Pencil size={16} /> Edit
-                </button>
+                />
 
                 <BackButton
                   onClick={() => navigate("/admin/clientmanagement/clients")}

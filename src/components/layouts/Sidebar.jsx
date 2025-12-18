@@ -18,7 +18,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     role === "admin" ? "/admin/super-dashboard" : "/dashboard";
   const navSections = [
     {
-      section: "MAIN MENU",
       items: [
         {
           module: "dashboard",
@@ -46,6 +45,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       ],
     },
     {
+      section: "Profile Management",
+      items: [
+        {
+          module: "profile",
+          path: "/admin/profilemanagement/profiles",
+          label: "Profiles",
+          icon: <ImProfile size={16} />,
+        },
+      ],
+    },
+    {
       section: "CLIENT MANAGEMENT",
       items: [
         {
@@ -62,48 +72,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         },
       ],
     },
-    // {
-    //   section: "REPORTS",
-    //   items: [
-    //     {
-    //       module: "reports",
-    //       path: "/admin/reports",
-    //       label: "Reports",
-    //       icon: <TbReportAnalytics size={16} />,
-    //       submodules: [
-    //         {
-    //           module: "hr",
-    //           path: "/admin/reports/hr",
-    //           label: "HR",
-    //           icon: <AiOutlineDashboard size={16} />,
-    //         },
-    //         {
-    //           module: "bde",
-    //           path: "/admin/reports/bde",
-    //           label: "BDE",
-    //           icon: <AiOutlineDashboard size={16} />,
-    //         },
-    //         {
-    //           module: "sales",
-    //           path: "/admin/reports/sales",
-    //           label: "Sales",
-    //           icon: <AiOutlineDashboard size={16} />,
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
-    {
-      section: "Profile Management",
-      items: [
-        {
-          module: "profile",
-          path: "/admin/profilemanagement/profiles",
-          label: "Profiles",
-          icon: <ImProfile size={16} />,
-        },
-      ],
-    },
+
     {
       section: "Settings",
       items: [
@@ -235,7 +204,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           {filteredSections.map((section) => (
             <div key={section.section}>
               {isOpen && section.section && (
-                <h4 className="px-4 pb-2 text-[13px] font-medium  dark:text-gray-300 uppercase tracking-wide  bg-white dark:bg-darkBg z-10">
+                <h4 className="px-2 pb-2 text-[13px] font-medium  dark:text-gray-300 uppercase tracking-wide  bg-white dark:bg-darkBg z-10">
                   {section.section}
                 </h4>
               )}

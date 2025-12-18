@@ -21,6 +21,7 @@ import TableSkeleton from "../loaders/TableSkeleton";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import EditButton from "../ui/buttons/EditButton";
+import ToolTip from "../ui/ToolTip";
 
 const RoleList = () => {
   PageTitle("Elevva | Roles");
@@ -185,7 +186,18 @@ const RoleList = () => {
         <h2 className="text-2xl font-semibold ">
           Role & Permission Management
         </h2>
-        <RefreshButton fetchData={getAllRoles} />
+        {/* <RefreshButton fetchData={getAllRoles} /> */}
+        <button
+          className="flex items-center gap-2 "
+          onClick={() => getAllRoles()}
+        >
+          <ToolTip
+            title="Refresh"
+            placement="top"
+            icon={<RefreshCcw size={16} />}
+            isViewRefresh="true"
+          />
+        </button>
       </div>
       {errorMsg && (
         <div
@@ -304,7 +316,7 @@ const RoleList = () => {
                           role="checkbox"
                           aria-checked={isItemSelected}
                           selected={isItemSelected}
-                          className="hover:bg-lightGray dark:hover:bg-darkGray"
+                          className="hover:bg-[#f2f4f5] dark:hover:bg-darkGray"
                         >
                           <TableCell padding="checkbox">
                             <Checkbox

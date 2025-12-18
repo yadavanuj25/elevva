@@ -11,14 +11,11 @@ import {
   Checkbox,
 } from "@mui/material";
 
-import { Pencil, AtSign, Eye, Trash, Mail, Phone } from "lucide-react";
-import Spinner from "../../loaders/Spinner";
+import { AtSign, Eye, Trash, Mail, Phone } from "lucide-react";
 import NoData from "../NoData";
 import StatusDropDown from "../StatusDropDown";
 import DateDisplay from "../DateDisplay";
 import TableSkeleton from "../../loaders/TableSkeleton";
-import EditButton from "../buttons/EditButton";
-import ViewButton from "../buttons/ViewButton";
 import ActionMenu from "../buttons/ActionMenu";
 
 const getStickyClass = (columnId) => {

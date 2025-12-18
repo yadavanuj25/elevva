@@ -5,7 +5,6 @@ import * as yup from "yup";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import SelectField from "../ui/SelectField";
-import { useAuth } from "../../auth/AuthContext";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProfileById, updateProfile } from "../../services/profileServices";
 import FormSkeleton from "../loaders/FormSkeleton";
@@ -305,9 +304,9 @@ const EditProfile = () => {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold">Edit Profile</h2>
+    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
+        <h2 className="text-2xl font-semibold">Update Profile</h2>
         <div className="flex items-center gap-3 mt-3 sm:mt-0">
           <BackButton
             onClick={() => navigate("/admin/profilemanagement/profiles")}
@@ -325,7 +324,7 @@ const EditProfile = () => {
         </div>
       )}
 
-      <div className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 ">
+      <div>
         {loading ? (
           <FormSkeleton rows={6} />
         ) : (

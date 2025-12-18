@@ -27,6 +27,7 @@ import ViewBlock from "../ui/ViewBlock";
 import PageTitle from "../../hooks/PageTitle";
 import { BarLoader } from "react-spinners";
 import BackButton from "../ui/buttons/BackButton";
+import EditButton from "../ui/buttons/EditButton";
 
 const ViewRequirement = () => {
   const { id } = useParams();
@@ -99,12 +100,15 @@ const ViewRequirement = () => {
             </p>
           )}
         </div>
-
-        <button className="flex items-center gap-2 " onClick={fetchRequirement}>
+        <button
+          className="flex items-center gap-2 "
+          onClick={() => fetchRequirement()}
+        >
           <ToolTip
             title="Refresh"
             placement="top"
             icon={<RefreshCcw size={16} />}
+            isViewRefresh="true"
           />
         </button>
       </div>
@@ -148,15 +152,12 @@ const ViewRequirement = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 mt-3 sm:mt-0">
-                <button
+              <div className="flex items-center gap-2 mt-3 sm:mt-0">
+                <EditButton
                   onClick={() =>
                     navigate(`/admin/requirements/edit/${requirement._id}`)
                   }
-                  className="flex items-center gap-2 px-3 py-1.5 bg-dark text-white text-sm rounded-md hover:bg-[#222]"
-                >
-                  <Pencil size={16} /> Edit
-                </button>
+                />
 
                 <BackButton
                   onClick={() =>

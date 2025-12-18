@@ -224,11 +224,9 @@ const EditRole = () => {
   if (!role) return <p>Loading...</p>;
 
   return (
-    <>
-      <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-2xl font-semibold ">
-          Role & Permission Management
-        </h2>
+    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
+        <h2 className="text-2xl font-semibold ">Update Role</h2>
         <BackButton onClick={() => navigate("/admin/rolemanagement/roles")} />
       </div>
       <div className="space-y-6">
@@ -242,7 +240,7 @@ const EditRole = () => {
           </div>
         )}
 
-        <div className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800">
+        <div>
           {/* Role Details */}
 
           {loading ? (
@@ -250,8 +248,6 @@ const EditRole = () => {
           ) : (
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-2 p-6 bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-lg">
-                <h2 className="text-2xl font-semibold mb-4">Edit Role</h2>
-
                 <div className="grid grid-cols-1 gap-4">
                   {/* Role Name */}
                   <Input
@@ -379,7 +375,7 @@ const EditRole = () => {
               <div className="col-span-2 flex justify-end mt-2">
                 <Button
                   type="submit"
-                  text="Save"
+                  text="Update"
                   icon={<Save size={18} />}
                   loading={loading}
                 />
@@ -388,7 +384,7 @@ const EditRole = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

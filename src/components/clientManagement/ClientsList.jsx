@@ -6,6 +6,8 @@ import {
   List,
   Settings,
   ChartNoAxesCombined,
+  Search,
+  RefreshCcw,
 } from "lucide-react";
 import {
   getAllClients,
@@ -22,6 +24,9 @@ import ErrorToast from "../ui/toaster/ErrorToast";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import GroupButton from "../ui/buttons/GroupButton";
+import axios from "axios";
+import Button from "../ui/Button";
+import SelectField from "../ui/SelectField";
 
 const columns = [
   { id: "clientName", label: "Client Name" },
@@ -51,102 +56,150 @@ const ClientList = () => {
   const [statusTabs, setStatusTabs] = useState([]);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("clients.createdAt");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  const [loading, setLoading] = useState(true);
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
   const statusOptions = ["active", "dead", "prosepective", "terminated"];
   const [viewMode, setViewMode] = useState("list");
+  const [stats, setStats] = useState(null);
+  const [settings, setSettings] = useState({});
+  const [error, setError] = useState(null);
+
+  // Filter State
+  const [filters, setFilters] = useState({
+    search: "",
+    clientCategory: "",
+    clientSource: "",
+    companySize: "",
+    status: "",
+  });
+
+  const API_BASE_URL = "https://crm-backend-qbz0.onrender.com/api";
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetchClients();
-  }, [pagination.page, pagination.limit, activeTab]);
+    fetchSettings();
+  }, []);
 
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
+    const delay = setTimeout(() => {
       fetchClients();
     }, 500);
-    return () => clearTimeout(delayDebounce);
-  }, [searchQuery]);
+    return () => clearTimeout(delay);
+  }, [
+    filters.search,
+    filters.clientCategory,
+    filters.clientSource,
+    filters.companySize,
+    filters.status,
+    pagination.page,
+    pagination.limit,
+  ]);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/clients/options`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSettings(response.data.options);
+    } catch (err) {
+      console.error("Error fetching settings:", err);
+    }
+  };
 
   const fetchClients = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await getAllClients(
-        pagination.page,
-        pagination.limit,
-        activeTab,
-        searchQuery
+      const params = new URLSearchParams();
+      params.append("page", pagination.page);
+      params.append("limit", pagination.limit);
+      if (filters.search) params.append("search", filters.search);
+      if (filters.clientCategory)
+        params.append("clientCategory", filters.clientCategory);
+      if (filters.clientSource)
+        params.append("clientSource", filters.clientSource);
+      if (filters.companySize)
+        params.append("companySize", filters.companySize);
+      if (filters.status) params.append("status", filters.status);
+      const res = await axios.get(
+        `${API_BASE_URL}/clients?${params.toString()}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      const allClients = response.clients || [];
-      const statusesFromAPI = allClients.map(
-        (item) => item.status || "Unknown"
-      );
-      statusesFromAPI.sort((a, b) => a.localeCompare(b));
-      const uniqueStatuses = ["All", ...new Set(statusesFromAPI)];
-      const tabsWithCounts = uniqueStatuses.map((status) => ({
-        name: status,
-        count:
-          status === "All"
-            ? allClients.length
-            : allClients.filter((c) => c.status === status).length,
-      }));
-      setClients(allClients);
-      setStatusTabs(tabsWithCounts);
+      setClients(res.data.clients || []);
       setPagination((prev) => ({
         ...prev,
-        total: response.pagination?.total || 0,
-        pages: response.pagination?.pages || 1,
+        total: res.data.pagination.total,
+        pages: res.data.pagination.pages,
       }));
-    } catch (error) {
-      showError(`Error fetching clients: ${error.message || error}`);
+    } catch (err) {
+      setError(err.response?.data?.message || "Error fetching clients");
     } finally {
       setLoading(false);
     }
   };
 
-  //  const fetchClients = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await getAllClients(
-  //       pagination.page,
-  //       pagination.limit,
-  //       activeTab,
-  //       searchQuery
-  //     );
-  //     const allClients = response.clients || [];
-  //     const globalCounts = response.counts?.global || {};
-  // let statuses = Object.keys(globalCounts).filter((k) => k !== "total");
-  // statuses.sort((a, b) => a.localeCompare(b));
-  //     const tabsWithCounts = [
-  //       { name: "All", count: globalCounts.total || 0 },
-  //       ...statuses.map((s) => ({
-  //         name: s,
-  //         count: globalCounts[s] || 0,
-  //       })),
-  //     ];
-  //     setClients(allClients);
-  //     setStatusTabs(tabsWithCounts);
-  //     setPagination((prev) => ({
-  //       ...prev,
-  //       total: response.pagination?.total || 0,
-  //       pages: response.pagination?.pages || 1,
-  //     }));
-  //   } catch (error) {
-  //     showError(`${error.message || error}`);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchStats = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/clients/stats`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setStats(response.data.stats);
+    } catch (err) {
+      console.error("Error fetching stats:", err);
+    }
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setPagination((prev) => ({
+      ...prev,
+      page: 1,
+    }));
+  };
+
+  // Handle Search
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchClients();
+  };
+
+  // Clear Filters
+  const clearFilters = () => {
+    setFilters({
+      page: 1,
+      limit: 25,
+      search: "",
+      clientCategory: "",
+      clientSource: "",
+      companySize: "",
+      status: "",
+    });
+  };
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <h2>Error</h2>
+        <p>{error}</p>
+        <button onClick={fetchClients}>Retry</button>
+      </div>
+    );
+  }
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    setPagination((prev) => ({ ...prev, page: 1 }));
-  };
+
   const handleSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -177,7 +230,7 @@ const ClientList = () => {
       data = data.filter((c) => c.status === activeTab);
     }
     return data;
-  }, [clients, activeTab, searchQuery]);
+  }, [clients, activeTab]);
 
   const sortedData = useMemo(() => {
     return [...filteredData].sort((a, b) => {
@@ -231,7 +284,6 @@ const ClientList = () => {
     <>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">All Clients</h2>
-        {/* <RefreshButton fetchData={fetchClients} /> */}
       </div>
       {errorMsg && (
         <div
@@ -281,11 +333,147 @@ const ClientList = () => {
       </div>
       <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
         <TableHeader
-          searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
+          searchQuery={filters.search}
+          onSearchChange={(e) =>
+            handleFilterChange({
+              target: { name: "search", value: e.target.value },
+            })
+          }
           addLink="/admin/clientManagement/add-client"
           title="Client"
         />
+
+        <div className="mt-3">
+          <div className="space-y-2">
+            <form
+              onSubmit={handleSearch}
+              className="filters-form grid grid-cols-1 md:grid-cols-5 gap-4"
+            >
+              <SelectField
+                name="clientCategory"
+                label="Category"
+                value={filters.clientCategory}
+                options={settings?.clientCategories || []}
+                handleChange={handleFilterChange}
+                loading={loading}
+              />
+
+              {/* Client Source */}
+              <SelectField
+                name="clientSource"
+                label="Source"
+                value={filters.clientSource}
+                options={settings?.clientSources || []}
+                handleChange={handleFilterChange}
+                loading={loading}
+              />
+
+              {/* Company Size */}
+              <SelectField
+                name="companySize"
+                label="Company Size"
+                value={filters.companySize}
+                options={settings?.companySizes || []}
+                handleChange={handleFilterChange}
+                loading={loading}
+              />
+
+              {/* Status */}
+              <SelectField
+                name="status"
+                label="Status"
+                value={filters.status}
+                options={settings?.statuses || []}
+                handleChange={handleFilterChange}
+                loading={loading}
+              />
+            </form>
+
+            <div className="flex items-center justify-between border-b border-gray-300 dark:border-gray-600 pb-2">
+              <div className="active-filters">
+                {filters.search && (
+                  <span className="filter-tag text-dark">
+                    Search: {filters.search}{" "}
+                    <button
+                      onClick={() =>
+                        handleFilterChange({
+                          target: { name: "search", value: "" },
+                        })
+                      }
+                    >
+                      &times;
+                    </button>
+                  </span>
+                )}
+                {filters.clientCategory && (
+                  <span className="filter-tag text-dark">
+                    Category: {filters.clientCategory}{" "}
+                    <button
+                      onClick={() =>
+                        handleFilterChange({
+                          target: { name: "clientCategory", value: "" },
+                        })
+                      }
+                    >
+                      &times;
+                    </button>
+                  </span>
+                )}
+                {filters.clientSource && (
+                  <span className="filter-tag text-dark">
+                    Source: {filters.clientSource}{" "}
+                    <button
+                      onClick={() =>
+                        handleFilterChange({
+                          target: { name: "clientSource", value: "" },
+                        })
+                      }
+                    >
+                      &times;
+                    </button>
+                  </span>
+                )}
+                {filters.companySize && (
+                  <span className="filter-tag text-dark">
+                    Size: {filters.companySize}{" "}
+                    <button
+                      onClick={() =>
+                        handleFilterChange({
+                          target: { name: "companySize", value: "" },
+                        })
+                      }
+                    >
+                      &times;
+                    </button>
+                  </span>
+                )}
+                {filters.status && (
+                  <span className="filter-tag text-dark">
+                    Status: {filters.status}{" "}
+                    <button
+                      onClick={() =>
+                        handleFilterChange({
+                          target: { name: "status", value: "" },
+                        })
+                      }
+                    ></button>
+                  </span>
+                )}
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="clear-btn "
+                >
+                  Clear Filter
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Active Filters Display */}
+        </div>
 
         <div className="filter flex items-center justify-between">
           <div className="inline-flex" role="group">
@@ -308,8 +496,6 @@ const ClientList = () => {
             onLimitChange={handleChangeRowsPerPage}
           />
         </div>
-
-        {/* Pagination */}
 
         {viewMode === "grid" ? (
           <>

@@ -271,9 +271,9 @@ export default function EditUser() {
   const togglePassword = () => setShowPassword(!showPassword);
 
   return (
-    <div>
-      <div className="mb-4 flex justify-between items-center ">
-        <h2 className="text-2xl font-semibold">Edit User</h2>
+    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
+        <h2 className="text-2xl font-semibold">Update User</h2>
         <div className="flex items-center gap-3 mt-3 sm:mt-0">
           <BackButton onClick={() => navigate("/admin/usermanagement/users")} />
         </div>
@@ -287,7 +287,7 @@ export default function EditUser() {
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}
-      <div className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg bg-white dark:bg-gray-800 ">
+      <div>
         {loading ? (
           <FormSkeleton rows={6} />
         ) : (
@@ -297,7 +297,7 @@ export default function EditUser() {
             className="grid grid-cols-1 sm:grid-cols-[minmax(0,30%)_minmax(0,70%)] gap-5 items-stretch"
           >
             {/* User Profile */}
-            <div className="p-6 flex flex-col items-center gap-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+            <div className="p-6 flex flex-col items-center gap-4 border border-gray-300 dark:border-gray-600 rounded-md">
               {/* Profile Image Upload */}
               <div className="flex flex-col items-center  rounded-md space-y-2 col-span-2">
                 <div
@@ -373,7 +373,7 @@ export default function EditUser() {
               </div>
             </div>
             {/* User Form */}
-            <div className=" rounded-xl p-6 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600">
+            <div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
                   // id="user_name"

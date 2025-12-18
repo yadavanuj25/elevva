@@ -94,7 +94,7 @@
 //       {/* Header */}
 //       <DialogTitle
 //         sx={{
-//           background: "#1b84ff",
+//           background: "#25499f",
 //           color: "#fff",
 //           display: "flex",
 //           alignItems: "center",
@@ -293,7 +293,7 @@ const AssignModal = ({ open, onClose, selectedRequirements }) => {
 
     try {
       await assignRequirement(payload);
-      closeWithAnimation(); // ✅ clears + animates
+      closeWithAnimation();
     } catch (err) {}
   };
 

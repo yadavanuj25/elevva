@@ -86,9 +86,9 @@ const CreateRole = () => {
   };
 
   return (
-    <div>
-      <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Role & Permission Management</h2>
+    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
+        <h2 className="text-2xl font-semibold">Add New Role</h2>
         <BackButton onClick={() => navigate("/admin/rolemanagement/roles")} />
       </div>
       {errorMsg && (
@@ -100,47 +100,40 @@ const CreateRole = () => {
           <p className="text-sm">{errorMsg}</p>
         </div>
       )}
-      <div className="mx-auto bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-xl p-6 ">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-darkBg dark:text-white">
-            Create New Role
-          </h2>
-        </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            {/* Role Name */}
-            <div>
-              <Input
-                type="text"
-                name="name"
-                value={formData.name}
-                handleChange={handleChange}
-                className="col-span-2 md:col-span-1"
-                errors={errors}
-                labelName="Role name"
-              />
-            </div>
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-2 gap-4">
+          {/* Role Name */}
+          <div>
+            <Input
+              type="text"
+              name="name"
+              value={formData.name}
+              handleChange={handleChange}
+              className="col-span-2 md:col-span-1"
+              errors={errors}
+              labelName="Role name"
+            />
+          </div>
 
-            {/* Description */}
-            <div className="relative w-full">
-              <textarea
-                name="description"
-                rows={1}
-                value={formData.description}
-                onChange={handleChange}
-                placeholder=" "
-                className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
+          {/* Description */}
+          <div className="relative w-full">
+            <textarea
+              name="description"
+              rows={1}
+              value={formData.description}
+              onChange={handleChange}
+              placeholder=" "
+              className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
         ${
           errors.description
             ? "border-red-500"
             : "border-gray-300 dark:border-gray-600 focus:border-black"
         }`}
-              />
-              <label
-                className={`absolute pointer-events-none   text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
+            />
+            <label
+              className={`absolute pointer-events-none   text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
             peer-placeholder-shown:scale-100  peer-placeholder-shown:top-1/2
             peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
             ${
@@ -149,27 +142,24 @@ const CreateRole = () => {
                 : "peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2"
             }
             rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-              >
-                Description
-              </label>
-              {errors.description && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.description}
-                </p>
-              )}
-            </div>
+            >
+              Description
+            </label>
+            {errors.description && (
+              <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+            )}
           </div>
+        </div>
 
-          <div className="col-span-2 flex justify-end">
-            <Button
-              type="submit"
-              text="Save"
-              icon={<Save size={18} />}
-              loading={loading}
-            />
-          </div>
-        </form>
-      </div>
+        <div className="col-span-2 flex justify-end">
+          <Button
+            type="submit"
+            text="Submit"
+            icon={<Save size={18} />}
+            loading={loading}
+          />
+        </div>
+      </form>
     </div>
   );
 };

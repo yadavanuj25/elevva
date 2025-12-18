@@ -94,6 +94,7 @@ const ViewProfile = () => {
             title="Refresh"
             placement="top"
             icon={<RefreshCcw size={16} />}
+            isViewRefresh="true"
           />
         </button>
       </div>
@@ -140,7 +141,7 @@ const ViewProfile = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 mt-3 sm:mt-0">
+                <div className="flex items-center gap-2 mt-3 sm:mt-0">
                   <EditButton
                     onClick={() =>
                       navigate(
