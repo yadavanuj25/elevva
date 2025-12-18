@@ -32,7 +32,7 @@ const IconButton = ({ title, icon: Icon, badge, onClick }) => (
         title === "Notification" ? "animate-tada" : ""
       }`}
     >
-      <Icon size={18} />
+      <Icon size={15} />
       {badge && (
         <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-4 h-4 flex items-center justify-center rounded-full border border-white dark:border-gray-800">
           {badge}
@@ -113,7 +113,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 flex items-center bg-white dark:bg-darkBg justify-between px-3 py-2 border-b border-gray-300 dark:border-gray-600">
+    <header className="sticky top-0 z-40 flex items-center bg-dark text-white justify-between px-3 py-2 border-b border-gray-300 dark:border-gray-600">
       {/* Left */}
       <div className="flex gap-5 items-center text-md font-medium">
         <button
@@ -129,21 +129,21 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
         <div className="hidden sm:block">
           Welcome to Elevva{" "}
-          <span className="text-dark font-semibold"> {user?.fullName}</span>
+          <span className=" font-semibold"> {user?.fullName}</span>
         </div>
       </div>
 
       {/* Right */}
       <div className="flex items-center gap-3 relative" ref={popupRef}>
         <div
-          className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md"
+          className="h-8 w-8 flex justify-center items-center border border-gray-300  rounded-md"
           accordion
           onClick={lockScreen}
         >
           <IconButton title="Lock Screen" icon={LockKeyhole} />
         </div>
         {/*  Fullscreen Button */}
-        <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md">
+        <div className="h-8 w-8 flex justify-center items-center border border-gray-300  rounded-md">
           <IconButton
             title={isFullscreen ? "Exit Full Screen" : "Full Screen"}
             icon={isFullscreen ? Minimize : Maximize}
@@ -152,12 +152,12 @@ const Header = ({ toggleSidebar, isOpen }) => {
         </div>
         {/* Notification */}
 
-        <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md ">
+        <div className="h-8 w-8 flex justify-center items-center border border-gray-300  rounded-md ">
           <IconButton title="Notification" icon={Bell} badge={1} />
         </div>
 
         {/* Theme */}
-        <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md">
+        <div className="h-8 w-8 flex justify-center items-center border border-gray-300  rounded-md">
           <LightDarkMode />
         </div>
 
@@ -166,9 +166,9 @@ const Header = ({ toggleSidebar, isOpen }) => {
           className="flex gap-3 items-center cursor-pointer"
           onClick={() => setPopupOpen((prev) => !prev)}
         >
-          <div className="h-9 w-9 flex justify-center items-center border border-gray-300 dark:border-gray-600 rounded-md">
+          <div className="h-8 w-8 flex justify-center items-center border border-gray-300  rounded-md">
             {user?.profileImage ? (
-              <User size={18} />
+              <User size={15} />
             ) : (
               <img
                 src="https://staging.ecodedash.com/cias/assets/dist/img/userimg.png"
@@ -180,7 +180,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
         {/* Popup */}
         {popupOpen && (
-          <div className="absolute right-0 top-full mt-3 w-72 px-6 py-6 font-semibold bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+          <div className="absolute right-0 top-full mt-3 w-72 px-6 py-6 font-semibold text-black dark:text-white bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
             <div className="flex  items-center gap-5">
               <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-dark">
                 {user?.profileImage ? (

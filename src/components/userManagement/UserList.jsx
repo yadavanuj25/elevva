@@ -321,7 +321,7 @@ const UserList = () => {
                       sortedData.map((row) => (
                         <TableRow
                           key={row._id}
-                          className="hover:bg-lightGray dark:hover:bg-darkGray"
+                          className="hover:bg-[#f2f4f5] dark:hover:bg-darkGray"
                         >
                           <TableCell
                             padding="checkbox"

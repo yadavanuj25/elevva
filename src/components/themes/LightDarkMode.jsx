@@ -19,10 +19,10 @@ const LightDarkMode = ({ onToggle }) => {
     html.classList.add(theme);
 
     const themeSettings = {
-      light: { light: "#e3edff", dark: "#1b84ff" },
-      dark: { light: "#fff4e6", dark: "#1b84ff" },
+      light: { light: "#e3edff", dark: "#25499f" },
+      dark: { light: "#fff4e6", dark: "#25499f" },
       bottelGreen: { light: "#b2f1e89c", dark: "#007672" },
-      blue: { light: "#d2e0fa", dark: "#1b84ff" },
+      blue: { light: "#d2e0fa", dark: "#25499f" },
       red: { light: "#fff4e6", dark: "#ff0008" },
       purple: { light: "#ebd7fa", dark: "#800080" },
     };
@@ -66,7 +66,7 @@ const LightDarkMode = ({ onToggle }) => {
           onClick={toggleTheme}
           className="w-8 h-8 flex justify-center items-center rounded-full transition "
         >
-          {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+          {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
         </button>
       </Tippy>
     </>

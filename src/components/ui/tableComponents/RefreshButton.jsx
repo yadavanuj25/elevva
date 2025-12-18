@@ -12,8 +12,6 @@ const RefreshButton = ({ fetchData }) => {
           placement="top"
           icon={<RefreshCcw size={16} />}
         />
-        {/* 
-        <Tooltip title="Default tooltip">Default tooltip</Tooltip> */}
       </button>
     </>
   );

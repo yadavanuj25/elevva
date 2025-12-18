@@ -19,6 +19,7 @@ import DateDisplay from "../DateDisplay";
 import TableSkeleton from "../../loaders/TableSkeleton";
 import EditButton from "../buttons/EditButton";
 import ViewButton from "../buttons/ViewButton";
+import ActionMenu from "../buttons/ActionMenu";
 
 const getStickyClass = (columnId) => {
   switch (columnId) {
@@ -104,7 +105,7 @@ const TableLayout = ({
                 sortedData.map((row) => (
                   <TableRow
                     key={row._id}
-                    className="hover:bg-lightGray dark:hover:bg-darkGray"
+                    className="hover:bg-[#f2f4f5] dark:hover:bg-darkGray"
                   >
                     <TableCell padding="checkbox">
                       <Checkbox color=" dark:text-white" />
@@ -191,28 +192,23 @@ const TableLayout = ({
                     <TableCell className="whitespace-nowrap dark:text-gray-200">
                       <DateDisplay date={row.updatedAt} />
                     </TableCell>
+
                     <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
-                      <div className="flex gap-2 items-center">
-                        <EditButton
-                          onClick={() =>
-                            navigate(
-                              `/admin/clientmanagement/edit-client/${row._id}`
-                            )
-                          }
-                        />
-
-                        <ViewButton
-                          onClick={() =>
-                            navigate(
-                              `/admin/clientmanagement/view-client/${row._id}`
-                            )
-                          }
-                        />
-
-                        <button className="text-white bg-red-600 px-1 py-1 rounded hover:bg-[#222]">
-                          <Trash size={18} />
-                        </button>
-                      </div>
+                      <ActionMenu
+                        onEdit={() =>
+                          navigate(
+                            `/admin/clientmanagement/edit-client/${row._id}`
+                          )
+                        }
+                        onView={() =>
+                          navigate(
+                            `/admin/clientmanagement/view-client/${row._id}`
+                          )
+                        }
+                        onDelete={() => {
+                          console.log("Delete", row._id);
+                        }}
+                      />
                     </TableCell>
                   </TableRow>
                 ))

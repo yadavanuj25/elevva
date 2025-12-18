@@ -6,7 +6,7 @@ const BackButton = ({ onClick }) => {
     <>
       <button
         onClick={onClick}
-        className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-sm rounded-md hover:bg-[#222] transition"
+        className="flex items-center gap-1 px-2 py-1 bg-gray-600 text-white text-sm rounded hover:bg-[#222] transition"
       >
         <ArrowLeft size={16} /> Back
       </button>
