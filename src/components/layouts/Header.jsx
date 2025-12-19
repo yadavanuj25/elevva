@@ -28,11 +28,15 @@ const IconButton = ({ title, icon: Icon, badge, onClick }) => (
   >
     <div
       onClick={onClick}
-      className={`relative w-8 h-8 flex justify-center items-center rounded-full transition cursor-pointer ${
+      className={`group relative w-8 h-8 flex justify-center items-center rounded-full cursor-pointer transition ${
         title === "Notification" ? "animate-tada" : ""
       }`}
     >
-      <Icon size={15} />
+      <Icon
+        size={15}
+        className="transition-transform duration-200 ease-in-out group-hover:scale-125"
+      />
+
       {badge && (
         <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-4 h-4 flex items-center justify-center rounded-full border border-white dark:border-gray-800">
           {badge}

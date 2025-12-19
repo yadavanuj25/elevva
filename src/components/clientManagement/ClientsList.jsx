@@ -393,7 +393,7 @@ const ClientList = () => {
             <div className="flex items-center justify-between border-b border-gray-300 dark:border-gray-600 pb-2">
               <div className="active-filters">
                 {filters.search && (
-                  <span className="filter-tag text-dark">
+                  <span className="filter-tag ">
                     Search: {filters.search}{" "}
                     <button
                       onClick={() =>
@@ -407,7 +407,7 @@ const ClientList = () => {
                   </span>
                 )}
                 {filters.clientCategory && (
-                  <span className="filter-tag text-dark">
+                  <span className="filter-tag ">
                     Category: {filters.clientCategory}{" "}
                     <button
                       onClick={() =>
@@ -421,7 +421,7 @@ const ClientList = () => {
                   </span>
                 )}
                 {filters.clientSource && (
-                  <span className="filter-tag text-dark">
+                  <span className="filter-tag ">
                     Source: {filters.clientSource}{" "}
                     <button
                       onClick={() =>
@@ -435,7 +435,7 @@ const ClientList = () => {
                   </span>
                 )}
                 {filters.companySize && (
-                  <span className="filter-tag text-dark">
+                  <span className="filter-tag ">
                     Size: {filters.companySize}{" "}
                     <button
                       onClick={() =>
@@ -449,7 +449,7 @@ const ClientList = () => {
                   </span>
                 )}
                 {filters.status && (
-                  <span className="filter-tag text-dark">
+                  <span className="filter-tag ">
                     Status: {filters.status}{" "}
                     <button
                       onClick={() =>
@@ -457,7 +457,9 @@ const ClientList = () => {
                           target: { name: "status", value: "" },
                         })
                       }
-                    ></button>
+                    >
+                      &times;
+                    </button>
                   </span>
                 )}
               </div>

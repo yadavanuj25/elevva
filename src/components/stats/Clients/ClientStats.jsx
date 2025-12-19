@@ -20,7 +20,6 @@ const ClientStats = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Filters
   const [filters, setFilters] = useState({
     page: 1,
     limit: 10,
@@ -31,7 +30,6 @@ const ClientStats = () => {
     status: "",
   });
 
-  // Pagination
   const [pagination, setPagination] = useState({
     total: 0,
     pages: 0,
@@ -46,8 +44,6 @@ const ClientStats = () => {
   useEffect(() => {
     fetchClients();
   }, [filters]);
-
-  // ---------------- API Calls ----------------
 
   const fetchSettings = async () => {
     try {
@@ -79,8 +75,6 @@ const ClientStats = () => {
       console.error("Error fetching stats:", err);
     }
   };
-
-  // ---------------- UI ----------------
 
   if (error) {
     return (
