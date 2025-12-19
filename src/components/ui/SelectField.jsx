@@ -45,7 +45,7 @@ const SelectField = ({
             ${
               error
                 ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/30"
-                : "border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-dark/30"
+                : "border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-light"
             } dark:text-white`}
         >
           {selectedLabel || "-- Select option --"}
