@@ -155,7 +155,9 @@ const ViewRequirement = () => {
               <div className="flex items-center gap-2 mt-3 sm:mt-0">
                 <EditButton
                   onClick={() =>
-                    navigate(`/admin/requirements/edit/${requirement._id}`)
+                    navigate(
+                      `/admin/clientmanagement/edit-requirement/${requirement._id}`
+                    )
                   }
                 />
 
