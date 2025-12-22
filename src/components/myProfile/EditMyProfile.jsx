@@ -1,0 +1,369 @@
+import React, { useState, useEffect, useRef } from "react";
+import * as yup from "yup";
+import { ArrowLeft, Save, SaveAll, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthContext";
+import Input from "../../components/ui/Input";
+import profileImg from "../../assets/userImage/profileImg.png";
+import ReadOnlyInput from "../ui/formFields/ReadOnlyInput";
+import Button from "../ui/Button";
+import BasicDatePicker from "../ui/BasicDatePicker";
+import SelectField from "../ui/SelectField";
+
+const statusStyles = {
+  active: "bg-green-100 text-green-700 border-b-2 border-green-500",
+  inactive: "bg-red-100 text-red-700 border-b-2 border-red-500",
+};
+
+const formatDateForInput = (date) => {
+  if (!date) return "";
+  return new Date(date).toISOString().split("T")[0];
+};
+
+const profileSchema = yup.object().shape({
+  fullName: yup
+    .string()
+    .trim()
+    .min(3, "Full name must be at least 3 characters")
+    .required("Full name is required"),
+  dob: yup
+    .date()
+    .nullable()
+    .max(new Date(), "Date of birth cannot be in the future")
+    .required("Date of birth is required"),
+  country: yup.string().trim().required("Country is required"),
+  state: yup.string().trim().required("State is required"),
+  address: yup
+    .string()
+    .trim()
+    .min(5, "Address must be at least 5 characters")
+    .required("Address is required"),
+  zipcode: yup
+    .string()
+    .matches(/^[0-9]{5,6}$/, "Invalid zip code")
+    .required("Zip code is required"),
+});
+
+const EditProfile = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const isInitialLoad = useRef(true);
+  const {
+    fullName,
+    email,
+    phone,
+    role,
+    status,
+    dob,
+    country,
+    state,
+    address,
+    zipcode,
+    profileImage,
+  } = user;
+
+  const [profilePreview, setProfilePreview] = useState(
+    profileImage || profileImg
+  );
+  const [profileFile, setProfileFile] = useState(null);
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
+  const [fullCountryData, setFullCountryData] = useState([]);
+  const [loadingCountries, setLoadingCountries] = useState(false);
+  const [loadingStates, setLoadingStates] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: fullName || "",
+    dob: formatDateForInput(dob) || "",
+    country: country || "",
+    state: state || "",
+    address: address || "",
+    zipcode: zipcode || "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    getAllCountries();
+  }, []);
+
+  useEffect(() => {
+    if (formData.country) {
+      getAllStates(isInitialLoad.current);
+      isInitialLoad.current = false;
+    }
+  }, [formData.country]);
+
+  const getAllCountries = async () => {
+    try {
+      setLoadingCountries(true);
+      const res = await fetch("https://countriesnow.space/api/v0.1/countries");
+      const data = await res.json();
+
+      if (data?.data?.length) {
+        setFullCountryData(data.data);
+        setCountries(data.data.map((c) => c.country));
+      }
+    } catch (err) {
+      console.error("Error fetching countries:", err);
+    } finally {
+      setLoadingCountries(false);
+    }
+  };
+
+  const getAllStates = async (isInitial = false) => {
+    if (!formData.country) {
+      setStates([]);
+      return;
+    }
+
+    try {
+      setLoadingStates(true);
+      const res = await fetch(
+        "https://countriesnow.space/api/v0.1/countries/states",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ country: formData.country }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data?.data?.states?.length) {
+        const stateList = data.data.states.map((s) => s.name);
+        setStates(stateList);
+        if (!isInitial && !stateList.includes(formData.state)) {
+          setFormData((prev) => ({ ...prev, state: "" }));
+        }
+      } else {
+        setStates([]);
+      }
+    } catch (err) {
+      console.error("Error fetching states:", err);
+      setStates([]);
+    } finally {
+      setLoadingStates(false);
+    }
+  };
+
+  if (!user) return null;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    console.log(user);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setProfileFile(file);
+    setProfilePreview(URL.createObjectURL(file));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrors({});
+
+    try {
+      await profileSchema.validate(formData, { abortEarly: false });
+
+      const payload = {
+        fullName: formData.fullName,
+        dob: formData.dob,
+        address: formData.address,
+        country: formData.country,
+        state: formData.state,
+        zipcode: formData.zipcode,
+      };
+
+      const res = await fetch(
+        `https://crm-backend-qbz0.onrender.com/api/users/${user._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Update failed");
+
+      navigate(-1);
+    } catch (err) {
+      if (err.inner) {
+        const validationErrors = {};
+        err.inner.forEach((e) => (validationErrors[e.path] = e.message));
+        setErrors(validationErrors);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        console.error(err.message);
+      }
+    }
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 p-6 rounded-xl"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          My Profile
+        </h2>
+      </div>
+
+      <div className="relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 p-6 flex items-center justify-between gap-8 ">
+        <div className="flex items-center gap-8">
+          <div className="relative z-10">
+            <div className="w-28 h-28 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-white dark:bg-darkBg shadow-sm">
+              <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-600 flex items-center justify-center">
+                <img
+                  src={profilePreview}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Upload Overlay */}
+              <label className="absolute inset-0 flex items-center justify-center rounded-full cursor-pointer bg-black/40 opacity-0 hover:opacity-100 transition">
+                <User size={20} className="text-white" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </label>
+            </div>
+          </div>
+
+          {/* Info */}
+          <div className="relative z-10">
+            <h3 className="text-xl mb-1 font-semibold text-gray-900 dark:text-white capitalize">
+              {fullName}
+            </h3>
+
+            <span
+              className={`inline-block px-3 py-0.5 rounded-full text-xs font-semibold capitalize border
+          ${
+            statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-600"
+          }`}
+            >
+              {status}
+            </span>
+
+            <p className="mt-2 text-sm text-gray-400 capitalize">
+              {state}, {country}
+            </p>
+          </div>
+        </div>
+        <div>Column 2</div>
+        <div>Column 3</div>
+
+        {/* <div className="flex items-center gap-3">
+          <div className="col-span-2 flex justify-end">
+            <Button
+              type="submit"
+              text="Update"
+              icon={<Save size={18} />}
+              // loading={loading}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-gray-500 text-white hover:bg-gray-600 transition"
+          >
+            <ArrowLeft size={16} />
+            Back
+          </button>
+        </div> */}
+      </div>
+
+      {/* Editable Information */}
+      <Section title="Account Information">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Input
+            name="fullName"
+            labelName="Full Name"
+            value={formData.fullName}
+            handleChange={handleChange}
+            errors={errors}
+          />
+
+          <BasicDatePicker
+            name="dob"
+            labelName="Date of Birth"
+            value={formData.dob}
+            handleChange={handleChange}
+            errors={errors}
+          />
+
+          <ReadOnlyInput labelName="Email Address" value={email} />
+          <ReadOnlyInput labelName="Phone Number" value={phone} />
+          <ReadOnlyInput labelName="User Role" value={role?.name} />
+          <ReadOnlyInput labelName="Status" value={status} />
+        </div>
+      </Section>
+
+      {/* Address */}
+      <Section title="Address Details">
+        <InfoGrid>
+          <SelectField
+            name="country"
+            label="Country"
+            value={formData.country}
+            options={countries}
+            handleChange={handleChange}
+            loading={loadingCountries}
+            error={errors.country}
+          />
+          <SelectField
+            name="state"
+            label="State"
+            value={formData.state}
+            options={states}
+            handleChange={handleChange}
+            loading={loadingStates}
+            error={errors.state}
+          />
+          <Input
+            name="zipcode"
+            labelName="Zip Code"
+            value={formData.zipcode}
+            handleChange={handleChange}
+            errors={errors}
+          />
+          <Input
+            name="address"
+            labelName="Address"
+            value={formData.address}
+            handleChange={handleChange}
+            errors={errors}
+          />
+        </InfoGrid>
+      </Section>
+    </form>
+  );
+};
+
+const Section = ({ title, children }) => (
+  <div className="bg-white dark:bg-darkBg rounded-xl border border-gray-300 dark:border-gray-600 shadow-sm">
+    <div className="px-6 py-4 border-b border-gray-300 dark:border-gray-600">
+      <h3 className="font-semibold text-gray-800 dark:text-white">{title}</h3>
+    </div>
+    <div className="p-6">{children}</div>
+  </div>
+);
+
+const InfoGrid = ({ children }) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{children}</div>
+);
+
+export default EditProfile;

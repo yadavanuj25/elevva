@@ -18,8 +18,8 @@ const schema = yup.object().shape({
     .test("fileType", "Only PDF files allowed", (value) => {
       return value && value.type === "application/pdf";
     })
-    .test("fileSize", "File size must be less than 50MB", (value) => {
-      return value && value.size <= 1 * 1024 * 1024;
+    .test("fileSize", "File size must be less than 20 MB", (value) => {
+      return value && value.size <= 20 * 1024 * 1024;
     }),
   fullName: yup.string().required("Full name is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -171,7 +171,7 @@ const ProfileSubmission = () => {
     if (file.size > 1 * 1024 * 1024) {
       setErrors((prev) => ({
         ...prev,
-        resume: "File size must be less than 1MB!",
+        resume: "File size must be less than 20 MB!",
       }));
       return;
     }
@@ -283,7 +283,7 @@ const ProfileSubmission = () => {
   return (
     <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
       <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600 ">
-        <h2 className="text-2xl font-semibold">Add New Profle</h2>
+        <h2 className="text-2xl font-semibold">Add New Profile</h2>
         <BackButton
           onClick={() => navigate("/admin/profilemanagement/profiles")}
         />
@@ -334,7 +334,7 @@ const ProfileSubmission = () => {
                 <p className="text-gray-600 font-semibold">
                   {isDragging ? "Drop your Resume here" : "Upload your Resume"}
                 </p>
-                <p className="text-sm text-gray-500">Only PDF (max 50 MB)</p>
+                <p className="text-sm text-gray-500">Only PDF (max 20 MB)</p>
               </>
             )}
           </div>

@@ -19,6 +19,8 @@ import FormSkeleton from "../loaders/FormSkeleton";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
+import ReadOnlyInput from "../ui/formFields/ReadOnlyInput";
+import Textareafield from "../ui/formFields/Textareafield";
 
 const schema = yup.object().shape({
   client: yup.string().required("Client is required"),
@@ -316,13 +318,7 @@ const EditClientRequirement = () => {
                 Basic Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  value={formData.client}
-                  readOnly
-                  className="w-full border px-3 py-2 rounded bg-gray-100 cursor-not-allowed"
-                />
-
+                <ReadOnlyInput labelName="Client" value={formData.client} />
                 <SelectField
                   name="requirementPriority"
                   label="Requirement Priority"
@@ -466,33 +462,12 @@ const EditClientRequirement = () => {
               <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
                 Other Information
               </h3>
-              <div className="relative w-full">
-                <textarea
-                  name="otherInformation"
-                  rows={4}
-                  value={formData.otherInformation}
-                  onChange={handleChange}
-                  placeholder=" "
-                  className="block p-[14px] w-full text-sm bg-transparent rounded-md border  appearance-none focus:outline-none peer transition
-
-          border-gray-300 dark:border-gray-600 focus:border-black"
-                />
-                <label
-                  htmlFor="description"
-                  className={`absolute pointer-events-none  text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
-        ${
-          formData.otherInformation
-            ? "top-2 scale-75 -translate-y-4 text-darkBg dark:text-white"
-            : "peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2"
-        }
-        peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-[700]
-        peer-focus:text-darkBg dark:peer-focus:text-white
-        rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
-      `}
-                >
-                  Other Information
-                </label>
-              </div>
+              <Textareafield
+                name="otherInformation"
+                label="Other Information"
+                value={formData.otherInformation}
+                handleChange={handleChange}
+              />
             </div>
             <div className="flex justify-end">
               <Button

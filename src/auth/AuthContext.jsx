@@ -310,36 +310,36 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    if (!token || !user) return;
+  // useEffect(() => {
+  //   if (!token || !user) return;
 
-    const interval = setInterval(async () => {
-      try {
-        const res = await fetch(
-          "https://crm-backend-qbz0.onrender.com/api/auth/me",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        const data = await res.json();
-        if (res.ok && data.user) {
-          const backendLocked = data.user.isLocked;
+  //   const interval = setInterval(async () => {
+  //     try {
+  //       const res = await fetch(
+  //         "https://crm-backend-qbz0.onrender.com/api/auth/me",
+  //         {
+  //           headers: { Authorization: `Bearer ${token}` },
+  //         }
+  //       );
+  //       const data = await res.json();
+  //       if (res.ok && data.user) {
+  //         const backendLocked = data.user.isLocked;
 
-          if (backendLocked !== isLocked) {
-            setIsLocked(backendLocked);
-            localStorage.setItem("isLocked", JSON.stringify(backendLocked));
-          }
+  //         if (backendLocked !== isLocked) {
+  //           setIsLocked(backendLocked);
+  //           localStorage.setItem("isLocked", JSON.stringify(backendLocked));
+  //         }
 
-          setUser(data.user);
-          localStorage.setItem("user", JSON.stringify(data.user));
-        }
-      } catch (err) {
-        console.error("Polling error:", err);
-      }
-    }, 8000);
+  //         setUser(data.user);
+  //         localStorage.setItem("user", JSON.stringify(data.user));
+  //       }
+  //     } catch (err) {
+  //       console.error("Polling error:", err);
+  //     }
+  //   }, 8000);
 
-    return () => clearInterval(interval);
-  }, [token, user, isLocked]);
+  //   return () => clearInterval(interval);
+  // }, [token, user, isLocked]);
 
   return (
     <AuthContext.Provider

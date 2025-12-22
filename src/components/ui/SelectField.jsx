@@ -44,8 +44,8 @@ const SelectField = ({
           className={`block w-full p-[14px] text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer cursor-pointer
             ${
               error
-                ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/30"
-                : "border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-light"
+                ? "border-red-500 focus:border-red-500 "
+                : "border-gray-300 dark:border-gray-600 focus:border-dark dark:focus:border-white"
             } dark:text-white`}
         >
           {selectedLabel || "-- Select option --"}
@@ -55,8 +55,8 @@ const SelectField = ({
           className={`absolute pointer-events-none font-bold text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-darkBg px-2
             ${
               error
-                ? "text-red-500"
-                : "peer-focus:text-darkBg dark:peer-focus:text-white"
+                ? "text-red-500 dark:text-red-500"
+                : "peer-focus:text-dark dark:peer-focus:text-white"
             }
             start-1`}
         >
@@ -82,9 +82,9 @@ const SelectField = ({
               {loading ? (
                 <p className="p-3 text-sm text-gray-500">Loading...</p>
               ) : filteredOptions.length ? (
-                filteredOptions.map((opt, i) => (
+                filteredOptions.map((opt) => (
                   <div
-                    key={i}
+                    key={opt.value}
                     onClick={() => {
                       handleChange({
                         target: { name, value: opt.value },

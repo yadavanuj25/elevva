@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getAllTasks } from "../../services/taskServices";
 import { BarLoader } from "react-spinners";
 import { User } from "lucide-react";
+import NoData from "../ui/NoData";
 
 const AllTasksView = () => {
   const [tasks, setTasks] = useState([]);
@@ -22,7 +23,6 @@ const AllTasksView = () => {
       setLoading(true);
 
       const response = await getAllTasks(filters);
-      console.log(response);
 
       if (response?.tasks) {
         setTasks(response.tasks);
@@ -55,7 +55,7 @@ const AllTasksView = () => {
         </div>
       </div>
     );
-
+  if (!loading && tasks.length === 0) return <NoData title="No Data Found" />;
   return (
     <div>
       {/* Filters */}

@@ -107,7 +107,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
   };
 
   const menuItems = [
-    { icon: FaRegUser, text: "Profile", path: "/admin/profile" },
+    { icon: FaRegUser, text: "My Profile", path: "/my-profile" },
     {
       icon: Settings,
       text: "Account Settings",

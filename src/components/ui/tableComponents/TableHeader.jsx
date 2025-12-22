@@ -1,5 +1,6 @@
 import React from "react";
 import AddButton from "../buttons/AddButton";
+import { Search } from "lucide-react";
 
 const TableHeader = ({ searchQuery, onSearchChange, addLink, title }) => {
   return (
@@ -8,7 +9,7 @@ const TableHeader = ({ searchQuery, onSearchChange, addLink, title }) => {
         <input
           type="search"
           placeholder="Search by name, email or phone..."
-          className="w-full bg-white dark:bg-darkBg p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-gray-800 transition"
+          className="w-full bg-white dark:bg-darkBg p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-dark dark:focus:border-dark transition"
           value={searchQuery}
           onChange={onSearchChange}
         />

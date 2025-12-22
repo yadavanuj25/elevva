@@ -1,52 +1,330 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../auth/AuthContext";
-import Button from "../ui/Button";
-import Input from "../ui/Input";
-import SelectField from "../ui/SelectField";
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import * as yup from "yup";
+// import { createUser } from "../../services/userServices";
+// import { useMessage } from "../../auth/MessageContext";
+// import PageTitle from "../../hooks/PageTitle";
+// import BackButton from "../ui/buttons/BackButton";
+// import UserForm from "./UserForm";
+// import UseScrollOnError from "../../hooks/UseScrollOnError";
+
+// const schema = yup.object().shape({
+//   fullName: yup.string().required("Name is required"),
+//   email: yup.string().email("Invalid email").required("Email is required"),
+//   password: yup
+//     .string()
+//     .min(6, "Password must be at least 6 characters")
+//     .required("Password is required"),
+//   role: yup.string().required("Role is required"),
+//   phone: yup
+//     .string()
+//     .matches(/^\d+$/, "Only numbers are allowed")
+//     .length(10, "Phone number must be exactly 10 digits")
+//     .required("Phone number is required"),
+//   zipcode: yup
+//     .string()
+//     .matches(/^\d+$/, "Zip Code must contain only numbers")
+//     .length(6, "Zip code must must be exactly 6 digits")
+//     .required("Zip Code is required"),
+//   country: yup.string().required("Country is required"),
+//   state: yup.string().required("State is required"),
+//   profileImage: yup
+//     .mixed()
+//     .nullable()
+//     .test("fileType", "Allowed formats: jpeg, jpg, png", (value) => {
+//       if (!value) return true;
+//       return ["image/jpeg", "image/jpg", "image/png"].includes(value.type);
+//     })
+//     .test("fileSize", "Max size is 2 MB", (value) => {
+//       if (!value) return true;
+//       return value.size <= 2 * 1024 * 1024;
+//     }),
+//   // address: yup.string().required("Address is required"),
+// });
+
+// export default function UserManagement() {
+//   PageTitle("Elevva | Add-User");
+//   const { errorMsg, showSuccess, showError } = useMessage();
+//   const navigate = useNavigate();
+//   const [formData, setFormData] = useState({
+//     fullName: "",
+//     email: "",
+//     password: "",
+//     phone: "",
+//     dob: "",
+//     address: "",
+//     country: "India",
+//     state: "",
+//     zipcode: "",
+//     role: "",
+//     about: "",
+//     profileImage: null,
+//     status: "active",
+//     sendWelcomeEmail: true,
+//   });
+//   const [errors, setErrors] = useState({});
+//   const [loading, setLoading] = useState(false);
+//   const [profilePreview, setProfilePreview] = useState(null);
+
+//   UseScrollOnError(errors);
+
+//   const handleCreateUser = async (e) => {
+//     e.preventDefault();
+//     setErrors({});
+//     showError("");
+//     showSuccess("");
+//     setLoading(true);
+//     try {
+//       await schema.validate(formData, { abortEarly: false });
+//       const payload = {
+//         fullName: formData.fullName,
+//         email: formData.email,
+//         password: formData.password,
+//         phone: formData.phone,
+//         role: formData.role,
+//         dob: formData.dob,
+//         country: formData.country,
+//         state: formData.state,
+//         address: formData.address,
+//         zipcode: formData.zipcode,
+//         status: formData.status,
+//         about: formData.about,
+//         sendWelcomeEmail: formData.sendWelcomeEmail,
+//       };
+//       const res = await createUser(payload);
+//       if (res?.success) {
+//         showSuccess("User registered successfully!");
+//       } else {
+//         showError(res.message);
+//       }
+//       setFormData({
+//         fullName: "",
+//         email: "",
+//         password: "",
+//         phone: "",
+//         dob: "",
+//         address: "",
+//         country: "",
+//         state: "",
+//         zipcode: "",
+//         role: "",
+//         about: "",
+//         profileImage: null,
+//         status: "active",
+//         sendWelcomeEmail: true,
+//       });
+//       setProfilePreview(null);
+
+//       navigate("/admin/usermanagement/users");
+//     } catch (err) {
+//       if (err.inner) {
+//         const validationErrors = {};
+//         err.inner.forEach((e) => (validationErrors[e.path] = e.message));
+//         setErrors(validationErrors);
+//       } else {
+//         showError(err.message);
+//       }
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
+//       <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
+//         <h2 className="text-2xl font-semibold">Add New User</h2>
+//         <BackButton onClick={() => navigate("/admin/usermanagement/users")} />
+//       </div>
+
+//       {errorMsg && (
+//         <div
+//           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300
+//                bg-[#d72b16] text-white shadow-sm animate-slideDown"
+//         >
+//           <span className=" font-semibold">⚠ {"  "}</span>
+//           <p className="text-sm">{errorMsg}</p>
+//         </div>
+//       )}
+
+//       <form
+//         onSubmit={handleCreateUser}
+//         autoComplete="off"
+//         className="grid grid-cols-1 sm:grid-cols-[minmax(0,30%)_minmax(0,70%)] gap-5 items-stretch"
+//       >
+//         <UserForm
+//           errors={errors}
+//           setErrors={setErrors}
+//           formData={formData}
+//           setFormData={setFormData}
+//           loading={loading}
+//           profilePreview={profilePreview}
+//           setProfilePreview={setProfilePreview}
+//         />
+//       </form>
+//     </div>
+//   );
+// }
+
+// Create user Old code (20/12/2025)
+
+// import React, { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import * as yup from "yup";
+// import { Save } from "lucide-react";
+
+// import UserForm from "./UserForm";
+// import Button from "../ui/Button";
+// import BackButton from "../ui/buttons/BackButton";
+// import PageTitle from "../../hooks/PageTitle";
+
+// import { createUser } from "../../services/userServices";
+// import { useMessage } from "../../auth/MessageContext";
+
+// const schema = yup.object().shape({
+//   fullName: yup.string().required("Name is required"),
+//   email: yup.string().email("Invalid email").required("Email is required"),
+//   password: yup.string().min(6).required("Password is required"),
+//   role: yup.string().required("Role is required"),
+//   phone: yup
+//     .string()
+//     .matches(/^\d+$/, "Only numbers allowed")
+//     .length(10, "Phone must be 10 digits")
+//     .required("Phone is required"),
+//   zipcode: yup
+//     .string()
+//     .matches(/^\d+$/, "Only numbers allowed")
+//     .length(6, "Zipcode must be 6 digits")
+//     .required("Zipcode is required"),
+//   country: yup.string().required("Country is required"),
+//   state: yup.string().required("State is required"),
+// });
+
+// const UserManagement = () => {
+//   PageTitle("Add User");
+
+//   const navigate = useNavigate();
+//   const { showSuccess, showError } = useMessage();
+
+//   const [loading, setLoading] = useState(false);
+//   const [errors, setErrors] = useState({});
+
+//   const [formData, setFormData] = useState({
+//     fullName: "",
+//     email: "",
+//     password: "",
+//     phone: "",
+//     dob: "",
+//     address: "",
+//     country: "",
+//     state: "",
+//     zipcode: "",
+//     role: "",
+//     about: "",
+//     profileImage: null,
+//     status: "active",
+//     sendWelcomeEmail: true,
+//   });
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setErrors({});
+//     setLoading(true);
+
+//     try {
+//       await schema.validate(formData, { abortEarly: false });
+
+//       const payload = {
+//         ...formData,
+//       };
+
+//       const res = await createUser(payload);
+
+//       if (res?.success) {
+//         showSuccess("User created successfully");
+//         navigate("/admin/usermanagement/users");
+//       } else {
+//         showError(res?.message || "Something went wrong");
+//       }
+//     } catch (err) {
+//       if (err.inner) {
+//         const validationErrors = {};
+//         err.inner.forEach((e) => {
+//           validationErrors[e.path] = e.message;
+//         });
+//         setErrors(validationErrors);
+//       } else {
+//         showError(err.message);
+//       }
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="p-4 bg-white dark:bg-gray-800 border rounded-xl">
+//       <div className="flex justify-between items-center mb-4 border-b pb-2">
+//         <h2 className="text-2xl font-semibold">Add New User</h2>
+//         <BackButton onClick={() => navigate(-1)} />
+//       </div>
+
+//       <form onSubmit={handleSubmit}>
+//         <UserForm
+//           formData={formData}
+//           setFormData={setFormData}
+//           errors={errors}
+//           setErrors={setErrors}
+//           loading={loading}
+//         />
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default UserManagement;
+
+// Latest working code
+
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { Upload, Save, Eye, EyeOff, User } from "lucide-react";
+import { Save } from "lucide-react";
+
+import UserForm from "./UserForm";
+import Button from "../ui/Button";
+import BackButton from "../ui/buttons/BackButton";
+import PageTitle from "../../hooks/PageTitle";
+
 import { createUser } from "../../services/userServices";
 import { useMessage } from "../../auth/MessageContext";
-import BasicDatePicker from "../ui/BasicDatePicker";
-import PageTitle from "../../hooks/PageTitle";
-import BackButton from "../ui/buttons/BackButton";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Name is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
-  password: yup
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
+  password: yup.string().min(6).required("Password is required"),
   role: yup.string().required("Role is required"),
   phone: yup
     .string()
-    .matches(/^\d+$/, "Phone must contain only numbers")
+    .matches(/^\d+$/, "Only numbers allowed")
+    .length(10, "Phone must be 10 digits")
     .required("Phone is required"),
   zipcode: yup
     .string()
-    .matches(/^\d+$/, "Zip Code must contain only numbers")
-    .required("Zip Code is required"),
+    .matches(/^\d+$/, "Only numbers allowed")
+    .length(6, "Zipcode must be 6 digits")
+    .required("Zipcode is required"),
   country: yup.string().required("Country is required"),
   state: yup.string().required("State is required"),
-  profileImage: yup
-    .mixed()
-    .nullable()
-    .test("fileType", "Allowed formats: jpeg, jpg, png", (value) => {
-      if (!value) return true;
-      return ["image/jpeg", "image/jpg", "image/png"].includes(value.type);
-    })
-    .test("fileSize", "Max size is 1 MB", (value) => {
-      if (!value) return true;
-      return value.size <= 1 * 1024 * 1024;
-    }),
 });
-export default function UserManagement() {
-  PageTitle("Elevva | Add-User");
-  const { errorMsg, showSuccess, showError } = useMessage();
+
+const UserManagement = () => {
+  PageTitle("Add User");
+
   const navigate = useNavigate();
-  const { token } = useAuth();
+  const { showSuccess, showError } = useMessage();
+
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -54,206 +332,55 @@ export default function UserManagement() {
     phone: "",
     dob: "",
     address: "",
-    country: "India",
+    country: "",
     state: "",
     zipcode: "",
     role: "",
     about: "",
     profileImage: null,
     status: "active",
-    sendWelcomeEmail: "true",
+    sendWelcomeEmail: true,
   });
-  const [roles, setRoles] = useState([]);
-  const [allRoles, setAllRoles] = useState([]);
-  const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [countries, setCountries] = useState([]);
-  const [states, setStates] = useState([]);
-  const [fullCountryData, setFullCountryData] = useState([]);
-  const [loadingCountries, setLoadingCountries] = useState(false);
-  const [loadingRole, setLoadingRole] = useState(false);
-  const [profilePreview, setProfilePreview] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    getAllRoles();
-  }, []);
-  useEffect(() => {
-    getAllCountries();
-  }, []);
-  useEffect(() => {
-    getAllStates();
-  }, [formData.country, fullCountryData]);
-
-  const getAllRoles = async () => {
-    try {
-      setLoadingRole(true);
-      const res = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/roles",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await res.json();
-      if (Array.isArray(data.roles)) {
-        setAllRoles(data.roles);
-        setRoles(data.roles.map((role) => role._id));
-      } else {
-        console.error("Unexpected roles response:", data);
-      }
-    } catch (err) {
-      console.error("Error fetching Roles:", err);
-    } finally {
-      setLoadingRole(false);
-    }
-  };
-  const getAllCountries = async () => {
-    try {
-      setLoadingCountries(true);
-      const res = await fetch("https://countriesnow.space/api/v0.1/countries");
-      const data = await res.json();
-      if (data.data) {
-        setFullCountryData(data.data);
-        setCountries(data.data.map((c) => c.country));
-      }
-    } catch (err) {
-      console.error("Error fetching countries:", err);
-    } finally {
-      setLoadingCountries(false);
-    }
-  };
-  const getAllStates = async () => {
-    if (!formData.country) {
-      setStates([]);
-      setFormData((prev) => ({ ...prev, state: "" }));
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (type === "checkbox") {
+      setFormData((p) => ({ ...p, [name]: checked }));
       return;
     }
-    try {
-      const res = await fetch(
-        "https://countriesnow.space/api/v0.1/countries/states",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ country: formData.country }),
-        }
-      );
-      const data = await res.json();
-      if (data.data?.states?.length) {
-        setStates(data.data.states.map((s) => s.name));
-        setFormData((prev) => ({ ...prev, state: "" }));
-      } else {
-        setStates([]);
-        setFormData((prev) => ({ ...prev, state: "" }));
-      }
-    } catch (err) {
-      console.error(err);
-      setStates([]);
-    }
-  };
-  const handleChange = (e) => {
-    const { name, value } = e.target;
     if (name === "phone" || name === "zipcode") {
       const digits = value.replace(/\D/g, "");
-      if (value !== digits) {
-        setErrors((prev) => ({
-          ...prev,
-          [name]: "Only numbers are allowed",
-        }));
-      } else {
-        setFormData((prev) => ({ ...prev, [name]: digits }));
-        setErrors((prev) => ({ ...prev, [name]: "" }));
-      }
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-      setErrors((prev) => ({ ...prev, [name]: "" }));
+      setFormData((p) => ({ ...p, [name]: digits }));
+      setErrors((p) => ({
+        ...p,
+        [name]: value !== digits ? "Only numbers allowed" : "",
+      }));
+      return;
     }
-  };
-  const handleProfileImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
-        setErrors((prev) => ({
-          ...prev,
-          profileImage: "Allowed formats: jpeg, jpg, png",
-        }));
-        return;
-      } else if (file.size > 2 * 1024 * 1024) {
-        setErrors((prev) => ({
-          ...prev,
-          profileImage: "Max file size is 2 MB",
-        }));
-        return;
-      } else {
-        setErrors((prev) => ({ ...prev, profileImage: "" }));
-      }
-
-      setFormData((prev) => ({ ...prev, profileImage: file }));
-
-      const reader = new FileReader();
-      reader.onloadend = () => setProfilePreview(reader.result);
-      reader.readAsDataURL(file);
-    }
-  };
-  const handleStatusToggle = (status) => {
-    setFormData((prev) => ({ ...prev, status }));
+    setFormData((p) => ({ ...p, [name]: value }));
+    setErrors((p) => ({ ...p, [name]: "" }));
   };
 
-  const handleCreateUser = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    showError("");
-    showSuccess("");
     setLoading(true);
     try {
       await schema.validate(formData, { abortEarly: false });
-      const payload = {
-        fullName: formData.fullName,
-        email: formData.email,
-        password: formData.password,
-        phone: formData.phone,
-        role: formData.role,
-        dob: formData.dob,
-        country: formData.country,
-        state: formData.state,
-        address: formData.address,
-        zipcode: formData.zipcode,
-        status: formData.status,
-        about: formData.about,
-        sendWelcomeEmail: formData.sendWelcomeEmail,
-      };
+      const payload = { ...formData };
       const res = await createUser(payload);
       if (res?.success) {
-        showSuccess("User registered successfully!");
+        showSuccess("User created successfully");
+        navigate("/admin/usermanagement/users");
       } else {
-        showError(res.message);
+        showError(res?.message || "Something went wrong");
       }
-      setFormData({
-        fullName: "",
-        email: "",
-        password: "",
-        phone: "",
-        dob: "",
-        address: "",
-        country: "",
-        state: "",
-        zipcode: "",
-        role: "",
-        about: "",
-        profileImage: null,
-        status: "active",
-        sendWelcomeEmail: true,
-      });
-      setProfilePreview(null);
-      setStates([]);
-      navigate("/admin/usermanagement/users");
     } catch (err) {
       if (err.inner) {
         const validationErrors = {};
-        err.inner.forEach((e) => (validationErrors[e.path] = e.message));
+        err.inner.forEach((e) => {
+          validationErrors[e.path] = e.message;
+        });
         setErrors(validationErrors);
       } else {
         showError(err.message);
@@ -263,307 +390,25 @@ export default function UserManagement() {
     }
   };
 
-  const togglePassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const generatePassword = () => {
-    const chars =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-    const randomPass = Array.from({ length: 10 }, () =>
-      chars.charAt(Math.floor(Math.random() * chars.length))
-    ).join("");
-    setFormData({ ...formData, password: randomPass });
-    setShowPassword(true);
-  };
-
-  const roleOptions = useMemo(() => {
-    if (!Array.isArray(allRoles)) return [];
-
-    return allRoles.map((role) => ({
-      label: role.name,
-      value: role._id,
-    }));
-  }, [allRoles]);
-
   return (
-    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
-      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
+    <div className="p-4 bg-white dark:bg-gray-800 border rounded-xl">
+      <div className="flex justify-between items-center mb-4 border-b pb-2">
         <h2 className="text-2xl font-semibold">Add New User</h2>
-        <BackButton onClick={() => navigate("/admin/usermanagement/users")} />
+        <BackButton onClick={() => navigate(-1)} />
       </div>
 
-      {errorMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-[#d72b16] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">⚠ {"  "}</span>
-          <p className="text-sm">{errorMsg}</p>
-        </div>
-      )}
-
-      <form
-        onSubmit={handleCreateUser}
-        autoComplete="off"
-        className="grid grid-cols-1 sm:grid-cols-[minmax(0,30%)_minmax(0,70%)] gap-5 items-stretch"
-      >
-        {/* User Profile */}
-        <div className="p-6 flex flex-col items-center gap-4 border border-gray-300 dark:border-gray-600 rounded-md">
-          {/* Profile Image Upload */}
-          <div className="flex flex-col items-center  rounded-md space-y-2 col-span-2">
-            <div
-              className={`border rounded-full p-1 ${
-                errors.profileImage
-                  ? "border-red-500"
-                  : "border-gray-300 dark:border-gray-600"
-              }`}
-            >
-              <div
-                className={`w-28 h-28 bg-gray-100 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400`}
-              >
-                {profilePreview ? (
-                  <img
-                    src={profilePreview}
-                    alt="User Profile Preview"
-                    className="w-full h-full object-contain"
-                  />
-                ) : (
-                  <User size={40} />
-                )}
-              </div>
-            </div>
-
-            <label
-              htmlFor="profileImage"
-              className="flex gap-2 items-center cursor-pointer bg-dark text-white px-2 py-2 rounded text-sm"
-            >
-              <Upload size={18} />
-              Upload Image
-            </label>
-            <input
-              id="profileImage"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleProfileImageChange}
-            />
-          </div>
-          <p
-            className={`text-center  ${
-              errors.profileImage ? "text-red-600" : "text-[#605e5e]"
-            } mb-2`}
-          >
-            Allowed *.jpeg, *.jpg, *.png, <br /> max size of 1 Mb{" "}
-          </p>
-          {/* Status Toggle */}
-          <div className="flex justify-center">
-            <div className="flex items-center bg-gray-100 border border-gray-300 rounded-full p-1">
-              <button
-                type="button"
-                onClick={() => handleStatusToggle("active")}
-                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
-                  formData.status === "active"
-                    ? "bg-green-600 text-white shadow-sm"
-                    : "text-gray-600 hover:bg-[#28a745]"
-                }`}
-              >
-                Active
-              </button>
-              <button
-                type="button"
-                onClick={() => handleStatusToggle("inactive")}
-                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
-                  formData.status === "inactive"
-                    ? "bg-red-600 text-white shadow-sm"
-                    : "text-gray-600 hover:bg-red-50"
-                }`}
-              >
-                Inactive
-              </button>
-            </div>
-          </div>
-        </div>
-        {/* User Form */}
-        <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              handleChange={handleChange}
-              className="col-span-2 md:col-span-1"
-              errors={errors}
-              labelName="Full Name"
-            />
-            <Input
-              // id="user_email"
-              type="text"
-              name="email"
-              value={formData.email}
-              handleChange={handleChange}
-              className="col-span-2 md:col-span-1"
-              errors={errors}
-              labelName="Email"
-            />
-
-            <div className="relative w-full">
-              <Input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                handleChange={handleChange}
-                errors={errors}
-                labelName="Password"
-                icon={
-                  <span
-                    onClick={togglePassword}
-                    className="cursor-pointer   z-20 relative"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </span>
-                }
-              />
-              <button
-                type="button"
-                onClick={generatePassword}
-                className="absolute right-10 top-4 bg-light text-xs font-medium text-dark py-[2px] px-[6px] rounded whitespace-nowrap z-10"
-              >
-                Generate
-              </button>
-            </div>
-
-            <Input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              handleChange={handleChange}
-              className="col-span-2 md:col-span-1"
-              errors={errors}
-              labelName="Phone"
-            />
-
-            <SelectField
-              name="role"
-              label="Role"
-              value={formData.role}
-              options={roleOptions}
-              handleChange={handleChange}
-              loading={loadingRole}
-              error={errors.role}
-            />
-
-            <BasicDatePicker
-              name="dob"
-              value={formData.dob}
-              handleChange={handleChange}
-              errors={errors}
-              labelName="DOB"
-            />
-
-            <SelectField
-              name="country"
-              label="Country"
-              value={formData.country}
-              handleChange={handleChange}
-              options={countries}
-              loading={loadingCountries}
-              error={errors.country}
-            />
-
-            <SelectField
-              // id="user_state"
-              name="state"
-              label="State"
-              value={formData.state}
-              handleChange={handleChange}
-              options={states}
-              error={errors.state}
-            />
-            {/* Remaining Inputs */}
-            <Input
-              // id="user_address"
-              type="text"
-              name="address"
-              value={formData.address}
-              handleChange={handleChange}
-              className=""
-              errors={errors}
-              labelName="Address"
-            />
-            <Input
-              // id="user_zipcode"
-              type="text"
-              name="zipcode"
-              value={formData.zipcode}
-              handleChange={handleChange}
-              className="col-span-2 md:col-span-1"
-              errors={errors}
-              labelName="Zip Code"
-            />
-
-            <div className="col-span-2">
-              <div className="relative w-full">
-                <textarea
-                  // id="user_about"
-                  name="about"
-                  rows={4}
-                  value={formData.about}
-                  onChange={handleChange}
-                  placeholder=" "
-                  className="block p-[14px] w-full text-sm bg-transparent rounded-md border  appearance-none focus:outline-none peer transition
-          border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-dark/30"
-                />
-                <label
-                  className={`absolute pointer-events-none font-medium text-sm text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
-        ${
-          formData.about
-            ? "top-2 scale-75 -translate-y-4 text-darkBg dark:text-white"
-            : "peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2"
-        }
-        peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4  peer-focus:font-[700]
-        peer-focus:text-darkBg dark:peer-focus:text-white
-        rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
-      `}
-                >
-                  About
-                </label>
-              </div>
-            </div>
-            {/* Checkbox */}
-            <div className="col-span-2 flex items-start space-x-2 mt-2">
-              <input
-                // id="terms"
-                type="checkbox"
-                name="terms"
-                checked={formData.sendWelcomeEmail}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    sendWelcomeEmail: e.target.checked,
-                  })
-                }
-                className="mt-1 w-4 h-4 border rounded focus:ring-none  cursor-pointer"
-              />
-              <label
-                htmlFor="terms"
-                className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer select-none"
-              >
-                Send Welcome Email
-              </label>
-            </div>
-
-            <div className="col-span-2 flex justify-end">
-              <Button
-                type="submit"
-                text="Submit"
-                icon={<Save size={18} />}
-                loading={loading}
-              />
-            </div>
-          </div>
-        </div>
+      <form onSubmit={handleSubmit} autoComplete="off">
+        <UserForm
+          formData={formData}
+          setFormData={setFormData}
+          errors={errors}
+          setErrors={setErrors}
+          handleChange={handleChange}
+          loading={loading}
+        />
       </form>
     </div>
   );
-}
+};
+
+export default UserManagement;

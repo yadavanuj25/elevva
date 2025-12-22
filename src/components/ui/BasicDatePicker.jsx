@@ -29,10 +29,10 @@ const BasicDatePicker = ({
           className={`block w-full text-sm bg-transparent rounded-md appearance-none focus:outline-none peer transition border p-[14px]
             ${
               hasError
-                ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/30"
-                : "border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-light"
+                ? "border-red-500  text-red-500 dark:text-red-500"
+                : "border-gray-300 dark:border-gray-600 focus:border-dark dark:focus:border-white"
             }
-            dark:text-white
+            dark:text-white 
           `}
         />
 
@@ -42,8 +42,8 @@ const BasicDatePicker = ({
             peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 font-[700]
             ${
               hasError
-                ? "peer-focus:text-red-500"
-                : "peer-focus:text-darkBg dark:peer-focus:text-white"
+                ? "text-red-500 dark:text-red-500"
+                : "peer-focus:text-dark dark:peer-focus:text-white"
             }
             rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
         >

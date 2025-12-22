@@ -29,7 +29,6 @@ import EditClient from "./components/clientManagement/EditClient";
 import ViewClient from "./components/clientManagement/ViewClient";
 import ClientRequirement from "./components/clientManagement/ClientRequirement";
 import ClientsRequirementsList from "./components/clientManagement/ClientsRequirementList";
-// import ClientsRequirementsList from "./components/clientManagement/ClientRequirementListDemo";
 import ViewRequirement from "./components/clientManagement/ViewRequirement";
 import EditClientRequirement from "./components/clientManagement/EditClientRequirement";
 import ClientStats from "./components/stats/Clients/ClientStats";
@@ -39,6 +38,8 @@ import ResetPassword from "./pages/ResetPassword";
 import LockScreen from "./pages/LockScreen";
 import Tasks from "./pages/Tasks";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+import MyProfile from "./pages/MyProfile";
+import EditMyProfile from "./components/myProfile/EditMyProfile";
 
 const App = () => {
   const location = useLocation();
@@ -103,11 +104,11 @@ const App = () => {
           }
         />
 
-        {/* <Route path="/unauthorized" element={<UnauthorizedPage />} /> */}
-
         {/* Private routes with layout */}
         <Route element={<AdminLayout />}>
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
+          <Route path="/my-profile" element={<MyProfile />} />
+          <Route path="/edit-profile" element={<EditMyProfile />} />
           <Route
             path="/admin/super-dashboard"
             element={

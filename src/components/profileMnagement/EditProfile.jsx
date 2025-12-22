@@ -20,8 +20,8 @@ const schema = yup.object().shape({
     .test("fileType", "Only PDF files allowed", (value) => {
       return !value || value.type === "application/pdf";
     })
-    .test("fileSize", "File size must be less than 50MB", (value) => {
-      return !value || value.size <= 50 * 1024 * 1024;
+    .test("fileSize", "File size must be less than 20 MB", (value) => {
+      return !value || value.size <= 20 * 1024 * 1024;
     }),
   fullName: yup.string().required("Full name is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -367,7 +367,7 @@ const EditProfile = () => {
                         Upload your Resume
                       </p>
                       <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                        PDF • Max 50 MB
+                        PDF • Max 20 MB
                       </p>
                     </>
                   )}

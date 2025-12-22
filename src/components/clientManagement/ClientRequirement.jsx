@@ -223,7 +223,7 @@ const ClientRequirement = () => {
 
       {errorMsg && (
         <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300
                bg-[#d72b16] text-white shadow-sm animate-slideDown"
         >
           <span className=" font-semibold">⚠ {"  "}</span>
@@ -431,3 +431,173 @@ const ClientRequirement = () => {
 };
 
 export default ClientRequirement;
+
+// import React, { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import * as yup from "yup";
+
+// import RequirementForm from "../requirementManagement/RequirementForm";
+// import BackButton from "../ui/buttons/BackButton";
+// import PageTitle from "../../hooks/PageTitle";
+// import { useMessage } from "../../auth/MessageContext";
+
+// import {
+//   addClientsRequirement,
+//   getActiveClients,
+//   getRequirementsOptions,
+// } from "../../services/clientServices";
+
+// /* ---------------- Validation Schema ---------------- */
+// const schema = yup.object().shape({
+//   client: yup.string().required("Client is required"),
+//   requirementPriority: yup
+//     .string()
+//     .required("Requirement priority is required"),
+//   positionStatus: yup.string().required("Position status is required"),
+//   techStack: yup.string().required("Tech stack is required"),
+//   experience: yup.string().required("Experience is required"),
+//   budgetType: yup.string().required("Budget type is required"),
+//   currency: yup.string().required("Currency is required"),
+//   budget: yup.string().required("Budget is required"),
+//   totalPositions: yup.string().required("Total positions required"),
+//   workRole: yup.string().required("Work role is required"),
+//   workMode: yup.string().required("Work mode is required"),
+//   workLocation: yup.string().required("Work location is required"),
+//   jobDescription: yup
+//     .string()
+//     .trim()
+//     .min(50, "Job description must be at least 50 characters")
+//     .required("Job description is required"),
+// });
+
+// const ClientRequirement = () => {
+//   PageTitle("Elevva | Add Client Requirement");
+
+//   const navigate = useNavigate();
+//   const { errorMsg, showError, showSuccess } = useMessage();
+
+//   /* ---------------- State ---------------- */
+//   const [formData, setFormData] = useState({
+//     client: "",
+//     requirementPriority: "",
+//     positionStatus: "",
+//     techStack: "",
+//     experience: "",
+//     budgetType: "",
+//     currency: "",
+//     budget: "",
+//     totalPositions: "",
+//     workRole: "",
+//     workMode: "",
+//     workLocation: "",
+//     jobDescription: "",
+//     otherInformation: "",
+//     expectedClosureDate: "",
+//   });
+
+//   const [errors, setErrors] = useState({});
+//   const [loading, setLoading] = useState(false);
+
+//   const [activeClients, setActiveClients] = useState([]);
+//   const [options, setOptions] = useState({
+//     statuses: [],
+//     experiences: [],
+//     budgetTypes: [],
+//     currencies: [],
+//     workModes: [],
+//     priorities: [],
+//   });
+
+//   /* ---------------- Effects ---------------- */
+//   useEffect(() => {
+//     fetchActiveClients();
+//     fetchOptions();
+//   }, []);
+
+//   const fetchOptions = async () => {
+//     try {
+//       const res = await getRequirementsOptions();
+//       if (res?.options) {
+//         setOptions(res.options);
+//       }
+//     } catch (err) {
+//       showError("Failed to load dropdown options");
+//     }
+//   };
+
+//   const fetchActiveClients = async () => {
+//     try {
+//       const res = await getActiveClients();
+//       const active = res.clients?.filter((c) => c.status === "active") || [];
+//       setActiveClients(active);
+//     } catch (err) {
+//       showError("Failed to load clients");
+//     }
+//   };
+
+//   /* ---------------- Submit ---------------- */
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setErrors({});
+//     showError("");
+//     showSuccess("");
+//     setLoading(true);
+
+//     try {
+//       await schema.validate(formData, { abortEarly: false });
+
+//       const res = await addClientsRequirement(formData);
+
+//       if (res?.success) {
+//         showSuccess(res.message || "Requirement added successfully");
+//         navigate("/admin/clientmanagement/clientrequirements");
+//       } else {
+//         showError(res?.message || "Failed to add requirement");
+//       }
+//     } catch (err) {
+//       if (err.inner) {
+//         const validationErrors = {};
+//         err.inner.forEach((e) => {
+//           validationErrors[e.path] = e.message;
+//         });
+//         setErrors(validationErrors);
+//       } else {
+//         showError("Validation error");
+//       }
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   /* ---------------- UI ---------------- */
+//   return (
+//     <div className="p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+//       <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
+//         <h2 className="text-2xl font-semibold">Add New Requirement</h2>
+//         <BackButton
+//           onClick={() => navigate("/admin/clientmanagement/clientrequirements")}
+//         />
+//       </div>
+
+//       {errorMsg && (
+//         <div className="mb-4 p-3 rounded-xl border border-red-300 bg-[#d72b16] text-white">
+//           ⚠ {errorMsg}
+//         </div>
+//       )}
+
+//       <RequirementForm
+//         formData={formData}
+//         setFormData={setFormData}
+//         errors={errors}
+//         setErrors={setErrors}
+//         activeClients={activeClients}
+//         options={options}
+//         loading={loading}
+//         onSubmit={handleSubmit}
+//         isEdit={false}
+//       />
+//     </div>
+//   );
+// };
+
+// export default ClientRequirement;

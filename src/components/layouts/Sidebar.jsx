@@ -201,8 +201,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
         {/* Navigation */}
         <ul className="flex-1 overflow-y-auto py-3 space-y-2">
-          {filteredSections.map((section) => (
-            <div key={section.section}>
+          {filteredSections.map((section, sectionIndex) => (
+            <div key={`section-${sectionIndex}`}>
               {isOpen && section.section && (
                 <h4 className="px-2 pb-2 text-[13px] font-medium  dark:text-gray-300 uppercase tracking-wide  bg-white dark:bg-darkBg z-10">
                   {section.section}
@@ -213,7 +213,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 if (!hasAccess(item.module)) return null;
                 const isActive = isParentActive(item);
                 return (
-                  <li key={item.module} className="pr-2">
+                  <li key={`${item.module}-${item.path}`} className="pr-2">
                     {!item.submodules ? (
                       <Link
                         to={item.path}
@@ -275,7 +275,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                               return (
                                 hasSubmoduleAccess(item.module, sub.module) && (
-                                  <li key={sub.module}>
+                                  <li
+                                    key={`${item.module}-${sub.module}-${sub.path}`}
+                                  >
                                     <Link
                                       to={sub.path}
                                       onClick={() => {
