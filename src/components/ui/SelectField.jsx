@@ -92,7 +92,12 @@ const SelectField = ({
                       setOpen(false);
                       setSearch("");
                     }}
-                    className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className={`px-4 py-2 text-sm cursor-pointer
+                  ${
+                    opt.value === value
+                      ? "bg-gray-200 dark:bg-gray-700 font-semibold"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`}
                   >
                     {opt.label}
                   </div>
