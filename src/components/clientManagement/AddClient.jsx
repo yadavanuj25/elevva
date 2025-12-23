@@ -460,7 +460,6 @@ import BackButton from "../ui/buttons/BackButton";
 import { addClients, getAllOptions } from "../../services/clientServices";
 import { useMessage } from "../../auth/MessageContext";
 
-// -------------------- Yup Schema --------------------
 const schema = yup.object().shape({
   empanelmentDate: yup
     .string()
@@ -492,8 +491,10 @@ const schema = yup.object().shape({
     email: yup.string().email("Invalid email").required("Email is required"),
     phone: yup
       .string()
-      .required("POC1 phone is required")
-      .matches(/^\d{10,15}$/, "Phone must be 10–15 digits"),
+      .matches(/^[0-9]+$/, "Phone must contain only numbers")
+      .min(10, "Phone must be at least 10 digits")
+      .max(15, "Phone must be at most 15 digits")
+      .required("POC1 is required"),
     designation: yup.string().required("Designation is required"),
   }),
   poc2: yup.object().shape({
@@ -502,12 +503,13 @@ const schema = yup.object().shape({
     phone: yup
       .string()
       .nullable()
-      .matches(/^\d{10,15}$/, "Phone must be 10–15 digits"),
+      .matches(/^[0-9]+$/, "Phone must contain only numbers")
+      .min(10, "Phone must be at least 10 digits")
+      .max(15, "Phone must be at most 15 digits"),
     designation: yup.string().nullable(),
   }),
 });
 
-// -------------------- AddClient Component --------------------
 const AddClient = () => {
   PageTitle("Elevva | Add-Client");
   const navigate = useNavigate();
@@ -534,7 +536,6 @@ const AddClient = () => {
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState({});
 
-  // Fetch dropdown options
   useEffect(() => {
     fetchOptions();
   }, []);
@@ -551,14 +552,12 @@ const AddClient = () => {
     }
   };
 
-  // -------------------- Handle Submit --------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
     setLoading(true);
 
     try {
-      // Clean POC2 empty fields
       const cleanedPoc2 = Object.fromEntries(
         Object.entries(formData.poc2).map(([k, v]) => [
           k,
@@ -566,13 +565,8 @@ const AddClient = () => {
         ])
       );
       const cleanedData = { ...formData, poc2: cleanedPoc2 };
-
-      // Validate with Yup schema
       await schema.validate(cleanedData, { abortEarly: false });
-
-      // Submit
       const res = await addClients(cleanedData);
-
       if (res?.success) {
         showSuccess(res.message || "Client added successfully");
         navigate("/admin/clientmanagement/clients");

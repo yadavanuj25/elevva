@@ -244,13 +244,18 @@ import { FileText, Hash, Save, X } from "lucide-react";
 import { getAllUsers } from "../../services/userServices";
 import { assignRequirement } from "../../services/clientServices";
 import Button from "../ui/Button";
+import CustomSwal from "../../utils/CustomSwal";
 
-const AssignModal = ({ open, onClose, selectedRequirements }) => {
+const AssignModal = ({
+  open,
+  onClose,
+  selectedRequirements,
+  setSelectedRows,
+}) => {
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
 
-  /* -------------------- OPEN / CLOSE ANIMATION -------------------- */
   useEffect(() => {
     if (open) {
       setIsVisible(true);
@@ -266,12 +271,10 @@ const AssignModal = ({ open, onClose, selectedRequirements }) => {
     }, 1000);
   };
 
-  /* -------------------- DATA -------------------- */
   const fetchUsers = async () => {
     try {
-      const res = await getAllUsers();
-      const activeUsers = res.users.filter((u) => u.status === "active");
-      setOptions(activeUsers);
+      const res = await getAllUsers(1, 50, "active");
+      setOptions(res.users);
     } catch (err) {
       console.error(err);
     }
@@ -281,20 +284,57 @@ const AssignModal = ({ open, onClose, selectedRequirements }) => {
     setSelectedOptions([]);
   };
 
+  // const handleAssign = async () => {
+  //   if (!selectedOptions.length) {
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     requirementId: selectedRequirements.map((r) => r._id),
+  //     assignedTo: selectedOptions,
+  //   };
+
+  //   try {
+  //     const res = await assignRequirement(payload);
+  //     setSelectedRows([]);
+  //     closeWithAnimation();
+  //   } catch (err) {}
+  // };
+
   const handleAssign = async () => {
     if (!selectedOptions.length) {
+      CustomSwal.fire({
+        icon: "error",
+        text: "Please select at least one user to assign",
+        confirmButtonText: "OK",
+      });
       return;
     }
-
     const payload = {
       requirementId: selectedRequirements.map((r) => r._id),
       assignedTo: selectedOptions,
     };
-
     try {
-      await assignRequirement(payload);
+      const res = await assignRequirement(payload);
+      CustomSwal.fire({
+        icon: "success",
+        title: "Assigned Successfully",
+        text: res?.message || "Requirement assigned successfully",
+        confirmButtonText: "OK",
+      });
+      setSelectedRows([]);
       closeWithAnimation();
-    } catch (err) {}
+    } catch (err) {
+      CustomSwal.fire({
+        icon: "error",
+        title: "Assignment Failed",
+        text:
+          err?.response?.data?.message ||
+          err?.message ||
+          "Something went wrong while assigning",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
   const toggleUser = (id) => {

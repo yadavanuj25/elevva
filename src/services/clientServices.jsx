@@ -35,7 +35,7 @@ export const updateClientStatus = (id, status) => {
 
 export const getAllClients = (
   page = 1,
-  limit = 5,
+  limit = 25,
   tab = "All",
   search = ""
 ) => {
@@ -80,8 +80,28 @@ export const getClientsWithFilters = (filters = {}) => {
   return fetchHandler(`/api/clients?${params.toString()}`);
 };
 
-export const getClientStats = () => {
-  return fetchHandler("/api/clients/stats");
+// export const getClientStats = () => {
+//   return fetchHandler("/api/clients/stats");
+// };
+
+export const getClientStats = ({
+  startDate,
+  endDate,
+  status,
+  clientCategory,
+  clientSource,
+  companySize,
+} = {}) => {
+  const params = new URLSearchParams();
+
+  if (startDate) params.append("startDate", startDate);
+  if (endDate) params.append("endDate", endDate);
+  if (status) params.append("status", status);
+  if (clientCategory) params.append("clientCategory", clientCategory);
+  if (clientSource) params.append("clientSource", clientSource);
+  if (companySize) params.append("companySize", companySize);
+
+  return fetchHandler(`/api/clients/stats?${params.toString()}`);
 };
 
 // --------- Requirements ---------
@@ -110,9 +130,8 @@ export const getAllRequirements = (
   search = ""
 ) => {
   let url = `/api/requirements?page=${page}&limit=${limit}`;
-  const tabLower = tab.toLowerCase();
-  if (requirementStatuses.includes(tabLower)) {
-    url += `&status=${tabLower}`;
+  if (requirementStatuses.includes(tab)) {
+    url += `&positionStatus=${tab}`;
   }
   if (search.trim() !== "") {
     url += `&search=${encodeURIComponent(search)}`;
@@ -122,3 +141,7 @@ export const getAllRequirements = (
 
 export const assignRequirement = (clientData) =>
   fetchHandler("/api/tasks/assign", "POST", clientData);
+
+export const getRequirementOptions = () => {
+  return fetchHandler("/api/requirements/options");
+};

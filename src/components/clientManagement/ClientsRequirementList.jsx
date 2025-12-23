@@ -16,6 +16,7 @@ import DateDisplay from "../ui/DateDisplay";
 import {
   getAllClients,
   getAllRequirements,
+  getRequirementsOptions,
   updateRequirementStatus,
 } from "../../services/clientServices";
 import StatusDropDown from "../ui/StatusDropDown";
@@ -41,7 +42,7 @@ const ClientsRequirementsList = () => {
   const navigate = useNavigate();
   const [clients, setClients] = useState([]);
   const [requirements, setRequirements] = useState([]);
-  const [activeTab, setActiveTab] = useState("Open");
+  const [activeTab, setActiveTab] = useState("All");
   const [statusTabs, setStatusTabs] = useState([]);
   const [pagination, setPagination] = useState({
     total: 0,
@@ -57,20 +58,30 @@ const ClientsRequirementsList = () => {
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
   const [openAssignModal, setOpenAssignModal] = useState(false);
-
-  const statusOptions = [
-    "Open",
-    "On Hold",
-    "In Progress",
-    "Filled",
-    "Cancelled",
-    "Closed",
-  ];
+  const [statusOptions, setStatusOptions] = useState([]);
 
   useEffect(() => {
     fetchRequirements();
     fetchClients();
   }, [pagination.page, pagination.limit, searchQuery]);
+
+  useEffect(() => {
+    fetchAllOptions();
+  }, []);
+
+  const fetchAllOptions = async () => {
+    try {
+      const data = await getRequirementsOptions();
+      if (!data || typeof data !== "object") {
+        console.error("Invalid options response");
+        return;
+      }
+      setStatusOptions(data.options.statuses);
+    } catch (error) {
+      console.error("Error fetching options:", error);
+      showError("Failed to load dropdown options");
+    }
+  };
 
   const fetchRequirements = async () => {
     setLoading(true);
@@ -270,25 +281,11 @@ const ClientsRequirementsList = () => {
     selectedRows.includes(r._id)
   );
 
-  // const handleAssignSave = async (selectedOption) => {
-  //   try {
-  //     await assignApi({
-  //       ids: selectedRows,
-  //       option: selectedOption,
-  //     });
-  //     setOpenAssignModal(false);
-  //     setSelectedRows([]);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   const handleAssignClick = () => {
     if (selectedRows.length === 0) {
       CustomSwal.fire({
         text: "Please select at least one requirement",
         icon: "error",
-        timer: 1500,
         showConfirmButton: true,
       });
       return;
@@ -353,9 +350,13 @@ const ClientsRequirementsList = () => {
               icon={<Send size={16} />}
               onClick={handleAssignClick}
             />
+
             <GroupButton
               text="Stats"
               icon={<ChartNoAxesCombined size={16} />}
+              onClick={() =>
+                navigate("/admin/clientmanagement/clientrequirements/stats")
+              }
             />
             <RefreshButton fetchData={fetchRequirements} />
           </div>
@@ -671,6 +672,7 @@ const ClientsRequirementsList = () => {
         open={openAssignModal}
         onClose={() => setOpenAssignModal(false)}
         selectedRequirements={selectedRequirements}
+        setSelectedRows={setSelectedRows}
         // onSubmit={handleAssignSave}
       />
     </>

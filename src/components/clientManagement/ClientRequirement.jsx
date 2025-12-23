@@ -10,6 +10,7 @@ import "react-quill-new/dist/quill.snow.css";
 import {
   addClientsRequirement,
   getActiveClients,
+  getAllClients,
   getRequirementsOptions,
 } from "../../services/clientServices";
 import BasicDatePicker from "../ui/BasicDatePicker";
@@ -68,6 +69,7 @@ const ClientRequirement = () => {
     budgetTypes: [],
     currencies: [],
     workModes: [],
+    workRole: [],
     priorities: [],
   });
   const [errors, setErrors] = useState({});
@@ -81,12 +83,10 @@ const ClientRequirement = () => {
   const fetchAllOptions = async () => {
     try {
       const data = await getRequirementsOptions();
-      console.log("API Options Response:", data);
       if (!data || typeof data !== "object") {
         console.error("Invalid options response");
         return;
       }
-
       setOptions(data.options);
     } catch (error) {
       console.error("Error fetching options:", error);
@@ -96,9 +96,8 @@ const ClientRequirement = () => {
 
   const fetchActiveClients = async () => {
     try {
-      const res = await getActiveClients();
-      const activeList = res.clients.filter((c) => c.status === "active");
-      setActiveClients(activeList);
+      const res = await getAllClients(undefined, undefined, "active");
+      setActiveClients(res.clients);
     } catch (error) {
       console.log(error);
     }
@@ -285,12 +284,7 @@ const ClientRequirement = () => {
               name="workRole"
               label="Work Role"
               value={formData.workRole}
-              options={[
-                "Developer",
-                "Manager",
-                "Project Manager",
-                "Data Analyst",
-              ]}
+              options={options.workRole}
               handleChange={handleChange}
               error={errors.workRole}
             />

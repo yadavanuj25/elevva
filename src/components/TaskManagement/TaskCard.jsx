@@ -259,7 +259,6 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
       CustomSwal.fire({
         text: res?.message || "Task status updated successfully",
         icon: "success",
-        timer: 1500,
         showConfirmButton: true,
       });
       setShowMetricsForm(false);
@@ -268,7 +267,6 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
       CustomSwal.fire({
         text: error || "Failed to update task ",
         icon: "error",
-        timer: 1500,
         showConfirmButton: true,
       });
     }
@@ -283,7 +281,6 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
       CustomSwal.fire({
         text: res?.message || "Task status updated successfully",
         icon: "success",
-        timer: 1500,
         showConfirmButton: true,
       });
       onRefresh();
@@ -291,7 +288,6 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
       CustomSwal.fire({
         text: error || "Failed to update task ",
         icon: "error",
-        timer: 1500,
         showConfirmButton: true,
       });
     }

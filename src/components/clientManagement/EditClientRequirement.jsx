@@ -355,12 +355,7 @@ const EditClientRequirement = () => {
                   name="workRole"
                   label="Work Role"
                   value={formData.workRole}
-                  options={[
-                    "Developer",
-                    "Manager",
-                    "Project Manager",
-                    "Data Analyst",
-                  ]}
+                  options={options.workRole}
                   handleChange={handleChange}
                   error={errors.workRole}
                 />

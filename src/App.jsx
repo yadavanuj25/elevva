@@ -40,6 +40,7 @@ import Tasks from "./pages/Tasks";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import MyProfile from "./pages/MyProfile";
 import EditMyProfile from "./components/myProfile/EditMyProfile";
+import RequirementStats from "./components/stats/Requirements/RequirementStats";
 
 const App = () => {
   const location = useLocation();
@@ -320,6 +321,14 @@ const App = () => {
               <ProtectedRoute allowedModules={["users"]}>
                 {/* <ClientsRequirementsList /> */}
                 <ClientsRequirementsList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/clientmanagement/clientrequirements/stats"
+            element={
+              <ProtectedRoute allowedModules={["users"]}>
+                <RequirementStats />
               </ProtectedRoute>
             }
           />

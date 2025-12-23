@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import {
   getAllClients,
+  getAllOptions,
   updateClientStatus,
 } from "../../services/clientServices";
 import TableHeader from "../ui/tableComponents/TableHeader";
@@ -57,17 +58,13 @@ const ClientList = () => {
   const [statusTabs, setStatusTabs] = useState([]);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("clients.createdAt");
-
   const [loading, setLoading] = useState(true);
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
-  const statusOptions = ["active", "dead", "prosepective", "terminated"];
   const [viewMode, setViewMode] = useState("list");
   const [stats, setStats] = useState(null);
   const [settings, setSettings] = useState({});
   const [error, setError] = useState(null);
-
-  // Filter State
   const [filters, setFilters] = useState({
     search: "",
     clientCategory: "",
@@ -75,6 +72,7 @@ const ClientList = () => {
     companySize: "",
     status: "",
   });
+  const [statusOptions, setStatusOptions] = useState([]);
 
   const API_BASE_URL = "https://crm-backend-qbz0.onrender.com/api";
   const token = localStorage.getItem("token");
@@ -102,12 +100,31 @@ const ClientList = () => {
     fetchStats();
   }, []);
 
+  useEffect(() => {
+    fetchAllOptions();
+  }, []);
+
+  const fetchAllOptions = async () => {
+    try {
+      const data = await getAllOptions();
+      if (!data || typeof data !== "object") {
+        console.error("Invalid options response");
+        return;
+      }
+      setStatusOptions(data.options.statuses);
+    } catch (error) {
+      console.error("Error fetching options:", error);
+      showError("Failed to load dropdown options");
+    }
+  };
+
   const fetchSettings = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/clients/options`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSettings(response.data.options);
+      console.log(response.data.options);
     } catch (err) {
       console.error("Error fetching settings:", err);
     }

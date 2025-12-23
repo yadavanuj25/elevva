@@ -40,6 +40,5 @@ export const getProfileStats = ({ userId, startDate, endDate }) => {
   if (userId) query.append("userId", userId);
   if (startDate) query.append("startDate", startDate);
   if (endDate) query.append("endDate", endDate);
-
   return fetchHandler(`/api/profiles/stats?${query.toString()}`);
 };

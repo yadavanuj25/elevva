@@ -417,7 +417,6 @@ import {
 
 import { useMessage } from "../../auth/MessageContext";
 
-// -------------------- Yup Schema --------------------
 const schema = yup.object().shape({
   empanelmentDate: yup
     .string()
@@ -450,8 +449,10 @@ const schema = yup.object().shape({
       .required("POC1 email is required"),
     phone: yup
       .string()
-      .required("POC1 phone is required")
-      .matches(/^\d{10,15}$/, "POC1 phone must be 10–15 digits"),
+      .matches(/^[0-9]+$/, "Phone must contain only numbers")
+      .min(10, "Phone must be at least 10 digits")
+      .max(15, "Phone must be at most 15 digits")
+      .required("POC1 is required"),
     designation: yup.string().required("POC1 designation is required"),
   }),
 
@@ -461,7 +462,9 @@ const schema = yup.object().shape({
     phone: yup
       .string()
       .nullable()
-      .matches(/^\d{10,15}$/, "POC2 phone must be 10–15 digits"),
+      .matches(/^[0-9]+$/, "Phone must contain only numbers")
+      .min(10, "Phone must be at least 10 digits")
+      .max(15, "Phone must be at most 15 digits"),
     designation: yup.string().nullable(),
   }),
 });

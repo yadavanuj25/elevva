@@ -313,7 +313,6 @@ const MyTasksDashboard = () => {
       CustomSwal.fire({
         text: err.message || "Failed fetch tasks ",
         icon: "error",
-        timer: 1500,
         showConfirmButton: true,
       });
     } finally {
@@ -345,7 +344,6 @@ const MyTasksDashboard = () => {
       CustomSwal.fire({
         text: res?.message || "Task status updated successfully",
         icon: "success",
-        timer: 1500,
         showConfirmButton: true,
       });
 
@@ -370,7 +368,6 @@ const MyTasksDashboard = () => {
       CustomSwal.fire({
         text: err || "Failed to update task ",
         icon: "error",
-        timer: 1500,
         showConfirmButton: true,
       });
     } finally {

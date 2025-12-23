@@ -25,7 +25,9 @@ const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
   phone: yup
     .string()
-    .matches(/^[0-9]\d{9}$/, "Enter a valid 10-digit phone number")
+    .matches(/^[0-9]+$/, "Phone must contain only numbers")
+    .min(10, "Phone must be at least 10 digits")
+    .max(15, "Phone must be at most 15 digits")
     .required("Phone is required"),
   alternatePhone: yup
     .string()

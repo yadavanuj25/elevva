@@ -11,15 +11,15 @@ import SelectField from "../ui/SelectField";
 import BasicDatePicker from "../ui/BasicDatePicker";
 import Textareafield from "../ui/formFields/Textareafield";
 import { useMessage } from "../../auth/MessageContext";
+import { getAllUsers } from "../../services/userServices";
+import { getAllRequirements } from "../../services/clientServices";
 
-// Yup validation schema
 const schema = yup.object().shape({
   requirementId: yup.string().required("Requirement is required"),
   assignedTo: yup.string().required("Assign To is required"),
   priority: yup.string().required("Priority is required"),
   dueDate: yup
     .string()
-
     .test("not-in-future", "Due Date cannot be in the past", (value) => {
       if (!value) return false;
       return (
@@ -51,7 +51,7 @@ const AssignTaskView = () => {
 
   const fetchRequirements = async () => {
     try {
-      const response = await getOpenRequirements();
+      const response = await getAllRequirements(1, 50, "Open");
       setRequirements(response.requirements);
     } catch (error) {
       console.error("Error fetching requirements:", error);
@@ -60,36 +60,26 @@ const AssignTaskView = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await getUsers();
+      const response = await getAllUsers(1, 50, "active");
       setUsers(response.users);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
-  // Universal handleChange with error clearing
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Update value
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    // Clear error for this field
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      // Validate form
       await schema.validate(formData, { abortEarly: false });
-      setErrors({}); // clear errors if valid
-
-      // Submit form
+      setErrors({});
       const res = await assignTask(formData);
-
       setFormData({
         requirementId: "",
         assignedTo: "",
@@ -97,11 +87,9 @@ const AssignTaskView = () => {
         dueDate: "",
         notes: "",
       });
-
       showSuccess(res.message);
     } catch (err) {
       if (err.inner) {
-        // Collect validation errors
         const formErrors = {};
         err.inner.forEach((error) => {
           formErrors[error.path] = error.message;

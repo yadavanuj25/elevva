@@ -368,9 +368,10 @@ const schema = yup.object().shape({
   role: yup.string().required("Role is required"),
   phone: yup
     .string()
-    .matches(/^\d+$/, "Only numbers are allowed")
-    .length(10, "Phone number must be exactly 10 digits")
-    .required("Phone number is required"),
+    .matches(/^[0-9]+$/, "Phone must contain only numbers")
+    .min(10, "Phone must be at least 10 digits")
+    .max(15, "Phone must be at most 15 digits")
+    .required("Phone is required"),
   zipcode: yup
     .string()
     .matches(/^\d+$/, "Zip Code must contain only numbers")
@@ -532,7 +533,7 @@ export default function EditUser() {
             setFormData={setFormData}
             errors={errors}
             setErrors={setErrors}
-            handleChange={handleChange} // <-- pass handleChange from parent
+            handleChange={handleChange}
             loading={loading}
           />
         </form>

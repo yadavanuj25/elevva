@@ -287,10 +287,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { Save } from "lucide-react";
 
 import UserForm from "./UserForm";
-import Button from "../ui/Button";
 import BackButton from "../ui/buttons/BackButton";
 import PageTitle from "../../hooks/PageTitle";
 
@@ -304,8 +302,9 @@ const schema = yup.object().shape({
   role: yup.string().required("Role is required"),
   phone: yup
     .string()
-    .matches(/^\d+$/, "Only numbers allowed")
-    .length(10, "Phone must be 10 digits")
+    .matches(/^[0-9]+$/, "Phone must contain only numbers")
+    .min(10, "Phone must be at least 10 digits")
+    .max(15, "Phone must be at most 15 digits")
     .required("Phone is required"),
   zipcode: yup
     .string()
@@ -339,7 +338,7 @@ const UserManagement = () => {
     about: "",
     profileImage: null,
     status: "active",
-    sendWelcomeEmail: true,
+    sendWelcomeEmail: false,
   });
 
   const handleChange = (e) => {
