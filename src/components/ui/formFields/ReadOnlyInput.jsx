@@ -9,7 +9,7 @@ const ReadOnlyInput = ({ value, labelName, className = "", icon = null }) => {
           value={value || ""}
           readOnly
           placeholder=" "
-          className={`block w-full text-sm  rounded-md appearance-none 
+          className={`block w-full text-sm  bg-transparent rounded-md appearance-none 
             peer transition border p-[14px] cursor-not-allowed
             ${icon ? "pr-10" : ""}
             border-gray-300 dark:border-gray-600
