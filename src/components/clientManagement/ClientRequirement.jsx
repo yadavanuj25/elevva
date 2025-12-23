@@ -350,7 +350,10 @@ const ClientRequirement = () => {
             />
           </div>
         </div>
-        <div className="col-span-2">
+        <div className="col-span-2 section">
+          <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
+            Technical Info
+          </h3>
           <Input
             name="techStack"
             value={formData.techStack}

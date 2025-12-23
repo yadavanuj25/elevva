@@ -5,11 +5,9 @@ const Card = ({ title, value, icon, subTitle, color }) => {
     <div className=" p-3 rounded-lg dark:text-white bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold" style={{ color: color }}>
-            {value}
-          </h3>
+          <h3 className="text-dark text-lg font-semibold">{value}</h3>
           <p>{title}</p>
-          {subTitle && <p className="text-xs  ">({subTitle})</p>}
+          {subTitle && <p className="text-xs">({subTitle})</p>}
         </div>
         <div
           className="text-white p-2 border border-gray-300 dark:border-gray-600 rounded-full"

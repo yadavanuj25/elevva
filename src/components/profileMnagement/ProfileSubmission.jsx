@@ -11,6 +11,12 @@ import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
 
+const phoneSchema = yup
+  .string()
+  .transform((value) => (value === "" ? null : value))
+  .matches(/^[0-9]+$/, "Phone must contain only numbers")
+  .min(10, "Phone must be at least 10 digits")
+  .max(15, "Phone must be at most 15 digits");
 const schema = yup.object().shape({
   resume: yup
     .mixed()
@@ -23,19 +29,8 @@ const schema = yup.object().shape({
     }),
   fullName: yup.string().required("Full name is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
-  phone: yup
-    .string()
-    .matches(/^[0-9]+$/, "Phone must contain only numbers")
-    .min(10, "Phone must be at least 10 digits")
-    .max(15, "Phone must be at most 15 digits")
-    .required("Phone is required"),
-  alternatePhone: yup
-    .string()
-    .nullable()
-    .test("is-valid", "Enter a valid 10-digit phone number", (value) => {
-      if (!value) return true;
-      return /^[0-9]\d{9}$/.test(value);
-    }),
+  phone: phoneSchema.required("Phone is required"),
+  alternatePhone: phoneSchema.notRequired(),
   preferredLocation: yup.string().required("Preferred location is required"),
   currentLocation: yup.string().required("Current location is required"),
   currentCompany: yup.string().required("Current company is required"),
@@ -183,44 +178,94 @@ const ProfileSubmission = () => {
       resume: "",
     }));
   };
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   let newValue = value;
+  //   let errorMsg = "";
+  //   if (
+  //     ["phone", "alternatePhone", "currentCTC", "expectedCTC"].includes(name)
+  //   ) {
+  //     const cleanValue = ["currentCTC", "expectedCTC"].includes(name)
+  //       ? value.replace(/,/g, "")
+  //       : value.replace(/\D/g, "");
+  //     if (["phone", "alternatePhone"].includes(name) && value !== cleanValue) {
+  //       errorMsg = "Only numbers are allowed";
+  //     }
+  //     if (["currentCTC", "expectedCTC"].includes(name)) {
+  //       if (cleanValue && !isNaN(cleanValue)) {
+  //         newValue = new Intl.NumberFormat("en-IN").format(Number(cleanValue));
+  //       } else {
+  //         newValue = "";
+  //       }
+  //     } else {
+  //       newValue = cleanValue;
+  //     }
+  //   }
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: newValue,
+  //   }));
+  //   setErrors((prev) => ({
+  //     ...prev,
+  //     [name]: errorMsg,
+  //   }));
+  //   if (name === "email" && newValue.length > 5) {
+  //     handleDuplicateCheck("email", newValue);
+  //   }
+  //   if (name === "phone" && newValue.length === 10) {
+  //     handleDuplicateCheck("phone", newValue);
+  //   }
+  // };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     let newValue = value;
     let errorMsg = "";
-    if (
-      ["phone", "alternatePhone", "currentCTC", "expectedCTC"].includes(name)
-    ) {
-      const cleanValue = ["currentCTC", "expectedCTC"].includes(name)
-        ? value.replace(/,/g, "")
-        : value.replace(/\D/g, "");
-      if (["phone", "alternatePhone"].includes(name) && value !== cleanValue) {
+    if (name === "phone" || name === "alternatePhone") {
+      const digits = value.replace(/\D/g, "");
+      if (value !== digits) {
         errorMsg = "Only numbers are allowed";
+      } else if (digits.length && digits.length < 10) {
+        errorMsg = "Must be at least 10 digits";
+      } else if (digits.length > 15) {
+        errorMsg = "Must not exceed 15 digits";
       }
-      if (["currentCTC", "expectedCTC"].includes(name)) {
-        if (cleanValue && !isNaN(cleanValue)) {
-          newValue = new Intl.NumberFormat("en-IN").format(Number(cleanValue));
-        } else {
-          newValue = "";
-        }
+      newValue = digits;
+    } else if (name === "currentCTC" || name === "expectedCTC") {
+      const cleanValue = value.replace(/,/g, "");
+
+      if (cleanValue && !/^\d+$/.test(cleanValue)) {
+        errorMsg = "Only numbers are allowed";
+        newValue = "";
       } else {
-        newValue = cleanValue;
+        newValue = cleanValue
+          ? new Intl.NumberFormat("en-IN").format(Number(cleanValue))
+          : "";
       }
+    } else {
+      newValue = value;
     }
+
     setFormData((prev) => ({
       ...prev,
       [name]: newValue,
     }));
+
     setErrors((prev) => ({
       ...prev,
       [name]: errorMsg,
     }));
+
     if (name === "email" && newValue.length > 5) {
       handleDuplicateCheck("email", newValue);
     }
-    if (name === "phone" && newValue.length === 10) {
+
+    if (name === "phone" && newValue.length === 10 && !errorMsg) {
       handleDuplicateCheck("phone", newValue);
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     showSuccess("");

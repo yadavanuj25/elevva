@@ -8,6 +8,8 @@ import SourceChart from "../SourceChart";
 import RequirementStatsFilters from "./RequirementStatsFilters";
 
 import { getRequirementStats } from "../../../services/requirementsServices";
+import { BarLoader } from "react-spinners";
+import NoData from "../../ui/NoData";
 
 const RequirementStats = () => {
   const [stats, setStats] = useState(null);
@@ -53,10 +55,6 @@ const RequirementStats = () => {
     getRequirementStats(cleared).then((res) => setStats(res.stats));
   };
 
-  if (loading) {
-    return <div className="p-4 text-center">Loading stats...</div>;
-  }
-
   if (error) {
     return (
       <div className="p-4 text-center text-red-600">
@@ -70,7 +68,9 @@ const RequirementStats = () => {
 
   return (
     <div className="space-y-6">
-      {/* ===== Filters ===== */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-semibold">Requirement Stats</h2>
+      </div>
       <RequirementStatsFilters
         filters={filters}
         setFilters={setFilters}
@@ -78,8 +78,18 @@ const RequirementStats = () => {
         onReset={resetFilters}
       />
 
-      {/* ===== Cards ===== */}
-      {stats && (
+      {loading ? (
+        <div className="h-[70vh] flex justify-center items-center text-center py-10">
+          <div className="w-[200px] text-black dark:text-white bg-gray-300 dark:bg-gray-700 rounded-full">
+            <BarLoader
+              height={6}
+              width={200}
+              color="currentColor"
+              cssOverride={{ borderRadius: "999px" }}
+            />
+          </div>
+        </div>
+      ) : !loading && stats ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card
             title="Total Requirements"
@@ -106,26 +116,11 @@ const RequirementStats = () => {
             color="#222"
           />
         </div>
-      )}
-
-      {/* ===== Charts ===== */}
-      {/* {stats && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <StatsBarGraph title="Requirements by Status" data={stats.byStatus} />
-          <SourceChart
-            title="Requirements by Priority"
-            data={stats.byPriority}
-          />
+      ) : (
+        <div className=" bg-white dark:bg-[#31415f] border border-gray-300 dark:border-600 rounded-xl">
+          <NoData title="No Data Found" />
         </div>
-      )} */}
-
-      {/* ===== Work Mode ===== */}
-      {/* {stats && (
-        <SourceChart
-          title="Requirements by Work Mode"
-          data={stats.byWorkMode}
-        />
-      )} */}
+      )}
     </div>
   );
 };

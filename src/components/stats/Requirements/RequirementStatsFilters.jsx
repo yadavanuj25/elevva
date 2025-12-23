@@ -24,7 +24,7 @@ const RequirementStatsFilters = ({
   };
 
   return (
-    <div className="bg-white dark:bg-darkBg border rounded-lg p-4">
+    <div className="bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-xl p-4">
       <div className="grid md:grid-cols-6 gap-4 items-center">
         <SelectField
           name="status"

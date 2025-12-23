@@ -4,7 +4,7 @@ import NoFoundImg from "../../assets/images/no-data.svg";
 const NoData = ({ title, description }) => {
   return (
     <>
-      <div className="flex flex-col items-center justify-center h-[300px] text-center">
+      <div className="flex flex-col items-center justify-center min-h-[300px] text-center">
         <img
           src={NoFoundImg}
           alt="No Data"

@@ -13,6 +13,13 @@ import previewResumeImg from "../../assets/images/dummy-resume.jpg";
 import { useMessage } from "../../auth/MessageContext";
 import BackButton from "../ui/buttons/BackButton";
 
+const phoneSchema = yup
+  .string()
+  .transform((value) => (value === "" ? null : value))
+  .matches(/^[0-9]+$/, "Phone must contain only numbers")
+  .min(10, "Phone must be at least 10 digits")
+  .max(15, "Phone must be at most 15 digits");
+
 const schema = yup.object().shape({
   resume: yup
     .mixed()
@@ -25,19 +32,8 @@ const schema = yup.object().shape({
     }),
   fullName: yup.string().required("Full name is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
-  phone: yup
-    .string()
-    .matches(/^[0-9]+$/, "Phone must contain only numbers")
-    .min(10, "Phone must be at least 10 digits")
-    .max(15, "Phone must be at most 15 digits")
-    .required("Phone is required"),
-  alternatePhone: yup
-    .string()
-    .nullable()
-    .test("is-valid", "Enter a valid 10-digit phone number", (value) => {
-      if (!value) return true;
-      return /^[0-9]\d{9}$/.test(value);
-    }),
+  phone: phoneSchema.required("Phone is required"),
+  alternatePhone: phoneSchema.notRequired(),
   preferredLocation: yup.string().required("Preferred location is required"),
   currentLocation: yup.string().required("Current location is required"),
   currentCompany: yup.string().required("Current company is required"),
@@ -226,21 +222,55 @@ const EditProfile = () => {
     }));
   };
 
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   let newValue = value;
+  //   if (["phone", "alternatePhone"].includes(name)) {
+  //     newValue = value.replace(/\D/g, "");
+  //   }
+  //   if (["currentCTC", "expectedCTC"].includes(name)) {
+  //     const cleanValue = value.replace(/,/g, "");
+  //     newValue = cleanValue
+  //       ? new Intl.NumberFormat("en-IN").format(Number(cleanValue))
+  //       : "";
+  //   }
+  //   setFormData((prev) => ({ ...prev, [name]: newValue }));
+  //   setErrors((prev) => ({ ...prev, [name]: "" }));
+  // };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let newValue = value;
-    if (["phone", "alternatePhone"].includes(name)) {
-      newValue = value.replace(/\D/g, "");
+    if (name === "phone" || name === "alternatePhone") {
+      const digits = value.replace(/\D/g, "");
+      setFormData((prev) => ({
+        ...prev,
+        [name]: digits,
+      }));
+      setErrors((prev) => ({
+        ...prev,
+        [name]: value !== digits ? "Only numbers allowed" : "",
+      }));
+      return;
     }
-    if (["currentCTC", "expectedCTC"].includes(name)) {
+    if (name === "currentCTC" || name === "expectedCTC") {
       const cleanValue = value.replace(/,/g, "");
-      newValue = cleanValue
+      const formattedValue = cleanValue
         ? new Intl.NumberFormat("en-IN").format(Number(cleanValue))
         : "";
+      setFormData((prev) => ({
+        ...prev,
+        [name]: formattedValue,
+      }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+      return;
     }
-    setFormData((prev) => ({ ...prev, [name]: newValue }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+
   const handleResumeSelect = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;

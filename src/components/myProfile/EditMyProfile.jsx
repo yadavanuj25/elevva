@@ -11,8 +11,8 @@ import BasicDatePicker from "../ui/BasicDatePicker";
 import SelectField from "../ui/SelectField";
 
 const statusStyles = {
-  active: "bg-green-100 text-green-700 border-b-2 border-green-500",
-  inactive: "bg-red-100 text-red-700 border-b-2 border-red-500",
+  active: "bg-green-600 text-white ",
+  inactive: "bg-red-600 text-white ",
 };
 
 const formatDateForInput = (date) => {
@@ -206,6 +206,17 @@ const EditProfile = () => {
     }
   };
 
+  const handleCancel = () => {
+    setFormData({
+      fullName: fullName || "",
+      dob: formatDateForInput(dob) || "",
+      country: country || "",
+      state: state || "",
+      address: address || "",
+      zipcode: zipcode || "",
+    });
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -217,12 +228,12 @@ const EditProfile = () => {
           My Profile
         </h2>
       </div>
-
-      <div className="relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 p-6 flex items-center justify-between gap-8 ">
-        <div className="flex items-center gap-8">
-          <div className="relative z-10">
-            <div className="w-28 h-28 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-white dark:bg-darkBg shadow-sm">
-              <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-600 flex items-center justify-center">
+      <div className="relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+          {/* Column 1: Profile */}
+          <div className="flex items-center gap-6">
+            <div className="relative">
+              <div className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-600">
                 <img
                   src={profilePreview}
                   alt="Profile"
@@ -230,8 +241,7 @@ const EditProfile = () => {
                 />
               </div>
 
-              {/* Upload Overlay */}
-              <label className="absolute inset-0 flex items-center justify-center rounded-full cursor-pointer bg-black/40 opacity-0 hover:opacity-100 transition">
+              <label className="absolute inset-0 flex items-center justify-center rounded-xl cursor-pointer bg-black/40 opacity-0 hover:opacity-100 transition">
                 <User size={20} className="text-white" />
                 <input
                   type="file"
@@ -241,49 +251,51 @@ const EditProfile = () => {
                 />
               </label>
             </div>
-          </div>
 
-          {/* Info */}
-          <div className="relative z-10">
-            <h3 className="text-xl mb-1 font-semibold text-gray-900 dark:text-white capitalize">
-              {fullName}
-            </h3>
+            <div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white capitalize">
+                {fullName}
+              </h3>
 
-            <span
-              className={`inline-block px-3 py-0.5 rounded-full text-xs font-semibold capitalize border
+              <span
+                className={`inline-block mt-1 px-3 py-1 rounded-md text-xs font-semibold capitalize 
           ${
             statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-600"
           }`}
-            >
-              {status}
-            </span>
+              >
+                {status}
+              </span>
 
-            <p className="mt-2 text-sm text-gray-400 capitalize">
-              {state}, {country}
-            </p>
+              <p className="mt-2 text-sm text-gray-400 capitalize">
+                {state}, {country}
+              </p>
+            </div>
+          </div>
+
+          {/* Column 2: Account Info */}
+          <div className="space-y-3 md:border-l md:border-gray-300 md:dark:border-gray-600 md:pl-8">
+            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Account Information
+            </h4>
+
+            <InfoRow label="Email" value={email} />
+            <InfoRow label="Phone" value={phone} />
+            <InfoRow label="Role" value={role?.name} />
+            <InfoRow label="Status" value={status} />
+          </div>
+
+          {/* Column 3: Address Info */}
+          <div className="space-y-3 md:border-l md:border-gray-300 md:dark:border-gray-600 md:pl-8">
+            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Address Information
+            </h4>
+
+            <InfoRow label="Country" value={country} />
+            <InfoRow label="State" value={state} />
+            <InfoRow label="Zip Code" value={zipcode} />
+            <InfoRow label="Address" value={address} />
           </div>
         </div>
-        <div>Column 2</div>
-        <div>Column 3</div>
-
-        {/* <div className="flex items-center gap-3">
-          <div className="col-span-2 flex justify-end">
-            <Button
-              type="submit"
-              text="Update"
-              icon={<Save size={18} />}
-              // loading={loading}
-            />
-          </div>
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-gray-500 text-white hover:bg-gray-600 transition"
-          >
-            <ArrowLeft size={16} />
-            Back
-          </button>
-        </div> */}
       </div>
 
       {/* Editable Information */}
@@ -349,6 +361,23 @@ const EditProfile = () => {
           />
         </InfoGrid>
       </Section>
+      <div className="flex items-center justify-end">
+        <div className="flex gap-2 items-center">
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-gray-500 text-white hover:bg-gray-600 transition"
+          >
+            Cancel
+          </button>
+          <Button
+            type="submit"
+            text="Update"
+            icon={<Save size={18} />}
+            // loading={loading}
+          />
+        </div>
+      </div>
     </form>
   );
 };
@@ -364,6 +393,14 @@ const Section = ({ title, children }) => (
 
 const InfoGrid = ({ children }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{children}</div>
+);
+const InfoRow = ({ label, value }) => (
+  <div className="grid grid-cols-[80px_1fr] items-center text-sm">
+    <span className="text-gray-500 dark:text-gray-400">{label} : </span>
+    <span className="text-gray-900 dark:text-white font-medium">
+      {value || "-"}
+    </span>
+  </div>
 );
 
 export default EditProfile;

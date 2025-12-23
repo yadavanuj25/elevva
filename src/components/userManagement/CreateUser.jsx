@@ -291,7 +291,6 @@ import * as yup from "yup";
 import UserForm from "./UserForm";
 import BackButton from "../ui/buttons/BackButton";
 import PageTitle from "../../hooks/PageTitle";
-
 import { createUser } from "../../services/userServices";
 import { useMessage } from "../../auth/MessageContext";
 
@@ -317,13 +316,10 @@ const schema = yup.object().shape({
 
 const UserManagement = () => {
   PageTitle("Add User");
-
   const navigate = useNavigate();
   const { showSuccess, showError } = useMessage();
-
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -338,7 +334,7 @@ const UserManagement = () => {
     about: "",
     profileImage: null,
     status: "active",
-    sendWelcomeEmail: false,
+    sendWelcomeEmail: true,
   });
 
   const handleChange = (e) => {

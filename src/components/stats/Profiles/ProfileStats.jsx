@@ -156,7 +156,7 @@ const ProfileStats = ({ userId: defaultuserId }) => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">Filter Profile Stats</h2>
+        <h2 className="text-2xl font-semibold"> Profile Stats</h2>
       </div>
       <div className="bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-lg p-4">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">

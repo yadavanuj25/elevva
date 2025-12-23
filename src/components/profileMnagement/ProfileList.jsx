@@ -560,10 +560,7 @@ const ProfileList = () => {
                           colSpan={10}
                           className="py-10 text-center bg-white dark:bg-darkBg"
                         >
-                          <NoData
-                            title="No Data Found"
-                            description="There are currently no profiles in the system."
-                          />
+                          <NoData title="No Data Found" />
                         </TableCell>
                       </TableRow>
                     )}
