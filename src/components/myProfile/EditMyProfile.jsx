@@ -62,9 +62,7 @@ const EditProfile = () => {
     profileImage,
   } = user;
 
-  const [profilePreview, setProfilePreview] = useState(
-    profileImage || profileImg
-  );
+  const [profilePreview, setProfilePreview] = useState(profileImage);
   const [profileFile, setProfileFile] = useState(null);
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
@@ -230,15 +228,22 @@ const EditProfile = () => {
       </div>
       <div className="relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-          {/* Column 1: Profile */}
           <div className="flex items-center gap-6">
             <div className="relative">
-              <div className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-600">
-                <img
-                  src={profilePreview}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-600 flex items-center justify-center">
+                {profilePreview ? (
+                  <img
+                    src={profilePreview}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src="https://staging.ecodedash.com/cias/assets/dist/img/userimg.png"
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
 
               <label className="absolute inset-0 flex items-center justify-center rounded-xl cursor-pointer bg-black/40 opacity-0 hover:opacity-100 transition">
@@ -259,9 +264,7 @@ const EditProfile = () => {
 
               <span
                 className={`inline-block mt-1 px-3 py-1 rounded-md text-xs font-semibold capitalize 
-          ${
-            statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-600"
-          }`}
+        ${statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-600"}`}
               >
                 {status}
               </span>
@@ -272,24 +275,13 @@ const EditProfile = () => {
             </div>
           </div>
 
-          {/* Column 2: Account Info */}
           <div className="space-y-3 md:border-l md:border-gray-300 md:dark:border-gray-600 md:pl-8">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-              Account Information
-            </h4>
-
             <InfoRow label="Email" value={email} />
             <InfoRow label="Phone" value={phone} />
             <InfoRow label="Role" value={role?.name} />
             <InfoRow label="Status" value={status} />
           </div>
-
-          {/* Column 3: Address Info */}
           <div className="space-y-3 md:border-l md:border-gray-300 md:dark:border-gray-600 md:pl-8">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-              Address Information
-            </h4>
-
             <InfoRow label="Country" value={country} />
             <InfoRow label="State" value={state} />
             <InfoRow label="Zip Code" value={zipcode} />
@@ -396,10 +388,10 @@ const InfoGrid = ({ children }) => (
 );
 const InfoRow = ({ label, value }) => (
   <div className="grid grid-cols-[80px_1fr] items-center text-sm">
-    <span className="text-gray-500 dark:text-gray-400">{label} : </span>
     <span className="text-gray-900 dark:text-white font-medium">
-      {value || "-"}
+      {label} :{" "}
     </span>
+    <span className=" text-gray-500 dark:text-gray-400 ">{value || "-"}</span>
   </div>
 );
 

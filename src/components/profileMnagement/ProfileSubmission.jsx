@@ -10,6 +10,7 @@ import { addProfile } from "../../services/profileServices";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
+import SkillsInput from "../ui/formFields/SkillsInput";
 
 const phoneSchema = yup
   .string()
@@ -116,24 +117,35 @@ const ProfileSubmission = () => {
       }
     }, 600);
   };
-  const handleSkillKeyDown = (e) => {
-    if (e.key === "Enter" && skillInput.trim()) {
-      e.preventDefault();
-      const skill = skillInput.trim();
-      setErrors((prev) => ({
+  const addSkills = (input) => {
+    if (!input?.trim()) return;
+    const newSkills = input
+      .split(",")
+      .map((skill) => skill.trim())
+      .filter(Boolean);
+    setFormData((prev) => {
+      const uniqueSkills = newSkills.filter(
+        (skill) => !prev.skills.includes(skill)
+      );
+      if (!uniqueSkills.length) return prev;
+      return {
         ...prev,
-        skills: "",
-      }));
-      setFormData((prev) => {
-        if (!prev.skills.includes(skill)) {
-          return { ...prev, skills: [...prev.skills, skill] };
-        }
-        return prev;
-      });
-
-      setSkillInput("");
+        skills: [...prev.skills, ...uniqueSkills],
+      };
+    });
+    setErrors((prev) => ({ ...prev, skills: "" }));
+    setSkillInput("");
+  };
+  const handleSkillKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addSkills(skillInput);
     }
   };
+  const handleSkillBlur = () => {
+    addSkills(skillInput);
+  };
+
   const handleRemoveSkill = (skill) => {
     setFormData((prev) => ({
       ...prev,
@@ -178,45 +190,6 @@ const ProfileSubmission = () => {
       resume: "",
     }));
   };
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   let newValue = value;
-  //   let errorMsg = "";
-  //   if (
-  //     ["phone", "alternatePhone", "currentCTC", "expectedCTC"].includes(name)
-  //   ) {
-  //     const cleanValue = ["currentCTC", "expectedCTC"].includes(name)
-  //       ? value.replace(/,/g, "")
-  //       : value.replace(/\D/g, "");
-  //     if (["phone", "alternatePhone"].includes(name) && value !== cleanValue) {
-  //       errorMsg = "Only numbers are allowed";
-  //     }
-  //     if (["currentCTC", "expectedCTC"].includes(name)) {
-  //       if (cleanValue && !isNaN(cleanValue)) {
-  //         newValue = new Intl.NumberFormat("en-IN").format(Number(cleanValue));
-  //       } else {
-  //         newValue = "";
-  //       }
-  //     } else {
-  //       newValue = cleanValue;
-  //     }
-  //   }
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [name]: newValue,
-  //   }));
-  //   setErrors((prev) => ({
-  //     ...prev,
-  //     [name]: errorMsg,
-  //   }));
-  //   if (name === "email" && newValue.length > 5) {
-  //     handleDuplicateCheck("email", newValue);
-  //   }
-  //   if (name === "phone" && newValue.length === 10) {
-  //     handleDuplicateCheck("phone", newValue);
-  //   }
-  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -392,7 +365,7 @@ const ProfileSubmission = () => {
 
         {/*Personal Information */}
         <section>
-          <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+          <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
             Personal Information
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -443,7 +416,7 @@ const ProfileSubmission = () => {
 
         {/* Professional Information */}
         <section>
-          <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+          <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
             Professional Information
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -532,7 +505,7 @@ const ProfileSubmission = () => {
             />
 
             {/* 🏷 Skills */}
-            <div className="col-span-2">
+            {/* <div className="col-span-2">
               <label className="block font-medium mb-1">Skills *</label>
               <div
                 className={`flex flex-wrap gap-2 border rounded-md p-2 min-h-[48px]  ${
@@ -560,19 +533,31 @@ const ProfileSubmission = () => {
                   value={skillInput}
                   onChange={(e) => setSkillInput(e.target.value)}
                   onKeyDown={handleSkillKeyDown}
+                  onBlur={handleSkillBlur}
                   className="flex-grow bg-transparent outline-none text-sm "
                 />
               </div>
               {errors.skills && (
                 <p className="text-red-500  mt-1">{errors.skills}</p>
               )}
-            </div>
+            </div> */}
+            <SkillsInput
+              label="Skills"
+              required
+              skills={formData.skills}
+              value={skillInput}
+              onChange={(e) => setSkillInput(e.target.value)}
+              onKeyDown={handleSkillKeyDown}
+              onBlur={handleSkillBlur}
+              onRemove={handleRemoveSkill}
+              error={errors.skills}
+            />
           </div>
         </section>
 
         {/* Additional Information */}
         <section>
-          <h3 className="text-lg font-semibold mb-3 border-b border-gray-300 dark:border-gray-600 pb-2">
+          <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
             Additional Information
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -12,6 +12,7 @@ import PageTitle from "../../hooks/PageTitle";
 import previewResumeImg from "../../assets/images/dummy-resume.jpg";
 import { useMessage } from "../../auth/MessageContext";
 import BackButton from "../ui/buttons/BackButton";
+import SkillsInput from "../ui/formFields/SkillsInput";
 
 const phoneSchema = yup
   .string()
@@ -45,7 +46,7 @@ const schema = yup.object().shape({
   status: yup.string().required("Candidate status is required"),
   techStack: yup.string().required("Tech stack is required"),
   candidateSource: yup.string().required("Candidate source is required"),
-  skills: yup.array().min(1, "Add at least 1 skill"),
+  skills: yup.array().min(8, "Add at least 8 skill"),
   description: yup.string().nullable(),
 });
 const BASE_URL = "https://crm-backend-qbz0.onrender.com";
@@ -187,33 +188,61 @@ const EditProfile = () => {
     }
   };
 
-  const handleAddSkill = (raw) => {
-    const v = (raw || "").toString().trim();
-    if (!v) return;
-    const parts = v
+  // const handleAddSkill = (raw) => {
+  //   const v = (raw || "").toString().trim();
+  //   if (!v) return;
+  //   const parts = v
+  //     .split(",")
+  //     .map((s) => s.trim())
+  //     .filter(Boolean);
+  //   setFormData((prev) => {
+  //     const next = [...prev.skills];
+  //     parts.forEach((p) => {
+  //       if (!next.includes(p)) next.push(p);
+  //     });
+  //     return { ...prev, skills: next };
+  //   });
+  //   setSkillInput("");
+  //   setErrors((prev) => ({ ...prev, skills: "" }));
+  // };
+
+  // const handleSkillKeyDown = (e) => {
+  //   if ((e.key === "Enter" || e.key === ",") && skillInput.trim()) {
+  //     e.preventDefault();
+  //     handleAddSkill(skillInput);
+  //   } else if (e.key === "Backspace" && !skillInput && formData.skills.length) {
+  //     setFormData((prev) => ({ ...prev, skills: prev.skills.slice(0, -1) }));
+  //   }
+  // };
+
+  const addSkills = (input) => {
+    if (!input?.trim()) return;
+    const newSkills = input
       .split(",")
-      .map((s) => s.trim())
+      .map((skill) => skill.trim())
       .filter(Boolean);
     setFormData((prev) => {
-      const next = [...prev.skills];
-      parts.forEach((p) => {
-        if (!next.includes(p)) next.push(p);
-      });
-      return { ...prev, skills: next };
+      const uniqueSkills = newSkills.filter(
+        (skill) => !prev.skills.includes(skill)
+      );
+      if (!uniqueSkills.length) return prev;
+      return {
+        ...prev,
+        skills: [...prev.skills, ...uniqueSkills],
+      };
     });
-    setSkillInput("");
     setErrors((prev) => ({ ...prev, skills: "" }));
+    setSkillInput("");
   };
-
   const handleSkillKeyDown = (e) => {
-    if ((e.key === "Enter" || e.key === ",") && skillInput.trim()) {
+    if (e.key === "Enter") {
       e.preventDefault();
-      handleAddSkill(skillInput);
-    } else if (e.key === "Backspace" && !skillInput && formData.skills.length) {
-      setFormData((prev) => ({ ...prev, skills: prev.skills.slice(0, -1) }));
+      addSkills(skillInput);
     }
   };
-
+  const handleSkillBlur = () => {
+    addSkills(skillInput);
+  };
   const handleRemoveSkill = (skill) => {
     const clean = (skill || "").toString().trim();
     setFormData((prev) => ({
@@ -368,7 +397,6 @@ const EditProfile = () => {
                 <span className="text-red-600"> *</span>
               </label>
               <div className="grid grid-cols-[3fr,2fr] gap-8 ">
-                {/* UPLOAD CARD */}
                 <div
                   className="cursor-pointer border-2 border-dashed border-gray-300 dark:border-gray-700
     rounded-2xl p-8 flex flex-col items-center justify-center text-center
@@ -504,7 +532,7 @@ backdrop-blur-md overflow-hidden shadow-md"
 
             {/* Personal Info */}
             <section className="my-3">
-              <h3 className="text-lg font-semibold mb-4 border-b pb-1">
+              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
                 Personal Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -555,7 +583,7 @@ backdrop-blur-md overflow-hidden shadow-md"
 
             {/* Professional Info */}
             <section className="my-3">
-              <h3 className="text-lg font-semibold mb-4 border-b pb-1">
+              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
                 Professional Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -644,52 +672,25 @@ backdrop-blur-md overflow-hidden shadow-md"
                 />
 
                 {/* Skills */}
-                <div className="col-span-2">
-                  <label className="block font-semibold mb-1">
-                    Skills
-                    <span className="text-red-600"> *</span>
-                  </label>
-                  <div
-                    className={`flex flex-wrap gap-2 border rounded-md p-2 min-h-[48px] ${
-                      errors.skills ? "border-red-500" : "border-gray-300"
-                    }`}
-                  >
-                    {formData.skills.map((skill, i) => (
-                      <span
-                        key={i}
-                        className="flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-                      >
-                        <span>{skill}</span>
-                        <X
-                          size={14}
-                          onClick={() => handleRemoveSkill(skill)}
-                          className="cursor-pointer hover:text-red-500"
-                        />
-                      </span>
-                    ))}
 
-                    <input
-                      type="text"
-                      placeholder="Type a skill and press Enter or comma"
-                      value={skillInput}
-                      onChange={(e) => setSkillInput(e.target.value)}
-                      onKeyDown={handleSkillKeyDown}
-                      onBlur={() => {
-                        if (skillInput.trim()) handleAddSkill(skillInput);
-                      }}
-                      className="flex-grow bg-transparent outline-none text-sm min-w-[160px]"
-                    />
-                  </div>
-                  {errors.skills && (
-                    <p className="text-red-500 text-sm mt-1">{errors.skills}</p>
-                  )}
-                </div>
+                <SkillsInput
+                  label="Skills"
+                  required
+                  skills={formData.skills}
+                  value={skillInput}
+                  onChange={(e) => setSkillInput(e.target.value)}
+                  onKeyDown={handleSkillKeyDown}
+                  onBlur={handleSkillBlur}
+                  onRemove={handleRemoveSkill}
+                  error={errors.skills}
+                  placeholder="Type a skill and press Enter or comma"
+                />
               </div>
             </section>
 
             {/* Additional Info */}
             <section className="my-3">
-              <h3 className="text-lg font-semibold mb-4 border-b pb-1">
+              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
                 Additional Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
