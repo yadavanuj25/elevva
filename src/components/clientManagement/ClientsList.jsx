@@ -238,14 +238,6 @@ const ClientList = () => {
       page: 1,
     }));
   };
-  const formatDate = (date) => {
-    if (!date) return "-";
-    return new Date(date).toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  };
 
   const filteredData = useMemo(() => {
     let data = [...clients];
@@ -339,7 +331,9 @@ const ClientList = () => {
         <button
           onClick={() => setViewMode("list")}
           className={`p-1 rounded border ${
-            viewMode === "list" ? "bg-dark text-white" : "bg-gray-200"
+            viewMode === "list"
+              ? "bg-dark text-white"
+              : "bg-gray-300 dark:bg-white dark:text-black"
           }`}
         >
           <List size={20} />
@@ -348,7 +342,9 @@ const ClientList = () => {
         <button
           onClick={() => setViewMode("grid")}
           className={`p-1 rounded border ${
-            viewMode === "grid" ? "bg-dark text-white" : "bg-gray-200"
+            viewMode === "grid"
+              ? "bg-dark text-white"
+              : "bg-gray-300 dark:bg-white dark:text-black"
           }`}
         >
           <LayoutGrid size={20} />
@@ -538,7 +534,6 @@ const ClientList = () => {
             setOpenStatusRow={setOpenStatusRow}
             statusOptions={statusOptions}
             handleStatusUpdate={handleStatusUpdate}
-            formatDate={formatDate}
             statusLoading={statusLoading}
           />
         )}

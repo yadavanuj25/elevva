@@ -20,7 +20,7 @@ const LightDarkMode = ({ onToggle }) => {
 
     const themeSettings = {
       light: { light: "#e3edff", dark: "#25499f" },
-      dark: { light: "#fff4e6", dark: "#25499f" },
+      dark: { light: "#e3edff", dark: "#25499f" },
       bottelGreen: { light: "#b2f1e89c", dark: "#007672" },
       orange: { light: "#fff4e6", dark: "#fb6506" },
       midnight_blue_teal: { light: "#badef9", dark: "#07385D" },
@@ -74,3 +74,36 @@ const LightDarkMode = ({ onToggle }) => {
 };
 
 export default LightDarkMode;
+
+// import React, { useContext } from "react";
+// import { Moon, Sun } from "lucide-react";
+// import Tippy from "@tippyjs/react";
+// import { ThemeContext } from "../../context/ThemeContext";
+
+// const LightDarkMode = () => {
+//   const { mode, setMode } = useContext(ThemeContext);
+
+//   const toggleMode = () => {
+//     setMode(mode === "light" ? "dark" : "light");
+//   };
+
+//   return (
+//     <Tippy
+//       content={mode === "light" ? "Switch to Dark" : "Switch to Light"}
+//       placement="top"
+//       arrow={false}
+//       animation="fade"
+//       duration={100}
+//       theme="custom"
+//     >
+//       <button
+//         onClick={toggleMode}
+//         className="w-8 h-8 flex justify-center items-center rounded-full transition-all hover:scale-125"
+//       >
+//         {mode === "light" ? <Moon size={15} /> : <Sun size={15} />}
+//       </button>
+//     </Tippy>
+//   );
+// };
+
+// export default LightDarkMode;

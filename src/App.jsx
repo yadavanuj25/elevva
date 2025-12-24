@@ -41,6 +41,7 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import MyProfile from "./pages/MyProfile";
 import EditMyProfile from "./components/myProfile/EditMyProfile";
 import RequirementStats from "./components/stats/Requirements/RequirementStats";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   const location = useLocation();
@@ -367,6 +368,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </div>

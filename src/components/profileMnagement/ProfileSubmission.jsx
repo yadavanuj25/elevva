@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FolderClosed, Save, X, ArrowLeft } from "lucide-react";
+import { FolderClosed, Save, X, ArrowLeft, Check } from "lucide-react";
 import * as yup from "yup";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
@@ -336,17 +336,27 @@ const ProfileSubmission = () => {
       )}
       <form onSubmit={handleSubmit} className="space-y-6 ">
         {/* Resume Upload */}
+
         <div>
           <div
             onClick={handleBoxClick}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
-            className={`border rounded-md bg-gray-50 dark:bg-gray-800 p-12 text-center cursor-pointer ${
-              errors.resume
-                ? "border-red-500"
-                : "border-gray-300 dark:border-gray-600"
-            }`}
+            className={`
+      relative group
+      border-2 border-dashed rounded-lg
+      p-10 text-center cursor-pointer
+      transition-all duration-300
+      bg-white
+      dark:from-gray-800 dark:to-gray-900
+      ${
+        isDragging
+          ? "border-blue-500 scale-[1.02]"
+          : errors.resume
+          ? "border-red-500 hover:border-red-600 "
+          : "border-dark"
+      }`}
           >
             <input
               ref={fileInputRef}
@@ -357,26 +367,45 @@ const ProfileSubmission = () => {
             />
 
             {formData.resume ? (
-              <div>
-                <p className="text-green-600 font-medium">
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-green-200 text-green-600">
+                  <Check size={26} />
+                </div>
+                <p className="text-green-600 font-semibold truncate max-w-xs">
                   {formData.resume.name}
                 </p>
                 <p className="text-sm text-gray-500">
                   {(formData.resume.size / (1024 * 1024)).toFixed(2)} MB
                 </p>
+                <p className="text-xs text-gray-400">Click to replace file</p>
               </div>
             ) : (
-              <>
-                <FolderClosed className="mx-auto text-dark mb-2" size={24} />
-                <p className="text-gray-600 font-semibold">
-                  {isDragging ? "Drop your Resume here" : "Upload your Resume"}
+              <div className="flex flex-col items-center gap-2">
+                <div
+                  className="
+            w-14 h-14 rounded-full
+            flex items-center justify-center
+            bg-gray-200 dark:bg-gray-700
+            text-dark
+            group-hover:scale-110 transition
+          "
+                >
+                  <FolderClosed size={26} />
+                </div>
+                <p className="text-gray-700 dark:text-gray-300 font-semibold">
+                  {isDragging ? "Drop your resume here" : "Upload your resume"}
                 </p>
-                <p className="text-sm text-gray-500">Only PDF (max 20 MB)</p>
-              </>
+                <p className="text-sm text-gray-500">
+                  Drag & drop or{" "}
+                  <span className="text-dark font-medium">browse</span>
+                </p>
+                <p className="text-xs text-gray-400">PDF only · Max 20 MB</p>
+              </div>
             )}
           </div>
+
           {errors.resume && (
-            <p className="text-red-500 text-sm mt-1">{errors.resume}</p>
+            <p className="text-red-500 text-sm mt-2">{errors.resume}</p>
           )}
         </div>
 

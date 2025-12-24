@@ -3,7 +3,7 @@ import { Check } from "lucide-react";
 import PageTitle from "../../hooks/PageTitle";
 const colorThemes = [
   { name: "Default", value: "light", dark: "#25499f", light: "#e3edff" },
-  { name: "Dark", value: "dark", dark: "#25499f", light: "#fff4e6" },
+  { name: "Dark", value: "dark", dark: "#25499f", light: "#e3edff" },
   {
     name: "Bottle Green",
     value: "bottelGreen",
@@ -108,3 +108,45 @@ const Themes = () => {
 };
 
 export default Themes;
+
+// import React, { useContext } from "react";
+// import { Check } from "lucide-react";
+// import { ThemeContext } from "../../context/ThemeContext";
+// import PageTitle from "../../hooks/PageTitle";
+
+// const Themes = () => {
+//   PageTitle("Elevva | Settings-Themes");
+//   const { color, setColor, colorThemes } = useContext(ThemeContext);
+
+//   return (
+//     <div className="p-6 bg-white dark:bg-gray-800">
+//       <h3 className="text-lg font-semibold mb-3">Select Theme Color</h3>
+//       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//         {colorThemes.map((c) => (
+//           <button
+//             key={c.value}
+//             onClick={() => setColor(c.value)}
+//             className={`relative flex items-center gap-4 p-3 rounded-lg border transition ${
+//               color === c.value
+//                 ? "border-[var(--text-color)] bg-[var(--bg-color)]"
+//                 : "border-gray-200 hover:border-[var(--text-color)] hover:bg-gray-50 dark:hover:bg-gray-800"
+//             }`}
+//           >
+//             <span
+//               className="w-8 h-8 rounded-full border"
+//               style={{ backgroundColor: c.dark }}
+//             />
+//             <span className="font-semibold">{c.name}</span>
+//             {color === c.value && (
+//               <span className="absolute right-2">
+//                 <Check size={16} className="text-[var(--text-color)]" />
+//               </span>
+//             )}
+//           </button>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Themes;

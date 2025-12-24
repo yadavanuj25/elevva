@@ -17,6 +17,7 @@ import StatusDropDown from "../StatusDropDown";
 import DateDisplay from "../DateDisplay";
 import TableSkeleton from "../../loaders/TableSkeleton";
 import ActionMenu from "../buttons/ActionMenu";
+import FormatDate from "../dateFormat.jsx/FormatDate";
 
 const getStickyClass = (columnId) => {
   switch (columnId) {
@@ -40,7 +41,6 @@ const TableLayout = ({
   setOpenStatusRow,
   statusOptions,
   handleStatusUpdate,
-  formatDate,
   statusLoading,
 }) => {
   const navigate = useNavigate();
@@ -171,7 +171,7 @@ const TableLayout = ({
                       </div>
                     </TableCell>
                     <TableCell className="whitespace-nowrap dark:text-gray-300">
-                      {formatDate(row.empanelmentDate)}
+                      <FormatDate date={row.empanelmentDate} />
                     </TableCell>
                     <TableCell className="whitespace-nowrap dark:text-gray-300">
                       {row.addedBy?.fullName || "-"}

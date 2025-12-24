@@ -168,7 +168,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
         >
           <div className="header-icons">
             {user?.profileImage ? (
-              <User size={15} />
+              <img src={user?.profileImage} alt="image" />
             ) : (
               <img
                 src="https://staging.ecodedash.com/cias/assets/dist/img/userimg.png"
