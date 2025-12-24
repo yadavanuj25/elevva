@@ -1,11 +1,11 @@
 import React from "react";
 
-const Textareafield = ({ name, value, handleChange, label }) => {
+const Textareafield = ({ name, value, handleChange, label, rows = 2 }) => {
   return (
     <div className="relative w-full">
       <textarea
         name={name}
-        rows={2}
+        rows={rows}
         value={value}
         onChange={handleChange}
         placeholder=" "

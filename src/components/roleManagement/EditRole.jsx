@@ -337,7 +337,7 @@ const EditRole = () => {
         ${
           errors.description
             ? "border-red-500 focus:border-red-500 "
-            : "border-gray-300 dark:border-gray-600 focus:border-dark"
+            : "border-gray-300 dark:border-gray-600 focus:border-dark dark:focus:border-white"
         }`}
                     />
                     <label

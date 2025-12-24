@@ -1,6 +1,6 @@
 import { fetchHandler } from "../fatchHandler/fetchHandler";
 
-const clientStatuses = ["active", "dead", "prospective", "terminated"];
+const clientStatuses = ["active", "inactive", "on_hold", "terminated"];
 const requirementStatuses = [
   "Open",
   "On Hold",
@@ -10,44 +10,51 @@ const requirementStatuses = [
   "Closed",
 ];
 
+// export const getAllClients = (
+//   page = 1,
+//   limit = 25,
+//   tab = "All",
+//   search = ""
+// ) => {
+//   let url = `/api/clients?page=${page}&limit=${limit}`;
+//   const tabLower = tab.toLowerCase();
+//   if (clientStatuses.includes(tabLower)) {
+//     url += `&status=${tabLower}`;
+//   }
+//   if (search.trim() !== "") {
+//     url += `&search=${encodeURIComponent(search)}`;
+//   }
+//   return fetchHandler(url);
+// };
+
+export const getAllClients = ({
+  page = 1,
+  limit = 25,
+  search = "",
+  clientCategory = "",
+  clientSource = "",
+  companySize = "",
+  status = "",
+} = {}) => {
+  const params = new URLSearchParams();
+
+  params.append("page", page);
+  params.append("limit", limit);
+
+  if (search.trim()) params.append("search", search);
+  if (status.includes(status?.toLowerCase()))
+    params.append("status", status.toLowerCase());
+  if (clientCategory) params.append("clientCategory", clientCategory);
+  if (clientSource) params.append("clientSource", clientSource);
+  if (companySize) params.append("companySize", companySize);
+
+  return fetchHandler(`/api/clients?${params.toString()}`);
+};
 export const getActiveClients = () => {
   return fetchHandler(`/api/clients?status=active`);
 };
 export const updateClientStatus = (id, status) => {
   return fetchHandler(`/api/clients/${id}`, "PUT", status);
-};
-
-// export const getAllClients = (
-//   page = 1,
-//   limit = 5,
-//   tab = "All",
-//   search = ""
-// ) => {
-//   let url = `/api/clients?page=${page}&limit=${limit}`;
-//   if (tab.toLowerCase() === "active") url += "&status=active";
-//   if (tab.toLowerCase() === "inactive") url += "&status=inactive";
-//   if (tab.toLowerCase() === "dead") url += "&status=dead";
-//   if (tab.toLowerCase() === "prospective") url += "&status=prospective";
-//   if (tab.toLowerCase() === "terminated") url += "&status=terminated";
-//   if (search.trim() !== "") url += `&search=${encodeURIComponent(search)}`;
-//   return fetchHandler(url);
-// };
-
-export const getAllClients = (
-  page = 1,
-  limit = 25,
-  tab = "All",
-  search = ""
-) => {
-  let url = `/api/clients?page=${page}&limit=${limit}`;
-  const tabLower = tab.toLowerCase();
-  if (clientStatuses.includes(tabLower)) {
-    url += `&status=${tabLower}`;
-  }
-  if (search.trim() !== "") {
-    url += `&search=${encodeURIComponent(search)}`;
-  }
-  return fetchHandler(url);
 };
 
 export const getAllOptions = () => {

@@ -13,6 +13,7 @@ import previewResumeImg from "../../assets/images/dummy-resume.jpg";
 import { useMessage } from "../../auth/MessageContext";
 import BackButton from "../ui/buttons/BackButton";
 import SkillsInput from "../ui/formFields/SkillsInput";
+import Textareafield from "../ui/formFields/Textareafield";
 
 const phoneSchema = yup
   .string()
@@ -214,40 +215,60 @@ const EditProfile = () => {
   //     setFormData((prev) => ({ ...prev, skills: prev.skills.slice(0, -1) }));
   //   }
   // };
+  const normalizeSkill = (skill) => skill.trim().toLowerCase();
 
   const addSkills = (input) => {
     if (!input?.trim()) return;
-    const newSkills = input
+
+    // Step 1: split + clean
+    const parsedSkills = input
       .split(",")
       .map((skill) => skill.trim())
       .filter(Boolean);
+
     setFormData((prev) => {
-      const uniqueSkills = newSkills.filter(
-        (skill) => !prev.skills.includes(skill)
-      );
+      const existingNormalized = prev.skills.map(normalizeSkill);
+      const seen = new Set(existingNormalized);
+
+      // Step 2: remove duplicates (both pasted & existing)
+      const uniqueSkills = [];
+
+      for (const skill of parsedSkills) {
+        const normalized = normalizeSkill(skill);
+        if (!seen.has(normalized)) {
+          seen.add(normalized);
+          uniqueSkills.push(skill);
+        }
+      }
+
       if (!uniqueSkills.length) return prev;
+
       return {
         ...prev,
         skills: [...prev.skills, ...uniqueSkills],
       };
     });
+
     setErrors((prev) => ({ ...prev, skills: "" }));
     setSkillInput("");
   };
+
   const handleSkillKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       addSkills(skillInput);
     }
   };
+
   const handleSkillBlur = () => {
     addSkills(skillInput);
   };
+
   const handleRemoveSkill = (skill) => {
-    const clean = (skill || "").toString().trim();
+    const normalized = normalizeSkill(skill);
     setFormData((prev) => ({
       ...prev,
-      skills: prev.skills.filter((s) => s.trim() !== clean),
+      skills: prev.skills.filter((s) => normalizeSkill(s) !== normalized),
     }));
   };
 
@@ -713,15 +734,12 @@ backdrop-blur-md overflow-hidden shadow-md"
                   ]}
                   error={errors.candidateSource}
                 />
-                <div className="md:col-span-2">
-                  <label className="block font-medium mb-1">Description</label>
-                  <textarea
+                <div className="col-span-2">
+                  <Textareafield
                     name="description"
-                    rows="2"
+                    label="Description"
                     value={formData.description}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 dark:border-gray-600 rounded-md p-2 bg-white dark:bg-gray-800"
-                    placeholder="Short description about this profile ..."
+                    handleChange={handleChange}
                   />
                 </div>
               </div>

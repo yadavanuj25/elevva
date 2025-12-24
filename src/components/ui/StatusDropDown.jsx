@@ -19,9 +19,10 @@ const getStatusColor = (s) => {
     case "in-active":
     case "inactive":
     case "dead":
+    case "Dead":
       return "bg-red-600";
 
-    case "prosepective":
+    case "prospective":
     case "on hold":
     case "on_hold":
     case "defaulter":

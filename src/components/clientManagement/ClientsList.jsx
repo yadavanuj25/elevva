@@ -6,8 +6,6 @@ import {
   List,
   Settings,
   ChartNoAxesCombined,
-  Search,
-  RefreshCcw,
   X,
 } from "lucide-react";
 import {
@@ -130,32 +128,51 @@ const ClientList = () => {
     }
   };
 
+  const formatStatus = (status = "") =>
+    status.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+
   const fetchClients = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      params.append("page", pagination.page);
-      params.append("limit", pagination.limit);
-      if (filters.search) params.append("search", filters.search);
-      if (filters.clientCategory)
-        params.append("clientCategory", filters.clientCategory);
-      if (filters.clientSource)
-        params.append("clientSource", filters.clientSource);
-      if (filters.companySize)
-        params.append("companySize", filters.companySize);
-      if (filters.status) params.append("status", filters.status);
-      const res = await axios.get(
-        `${API_BASE_URL}/clients?${params.toString()}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setClients(res.data.clients || []);
+      const data = await getAllClients({
+        page: pagination.page,
+        limit: pagination.limit,
+        search: filters.search,
+        status: filters.status,
+        clientCategory: filters.clientCategory,
+        clientSource: filters.clientSource,
+        companySize: filters.companySize,
+      });
+
+      const allClients = data.clients || [];
+      setClients(allClients);
+      const uniqueStatuses = [
+        "All",
+        ...new Set(
+          allClients.map((c) => (c.status ? formatStatus(c.status) : "Unknown"))
+        ),
+      ];
+
+      uniqueStatuses.sort((a, b) => a.localeCompare(b));
+
+      const tabsWithCounts = uniqueStatuses.map((status) => ({
+        name: status,
+        count:
+          status === "All"
+            ? allClients.length
+            : allClients.filter((c) => formatStatus(c.status) === status)
+                .length,
+      }));
+
+      setStatusTabs(tabsWithCounts);
+
       setPagination((prev) => ({
         ...prev,
-        total: res.data.pagination.total,
-        pages: res.data.pagination.pages,
+        total: data.pagination?.total || 0,
+        pages: data.pagination?.pages || 1,
       }));
-    } catch (err) {
-      setError(err.response?.data?.message || "Error fetching clients");
+    } catch (error) {
+      showError(`Error fetching clients: ${error?.message || error}`);
     } finally {
       setLoading(false);
     }
@@ -184,13 +201,11 @@ const ClientList = () => {
     }));
   };
 
-  // Handle Search
   const handleSearch = (e) => {
     e.preventDefault();
     fetchClients();
   };
 
-  // Clear Filters
   const clearFilters = () => {
     setFilters({
       page: 1,
@@ -202,16 +217,6 @@ const ClientList = () => {
       status: "",
     });
   };
-
-  if (error) {
-    return (
-      <div className="error-container">
-        <h2>Error</h2>
-        <p>{error}</p>
-        <button onClick={fetchClients}>Retry</button>
-      </div>
-    );
-  }
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

@@ -264,7 +264,10 @@ const EditProfile = () => {
 
               <span
                 className={`inline-block mt-1 px-3 py-1 rounded-md text-xs font-semibold capitalize 
-        ${statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-600"}`}
+                 ${
+                   statusStyles[status?.toLowerCase()] ||
+                   "bg-gray-100 text-gray-600"
+                 }`}
               >
                 {status}
               </span>
@@ -386,13 +389,22 @@ const Section = ({ title, children }) => (
 const InfoGrid = ({ children }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{children}</div>
 );
-const InfoRow = ({ label, value }) => (
-  <div className="grid grid-cols-[80px_1fr] items-center text-sm">
-    <span className="text-gray-900 dark:text-white font-medium">
-      {label} :{" "}
-    </span>
-    <span className=" text-gray-500 dark:text-gray-400 ">{value || "-"}</span>
-  </div>
-);
+const InfoRow = ({ label, value }) => {
+  const isEmail = label?.toLowerCase() === "email";
+
+  const formattedValue =
+    value && !isEmail ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+
+  return (
+    <div className="grid grid-cols-[80px_1fr] items-center text-sm">
+      <span className="text-gray-900 dark:text-white font-medium">
+        {label} :
+      </span>
+      <span className="text-gray-500 dark:text-gray-400">
+        {formattedValue || "-"}
+      </span>
+    </div>
+  );
+};
 
 export default EditProfile;

@@ -11,6 +11,7 @@ import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
 import SkillsInput from "../ui/formFields/SkillsInput";
+import Textareafield from "../ui/formFields/Textareafield";
 
 const phoneSchema = yup
   .string()
@@ -117,39 +118,55 @@ const ProfileSubmission = () => {
       }
     }, 600);
   };
+  const normalizeSkill = (skill) => skill.trim().toLowerCase();
+
   const addSkills = (input) => {
     if (!input?.trim()) return;
-    const newSkills = input
+    const parsedSkills = input
       .split(",")
       .map((skill) => skill.trim())
       .filter(Boolean);
+
     setFormData((prev) => {
-      const uniqueSkills = newSkills.filter(
-        (skill) => !prev.skills.includes(skill)
-      );
+      const existingNormalized = prev.skills.map(normalizeSkill);
+      const seen = new Set(existingNormalized);
+      const uniqueSkills = [];
+      for (const skill of parsedSkills) {
+        const normalized = normalizeSkill(skill);
+        if (!seen.has(normalized)) {
+          seen.add(normalized);
+          uniqueSkills.push(skill);
+        }
+      }
+
       if (!uniqueSkills.length) return prev;
+
       return {
         ...prev,
         skills: [...prev.skills, ...uniqueSkills],
       };
     });
+
     setErrors((prev) => ({ ...prev, skills: "" }));
     setSkillInput("");
   };
+
   const handleSkillKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       addSkills(skillInput);
     }
   };
+
   const handleSkillBlur = () => {
     addSkills(skillInput);
   };
 
   const handleRemoveSkill = (skill) => {
+    const normalized = normalizeSkill(skill);
     setFormData((prev) => ({
       ...prev,
-      skills: prev.skills.filter((s) => s !== skill),
+      skills: prev.skills.filter((s) => normalizeSkill(s) !== normalized),
     }));
   };
   // Resume
@@ -177,7 +194,7 @@ const ProfileSubmission = () => {
       setErrors((prev) => ({ ...prev, resume: "Only pdf allowed" }));
       return;
     }
-    if (file.size > 1 * 1024 * 1024) {
+    if (file.size > 20 * 1024 * 1024) {
       setErrors((prev) => ({
         ...prev,
         resume: "File size must be less than 20 MB!",
@@ -504,43 +521,6 @@ const ProfileSubmission = () => {
               errors={errors}
             />
 
-            {/* 🏷 Skills */}
-            {/* <div className="col-span-2">
-              <label className="block font-medium mb-1">Skills *</label>
-              <div
-                className={`flex flex-wrap gap-2 border rounded-md p-2 min-h-[48px]  ${
-                  errors.skills
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600 "
-                }`}
-              >
-                {formData.skills.map((skill, i) => (
-                  <span
-                    key={i}
-                    className="flex items-center gap-1 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-                  >
-                    {skill}
-                    <X
-                      size={14}
-                      onClick={() => handleRemoveSkill(skill)}
-                      className="cursor-pointer hover:text-red-500"
-                    />
-                  </span>
-                ))}
-                <input
-                  type="text"
-                  placeholder="Type a skill and press Enter"
-                  value={skillInput}
-                  onChange={(e) => setSkillInput(e.target.value)}
-                  onKeyDown={handleSkillKeyDown}
-                  onBlur={handleSkillBlur}
-                  className="flex-grow bg-transparent outline-none text-sm "
-                />
-              </div>
-              {errors.skills && (
-                <p className="text-red-500  mt-1">{errors.skills}</p>
-              )}
-            </div> */}
             <SkillsInput
               label="Skills"
               required
@@ -581,34 +561,12 @@ const ProfileSubmission = () => {
               error={errors.candidateSource}
             />
             <div className="col-span-2">
-              <div className="relative w-full">
-                <textarea
-                  id="description"
-                  name="description"
-                  rows={4}
-                  value={formData.description}
-                  onChange={handleChange}
-                  placeholder=" "
-                  className="block p-[14px] w-full text-sm bg-transparent rounded-md border  appearance-none focus:outline-none peer transition
-        
-          border-gray-300 dark:border-gray-600 focus:border-black"
-                />
-                <label
-                  htmlFor="description"
-                  className={`absolute pointer-events-none font-medium text-sm text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
-        ${
-          formData.description
-            ? "top-2 scale-75 -translate-y-4 text-darkBg dark:text-white"
-            : "peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2"
-        }
-        peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4
-        peer-focus:text-darkBg dark:peer-focus:text-white
-        rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1
-      `}
-                >
-                  Description
-                </label>
-              </div>
+              <Textareafield
+                name="description"
+                label="Description"
+                value={formData.description}
+                handleChange={handleChange}
+              />
             </div>
           </div>
         </section>

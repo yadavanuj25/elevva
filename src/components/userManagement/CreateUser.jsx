@@ -386,8 +386,8 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-800 border rounded-xl">
-      <div className="flex justify-between items-center mb-4 border-b pb-2">
+    <div className="p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="flex justify-between items-center mb-4 border-b border-gray-300 dark:border-gray-600 pb-2">
         <h2 className="text-2xl font-semibold">Add New User</h2>
         <BackButton onClick={() => navigate(-1)} />
       </div>
