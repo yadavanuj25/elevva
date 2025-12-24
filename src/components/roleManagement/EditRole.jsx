@@ -157,17 +157,81 @@ const EditRole = () => {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSave = async () => {
+  // const handleUpdate = async () => {
+  //   setLoading(true);
+  //   showError("");
+  //   showSuccess("");
+  //   try {
+  //     await schema.validate(role, { abortEarly: false });
+  //     const selectedPermissions = [];
+  //     permissions.forEach((perm) => {
+  //       const mod = selected[perm.resource];
+  //       if (!mod) return;
+  //       if (mod.manage && perm.action === "manage") {
+  //         selectedPermissions.push(perm._id);
+  //       } else if (!mod.manage && mod[perm.action]) {
+  //         selectedPermissions.push(perm._id);
+  //       }
+  //     });
+
+  //     const payload = {
+  //       name: role.name,
+  //       description: role.description,
+  //       permissions: selectedPermissions,
+  //       isActive: true,
+  //     };
+
+  //     const res = await fetch(
+  //       `https://crm-backend-qbz0.onrender.com/api/roles/${id}`,
+  //       {
+  //         method: "PUT",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         body: JSON.stringify(payload),
+  //       }
+  //     );
+
+  //     const data = await res.json();
+  //     if (!res.ok) {
+  //       showError(data?.message || "Failed to update role.");
+  //       return;
+  //     }
+
+  //     showSuccess("Role updated successfully!");
+  //     navigate("/admin/rolemanagement/roles");
+  //   } catch (error) {
+  //     if (error.inner) {
+  //       const validationErrors = {};
+  //       error.inner.forEach(
+  //         (err) => (validationErrors[err.path] = err.message)
+  //       );
+  //       setErrors(validationErrors);
+  //     } else {
+  //       console.error("Error updating role:", error);
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //     setTimeout(() => {
+  //       showSuccess("");
+  //       showError("");
+  //     }, 6000);
+  //   }
+  // };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
     setLoading(true);
     showError("");
     showSuccess("");
-
     try {
       await schema.validate(role, { abortEarly: false });
       const selectedPermissions = [];
       permissions.forEach((perm) => {
         const mod = selected[perm.resource];
         if (!mod) return;
+
         if (mod.manage && perm.action === "manage") {
           selectedPermissions.push(perm._id);
         } else if (!mod.manage && mod[perm.action]) {
@@ -176,8 +240,8 @@ const EditRole = () => {
       });
 
       const payload = {
-        name: role.name,
-        description: role.description,
+        name: role.name.trim(),
+        description: role.description.trim(),
         permissions: selectedPermissions,
         isActive: true,
       };
@@ -195,6 +259,7 @@ const EditRole = () => {
       );
 
       const data = await res.json();
+
       if (!res.ok) {
         showError(data?.message || "Failed to update role.");
         return;
@@ -205,13 +270,15 @@ const EditRole = () => {
     } catch (error) {
       if (error.inner) {
         const validationErrors = {};
-        error.inner.forEach(
-          (err) => (validationErrors[err.path] = err.message)
-        );
+        error.inner.forEach((err) => {
+          validationErrors[err.path] = err.message;
+        });
         setErrors(validationErrors);
       } else {
         console.error("Error updating role:", error);
       }
+
+      return;
     } finally {
       setLoading(false);
       setTimeout(() => {
@@ -240,9 +307,7 @@ const EditRole = () => {
           </div>
         )}
 
-        <div>
-          {/* Role Details */}
-
+        <form onSubmit={handleUpdate}>
           {loading ? (
             <FormSkeleton rows={4} />
           ) : (
@@ -271,8 +336,8 @@ const EditRole = () => {
                       className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
         ${
           errors.description
-            ? "border-red-500"
-            : "border-gray-300 dark:border-gray-600 focus:border-black"
+            ? "border-red-500 focus:border-red-500 "
+            : "border-gray-300 dark:border-gray-600 focus:border-dark"
         }`}
                     />
                     <label
@@ -282,7 +347,7 @@ const EditRole = () => {
             ${
               errors.description
                 ? "peer-focus:text-red-500 peer-placeholder-shown:-translate-y-[100%]"
-                : "peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2"
+                : "peer-focus:text-dark dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2"
             }
             rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
                     >
@@ -382,7 +447,7 @@ const EditRole = () => {
               </div>
             </>
           )}
-        </div>
+        </form>
       </div>
     </div>
   );

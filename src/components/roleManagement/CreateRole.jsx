@@ -8,6 +8,7 @@ import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import Button from "../ui/Button";
 import BackButton from "../ui/buttons/BackButton";
+import Textareafield from "../ui/formFields/Textareafield";
 
 // Validation Schema
 const schema = yup.object().shape({
@@ -118,6 +119,15 @@ const CreateRole = () => {
           </div>
 
           {/* Description */}
+          {/* <div className="col-span-1">
+            <Textareafield
+              name="description"
+              label="Description"
+              rows={1}
+              value={formData.description}
+              handleChange={handleChange}
+            />
+          </div> */}
           <div className="relative w-full">
             <textarea
               name="description"
@@ -128,8 +138,8 @@ const CreateRole = () => {
               className={`block p-[14px] w-full text-sm bg-transparent rounded-md border appearance-none focus:outline-none peer transition
         ${
           errors.description
-            ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/30"
-            : "border-gray-300 dark:border-gray-600 focus:border-dark focus:ring-1 focus:ring-dark/30"
+            ? "border-red-500 focus:border-red-500 "
+            : "border-gray-300 dark:border-gray-600 focus:border-dark"
         }`}
             />
             <label
@@ -139,7 +149,7 @@ const CreateRole = () => {
             ${
               errors.description
                 ? "peer-focus:text-red-500 peer-placeholder-shown:-translate-y-[100%]"
-                : "peer-focus:text-[#181c1f] dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2"
+                : "peer-focus:text-dark dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2"
             }
             rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
             >
