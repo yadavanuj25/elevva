@@ -127,7 +127,7 @@ const ViewRequirement = () => {
             </div>
           </div>
         ) : client ? (
-          <div className="space-y-8">
+          <div className="space-y-4">
             {/* TOP HEADER */}
             <div className="p-4 rounded-lg border border-gray-300 dark:border-gray-600 flex justify-between items-center">
               <div className="flex items-center gap-5">

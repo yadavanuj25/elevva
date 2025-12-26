@@ -112,7 +112,7 @@ const ViewProfile = () => {
               </div>
             </div>
           ) : profile ? (
-            <div className="space-y-8">
+            <div className="space-y-4">
               {/* Header */}
               <div className="sticky top-0   z-10 flex flex-wrap justify-between items-center rounded-lg border border-gray-300 dark:border-gray-600 p-4">
                 <div className="flex items-center gap-5">
