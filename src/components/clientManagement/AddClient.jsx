@@ -541,22 +541,19 @@ const AddClient = () => {
   }, []);
 
   const fetchOptions = async () => {
-    setLoading(true);
+   
     try {
       const res = await getAllOptions();
       setOptions(res?.options || {});
     } catch (err) {
       console.log(err);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
     setLoading(true);
-
     try {
       const cleanedPoc2 = Object.fromEntries(
         Object.entries(formData.poc2).map(([k, v]) => [

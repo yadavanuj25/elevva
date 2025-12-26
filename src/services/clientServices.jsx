@@ -87,10 +87,6 @@ export const getClientsWithFilters = (filters = {}) => {
   return fetchHandler(`/api/clients?${params.toString()}`);
 };
 
-// export const getClientStats = () => {
-//   return fetchHandler("/api/clients/stats");
-// };
-
 export const getClientStats = ({
   startDate,
   endDate,
@@ -110,6 +106,12 @@ export const getClientStats = ({
 
   return fetchHandler(`/api/clients/stats?${params.toString()}`);
 };
+
+// export const getRequirementByClientId = (id) =>
+//   fetchHandler(`/api/requirements/client/${id}`);
+
+export const getRequirementByClientId = (id, page = 1, limit = 5) =>
+  fetchHandler(`/api/requirements/client/${id}?page=${page}&limit=${limit}`);
 
 // --------- Requirements ---------
 

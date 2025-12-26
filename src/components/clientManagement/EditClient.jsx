@@ -402,13 +402,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
-
 import ClientForm from "./ClientForm";
 import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
 import FormSkeleton from "../loaders/FormSkeleton";
 import UseScrollOnError from "../../hooks/UseScrollOnError";
-
 import {
   updateClient,
   getAllOptions,
@@ -474,7 +472,6 @@ const EditClient = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { showSuccess, showError, errorMsg } = useMessage();
-
   const [formData, setFormData] = useState({
     empanelmentDate: "",
     clientName: "",
@@ -491,14 +488,11 @@ const EditClient = () => {
     poc1: { name: "", email: "", phone: "", designation: "" },
     poc2: { name: "", email: "", phone: "", designation: "" },
   });
-
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState({});
-  const [submitting, setSubmitting] = useState(false);
-
+  const [updating, setUpdating] = useState(false);
   // UseScrollOnError(errors);
-
   useEffect(() => {
     fetchOptions();
     fetchClient();
@@ -519,7 +513,6 @@ const EditClient = () => {
       const res = await getClientById(id);
       if (res?.success) {
         const c = res.client;
-
         setFormData({
           empanelmentDate: c.empanelmentDate
             ? c.empanelmentDate.split("T")[0]
@@ -561,39 +554,29 @@ const EditClient = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSubmitting(true);
-
+    setUpdating(true);
     try {
-      // Clean POC2 empty fields (same as AddClient)
       const cleanedPoc2 = Object.fromEntries(
         Object.entries(formData.poc2 || {}).map(([k, v]) => [
           k,
           v === "" ? undefined : v,
         ])
       );
-
       const cleanedData = {
         ...formData,
         poc2: Object.values(cleanedPoc2).some(Boolean)
           ? cleanedPoc2
           : undefined,
       };
-
-      // Validate with Yup schema
       await schema.validate(cleanedData, { abortEarly: false });
-
-      // Submit update
       const res = await updateClient(id, cleanedData);
-
       if (res?.success) {
         showSuccess(res.message || "Client updated successfully");
         navigate("/admin/clientManagement/clients");
         return;
       }
-
       showError(res?.message || "Failed to update client");
     } catch (err) {
-      // Same Yup error handling as AddClient
       if (err?.inner && Array.isArray(err.inner)) {
         const newErrors = {};
         err.inner.forEach((e) => {
@@ -603,15 +586,13 @@ const EditClient = () => {
         setErrors(newErrors);
         return;
       }
-
       if (err?.errors && typeof err.errors === "object") {
         setErrors(err.errors);
         return;
       }
-
       showError(err?.message || "Something went wrong");
     } finally {
-      setSubmitting(false);
+      setUpdating(false);
     }
   };
 
@@ -639,7 +620,7 @@ const EditClient = () => {
           errors={errors}
           setErrors={setErrors}
           handleSubmit={handleSubmit}
-          loading={submitting}
+          loading={updating}
           options={options}
         />
       )}

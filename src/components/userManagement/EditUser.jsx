@@ -406,6 +406,7 @@ export default function EditUser() {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [updating, setUpdating] = useState(false);
   // UseScrollOnError(errors);
 
   useEffect(() => {
@@ -469,10 +470,9 @@ export default function EditUser() {
     showError("");
     showSuccess("");
     setErrors({});
-
+    setUpdating(true);
     try {
       await schema.validate(formData, { abortEarly: false });
-
       const payload = {
         fullName: formData.fullName,
         email: formData.email,
@@ -488,13 +488,10 @@ export default function EditUser() {
         status: formData.status,
         sendWelcomeEmail: formData.sendWelcomeEmail,
       };
-
       const res = await updateUser(id, payload);
-
       if (!res || res.error || res.success === false) {
         throw new Error(res?.message || "Failed to update user");
       }
-
       showSuccess(res.message || "User updated successfully");
       navigate("/admin/usermanagement/users");
     } catch (err) {
@@ -507,6 +504,8 @@ export default function EditUser() {
         return;
       }
       showError(err.message || "Something went wrong");
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -534,7 +533,7 @@ export default function EditUser() {
             errors={errors}
             setErrors={setErrors}
             handleChange={handleChange}
-            loading={loading}
+            loading={updating}
           />
         </form>
       )}

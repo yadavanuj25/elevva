@@ -27,6 +27,7 @@ import GroupButton from "../ui/buttons/GroupButton";
 import axios from "axios";
 import Button from "../ui/Button";
 import SelectField from "../ui/SelectField";
+import CustomSwal from "../../utils/CustomSwal";
 
 const columns = [
   { id: "clientName", label: "Client Name" },
@@ -95,12 +96,22 @@ const ClientList = () => {
   ]);
 
   useEffect(() => {
+    fetchAllOptions();
     fetchStats();
   }, []);
 
   useEffect(() => {
-    fetchAllOptions();
-  }, []);
+    if (successMsg) {
+      CustomSwal.fire({
+        icon: "success",
+        title: "Success",
+        text: successMsg,
+        confirmButtonText: "Great!",
+        background: "#ffffff",
+        color: "#28a745",
+      });
+    }
+  }, [successMsg]);
 
   const fetchAllOptions = async () => {
     try {
@@ -310,17 +321,6 @@ const ClientList = () => {
         </div>
       )}
 
-      {successMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
-               bg-[#28a745] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">✔ </span>
-          <p className="text-sm">{successMsg}</p>
-        </div>
-      )}
-
-      {/* Tabs */}
       <Tabs
         statusTabs={statusTabs}
         activeTab={activeTab}

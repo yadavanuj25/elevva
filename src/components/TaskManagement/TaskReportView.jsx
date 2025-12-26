@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { getTasksReport } from "../../services/taskServices";
+import NoData from "../ui/NoData";
+import { BarLoader } from "react-spinners";
 
 const TaskReportView = () => {
   const [report, setReport] = useState([]);
@@ -21,6 +23,7 @@ const TaskReportView = () => {
       const response = await getTasksReport(params.toString());
       setReport(response.report);
     } catch (error) {
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -82,7 +85,18 @@ const TaskReportView = () => {
       </div>
 
       {/* Report Table */}
-      {report.length > 0 && (
+      {loading ? (
+        <div className="h-[70vh] flex justify-center items-center text-center py-10">
+          <div className="w-[200px] text-black dark:text-white bg-gray-300 dark:bg-gray-700 rounded-full">
+            <BarLoader
+              height={6}
+              width={200}
+              color="currentColor"
+              cssOverride={{ borderRadius: "999px" }}
+            />
+          </div>
+        </div>
+      ) : !loading && report.length > 0 ? (
         <div className="bg-white dark:bg-[#1e2533] rounded-lg shadow-md overflow-x-auto border border-gray-200 dark:border-gray-700">
           <table className="min-w-full text-sm">
             <thead className="bg-gray-100 dark:bg-[#2a3142]">
@@ -168,6 +182,10 @@ const TaskReportView = () => {
               ))}
             </tbody>
           </table>
+        </div>
+      ) : (
+        <div className=" bg-white border border-gray-300 dark:border-gray-600 rounded-xl">
+          <NoData title="No Data Found" />
         </div>
       )}
     </div>

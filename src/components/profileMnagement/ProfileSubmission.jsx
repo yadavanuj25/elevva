@@ -260,6 +260,7 @@ const ProfileSubmission = () => {
     e.preventDefault();
     showSuccess("");
     showError("");
+    setLoading(true);
     const hasErrors = Object.values(errors).some(
       (err) => err && err.length > 0
     );
@@ -268,7 +269,7 @@ const ProfileSubmission = () => {
     }
     try {
       await schema.validate(formData, { abortEarly: false });
-      setLoading(true);
+
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (key === "skills") {
@@ -604,9 +605,9 @@ const ProfileSubmission = () => {
         <div className="flex justify-end">
           <Button
             type="submit"
-            text={loading ? "Submitting..." : "Submit"}
+            text="Submit"
             icon={<Save size={18} />}
-            disabled={loading}
+            loading={loading}
           />
         </div>
       </form>

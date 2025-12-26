@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import * as yup from "yup";
 import Button from "../ui/Button";
 import { Save } from "lucide-react";
-import {
-  assignTask,
-  getOpenRequirements,
-  getUsers,
-} from "../../services/taskServices";
+import PageTitle from "../../hooks/PageTitle";
+import { assignTask } from "../../services/taskServices";
 import SelectField from "../ui/SelectField";
 import BasicDatePicker from "../ui/BasicDatePicker";
 import Textareafield from "../ui/formFields/Textareafield";
 import { useMessage } from "../../auth/MessageContext";
 import { getAllUsers } from "../../services/userServices";
-import { getAllRequirements } from "../../services/clientServices";
+import {
+  getAllRequirements,
+  getRequirementOptions,
+} from "../../services/clientServices";
+import CustomSwal from "../../utils/CustomSwal";
 
 const schema = yup.object().shape({
   requirementId: yup.string().required("Requirement is required"),
@@ -31,6 +32,7 @@ const schema = yup.object().shape({
 });
 
 const AssignTaskView = () => {
+  PageTitle("Elevva | Assign Task");
   const { showSuccess, showError, errorMsg, successMsg } = useMessage();
   const [requirements, setRequirements] = useState([]);
   const [users, setUsers] = useState([]);
@@ -41,13 +43,28 @@ const AssignTaskView = () => {
     dueDate: "",
     notes: "",
   });
+  const [options, setOptions] = useState({});
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetchRequirements();
     fetchUsers();
+    fetchOptions();
   }, []);
+
+  useEffect(() => {
+    if (successMsg) {
+      CustomSwal.fire({
+        icon: "success",
+        title: "Success",
+        text: successMsg,
+        confirmButtonText: "Great!",
+        background: "#ffffff",
+        color: "#28a745",
+      });
+    }
+  }, [successMsg]);
 
   const fetchRequirements = async () => {
     try {
@@ -64,6 +81,15 @@ const AssignTaskView = () => {
       setUsers(response.users);
     } catch (error) {
       console.error("Error fetching users:", error);
+    }
+  };
+
+  const fetchOptions = async () => {
+    try {
+      const res = await getRequirementOptions();
+      setOptions(res?.options);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -105,7 +131,7 @@ const AssignTaskView = () => {
 
   return (
     <div className="mx-auto">
-      <div className="bg-white dark:bg-[#1e2738] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 transition-all">
+      <div className="bg-white dark:bg-[#1e2738] rounded-2xl  border border-gray-300 dark:border-gray-600 p-8 transition-all">
         <div className="flex items-center gap-3 mb-6">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
             Assign Task to HR
@@ -116,12 +142,6 @@ const AssignTaskView = () => {
           <div className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 bg-red-50 text-red-700 shadow-sm animate-slideDown">
             <span className="font-semibold">⚠ </span>
             <p className="text-sm">{errorMsg}</p>
-          </div>
-        )}
-        {successMsg && (
-          <div className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 bg-[#28a745] text-white shadow-sm animate-slideDown">
-            <span className="font-semibold">✔ </span>
-            <p className="text-sm">{successMsg}</p>
           </div>
         )}
 
@@ -156,12 +176,7 @@ const AssignTaskView = () => {
             <SelectField
               name="priority"
               label="Priority"
-              options={[
-                { value: "Critical", label: "Critical" },
-                { value: "High", label: "High" },
-                { value: "Medium", label: "Medium" },
-                { value: "Low", label: "Low" },
-              ]}
+              options={options.priorities}
               value={formData.priority}
               handleChange={handleChange}
               error={errors.priority}

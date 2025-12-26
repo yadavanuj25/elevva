@@ -36,6 +36,7 @@ import PageTitle from "../../hooks/PageTitle";
 import GroupButton from "../ui/buttons/GroupButton";
 import EditButton from "../ui/buttons/EditButton";
 import ViewButton from "../ui/buttons/ViewButton";
+import CustomSwal from "../../utils/CustomSwal";
 
 const UserList = () => {
   PageTitle("Elevva | Users");
@@ -69,6 +70,18 @@ const UserList = () => {
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
 
+  useEffect(() => {
+    if (successMsg) {
+      CustomSwal.fire({
+        icon: "success",
+        title: "Success",
+        text: successMsg,
+        confirmButtonText: "Great!",
+        background: "#ffffff",
+        color: "#28a745",
+      });
+    }
+  }, [successMsg]);
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -212,7 +225,7 @@ const UserList = () => {
             </div>
           )}
 
-          {successMsg && (
+          {/* {successMsg && (
             <div
               className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
                bg-[#28a745] text-white shadow-sm animate-slideDown"
@@ -220,7 +233,7 @@ const UserList = () => {
               <span className=" font-semibold">✔ </span>
               <p className="text-sm">{successMsg}</p>
             </div>
-          )}
+          )} */}
           <Tabs
             statusTabs={statusTabs}
             activeTab={activeTab}

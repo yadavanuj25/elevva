@@ -399,7 +399,7 @@ const ClientRequirement = () => {
         <div className="flex justify-end">
           <Button
             type="submit"
-            text="submit"
+            text="Submit"
             icon={<Save size={18} />}
             loading={loading}
           />

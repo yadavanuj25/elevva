@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ListTodo, UserCheck, BarChart3, Send } from "lucide-react";
+import PageTitle from "../../hooks/PageTitle";
 import MyTasksDashboard from "./MyTasksDashboard";
 import TaskReportView from "./TaskReportView";
 import AllTasksView from "./AllTasksView";
@@ -7,6 +8,7 @@ import AssignTaskView from "./AssignTaskView";
 
 // Main App Component
 const MyTaskDashboard = () => {
+  PageTitle("Elevva | Tasks");
   const [currentView, setCurrentView] = useState("my-tasks");
   const [userRole, setUserRole] = useState("hr");
 

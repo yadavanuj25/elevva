@@ -40,9 +40,9 @@ const CreateRole = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await schema.validate(formData, { abortEarly: false });
-      setLoading(true);
       if (!token) {
         showError("No token found. Please log in again.");
         return;

@@ -81,6 +81,7 @@ const EditProfile = () => {
   const [skillInput, setSkillInput] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [updating, setUpdating] = useState(false);
   const [profileCode, setProfileCode] = useState("");
   const [resumePreview, setResumePreview] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(
@@ -341,7 +342,7 @@ const EditProfile = () => {
     setErrors({});
     showSuccess("");
     showError("");
-    setLoading(true);
+    setUpdating(true);
     try {
       const validated = {
         ...formData,
@@ -381,7 +382,7 @@ const EditProfile = () => {
         );
       }
     } finally {
-      setLoading(false);
+      setUpdating(false);
     }
   };
 
@@ -749,9 +750,9 @@ backdrop-blur-md overflow-hidden shadow-md"
             <div className="flex justify-end">
               <Button
                 type="submit"
-                text={loading ? "Updating..." : "Update"}
+                text="Update"
                 icon={<Save size={18} />}
-                disabled={loading}
+                loading={updating}
               />
             </div>
           </form>

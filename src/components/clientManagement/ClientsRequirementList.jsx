@@ -68,7 +68,18 @@ const ClientsRequirementsList = () => {
   useEffect(() => {
     fetchAllOptions();
   }, []);
-
+  useEffect(() => {
+    if (successMsg) {
+      CustomSwal.fire({
+        icon: "success",
+        title: "Success",
+        text: successMsg,
+        confirmButtonText: "Great!",
+        background: "#ffffff",
+        color: "#28a745",
+      });
+    }
+  }, [successMsg]);
   const fetchAllOptions = async () => {
     try {
       const data = await getRequirementsOptions();
@@ -318,7 +329,7 @@ const ClientsRequirementsList = () => {
         </div>
       )}
 
-      {successMsg && (
+      {/* {successMsg && (
         <div
           className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
                bg-[#28a745] text-white shadow-sm animate-slideDown"
@@ -326,7 +337,7 @@ const ClientsRequirementsList = () => {
           <span className=" font-semibold">✔ </span>
           <p className="text-sm">{successMsg}</p>
         </div>
-      )}
+      )} */}
       {/* Tabs */}
       <Tabs
         statusTabs={statusTabs}

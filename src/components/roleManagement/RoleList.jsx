@@ -22,6 +22,7 @@ import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import EditButton from "../ui/buttons/EditButton";
 import ToolTip from "../ui/ToolTip";
+import CustomSwal from "../../utils/CustomSwal";
 
 const RoleList = () => {
   PageTitle("Elevva | Roles");
@@ -40,6 +41,19 @@ const RoleList = () => {
   useEffect(() => {
     getAllRoles();
   }, []);
+
+  useEffect(() => {
+    if (successMsg) {
+      CustomSwal.fire({
+        icon: "success",
+        title: "Success",
+        text: successMsg,
+        confirmButtonText: "Great!",
+        background: "#ffffff",
+        color: "#28a745",
+      });
+    }
+  }, [successMsg]);
 
   const getAllRoles = async () => {
     setLoading(true);
@@ -209,15 +223,6 @@ const RoleList = () => {
         </div>
       )}
 
-      {successMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
-               bg-[#28a745] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">✔ </span>
-          <p className="text-sm">{successMsg}</p>
-        </div>
-      )}
       <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
         {/* Search and Add */}
         <TableHeader

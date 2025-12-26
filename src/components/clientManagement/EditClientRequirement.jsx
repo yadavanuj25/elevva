@@ -73,7 +73,7 @@ const EditClientRequirement = () => {
     priorities: [],
   });
   const [loading, setLoading] = useState(false);
-  const [disable, setDisable] = useState(false);
+  const [updating, setUpdating] = useState(false);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -168,14 +168,6 @@ const EditClientRequirement = () => {
     }),
     []
   );
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     let newValue = value;
@@ -210,60 +202,12 @@ const EditClientRequirement = () => {
   const handleQuillChange = (content, delta, source, editor) => {
     jobDescriptionRef.current = editor.getHTML();
   };
-  // const parseBackendFieldError = (message) => {
-  //   if (!message) return null;
-
-  //   const cleaned = message.replace("Validation failed:", "").trim();
-  //   const [field, error] = cleaned.split(": ");
-
-  //   if (!field || !error) return null;
-
-  //   return { field: field.trim(), message: error.trim() };
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setErrors({});
-  //   setDisable(true);
-
-  //   const finalData = {
-  //     ...formData,
-  //     jobDescription: jobDescriptionRef.current,
-  //   };
-
-  //   try {
-  //     await schema.validate(finalData, { abortEarly: false });
-
-  //     const res = await updateClientsRequirement(id, finalData);
-
-  //     if (res?.success) {
-  //       showSuccess(res.message || "Updated successfully");
-  //       navigate("/admin/clientmanagement/clientrequirements");
-  //     }
-  //   } catch (err) {
-  //     //  Extract backend message safely (Axios)
-  //     const apiMessage = err?.response?.data?.message || err?.message || "";
-
-  //     const parsed = parseBackendFieldError(apiMessage);
-
-  //     if (parsed) {
-  //       setErrors({
-  //         [parsed.field]: parsed.message,
-  //       });
-  //       return;
-  //     }
-
-  //     showError(apiMessage || "Something went wrong");
-  //   } finally {
-  //     setDisable(false);
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     showError("");
     showSuccess("");
-    setDisable(true);
+    setUpdating(true);
     const finalData = {
       ...formData,
       jobDescription: jobDescriptionRef.current,
@@ -285,7 +229,7 @@ const EditClientRequirement = () => {
       console.log(err);
       setErrors(validationErrors);
     } finally {
-      setDisable(false);
+      setUpdating(false);
     }
   };
 
@@ -471,7 +415,8 @@ const EditClientRequirement = () => {
               <Button
                 type="submit"
                 text="Update"
-                icon={<Save size={18} loading={disable} />}
+                icon={<Save size={18} />}
+                loading={updating}
               />
             </div>
           </form>

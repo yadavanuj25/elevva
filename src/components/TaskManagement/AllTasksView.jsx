@@ -1,30 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { getAllTasks } from "../../services/taskServices";
 import { BarLoader } from "react-spinners";
+import PageTitle from "../../hooks/PageTitle";
 import { User } from "lucide-react";
 import NoData from "../ui/NoData";
 import SelectField from "../ui/SelectField";
+import { getRequirementOptions } from "../../services/clientServices";
 
 const AllTasksView = () => {
+  PageTitle("Elevva | All Tasks");
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewType, setViewType] = useState("card");
-
   const [filters, setFilters] = useState({
     status: "",
     priority: "",
   });
-
+  const [options, setOptions] = useState({});
   useEffect(() => {
     fetchAllTasks();
   }, [filters]);
 
+  useEffect(() => {
+    fetchOptions();
+  }, []);
+
   const fetchAllTasks = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-
       const response = await getAllTasks(filters);
-
       if (response?.tasks) {
         setTasks(response.tasks);
       }
@@ -32,6 +36,15 @@ const AllTasksView = () => {
       console.error("Error fetching tasks:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchOptions = async () => {
+    try {
+      const res = await getRequirementOptions();
+      setOptions(res.options);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -50,20 +63,6 @@ const AllTasksView = () => {
     acc[user].push(task);
     return acc;
   }, {});
-
-  // if (loading)
-  //   return (
-  //     <div className="h-[70vh] flex justify-center items-center text-center py-10">
-  //       <div className="w-[200px] text-black dark:text-white bg-gray-300 dark:bg-gray-700 rounded-full">
-  //         <BarLoader
-  //           height={6}
-  //           width={200}
-  //           color="currentColor"
-  //           cssOverride={{ borderRadius: "999px" }}
-  //         />
-  //       </div>
-  //     </div>
-  //   );
 
   return (
     <>
@@ -104,12 +103,7 @@ const AllTasksView = () => {
                 label="Status"
                 value={filters.status}
                 handleChange={handleFilterChange}
-                options={[
-                  { label: "All Status", value: "" },
-                  { label: "Assigned", value: "Assigned" },
-                  { label: "In Progress", value: "In Progress" },
-                  { label: "Completed", value: "Completed" },
-                ]}
+                options={options.statuses}
               />
             </div>
 
@@ -120,13 +114,7 @@ const AllTasksView = () => {
                 label="Priority"
                 value={filters.priority}
                 handleChange={handleFilterChange}
-                options={[
-                  { label: "All Priority", value: "" },
-                  { label: "Critical", value: "Critical" },
-                  { label: "High", value: "High" },
-                  { label: "Medium", value: "Medium" },
-                  { label: "Low", value: "Low" },
-                ]}
+                options={options.priorities}
               />
             </div>
           </div>

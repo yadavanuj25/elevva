@@ -121,14 +121,13 @@ const ViewClient = () => {
             </div>
           </div>
         ) : client ? (
-          <div className="space-y-8">
+          <div className="space-y-4">
             {/* TOP CLIENT HEADER */}
             <div className="p-4 rounded-lg border border-gray-300 dark:border-gray-600 flex justify-between items-center">
               <div className="flex items-center gap-5">
                 <div className="w-16 h-16 flex items-center justify-center rounded-lg border-b-[3px] border-dark bg-light dark:bg-white text-3xl font-semibold text-dark">
                   {client.clientName.slice(0, 2).toUpperCase()}
                 </div>
-
                 <div>
                   <h2 className="text-2xl font-semibold text-dark">
                     {client.clientName}
@@ -300,12 +299,10 @@ const ViewClient = () => {
                       label="Website"
                       value={client.website}
                       type="website"
-                      // icon={<Info size={16} />}
                     />
                     <ViewInfo
                       label="LinkedIn"
                       value={client.linkedin}
-                      // icon={<Info size={16} />}
                       type="linkedin"
                     />
                   </div>

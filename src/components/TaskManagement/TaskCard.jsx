@@ -229,7 +229,6 @@
 // export default TaskCard;
 
 import React, { useState } from "react";
-import Swal from "sweetalert2";
 import TaskQuickViewModal from "../TaskManagement/TaskQuickViewModal";
 import { updateMetrics, updateTaskStatus } from "../../services/taskServices";
 import CustomSwal from "../../utils/CustomSwal";
@@ -238,6 +237,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
   const [showMetricsForm, setShowMetricsForm] = useState(false);
   const [metrics, setMetrics] = useState(task.metrics);
   const [showQuickView, setShowQuickView] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const priorityColors = {
     Critical: " text-red-800 border-red-500",
@@ -254,6 +254,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
 
   const handleMetricsSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await updateMetrics(task._id, metrics);
       CustomSwal.fire({
@@ -387,9 +388,10 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
             <div className="flex gap-2">
               <button
                 type="submit"
+                disabled={loading}
                 className="flex-1 bg-green-600 text-white py-1 px-3 rounded text-sm hover:bg-green-700"
               >
-                Save
+                {loading ? "Saving ..." : "Save"} Save
               </button>
               <button
                 type="button"

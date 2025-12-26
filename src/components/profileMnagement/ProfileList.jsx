@@ -40,6 +40,7 @@ import PageTitle from "../../hooks/PageTitle";
 import { useMessage } from "../../auth/MessageContext";
 import GroupButton from "../ui/buttons/GroupButton";
 import ActionMenu from "../ui/buttons/ActionMenu";
+import CustomSwal from "../../utils/CustomSwal";
 
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
@@ -79,6 +80,19 @@ const ProfileList = () => {
   useEffect(() => {
     fetchProfiles();
   }, [pagination.page, pagination.limit, searchQuery, activeTab]);
+
+  useEffect(() => {
+    if (successMsg) {
+      CustomSwal.fire({
+        icon: "success",
+        title: "Success",
+        text: successMsg,
+        confirmButtonText: "Great!",
+        background: "#ffffff",
+        color: "#28a745",
+      });
+    }
+  }, [successMsg]);
 
   const fetchProfiles = async () => {
     try {
@@ -257,15 +271,6 @@ const ProfileList = () => {
           </div>
         )}
 
-        {successMsg && (
-          <div
-            className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
-               bg-[#28a745] text-white shadow-sm animate-slideDown"
-          >
-            <span className=" font-semibold">✔ </span>
-            <p className="text-sm">{successMsg}</p>
-          </div>
-        )}
         <div>
           {/* Tabs */}
           <Tabs

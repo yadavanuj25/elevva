@@ -40,10 +40,8 @@ const EditRole = () => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const data = await res.json();
-
         if (data?.role) {
           setRole(data.role);
-
           const selectedMap = {};
           data.role.permissions?.forEach((perm) => {
             if (!selectedMap[perm.resource]) {
@@ -55,8 +53,6 @@ const EditRole = () => {
                 manage: false,
               };
             }
-
-            // ✅ Handle "manage" correctly — covers all
             if (perm.action === "manage") {
               selectedMap[perm.resource] = {
                 create: true,
@@ -157,74 +153,11 @@ const EditRole = () => {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // const handleUpdate = async () => {
-  //   setLoading(true);
-  //   showError("");
-  //   showSuccess("");
-  //   try {
-  //     await schema.validate(role, { abortEarly: false });
-  //     const selectedPermissions = [];
-  //     permissions.forEach((perm) => {
-  //       const mod = selected[perm.resource];
-  //       if (!mod) return;
-  //       if (mod.manage && perm.action === "manage") {
-  //         selectedPermissions.push(perm._id);
-  //       } else if (!mod.manage && mod[perm.action]) {
-  //         selectedPermissions.push(perm._id);
-  //       }
-  //     });
-
-  //     const payload = {
-  //       name: role.name,
-  //       description: role.description,
-  //       permissions: selectedPermissions,
-  //       isActive: true,
-  //     };
-
-  //     const res = await fetch(
-  //       `https://crm-backend-qbz0.onrender.com/api/roles/${id}`,
-  //       {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify(payload),
-  //       }
-  //     );
-
-  //     const data = await res.json();
-  //     if (!res.ok) {
-  //       showError(data?.message || "Failed to update role.");
-  //       return;
-  //     }
-
-  //     showSuccess("Role updated successfully!");
-  //     navigate("/admin/rolemanagement/roles");
-  //   } catch (error) {
-  //     if (error.inner) {
-  //       const validationErrors = {};
-  //       error.inner.forEach(
-  //         (err) => (validationErrors[err.path] = err.message)
-  //       );
-  //       setErrors(validationErrors);
-  //     } else {
-  //       console.error("Error updating role:", error);
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //     setTimeout(() => {
-  //       showSuccess("");
-  //       showError("");
-  //     }, 6000);
-  //   }
-  // };
-
   const handleUpdate = async (e) => {
     e.preventDefault();
-    setLoading(true);
     showError("");
     showSuccess("");
+    setLoading(true);
     try {
       await schema.validate(role, { abortEarly: false });
       const selectedPermissions = [];
@@ -277,18 +210,13 @@ const EditRole = () => {
       } else {
         console.error("Error updating role:", error);
       }
-
       return;
     } finally {
       setLoading(false);
-      setTimeout(() => {
-        showSuccess("");
-        showError("");
-      }, 6000);
     }
   };
 
-  if (!role) return <p>Loading...</p>;
+  // if (!role) return <p>Loading...</p>;
 
   return (
     <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
