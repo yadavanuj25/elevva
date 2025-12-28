@@ -26,31 +26,6 @@
   --accent-color: var(--accent-light);
 }
 
-/* @layer base {
-  .bg-accent-dark {
-    background-color: var(--accent-dark);
-  }
-
-  .text-accent-dark {
-    color: var(--accent-dark);
-  }
-
-  .border-accent-dark {
-    border-color: var(--accent-dark);
-  }
-
-  .bg-accent-light {
-    background-color: var(--accent-light);
-  }
-
-  .text-accent-light {
-    color: var(--accent-light);
-  }
-
-  .bg-accent {
-    background-color: var(--accent-color);
-  }
-} */
 
 .dark {
   --accent-color: var(--accent-dark);

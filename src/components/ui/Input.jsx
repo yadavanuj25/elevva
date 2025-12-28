@@ -20,7 +20,7 @@ const Input = ({
           value={value}
           onChange={handleChange}
           placeholder=" "
-          className={`block w-full text-sm bg-transparent rounded-md appearance-none focus:outline-none peer transition border p-[14px] 
+          className={`block w-full text-sm bg-transparent rounded-md appearance-none focus:outline-none peer transition-all border p-[14px] 
             ${icon ? "pr-10" : ""}  
             ${
               hasError

@@ -447,7 +447,7 @@ const UserForm = ({
           <button
             type="button"
             onClick={generatePassword}
-            className="absolute right-10 top-4 text-xs bg-gray-200 px-2 py-1 rounded"
+            className="absolute right-10 top-4 text-xs bg-accent-dark px-1 py-0.5 rounded"
           >
             Generate
           </button>
