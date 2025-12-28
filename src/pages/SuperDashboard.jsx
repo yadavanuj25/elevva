@@ -51,7 +51,7 @@ const SuperDashboard = () => {
         </div>
         <div className="flex gap-2 font-semibold">
           <button
-            className="bg-dark text-white px-2 py-1 rounded-md hover:bg-gray-500 transition"
+            className="bg-accent-dark text-white px-2 py-1 rounded-md hover:bg-gray-500 transition"
             onClick={() => navigate("/taskboard")}
           >
             To Do List

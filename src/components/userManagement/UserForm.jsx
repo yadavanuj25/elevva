@@ -177,7 +177,7 @@
 //       <button
 //         type="button"
 //         onClick={generatePassword}
-//         className="absolute right-10 top-4 bg-light text-xs font-medium text-dark py-[2px] px-[6px] rounded whitespace-nowrap z-10"
+//         className="absolute right-10 top-4 bg-accent-light text-xs font-medium text-accent-dark py-[2px] px-[6px] rounded whitespace-nowrap z-10"
 //       >
 //         Generate
 //       </button>

@@ -117,12 +117,12 @@ const Header = ({ toggleSidebar, isOpen }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 flex items-center bg-dark text-white justify-between px-3 py-2 border-b border-gray-300 dark:border-gray-600">
+    <header className="sticky top-0 z-40 flex items-center bg-accent-dark text-white justify-between px-3 py-2 border-b border-gray-300 dark:border-gray-600">
       {/* Left */}
       <div className="flex gap-5 items-center text-md font-medium">
         <button
           onClick={toggleSidebar}
-          className="p-2 rounded-full text-white hover:bg-gray-700  transition-all"
+          className="p-2 rounded-full text-white hover:text-accent-dark hover:bg-accent-light  transition-all"
         >
           {isOpen ? (
             <RiMenuFold3Line size={20} />
@@ -180,9 +180,9 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
         {/* Popup */}
         {popupOpen && (
-          <div className="absolute right-0 top-full mt-3 w-72 px-6 py-6 font-semibold text-black dark:text-white bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+          <div className="absolute right-0 top-full mt-3 w-72 px-6 py-6 font-semibold text-black dark:text-white bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow z-50">
             <div className="flex  items-center gap-5">
-              <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-dark">
+              <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-accent-dark">
                 {user?.profileImage ? (
                   <img
                     src={user.profileImage}
@@ -197,11 +197,11 @@ const Header = ({ toggleSidebar, isOpen }) => {
               </div>
 
               <div>
-                <p className="text-lg font-bold text-darkGray dark:text-lightGray">
+                <p className="text-lg font-bold text-accent-darkGray dark:text-accent-lightGray">
                   {user?.fullName}
                 </p>
 
-                <p className="text-xs text-darkGray dark:text-lightGray">
+                <p className="text-xs text-accent-darkGray dark:text-accent-lightGray">
                   {user?.email}
                 </p>
               </div>
@@ -238,7 +238,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
               <li>
                 <button
                   onClick={handleLogout}
-                  className="w-full font-bold flex gap-3 items-center px-3 py-2 text-left text-red-500 hover:bg-red-100 dark:hover:bg-red-700/40 transition rounded-md"
+                  className="w-full font-bold flex gap-3 items-center px-3 py-2 text-left text-red-500 hover:bg-red-200  transition rounded-md"
                 >
                   <LogOut size={18} />
                   <p className="text-sm">Logout</p>

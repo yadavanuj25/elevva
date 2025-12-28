@@ -74,7 +74,7 @@ const GridLayout = ({ data = [], loading = false }) => {
                       </div>
                     ) : (
                       <div className="relative">
-                        <div className="w-12 h-12 rounded-md bg-gray-200 flex items-center justify-center font-bold text-dark ">
+                        <div className="w-12 h-12 rounded-md bg-gray-200 flex items-center justify-center font-bold text-accent-dark ">
                           {row.clientName?.slice(0, 2).toUpperCase()}
                         </div>
 

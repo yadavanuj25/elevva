@@ -28,7 +28,7 @@ const SkillsInput = ({
             error
               ? "border-red-500"
               : isFocused
-              ? "border-dark dark:border-white"
+              ? "border-accent-dark dark:border-white"
               : "border-gray-300 dark:border-gray-600"
           }`}
       >

@@ -133,7 +133,7 @@ const GeneralSettings = () => {
           </div>
           <label
             htmlFor="company_logo"
-            className="flex gap-2 items-center cursor-pointer bg-dark text-white px-3 py-2 rounded text-sm"
+            className="flex gap-2 items-center cursor-pointer bg-accent-dark text-white px-3 py-2 rounded text-sm"
           >
             <Upload size={18} />
             Upload Logo

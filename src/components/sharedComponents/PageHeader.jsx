@@ -9,7 +9,7 @@ const PageHeader = ({ title, addLink, onRefresh }) => {
       <div className="flex items-center gap-2">
         <button
           onClick={onRefresh}
-          className="p-2 rounded-md border hover:bg-gray-100 dark:hover:bg-darkLight"
+          className="p-2 rounded-md border hover:bg-gray-100 dark:hover:bg-accent-darkLight"
         >
           <RefreshCcw size={18} />
         </button>

@@ -12,6 +12,7 @@ export default {
         golos: ["Golos Text", "sans-serif"],
       },
       colors: {
+        accent: "var(--accent-color)",
         darkBg: "var(--darkBg)",
         hoverColor: "var(--hoverColor)",
         lightBg: "var(--lightBg)",
@@ -21,7 +22,7 @@ export default {
         lightGray: "var(--lightGray)",
         darkGray: "var(--darkGray)",
         bottelGreen: "#007672",
-        lightBottelGreen: "#b2f1e89c",
+        lightBottelGreen: "#d3f6f19c",
       },
       keyframes: {
         tada: {

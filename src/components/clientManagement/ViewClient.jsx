@@ -88,7 +88,7 @@ const ViewClient = () => {
         <div className="flex items-center gap-2">
           <h2 className="text-2xl font-semibold">Client Info</h2>
           {client?.clientName && (
-            <p className="text-dark bg-light dark:bg-white text-[12px] px-[2px] py-0 border-b border-dark rounded font-[500]">
+            <p className="text-accent-dark bg-accent-light dark:bg-white text-[12px] px-[2px] py-0 border-b border-accent-dark rounded font-[500]">
               # {client.clientName}
             </p>
           )}
@@ -125,11 +125,11 @@ const ViewClient = () => {
             {/* TOP CLIENT HEADER */}
             <div className="p-4 rounded-lg border border-gray-300 dark:border-gray-600 flex justify-between items-center">
               <div className="flex items-center gap-5">
-                <div className="w-16 h-16 flex items-center justify-center rounded-lg border-b-[3px] border-dark bg-light dark:bg-white text-3xl font-semibold text-dark">
+                <div className="w-16 h-16 flex items-center justify-center rounded-lg border-b-[3px] border-accent-dark bg-accent-light dark:bg-white text-3xl font-semibold text-accent-dark">
                   {client.clientName.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold text-dark">
+                  <h2 className="text-2xl font-semibold text-accent-dark">
                     {client.clientName}
                   </h2>
                   <p className="text-sm text-gray-700 dark:text-gray-400">

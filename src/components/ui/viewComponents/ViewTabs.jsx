@@ -81,7 +81,7 @@ const ViewTabs = () => {
                 duration-200 
                 ${
                   activeTab === tab.id
-                    ? " text-dark  border-b-2 border-dark"
+                    ? " text-accent-dark  border-b-2 border-accent-dark"
                     : " text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-[#222]"
                 }
               `}
@@ -320,7 +320,7 @@ const ViewTabs = () => {
                   disabled={pagination.page === 1}
                   className="px-4 py-0.5 rounded 
       disabled:opacity-50 disabled:cursor-not-allowed
-      bg-dark  hover:bg-gray-500 text-white "
+      bg-accent-dark  hover:bg-gray-500 text-white "
                 >
                   Prev
                 </button>
@@ -333,7 +333,7 @@ const ViewTabs = () => {
                   disabled={pagination.page === pagination.pages}
                   className="px-4 py-0.5 rounded 
       disabled:opacity-50 disabled:cursor-not-allowed
-      bg-dark  hover:bg-gray-500 text-white "
+      bg-accent-dark  hover:bg-gray-500 text-white "
                 >
                   Next
                 </button>

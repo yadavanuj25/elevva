@@ -184,7 +184,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <div className="w-full flex items-center justify-between p-0 sm:p-0.5">
             <Link
               to="/"
-              className="text-lg  flex items-center gap-1 truncate text-dark dark:text-white"
+              className="text-lg  flex items-center gap-1 truncate text-accent-dark dark:text-white"
             >
               <img src={logo} alt="" className="w-7" />
               {isOpen && <span className="font-extrabold">Elevva CRM</span>}
@@ -226,7 +226,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         } ${isActive ? "active" : ""}`}
                       >
                         <div className="flex items-center gap-4 space-y-1 ">
-                          <div className="w-6 h-6 flex justify-center items-center bg-dark text-white rounded">
+                          <div className="w-6 h-6 flex justify-center items-center bg-accent-dark text-white rounded">
                             {item.icon}
                           </div>
                           {isOpen && (
@@ -248,7 +248,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                           } ${isActive ? "active" : ""}`}
                         >
                           <div className="flex items-center gap-5">
-                            <div className="w-6 h-6 flex justify-center items-center bg-dark text-white rounded">
+                            <div className="w-6 h-6 flex justify-center items-center bg-accent-dark text-white rounded">
                               {item.icon}
                             </div>
                             {isOpen && (
@@ -287,15 +287,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                       }}
                                       className={`group sidebar-sublink flex items-center gap-5 px-2 py-1.5 font-medium rounded-md transition ${
                                         isActiveSubMenu
-                                          ? "active text-dark dark:text-white"
-                                          : "text-gray-600 dark:text-gray-300 hover:text-dark dark:hover:text-white"
+                                          ? "active text-accent-dark dark:text-white"
+                                          : "text-gray-600 dark:text-gray-300 hover:text-accent-dark dark:hover:text-white"
                                       }`}
                                     >
                                       <span
                                         className={`w-2 h-2 rounded-full transition-colors duration-200 ${
                                           isActiveSubMenu
-                                            ? "bg-dark dark:bg-white"
-                                            : "bg-gray-500 group-hover:bg-dark dark:group-hover:bg-white"
+                                            ? "bg-accent-dark dark:bg-white"
+                                            : "bg-gray-500 group-hover:bg-accent-dark dark:group-hover:bg-white"
                                         }`}
                                       ></span>
                                       {sub.label}

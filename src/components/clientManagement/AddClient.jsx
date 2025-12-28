@@ -541,13 +541,12 @@ const AddClient = () => {
   }, []);
 
   const fetchOptions = async () => {
-   
     try {
       const res = await getAllOptions();
       setOptions(res?.options || {});
     } catch (err) {
       console.log(err);
-    } 
+    }
   };
 
   const handleSubmit = async (e) => {

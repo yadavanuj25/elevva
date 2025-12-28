@@ -38,14 +38,16 @@ const MyTaskDashboard = () => {
         <div className=" mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-dark">Task Management</h1>
+              <h1 className="text-2xl font-bold text-accent-dark">
+                Task Management
+              </h1>
             </div>
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setCurrentView("my-tasks")}
                 className={`px-4 py-2 rounded-lg ${
                   currentView === "my-tasks"
-                    ? "bg-dark text-white"
+                    ? "bg-accent-dark text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
               >

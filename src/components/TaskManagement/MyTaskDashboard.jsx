@@ -32,7 +32,7 @@ const MyTaskDashboard = () => {
                 onClick={() => setCurrentView("my-tasks")}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
                   currentView === "my-tasks"
-                    ? "bg-dark text-white"
+                    ? "bg-accent-dark text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
               >
@@ -45,7 +45,7 @@ const MyTaskDashboard = () => {
                   onClick={() => setCurrentView("all-tasks")}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
                     currentView === "all-tasks"
-                      ? "bg-dark text-white"
+                      ? "bg-accent-dark text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
@@ -56,7 +56,7 @@ const MyTaskDashboard = () => {
                   onClick={() => setCurrentView("assign-task")}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
                     currentView === "assign-task"
-                      ? "bg-dark text-white"
+                      ? "bg-accent-dark text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
@@ -67,7 +67,7 @@ const MyTaskDashboard = () => {
                   onClick={() => setCurrentView("report")}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
                     currentView === "report"
-                      ? "bg-dark text-white"
+                      ? "bg-accent-dark text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >

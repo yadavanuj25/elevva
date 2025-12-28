@@ -64,7 +64,7 @@ const TableLayout = ({
                 {columns.map((col) => (
                   <TableCell
                     key={col.id}
-                    className={`whitespace-nowrap font-bold text-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray
+                    className={`whitespace-nowrap font-bold text-accent-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray
                   ${col.sticky ? getStickyClass(col.id) : ""}`}
                   >
                     {col.id !== "action" ? (
@@ -113,16 +113,16 @@ const TableLayout = ({
                           <img
                             src={row.profileImage}
                             alt={row.clientName}
-                            className="w-10 h-10 rounded-md object-cover border border-dark"
+                            className="w-10 h-10 rounded-md object-cover border border-accent-dark"
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-md flex items-center justify-center bg-gray-200 text-dark font-semibold">
+                          <div className="w-10 h-10 rounded-md flex items-center justify-center bg-gray-200 text-accent-dark font-semibold">
                             {row.clientName?.slice(0, 2).toUpperCase()}
                           </div>
                         )}
                         <div className="flex flex-col items-start gap-1">
                           <Link
-                            className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-dark"
+                            className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-accent-dark"
                             to={`/admin/clientmanagement/edit-client/${row._id}`}
                           >
                             <AtSign size={14} />

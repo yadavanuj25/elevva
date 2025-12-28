@@ -10,18 +10,86 @@
 @tailwind utilities;
 
 :root {
-  /* Updated color */
   --dark: #25499f;
   --light: #e3edff;
   --lightGray: #dddddf;
   --darkGray: #283343;
-  /* --darkGray: #464748; */
   --darkBg: #1f2937;
   --white: #ffff;
   --tooltip-bg-light: #eee;
   --tooltip-text-light: #000000;
   --tooltip-bg-dark: #333;
   --tooltip-text-dark: #fffff;
+  /* --accent-color: #25499f; */
+   --accent-dark: #25499f;
+  --accent-light: #e3edff;
+  --accent-color: var(--accent-light);
+}
+
+/* @layer base {
+  .bg-accent-dark {
+    background-color: var(--accent-dark);
+  }
+
+  .text-accent-dark {
+    color: var(--accent-dark);
+  }
+
+  .border-accent-dark {
+    border-color: var(--accent-dark);
+  }
+
+  .bg-accent-light {
+    background-color: var(--accent-light);
+  }
+
+  .text-accent-light {
+    color: var(--accent-light);
+  }
+
+  .bg-accent {
+    background-color: var(--accent-color);
+  }
+} */
+
+.dark {
+  --accent-color: var(--accent-dark);
+}
+
+@layer base {
+  .bg-accent-dark {
+    background-color: var(--accent-dark);
+  }
+  .text-accent-dark {
+    color: var(--accent-dark);
+  }
+  .border-accent-dark {
+    border-color: var(--accent-dark);
+  }
+  .bg-accent-light {
+    background-color: var(--accent-light);
+  }
+  .text-accent-light {
+    color: var(--accent-light);
+  }
+  .border-accent-light {
+    border-color: var(--accent-light);
+  }
+  .bg-accent {
+    background-color: var(--accent-color);
+  }
+  .text-accent {
+    color: var(--accent-color);
+  }
+  .border-accent {
+    border-color: var(--accent-color);
+  }
+}
+* {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 html.light {
@@ -64,19 +132,19 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .sidebar-link.active {
-  background-color: var(--light);
-  color: var(--dark);
-  border-right: 3px solid var(--dark);
+  background-color: var(--accent-light);
+  color: var(--accent-dark);
+  border-right: 3px solid var(--accent-dark);
   font-weight: 900;
 }
 .sidebar-link.active:hover {
-  background-color: var(--light);
-  color: var(--dark);
+  background-color: var(--accent-light);
+  color: var(--accent-dark);
 }
 
 .sidebar-link:hover {
   background-color: var(--lightGray);
-  color: #14213d;
+  color: var(--accent-dark);
 }
 .no-margin {
   margin: 0 !important;

@@ -9,8 +9,8 @@ const UnauthorizedPage = () => {
       <div className="relative z-10 backdrop-blur-xl bg-white/10 border border-white/20  rounded-3xl p-10 max-w-lg text-center animate-fadeIn">
         {/* Icon */}
         <div className="flex items-center justify-center mb-6">
-          <div className="w-28 h-28 rounded-full bg-light border border-purple-400/40 flex items-center justify-center  animate-float">
-            <ShieldAlert size={70} className="text-dark" />
+          <div className="w-28 h-28 rounded-full bg-accent-light border border-purple-400/40 flex items-center justify-center  animate-float">
+            <ShieldAlert size={70} className="text-accent-dark" />
           </div>
         </div>
 
@@ -28,7 +28,7 @@ const UnauthorizedPage = () => {
         <div className="flex flex-col gap-4">
           <Link
             to="/"
-            className="px-5 py-3 rounded-xl font-semibold text-white bg-dark hover:opacity-80 transition "
+            className="px-5 py-3 rounded-xl font-semibold text-white bg-accent-dark hover:opacity-80 transition "
           >
             Go to Home
           </Link>

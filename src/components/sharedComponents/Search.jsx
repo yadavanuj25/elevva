@@ -17,7 +17,7 @@ const Search = ({ searchQuery, handleSearchChange, addLink, title }) => {
       <div>
         <Link
           to={addLink}
-          className="px-2 py-1.5 flex gap-1 items-center bg-dark text-white rounded-md"
+          className="px-2 py-1.5 flex gap-1 items-center bg-accent-dark text-white rounded-md"
         >
           <Plus size={18} />
           <span>{title}</span>

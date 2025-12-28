@@ -26,7 +26,6 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
 
   const handleAddFeedback = async () => {
     if (!feedback.trim()) {
-     
       return;
     }
     const payload = {
@@ -35,17 +34,14 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
     };
     try {
       await addTaskFeedback(task._id, payload);
-    
+
       setFeedback("");
       onRefresh();
-    } catch (error) {
-    
-    }
+    } catch (error) {}
   };
 
   const handleAddRejection = async () => {
     if (!rejection.candidateName || !rejection.reason) {
-     
       return;
     }
     const payload = {
@@ -56,7 +52,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
     };
     try {
       await addTaskRejection(task._id, payload);
-     
+
       setRejection({
         candidateName: "",
         rejectedBy: "Sales",
@@ -64,9 +60,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
         stage: "Sales Review",
       });
       onRefresh();
-    } catch (error) {
-    
-    }
+    } catch (error) {}
   };
 
   return (
@@ -81,7 +75,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
           transform transition-all duration-200
           ${visible ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
       >
-        <div className="bg-dark text-white px-5 py-3 rounded-t-lg">
+        <div className="bg-accent-dark text-white px-5 py-3 rounded-t-lg">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <h2 className="text-xl font-semibold">{task?.taskCode}</h2>-{" "}
@@ -103,7 +97,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
               onClick={() => setActiveTab("details")}
               className={`py-3 px-4 ${
                 activeTab === "details"
-                  ? "border-b-2 border-dark text-dark font-medium"
+                  ? "border-b-2 border-accent-dark text-accent-dark font-medium"
                   : "text-gray-600"
               }`}
             >
@@ -113,7 +107,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
               onClick={() => setActiveTab("feedback")}
               className={`py-3 px-4 ${
                 activeTab === "feedback"
-                  ? "border-b-2 border-dark text-dark font-medium"
+                  ? "border-b-2 border-accent-dark text-accent-dark font-medium"
                   : "text-gray-600"
               }`}
             >
@@ -123,7 +117,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
               onClick={() => setActiveTab("rejections")}
               className={`py-3 px-4 ${
                 activeTab === "rejections"
-                  ? "border-b-2 border-dark text-dark font-medium"
+                  ? "border-b-2 border-accent-dark text-accent-dark font-medium"
                   : "text-gray-600"
               }`}
             >
@@ -215,7 +209,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                   </select>
                   <button
                     onClick={handleAddFeedback}
-                    className="bg-dark text-white px-6 py-2 rounded hover:opacity-70"
+                    className="bg-accent-dark text-white px-6 py-2 rounded hover:opacity-70"
                   >
                     Add Feedback
                   </button>
@@ -239,7 +233,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                           </span>
                         </div>
                         <p className="text-sm text-gray-700">{fb.message}</p>
-                        <span className="text-xs bg-light text-dark px-2 py-1 rounded mt-2 inline-block">
+                        <span className="text-xs bg-accent-light text-accent-dark px-2 py-1 rounded mt-2 inline-block">
                           {fb.type}
                         </span>
                       </div>
@@ -308,7 +302,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                   />
                   <button
                     onClick={handleAddRejection}
-                    className="bg-dark text-white px-6 py-2 rounded hover:opacity-70"
+                    className="bg-accent-dark text-white px-6 py-2 rounded hover:opacity-70"
                   >
                     Record Rejection
                   </button>

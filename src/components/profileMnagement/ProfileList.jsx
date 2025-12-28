@@ -352,7 +352,7 @@ const ProfileList = () => {
                       ].map((column) => (
                         <TableCell
                           key={column.id}
-                          className={`whitespace-nowrap font-bold text-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray ${
+                          className={`whitespace-nowrap font-bold text-accent-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray ${
                             column.sticky ? getStickyClass(column.id) : ""
                           }`}
                         >
@@ -402,7 +402,7 @@ const ProfileList = () => {
                               <Checkbox color=" dark:text-white" />
 
                               {item.profileCode && (
-                                <small className="text-dark bg-light  p-[1px]   border-b border-dark  rounded font-[500]">
+                                <small className="text-accent-dark bg-accent-light  p-[1px]   border-b border-accent-dark  rounded font-[500]">
                                   #{item.profileCode}
                                 </small>
                               )}
@@ -426,16 +426,16 @@ const ProfileList = () => {
                                 <img
                                   src={item.profileImage}
                                   alt={item.fullName}
-                                  className="w-10 h-10 rounded-md object-cover border border-dark"
+                                  className="w-10 h-10 rounded-md object-cover border border-accent-dark"
                                 />
                               ) : (
-                                <div className="w-10 h-10 rounded-md flex items-center justify-center bg-gray-200 text-dark font-semibold">
+                                <div className="w-10 h-10 rounded-md flex items-center justify-center bg-gray-200 text-accent-dark font-semibold">
                                   {item.fullName?.slice(0, 2).toUpperCase()}
                                 </div>
                               )}
                               <div>
                                 <Link
-                                  className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-dark"
+                                  className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-accent-dark"
                                   to={`/admin/profilemanagement/edit-profile/${item._id}`}
                                 >
                                   <AtSign size={14} />

@@ -79,7 +79,7 @@ const ViewProfile = () => {
         <div className="flex items-center gap-2 ">
           <h2 className="text-2xl font-semibold ">Profile Info </h2>
           {profile?.profileCode && (
-            <p className="text-dark bg-light dark:bg-white text-[12px] px-[2px] py-0 border-b border-dark  rounded font-[500]">
+            <p className="text-accent-dark bg-accent-light dark:bg-white text-[12px] px-[2px] py-0 border-b border-accent-dark  rounded font-[500]">
               {" "}
               #{profile.profileCode}
             </p>
@@ -116,12 +116,12 @@ const ViewProfile = () => {
               {/* Header */}
               <div className="sticky top-0   z-10 flex flex-wrap justify-between items-center rounded-lg border border-gray-300 dark:border-gray-600 p-4">
                 <div className="flex items-center gap-5">
-                  <div className="relative w-16 h-16 flex items-center justify-center rounded-lg border-b-[3px]  border-dark  bg-light dark:bg-white  text-3xl font-semibold text-dark shadow-inner">
+                  <div className="relative w-16 h-16 flex items-center justify-center rounded-lg border-b-[3px]  border-accent-dark  bg-accent-light dark:bg-white  text-3xl font-semibold text-accent-dark shadow-inner">
                     {profile.fullName.slice(0, 2).toUpperCase()}
                     <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/10"></div>
                   </div>
                   <div>
-                    <h2 className="text-2xl font-semibold text-dark ">
+                    <h2 className="text-2xl font-semibold text-accent-dark ">
                       {profile.fullName}
                     </h2>
                     <p className="text-sm text-gray-700 dark:text-gray-400">
@@ -163,7 +163,7 @@ const ViewProfile = () => {
                   {profile.resume && (
                     <ViewSection title="Resume" icon={<FileText size={18} />}>
                       <div className="flex items-center justify-between mt-4">
-                        <div className="flex items-center gap-2 text-sm text-dark ">
+                        <div className="flex items-center gap-2 text-sm text-accent-dark ">
                           <FileText size={18} />
                           {profile.resume.originalName}
                         </div>
@@ -171,7 +171,7 @@ const ViewProfile = () => {
                           href={`https://crm-backend-qbz0.onrender.com/${profile.resume.path}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-light text-sm px-1 py-0.5 bg-dark  rounded-md"
+                          className="text-accent-light text-sm px-1 py-0.5 bg-accent-dark  rounded-md"
                         >
                           <Eye size={18} />
                         </a>
@@ -303,7 +303,7 @@ const ViewProfile = () => {
                   >
                     {profile.skills?.length > 0 && (
                       <div className="mb-2">
-                        <h4 className="font-semibold  mt-4 text-dark dark:text-white flex items-center gap-1">
+                        <h4 className="font-semibold  mt-4 text-accent-dark dark:text-white flex items-center gap-1">
                           <Star size={16} /> Skills
                         </h4>
                         <div className="flex flex-wrap gap-2">
@@ -319,7 +319,7 @@ const ViewProfile = () => {
                     {/* Description */}
                     {profile.description && (
                       <div className="mb-2">
-                        <h4 className="font-semibold  text-dark dark:text-white">
+                        <h4 className="font-semibold  text-accent-dark dark:text-white">
                           Description
                         </h4>
                         <p>{profile.description}</p>

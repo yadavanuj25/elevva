@@ -332,7 +332,7 @@ const ClientList = () => {
           onClick={() => setViewMode("list")}
           className={`p-1 rounded border ${
             viewMode === "list"
-              ? "bg-dark text-white"
+              ? "bg-accent-dark text-white"
               : "bg-gray-300 dark:bg-white dark:text-black"
           }`}
         >
@@ -343,7 +343,7 @@ const ClientList = () => {
           onClick={() => setViewMode("grid")}
           className={`p-1 rounded border ${
             viewMode === "grid"
-              ? "bg-dark text-white"
+              ? "bg-accent-dark text-white"
               : "bg-gray-300 dark:bg-white dark:text-black"
           }`}
         >

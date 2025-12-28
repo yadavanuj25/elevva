@@ -74,7 +74,7 @@ const AllTasksView = () => {
               onClick={() => setViewType("table")}
               className={`px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 ${
                 viewType === "table"
-                  ? "bg-dark text-white"
+                  ? "bg-accent-dark text-white"
                   : "bg-white text-gray-700"
               }`}
             >
@@ -85,7 +85,7 @@ const AllTasksView = () => {
               onClick={() => setViewType("card")}
               className={`px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 ${
                 viewType === "card"
-                  ? "bg-dark text-white"
+                  ? "bg-accent-dark text-white"
                   : "bg-white text-gray-700"
               }`}
             >

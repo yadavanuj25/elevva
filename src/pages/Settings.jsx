@@ -6,7 +6,7 @@ import PageTitle from "../hooks/PageTitle";
 
 const Settings = () => {
   PageTitle("Elevva | Settings-General");
-  const [activeTab, setActiveTab] = useState("General");
+  const [activeTab, setActiveTab] = useState("Themes");
   const tabs = ["General", "Themes", "Email"];
 
   return (
@@ -20,8 +20,8 @@ const Settings = () => {
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2  whitespace-nowrap ${
               activeTab === tab
-                ? "text-dark font-bold border-b-2 border-dark"
-                : "text-gray-500 hover:text-dark"
+                ? "text-accent-dark font-bold border-b-2 border-accent-dark"
+                : "text-gray-500 hover:text-accent-dark"
             }`}
           >
             {tab}

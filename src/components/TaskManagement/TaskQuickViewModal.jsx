@@ -41,7 +41,7 @@
 //           ${visible ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
 //       >
 //         {/* Header */}
-//         <div className="bg-dark text-white px-5 py-3 rounded-t-lg">
+//         <div className="bg-accent-dark text-white px-5 py-3 rounded-t-lg">
 //           <div className="flex justify-between items-start">
 //             <div className="flex items-center gap-4">
 //               <h2 className="text-xl font-semibold">
@@ -170,7 +170,7 @@ const TaskQuickViewModal = ({ task, onClose }) => {
         `}
         >
           {/* Header */}
-          <div className="bg-dark text-white px-5 py-3 rounded-t-lg">
+          <div className="bg-accent-dark text-white px-5 py-3 rounded-t-lg">
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-4">
                 <h2 className="text-xl font-semibold">

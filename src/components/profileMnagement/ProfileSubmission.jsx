@@ -356,7 +356,7 @@ const ProfileSubmission = () => {
           ? "border-blue-500 scale-[1.02]"
           : errors.resume
           ? "border-red-500 hover:border-red-600 "
-          : "border-dark"
+          : "border-accent-dark"
       }`}
           >
             <input
@@ -387,7 +387,7 @@ const ProfileSubmission = () => {
             w-14 h-14 rounded-full
             flex items-center justify-center
             bg-gray-200 dark:bg-gray-700
-            text-dark
+            text-accent-dark
             group-hover:scale-110 transition
           "
                 >
@@ -398,7 +398,7 @@ const ProfileSubmission = () => {
                 </p>
                 <p className="text-sm text-gray-500">
                   Drag & drop or{" "}
-                  <span className="text-dark font-medium">browse</span>
+                  <span className="text-accent-dark font-medium">browse</span>
                 </p>
                 <p className="text-xs text-gray-400">PDF only · Max 20 MB</p>
               </div>

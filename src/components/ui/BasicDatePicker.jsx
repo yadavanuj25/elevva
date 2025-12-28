@@ -30,7 +30,7 @@ const BasicDatePicker = ({
             ${
               hasError
                 ? "border-red-500  text-red-500 dark:text-red-500"
-                : "border-gray-300 dark:border-gray-600 focus:border-dark dark:focus:border-white"
+                : "border-gray-300 dark:border-gray-600 focus:border-accent-dark dark:focus:border-white"
             }
             dark:text-white 
           `}
@@ -43,7 +43,7 @@ const BasicDatePicker = ({
             ${
               hasError
                 ? "text-red-500 dark:text-red-500"
-                : "peer-focus:text-dark dark:peer-focus:text-white"
+                : "peer-focus:text-accent-dark dark:peer-focus:text-white"
             }
             rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
         >

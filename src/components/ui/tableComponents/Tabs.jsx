@@ -52,7 +52,7 @@ const Tabs = ({ statusTabs, handleTabChange, activeTab }) => {
           onClick={() => handleTabChange(tab.name)}
           className={`relative flex items-center gap-2 px-4 py-2 ${
             activeTab === tab.name
-              ? "text-dark border-b-2 border-dark font-semibold"
+              ? "text-accent-dark border-b-2 border-accent-dark font-semibold"
               : `${getTabsColor(tab.name)}`
           }`}
         >

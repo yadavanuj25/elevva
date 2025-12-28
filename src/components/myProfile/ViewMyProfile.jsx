@@ -92,7 +92,6 @@ const ViewMyProfile = () => {
         </div>
       </div>
 
-
       {/* Personal Information */}
       <Section title="Personal Information">
         <InfoGrid>

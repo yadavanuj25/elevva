@@ -277,7 +277,7 @@ const RoleList = () => {
                     ].map((column) => (
                       <TableCell
                         key={column.id}
-                        className={`whitespace-nowrap font-bold text-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray ${
+                        className={`whitespace-nowrap font-bold text-accent-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray ${
                           column.sticky ? "sticky right-0 z-20" : ""
                         }`}
                       >
@@ -330,22 +330,22 @@ const RoleList = () => {
                               onChange={() => handleCheckboxClick(row.id)}
                             />
                           </TableCell>
-                          <TableCell className="whitespace-nowrap text-darkBg dark:text-white font-semibold">
+                          <TableCell className="whitespace-nowrap text-accent-darkBg dark:text-white font-semibold">
                             {row.role_name.charAt(0).toUpperCase() +
                               row.role_name.slice(1)}
                           </TableCell>
-                          <TableCell className="whitespace-nowrap text-darkBg dark:text-white font-semibold">
+                          <TableCell className="whitespace-nowrap text-accent-darkBg dark:text-white font-semibold">
                             {row.role_description}
                           </TableCell>
-                          <TableCell className="whitespace-nowrap text-darkBg dark:text-white">
+                          <TableCell className="whitespace-nowrap text-accent-darkBg dark:text-white">
                             {row.created_date}
                           </TableCell>
-                          <TableCell className="whitespace-nowrap text-darkBg dark:text-white">
+                          <TableCell className="whitespace-nowrap text-accent-darkBg dark:text-white">
                             <DateDisplay date={row.updated_date} />
                           </TableCell>
                           <TableCell className="whitespace-nowrap sticky right-0 bg-[#f2f4f5] dark:bg-darkGray dark:text-white z-20">
                             <button
-                              className=" text-white bg-dark px-1 py-1 rounded hover:bg-[#222]"
+                              className=" text-white bg-accent-dark px-1 py-1 rounded hover:bg-[#222]"
                               onClick={() =>
                                 navigate(
                                   `/admin/rolemanagement/edit-roles/${row.id}`

@@ -139,7 +139,7 @@ const CreateRole = () => {
         ${
           errors.description
             ? "border-red-500 focus:border-red-500 "
-            : "border-gray-300 dark:border-gray-600 focus:border-dark dark:focus:border-white"
+            : "border-gray-300 dark:border-gray-600 focus:border-accent-dark dark:focus:border-white"
         }`}
             />
             <label
@@ -149,7 +149,7 @@ const CreateRole = () => {
             ${
               errors.description
                 ? "peer-focus:text-red-500 peer-placeholder-shown:-translate-y-[100%]"
-                : "peer-focus:text-dark dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2"
+                : "peer-focus:text-accent-dark dark:peer-focus:text-white peer-placeholder-shown:-translate-y-1/2"
             }
             rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
             >

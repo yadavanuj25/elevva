@@ -6,16 +6,19 @@ import { AuthProvider } from "./auth/AuthContext.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { MessageProvider } from "./auth/MessageContext.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
-      <MessageProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <App />
-        </BrowserRouter>
-      </MessageProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <MessageProvider>
+          <BrowserRouter>
+            <ScrollToTop />
+            <App />
+          </BrowserRouter>
+        </MessageProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </StrictMode>
 );
