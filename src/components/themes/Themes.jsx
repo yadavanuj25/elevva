@@ -157,12 +157,12 @@ import { colorThemes } from "../../contstants/ColorThemes";
 import PageTitle from "../../hooks/PageTitle";
 
 const Themes = () => {
-  PageTitle("Elevva | Settings-Themes");
+  PageTitle("Elevva | Themes");
 
   const { color, setColor, theme } = useTheme();
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-800">
+    <div className="p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
       <h3 className="text-lg font-semibold mb-3">Select Theme Color</h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -175,8 +175,8 @@ const Themes = () => {
               onClick={() => setColor(c.value)}
               className={`relative flex items-center gap-4 p-3 rounded-lg border transition ${
                 color === c.value
-                  ? "border-gray-900 dark:border-white"
-                  : "border-gray-200 hover:border-gray-400"
+                  ? "border-accent-dark "
+                  : "border-gray-300 dark:border-gray-600 hover:border-gray-900"
               }`}
             >
               <span
@@ -187,8 +187,8 @@ const Themes = () => {
               <span className="font-semibold">{c.name}</span>
 
               {color === c.value && (
-                <span className="absolute right-3">
-                  <Check size={16} />
+                <span className="absolute right-3 p-1 rounded-full text-accent-dark border border-accent-dark bg-accent-light">
+                  <Check size={14} />
                 </span>
               )}
             </button>

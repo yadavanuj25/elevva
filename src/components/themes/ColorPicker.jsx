@@ -39,7 +39,6 @@ const ColorPicker = () => {
     <div className="flex gap-3 flex-wrap">
       {colorThemes.map((c) => {
         const previewColor = c.dark;
-        // const previewColor = theme === "dark" ? c.dark : c.light;
 
         return (
           <button
