@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { getMyTasks, updateTaskStatus } from "../../services/taskServices";
 import PageTitle from "../../hooks/PageTitle.jsx";
@@ -94,8 +93,15 @@ const MyTasksDashboard = () => {
 
   if (loading) {
     return (
-      <div className="h-[70vh] flex justify-center items-center">
-        <BarLoader width={200} height={6} />
+      <div className="h-[70vh] flex justify-center items-center text-center py-10">
+        <div className="w-[200px] text-black dark:text-white bg-gray-300 dark:bg-gray-700 rounded-full">
+          <BarLoader
+            height={6}
+            width={200}
+            color="currentColor"
+            cssOverride={{ borderRadius: "999px" }}
+          />
+        </div>
       </div>
     );
   }

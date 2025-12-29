@@ -33,7 +33,7 @@ const VerifyPage = ({ email }) => {
 
       <button
         onClick={() => navigate("/login")}
-        className="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg "
+        className="w-full mt-8 bg-accent-dark hover:opacity-90 text-white font-semibold py-3 rounded-lg "
       >
         Back to Login
       </button>

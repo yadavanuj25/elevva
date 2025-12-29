@@ -53,7 +53,9 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     const html = document.documentElement;
-    html.classList.toggle("dark", theme === "dark");
+    // html.classList.toggle("dark", theme === "dark");
+    html.classList.remove("light", "dark");
+    html.classList.add(theme);
     const selectedColor = colorThemes.find((c) => c.value === color);
     if (selectedColor) {
       html.style.setProperty("--accent-dark", selectedColor.dark);

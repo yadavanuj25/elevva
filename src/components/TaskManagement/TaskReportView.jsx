@@ -184,7 +184,7 @@ const TaskReportView = () => {
           </table>
         </div>
       ) : (
-        <div className=" bg-white border border-gray-300 dark:border-gray-600 rounded-xl">
+        <div className="  border border-gray-300 dark:border-gray-600 rounded-xl">
           <NoData title="No Data Found" />
         </div>
       )}

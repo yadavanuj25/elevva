@@ -7,7 +7,7 @@ const AddButton = ({ addLink, title }) => {
     <>
       <Link
         to={addLink}
-        className="px-2 py-1.5 flex gap-1 items-center bg-accent-dark text-white rounded-md hover:bg-[#222] transition"
+        className="px-2 py-1.5 flex gap-1 items-center bg-accent-dark text-white rounded-md hover:bg-[#222] hover:dark:text-black hover:dark:bg-white transition"
       >
         <span>
           <Plus size={15} />

@@ -23,11 +23,11 @@ const ToolTip = ({
     <div
       className={`relative flex justify-center items-center px-2 py-2 border border-gray-300 dark:border-gray-600 text-sm  ${
         isViewRefresh ? "rounded-md" : "rounded-r-md"
-      } cursor-pointer hover:bg-[#222] hover:text-white`}
+      } cursor-pointer hover:bg-[#222] hover:text-white hover:dark:text-black hover:dark:bg-white`}
     >
       {icon}
       {badge && (
-        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-4 h-4 flex items-center justify-center rounded-full border border-white dark:border-gray-800">
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-4 h-4 flex items-center justify-center rounded-full 0">
           {badge}
         </span>
       )}

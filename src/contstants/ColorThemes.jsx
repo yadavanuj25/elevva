@@ -4,10 +4,10 @@ export const colorThemes = [
   {
     name: "Bottle Green",
     value: "bottelGreen",
-    dark: "#007672",
+    dark: "#2a4927",
     light: "#d3f6f19c",
   },
-  { name: "Orange", value: "orange", dark: "#fb6506", light: "#fff4e6" },
+  { name: "Orange", value: "orange", dark: "#e41f07", light: "#fff4e6" },
   {
     name: "Midnight Blue Teal",
     value: "midnight_blue_teal",

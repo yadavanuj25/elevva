@@ -190,12 +190,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               {isOpen && <span className="font-extrabold">Elevva CRM</span>}
             </Link>
 
-            <button
-              className="sm:hidden text-gray-600 dark:text-gray-300 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+            {/* <button
+              className="sm:hidden text-gray-600 dark:text-gray-300 p-1 rounded-full hover:bg-accent-light  transition"
               onClick={() => setIsOpen(false)}
             >
               <X size={20} />
-            </button>
+            </button> */}
           </div>
         </div>
 

@@ -105,14 +105,14 @@ const ForgotPassword = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className={`w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition ${
+                    className={`w-full mt-8 bg-accent-dark hover:opacity-90 text-white font-semibold py-3 rounded-lg transition ${
                       loading ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
                     {loading ? "Sending..." : "Send Reset Instructions"}
                   </button>
                   <p
-                    className="text-sm text-[#3282ff] mt-4 cursor-pointer hover:underline"
+                    className="text-sm font-semibold text-[#3282ff] mt-4 cursor-pointer hover:underline"
                     onClick={() => navigate("/login")}
                   >
                     ← Back to Login

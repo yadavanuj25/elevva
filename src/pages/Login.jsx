@@ -236,20 +236,20 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg  ${
+                className={`w-full mt-8 bg-accent-dark hover:opacity-90 text-white font-semibold py-3 rounded-lg  ${
                   loading ? "opacity-70 cursor-not-allowed" : ""
                 }`}
               >
                 {loading ? "Signing in..." : "Sign In"}
               </button>
 
-              <div className="flex items-center justify-center my-5 text-gray-500 text-sm">
+              {/* <div className="flex items-center justify-center my-5 text-gray-500 text-sm">
                 <span className="border-b w-1/3"></span>
                 <span className="px-2 font-semibold">or login with</span>
                 <span className="border-b w-1/3"></span>
-              </div>
+              </div> */}
 
-              <div className="grid grid-cols-3 gap-3">
+              {/* <div className="grid grid-cols-3 gap-3">
                 <button className="flex items-center justify-center p-3 bg-[#3282ff] rounded border hover:opacity-90">
                   <FaFacebookF className="text-[#3282ff] text-2xl p-1 bg-white rounded-full" />
                 </button>
@@ -259,7 +259,7 @@ const Login = () => {
                 <button className="flex items-center justify-center p-3 bg-black border rounded hover:opacity-90">
                   <FaTwitter className="text-[#3282ff] text-2xl p-1 bg-white rounded-full" />
                 </button>
-              </div>
+              </div> */}
             </form>
           </div>
         </div>

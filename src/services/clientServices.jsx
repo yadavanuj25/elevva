@@ -10,23 +10,6 @@ const requirementStatuses = [
   "Closed",
 ];
 
-// export const getAllClients = (
-//   page = 1,
-//   limit = 25,
-//   tab = "All",
-//   search = ""
-// ) => {
-//   let url = `/api/clients?page=${page}&limit=${limit}`;
-//   const tabLower = tab.toLowerCase();
-//   if (clientStatuses.includes(tabLower)) {
-//     url += `&status=${tabLower}`;
-//   }
-//   if (search.trim() !== "") {
-//     url += `&search=${encodeURIComponent(search)}`;
-//   }
-//   return fetchHandler(url);
-// };
-
 export const getAllClients = ({
   page = 1,
   limit = 25,

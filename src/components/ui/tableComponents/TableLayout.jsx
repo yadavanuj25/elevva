@@ -52,7 +52,6 @@ const TableLayout = ({
           <Table className="min-w-full">
             <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-20">
               <TableRow>
-                {/* Checkbox Column */}
                 <TableCell
                   padding="checkbox"
                   className="bg-[#f2f4f5] dark:bg-darkGray"

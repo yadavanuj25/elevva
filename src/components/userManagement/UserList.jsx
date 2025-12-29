@@ -224,16 +224,6 @@ const UserList = () => {
               <p className="text-sm">{errorMsg}</p>
             </div>
           )}
-
-          {/* {successMsg && (
-            <div
-              className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
-               bg-[#28a745] text-white shadow-sm animate-slideDown"
-            >
-              <span className=" font-semibold">✔ </span>
-              <p className="text-sm">{successMsg}</p>
-            </div>
-          )} */}
           <Tabs
             statusTabs={statusTabs}
             activeTab={activeTab}

@@ -66,7 +66,7 @@ const AllTasksView = () => {
 
   return (
     <>
-      <div className="bg-white dark:bg-[#31415f] border border-gray-300 dark:border-gray-600 rounded-xl p-4 mb-6">
+      <div className="bg-white dark:bg-[#1e2738] border border-gray-300 dark:border-gray-600 rounded-xl p-4 mb-6 ">
         <div className="flex justify-between items-center flex-wrap gap-4">
           <h2 className="text-2xl font-bold">All Tasks</h2>
           <div className="flex gap-2">
@@ -133,7 +133,7 @@ const AllTasksView = () => {
           </div>
         </div>
       ) : !loading && tasks.length === 0 ? (
-        <div className=" bg-white border border-gray-300 dark:border-gray-600 rounded-xl">
+        <div className="  border border-gray-300 dark:border-gray-600 rounded-xl">
           <NoData title="No Data Found" />
         </div>
       ) : (

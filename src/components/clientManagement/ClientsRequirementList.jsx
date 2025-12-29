@@ -361,7 +361,6 @@ const ClientsRequirementsList = () => {
               icon={<Send size={16} />}
               onClick={handleAssignClick}
             />
-
             <GroupButton
               text="Stats"
               icon={<ChartNoAxesCombined size={16} />}
@@ -397,6 +396,10 @@ const ClientsRequirementsList = () => {
                           selectedRows.length < sortedData.length
                         }
                         onChange={handleSelectAll}
+                        sx={{
+                          color: "gray-700",
+                          ".dark &": { color: "white" },
+                        }}
                       />
                     </div>
                   </TableCell>
@@ -467,6 +470,10 @@ const ClientsRequirementsList = () => {
                           <Checkbox
                             checked={selectedRows.includes(row._id)}
                             onChange={() => handleSelectRow(row._id)}
+                            sx={{
+                              color: "gray-700",
+                              ".dark &": { color: "white" },
+                            }}
                           />
                           {row.requirementCode && (
                             <small className="text-accent-dark bg-accent-light p-[1px] border-b border-accent-dark rounded font-[500]">
@@ -684,7 +691,6 @@ const ClientsRequirementsList = () => {
         onClose={() => setOpenAssignModal(false)}
         selectedRequirements={selectedRequirements}
         setSelectedRows={setSelectedRows}
-        // onSubmit={handleAssignSave}
       />
     </>
   );

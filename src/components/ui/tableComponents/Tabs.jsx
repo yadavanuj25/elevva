@@ -45,7 +45,7 @@ const getTabsColor = (s) => {
 
 const Tabs = ({ statusTabs, handleTabChange, activeTab }) => {
   return (
-    <div className="flex gap-4 border-b mb-4">
+    <div className="flex gap-4 border-b border-gray-300 dark:border-gray-600 mb-4">
       {statusTabs.map((tab) => (
         <button
           key={tab.name}

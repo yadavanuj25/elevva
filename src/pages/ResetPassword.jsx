@@ -182,7 +182,7 @@ const ResetPassword = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition ${
+                className={`w-full mt-8 bg-accent-dark hover:opacity-90 text-white font-semibold py-3 rounded-lg transition ${
                   loading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >
@@ -192,7 +192,7 @@ const ResetPassword = () => {
 
             <Link
               to="/login"
-              className="w-full flex justify-center items-center font-semibold text-blue-500 mt-4"
+              className="w-full flex justify-center items-center font-semibold text-accent-dark mt-4"
             >
               Back to Login
             </Link>

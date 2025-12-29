@@ -13,15 +13,22 @@ const Textareafield = ({ name, value, handleChange, label, rows = 2 }) => {
           border-gray-300 dark:border-gray-600 focus:border-accent-dark dark:focus:border-white "
       />
       <label
-        className={`absolute pointer-events-none font-medium text-sm text-gray-500 duration-300 transform z-10 origin-[0] bg-white dark:bg-darkBg px-2
-        ${
-          value
-            ? "top-2 scale-75 -translate-y-4 text-accent-darkBg dark:text-white "
-            : "peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2"
-        }
-        peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4  peer-focus:font-[700]
-        rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1  peer-focus:text-accent-dark dark:peer-focus:text-white
-      `}
+        className={`absolute pointer-events-none text-sm  text-gray-500 dark:text-gray-400
+  bg-white dark:bg-darkBg px-2 z-10 origin-[0] start-1
+  transform transition-all duration-300 ease-in-out
+  ${
+    value
+      ? "top-2 scale-75 -translate-y-4 font-medium text-accent-dark dark:text-white"
+      : "peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 "
+  }
+  peer-focus:top-2
+  peer-focus:scale-75
+  peer-focus:-translate-y-4
+  peer-focus:font-semibold
+  peer-focus:text-accent-dark dark:peer-focus:text-white
+
+  rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto
+`}
       >
         {label}
       </label>

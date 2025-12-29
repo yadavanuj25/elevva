@@ -90,17 +90,18 @@ const AssignModal = ({
   return (
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center
-        transition-opacity duration-300
-        ${isVisible ? "opacity-100" : "opacity-0"}
-        bg-black/90`}
+    transition-opacity duration-300
+    ${isVisible ? "opacity-100" : "opacity-0"}
+    bg-black/90`}
     >
       <div
-        className={`bg-white w-full max-w-xl rounded-2xl shadow-xl
-          transform transition-all duration-300
-          ${isVisible ? "scale-100 opacity-100" : "scale-90 opacity-0"}`}
+        className={`w-full max-w-xl rounded-2xl shadow-xl
+      bg-white dark:bg-darkBg
+      transform transition-all duration-300
+      ${isVisible ? "scale-100 opacity-100" : "scale-90 opacity-0"}`}
       >
         {/* HEADER */}
-        <div className="flex items-center justify-center gap-2 bg-accent-dark text-white py-4 rounded-t-2xl">
+        <div className="flex items-center justify-center gap-2 bg-accent-dark text-white py-3 rounded-t-2xl relative">
           <FileText size={22} />
           <h2 className="text-lg font-semibold">Assign Requirements</h2>
 
@@ -113,13 +114,19 @@ const AssignModal = ({
         </div>
 
         {/* CONTENT */}
-        <div className="p-5 bg-gray-50 space-y-4 max-h-[70vh] overflow-y-auto">
+        <div
+          className="p-5 space-y-4 max-h-[70vh] overflow-y-auto
+      bg-gray-50 dark:bg-darkGray
+      text-gray-800 dark:text-gray-200"
+        >
           <p className="font-semibold text-sm">Selected Requirements</p>
 
           {selectedRequirements.map((req) => (
             <div
               key={req._id}
-              className="bg-white border rounded-lg px-3 py-2 text-sm flex gap-2"
+              className="flex gap-2 px-3 py-2 text-sm rounded-lg
+            bg-white dark:bg-darkBg
+            border border-gray-200 dark:border-gray-700"
             >
               <Hash size={14} />
               {req.requirementCode} | {req.client.clientName} | {req.techStack}
@@ -129,11 +136,16 @@ const AssignModal = ({
           <div className="mt-4">
             <p className="font-semibold mb-2 text-sm">Assign To</p>
 
-            <div className="border rounded-lg bg-white max-h-48 overflow-y-auto">
+            <div
+              className="max-h-48 overflow-y-auto rounded-lg
+          bg-white dark:bg-darkBg
+          border border-gray-200 dark:border-gray-700"
+            >
               {options.map((user) => (
                 <label
                   key={user._id}
-                  className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100"
+                  className="flex items-center gap-2 px-3 py-2 cursor-pointer
+                hover:bg-gray-100 dark:hover:bg-darkGray"
                 >
                   <input
                     type="checkbox"
@@ -148,10 +160,14 @@ const AssignModal = ({
         </div>
 
         {/* FOOTER */}
-        <div className="flex justify-end gap-3 p-4 border-t bg-white rounded-b-2xl">
+        <div
+          className="flex justify-end gap-3 p-4 rounded-b-2xl
+      bg-white dark:bg-darkBg
+      border-t border-gray-200 dark:border-gray-700"
+        >
           <button
             onClick={closeWithAnimation}
-            className="flex items-center gap-2 px-4 py-2 bg-red-700 hover:bg-red-900 text-white rounded"
+            className="flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded"
           >
             <X size={16} />
             Cancel

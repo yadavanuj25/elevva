@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import MetricCard from "../TaskManagement/MetricCard";
 import { addTaskFeedback, addTaskRejection } from "../../services/taskServices";
-import { X } from "lucide-react";
+import { Save, X } from "lucide-react";
+import Detail from "./Detail";
+import Textareafield from "../ui/formFields/Textareafield";
+import SelectField from "../ui/SelectField";
+import Button from "../ui/Button";
 
 const TaskDetailModal = ({ task, onClose, onRefresh }) => {
   const [activeTab, setActiveTab] = useState("details");
@@ -34,7 +38,6 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
     };
     try {
       await addTaskFeedback(task._id, payload);
-
       setFeedback("");
       onRefresh();
     } catch (error) {}
@@ -71,7 +74,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
         bg-black bg-opacity-90`}
     >
       <div
-        className={`bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto
+        className={`bg-white border  rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto
           transform transition-all duration-200
           ${visible ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
       >
@@ -131,28 +134,16 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
           {activeTab === "details" && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm text-gray-600">Client</label>
-                  <p className="font-medium">
-                    {task.requirement?.client?.clientName}
-                  </p>
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600">
-                    Requirement Code
-                  </label>
-                  <p className="font-medium">
-                    {task.requirement?.requirementCode}
-                  </p>
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600">Priority</label>
-                  <p className="font-medium">{task.priority}</p>
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600">Status</label>
-                  <p className="font-medium">{task.status}</p>
-                </div>
+                <Detail
+                  label="Client"
+                  value={task.requirement?.client?.clientName}
+                />
+                <Detail
+                  label="Requirement Code"
+                  value={task.requirement?.requirementCode}
+                />
+                <Detail label="Priority" value={task.priority} />
+                <Detail label="Status" value={task.status} />
               </div>
 
               <div className="mt-6">
@@ -194,25 +185,28 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
                   placeholder="Enter your feedback..."
-                  className="w-full border rounded p-3 h-32"
+                  className="w-full text-black border border-gray-300 rounded p-3 h-32"
                 />
-                <div className="flex gap-3">
-                  <select
-                    value={feedbackType}
-                    onChange={(e) => setFeedbackType(e.target.value)}
-                    className="border rounded px-3 py-2"
-                  >
-                    <option value="General">General</option>
-                    <option value="Sales">Sales</option>
-                    <option value="Client">Client</option>
-                    <option value="Internal">Internal</option>
-                  </select>
-                  <button
-                    onClick={handleAddFeedback}
-                    className="bg-accent-dark text-white px-6 py-2 rounded hover:opacity-70"
-                  >
-                    Add Feedback
-                  </button>
+                <div className=" w-full flex items-center justify-between">
+                  <div className="w-1/2">
+                    <select
+                      value={feedbackType}
+                      onChange={(e) => setFeedbackType(e.target.value)}
+                      className="text-black border border-gray-300  rounded px-3 py-2"
+                    >
+                      <option value="General">General</option>
+                      <option value="Sales">Sales</option>
+                      <option value="Client">Client</option>
+                      <option value="Internal">Internal</option>
+                    </select>
+                  </div>
+
+                  <Button
+                    type="button"
+                    text="Add Feedback"
+                    icon={<Save size={18} />}
+                    handleClick={handleAddFeedback}
+                  />
                 </div>
               </div>
 
@@ -245,8 +239,8 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
           )}
 
           {activeTab === "rejections" && (
-            <div className="space-y-4">
-              <div className="bg-yellow-50 border border-yellow-200 rounded p-4">
+            <div className="space-y-4 text-black">
+              <div className="bg-yellow-50 border border-yellow-400 rounded p-4">
                 <h3 className="font-bold mb-3">Record Rejection</h3>
                 <div className="space-y-3">
                   <input
@@ -300,12 +294,18 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                     }
                     className="w-full border rounded px-3 py-2 h-24"
                   />
-                  <button
+                  {/* <button
                     onClick={handleAddRejection}
                     className="bg-accent-dark text-white px-6 py-2 rounded hover:opacity-70"
                   >
                     Record Rejection
-                  </button>
+                  </button> */}
+                  <Button
+                    type="button"
+                    text="Record Rejection"
+                    icon={<Save size={18} />}
+                    handleClick={handleAddRejection}
+                  />
                 </div>
               </div>
 

@@ -16,6 +16,8 @@ import { FaRegUser } from "react-icons/fa";
 import LightDarkMode from "../themes/LightDarkMode";
 import Tippy from "@tippyjs/react";
 import { useAuth } from "../../auth/AuthContext";
+import HeaderNotificationPanel from "../notifications/HeaderNotificationPanel";
+import { useHeaderNotifications } from "../../hooks/UseHeaderNotifications";
 
 const IconButton = ({ title, icon: Icon, badge, onClick }) => (
   <Tippy
@@ -38,7 +40,7 @@ const IconButton = ({ title, icon: Icon, badge, onClick }) => (
       />
 
       {badge && (
-        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-4 h-4 flex items-center justify-center rounded-full border border-white dark:border-gray-800">
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-4 h-4 flex items-center justify-center rounded-full ">
           {badge}
         </span>
       )}
@@ -52,6 +54,14 @@ const Header = ({ toggleSidebar, isOpen }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const { user, logout, lockScreen } = useAuth();
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const {
+    notifications,
+    unreadCount,
+    markAsRead,
+    markAllAsRead,
+    deleteNotification,
+  } = useHeaderNotifications(user?.token);
 
   useEffect(() => {
     const handler = () => setIsFullscreen(!!document.fullscreenElement);
@@ -151,9 +161,16 @@ const Header = ({ toggleSidebar, isOpen }) => {
           />
         </div>
         {/* Notification */}
-
-        <div className="header-icons">
+        {/* <div className="header-icons">
           <IconButton title="Notification" icon={Bell} badge={1} />
+        </div> */}
+        <div className="header-icons">
+          <IconButton
+            title="Notification"
+            icon={Bell}
+            badge={unreadCount > 0 ? unreadCount : ""}
+            onClick={() => setShowNotifications(true)}
+          />
         </div>
 
         {/* Theme */}
@@ -247,6 +264,15 @@ const Header = ({ toggleSidebar, isOpen }) => {
             </ul>
           </div>
         )}
+        <HeaderNotificationPanel
+          open={showNotifications}
+          onClose={() => setShowNotifications(false)}
+          notifications={notifications}
+          unreadCount={unreadCount}
+          markAsRead={markAsRead}
+          markAllAsRead={markAllAsRead}
+          deleteNotification={deleteNotification}
+        />
       </div>
     </header>
   );

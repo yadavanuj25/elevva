@@ -21,7 +21,7 @@ export default {
         light: "var(--light)",
         lightGray: "var(--lightGray)",
         darkGray: "var(--darkGray)",
-        bottelGreen: "#007672",
+        bottelGreen: "#2a4927",
         lightBottelGreen: "#d3f6f19c",
       },
       keyframes: {
