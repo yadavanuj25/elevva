@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { io } from "socket.io-client";
-
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 import {
@@ -69,6 +68,7 @@ export const useHeaderNotifications = (token) => {
     NotificationSwal({
       title: next.title,
       message: next.message,
+      timer: 10000,
     });
   };
 
@@ -110,9 +110,7 @@ export const useHeaderNotifications = (token) => {
       reconnectionDelay: 1000,
     });
 
-    socketRef.current.on("connect", () => {
-      console.log("🔔 Notification socket connected", socketRef.current.id);
-    });
+    socketRef.current.on("connect", () => {});
 
     socketRef.current.on("notification", (data) => {
       const isNew = !notifications.some((n) => n._id === data._id);
@@ -120,7 +118,6 @@ export const useHeaderNotifications = (token) => {
 
       setNotifications((prev) => [data, ...prev]);
       setUnreadCount((count) => count + 1);
-
       // Queue the notification for audio + toast
       notificationQueue.current.push({
         title: data.title,
@@ -205,28 +202,3 @@ export const useHeaderNotifications = (token) => {
     },
   };
 };
-
-// socketRef.current.on("notification", (data) => {
-//   console.log("Real-time notification received", data);
-//   setNotifications((prev) => {
-//     const exists = prev.some((n) => n._id === data._id);
-//     if (exists) return prev;
-
-//     if (notificationAudio.current) {
-//       notificationAudio.current.currentTime = 0;
-//       notificationAudio.current.play().catch(() => {});
-//     }
-
-//     Swal.fire({
-//       toast: true,
-//       position: "top-end",
-//       title: data.title,
-//       text: data.message,
-//       showConfirmButton: false,
-//       showCloseButton: true,
-//     });
-
-//     setUnreadCount((count) => count + 1);
-//     return [data, ...prev];
-//   });
-// });

@@ -1,13 +1,14 @@
 import Swal from "sweetalert2";
 import "../styles/swal.css";
 
-export const NotificationSwal = ({ title, message }) => {
+export const NotificationSwal = ({ title, message, timer = 60000 }) => {
   Swal.fire({
     toast: true,
     position: "top-end",
     showConfirmButton: false,
     showCloseButton: true,
-    timer: null,
+    timer,
+    timerProgressBar: true,
     padding: "0",
     background: "#ffffff",
     customClass: {
@@ -26,5 +27,9 @@ export const NotificationSwal = ({ title, message }) => {
         </div>
       </div>
     `,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
   });
 };
