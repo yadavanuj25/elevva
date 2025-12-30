@@ -79,7 +79,7 @@ const StatusDropDown = ({
           !isLoading && setOpenStatusRow(openStatusRow === rowId ? null : rowId)
         }
         className={`min-w-[80px] h-6 cursor-pointer px-1 py-1 
-  text-xs font-[500] text-white rounded-md 
+  text-xs font-[500] text-white rounded 
   flex items-center justify-between gap-2 ${getStatusColor(s)}`}
       >
         <div className="w-full flex items-center justify-center">

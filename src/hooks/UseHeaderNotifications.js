@@ -1,128 +1,8 @@
-// import { useEffect, useRef, useState } from "react";
-// import Swal from "sweetalert2";
-// import { io } from "socket.io-client";
-
-// import {
-//   getAllNotifications,
-//   getUnreadNotificationCount,
-//   markNotificationAsRead,
-//   markAllNotificationsAsRead,
-//   deleteNotification,
-// } from "../services/notificationServices.jsx";
-
-// export const useHeaderNotifications = (token) => {
-//   const [notifications, setNotifications] = useState([]);
-//   const [unreadCount, setUnreadCount] = useState(0);
-//   const socketRef = useRef(null);
-
-//   useEffect(() => {
-//     fetchNotifications();
-//     fetchUnreadCount();
-//   }, []);
-
-//   const fetchNotifications = async () => {
-//     try {
-//       const res = await getAllNotifications();
-//       setNotifications(res.notifications || []);
-//       setUnreadCount(res.unreadCount);
-//       console.log(res.notifications);
-//     } catch (err) {
-//       console.error("Error fetching notifications", err);
-//     }
-//   };
-
-//   const fetchUnreadCount = async () => {
-//     try {
-//       const res = await getUnreadNotificationCount();
-//       setUnreadCount(res?.count || 0);
-//     } catch (err) {
-//       console.error("Error fetching unread count", err);
-//     }
-//   };
-
-//   const markAsRead = async (id) => {
-//     try {
-//       await markNotificationAsRead(id);
-//       setNotifications((prev) =>
-//         prev.map((n) => (n._id === id ? { ...n, read: true } : n))
-//       );
-//       setUnreadCount((prev) => Math.max(prev - 1, 0));
-//     } catch (err) {
-//       console.error("Error marking notification as read", err);
-//     }
-//   };
-
-//   // Socket IO
-
-//   useEffect(() => {
-//     if (!token) return;
-//     socketRef.current = io(import.meta.env.VITE_SOCKET_URL, {
-//       transports: ["websocket"],
-//       auth: { token },
-//     });
-//     socketRef.current.on("connect", () => {
-//       console.log(" Notification socket connected");
-//     });
-//     socketRef.current.on("notification", (data) => {
-//       setNotifications((prev) => {
-//         const exists = prev.some((n) => n._id === data._id);
-//         if (exists) return prev;
-//         return [data, ...prev];
-//       });
-//       setUnreadCount((prev) => prev + 1);
-//       Swal.fire({
-//         toast: true,
-//         position: "top-end",
-//         icon: data.priority === "high" ? "error" : "info",
-//         title: data.title,
-//         text: data.message,
-//         timer: 5000,
-//         showConfirmButton: false,
-//       });
-//     });
-//     socketRef.current.on("disconnect", () => {
-//       console.log(" Notification socket disconnected");
-//     });
-//     return () => {
-//       socketRef.current?.disconnect();
-//     };
-//   }, [token]);
-
-//   const markAllAsRead = async () => {
-//     try {
-//       await markAllNotificationsAsRead();
-//       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-//       setUnreadCount(0);
-//     } catch (err) {
-//       console.error("Error marking all as read", err);
-//     }
-//   };
-
-//   const removeNotification = async (id) => {
-//     try {
-//       await deleteNotification(id);
-//       setNotifications((prev) => prev.filter((n) => n._id !== id));
-//     } catch (err) {
-//       console.error("Error deleting notification", err);
-//     }
-//   };
-
-//   return {
-//     notifications,
-//     unreadCount,
-//     markAsRead,
-//     markAllAsRead,
-//     deleteNotification: removeNotification,
-//     refreshNotifications: () => {
-//       fetchNotifications();
-//       fetchUnreadCount();
-//     },
-//   };
-// };
-
 import { useEffect, useRef, useState, useMemo } from "react";
 import Swal from "sweetalert2";
 import { io } from "socket.io-client";
+
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 import {
   getAllNotifications,
@@ -131,6 +11,7 @@ import {
   markAllNotificationsAsRead,
   deleteNotification,
 } from "../services/notificationServices.jsx";
+import { NotificationSwal } from "../utils/NotifictaionSwal.jsx";
 
 const isToday = (date) => {
   const d = new Date(date);
@@ -149,6 +30,61 @@ export const useHeaderNotifications = (token) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const socketRef = useRef(null);
+  const notificationAudio = useRef(null);
+  const notificationQueue = useRef([]);
+
+  // Initialize audio
+  useEffect(() => {
+    notificationAudio.current = new Audio("/notification.wav");
+    notificationAudio.current.volume = 0.8;
+
+    const unlockAudio = () => {
+      notificationAudio.current
+        .play()
+        .then(() => {
+          notificationAudio.current.pause();
+          notificationAudio.current.currentTime = 0;
+        })
+        .catch(() => {});
+      document.removeEventListener("click", unlockAudio);
+    };
+
+    document.addEventListener("click", unlockAudio);
+    return () => document.removeEventListener("click", unlockAudio);
+  }, []);
+
+  // Play queued notifications sequentially
+  const playNextNotification = () => {
+    if (notificationQueue.current.length === 0) return;
+    const audio = notificationAudio.current;
+    const next = notificationQueue.current.shift();
+    audio.currentTime = 0;
+    audio
+      .play()
+      .catch(() => {})
+      .finally(() => {
+        // After audio ends, play next in queue
+        audio.onended = () => {
+          audio.onended = null;
+          playNextNotification();
+        };
+      });
+
+    // Show toast for this notification
+    // Swal.fire({
+    //   toast: true,
+    //   position: "top-end",
+    //   title: next.title,
+    //   text: next.message,
+    //   showConfirmButton: false,
+    //   showCloseButton: true,
+    //   timer: null,
+    // });
+    NotificationSwal({
+      title: next.title,
+      message: next.message,
+    });
+  };
 
   useEffect(() => {
     fetchNotifications();
@@ -175,47 +111,55 @@ export const useHeaderNotifications = (token) => {
   };
 
   useEffect(() => {
-    if (!token || socketRef.current) return;
+    if (!token) return;
+    if (socketRef.current) socketRef.current.disconnect();
 
-    socketRef.current = io(import.meta.env.VITE_SOCKET_URL, {
+    socketRef.current = io(SOCKET_URL, {
       transports: ["websocket"],
       auth: { token },
+      upgrade: false,
+      withCredentials: true,
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
     });
 
     socketRef.current.on("connect", () => {
-      console.log("🔔 Notification socket connected");
+      console.log("🔔 Notification socket connected", socketRef.current.id);
     });
 
     socketRef.current.on("notification", (data) => {
-      setNotifications((prev) => {
-        const exists = prev.some((n) => n._id === data._id);
-        if (exists) return prev;
-        return [data, ...prev];
-      });
+      const isNew = !notifications.some((n) => n._id === data._id);
+      if (!isNew) return;
 
-      setUnreadCount((prev) => prev + 1);
+      setNotifications((prev) => [data, ...prev]);
+      setUnreadCount((count) => count + 1);
 
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: data.priority === "high" ? "error" : "info",
+      // Queue the notification for audio + toast
+      notificationQueue.current.push({
         title: data.title,
-        text: data.message,
-        timer: 5000,
-        showConfirmButton: false,
+        message: data.message,
       });
+
+      // If not already playing, start the queue
+      if (notificationQueue.current.length === 1) {
+        playNextNotification();
+      }
     });
 
-    socketRef.current.on("disconnect", () => {
-      console.log("🔕 Notification socket disconnected");
-      socketRef.current = null;
+    socketRef.current.on("connect_error", (err) => {
+      console.error("Socket connection error:", err.message);
+    });
+
+    socketRef.current.on("disconnect", (reason) => {
+      console.log("Socket disconnected:", reason);
     });
 
     return () => {
       socketRef.current?.disconnect();
       socketRef.current = null;
     };
-  }, [token]);
+  }, [token, notifications]);
 
   const markAsRead = async (id) => {
     try {
@@ -275,3 +219,28 @@ export const useHeaderNotifications = (token) => {
     },
   };
 };
+
+// socketRef.current.on("notification", (data) => {
+//   console.log("Real-time notification received", data);
+//   setNotifications((prev) => {
+//     const exists = prev.some((n) => n._id === data._id);
+//     if (exists) return prev;
+
+//     if (notificationAudio.current) {
+//       notificationAudio.current.currentTime = 0;
+//       notificationAudio.current.play().catch(() => {});
+//     }
+
+//     Swal.fire({
+//       toast: true,
+//       position: "top-end",
+//       title: data.title,
+//       text: data.message,
+//       showConfirmButton: false,
+//       showCloseButton: true,
+//     });
+
+//     setUnreadCount((count) => count + 1);
+//     return [data, ...prev];
+//   });
+// });

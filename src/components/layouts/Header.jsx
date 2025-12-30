@@ -39,8 +39,12 @@ const IconButton = ({ title, icon: Icon, badge, onClick }) => (
         className="transition-transform duration-200 ease-in-out group-hover:scale-125"
       />
 
-      {badge && (
-        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-4 h-4 flex items-center justify-center rounded-full ">
+      {badge !== null && badge !== undefined && (
+        <span
+          className={`absolute -top-1 -right-1 ${
+            badge > 0 ? "bg-green-500" : "bg-red-600"
+          } text-white text-[10px] font-semibold w-4 h-4 flex items-center justify-center rounded-full`}
+        >
           {badge}
         </span>
       )}
@@ -52,7 +56,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
   const navigate = useNavigate();
   const popupRef = useRef(null);
   const [popupOpen, setPopupOpen] = useState(false);
-  const { user, logout, lockScreen } = useAuth();
+  const { user, token, logout, lockScreen } = useAuth();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const {
@@ -61,7 +65,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
     markAsRead,
     markAllAsRead,
     deleteNotification,
-  } = useHeaderNotifications(user?.token);
+  } = useHeaderNotifications(token);
 
   useEffect(() => {
     const handler = () => setIsFullscreen(!!document.fullscreenElement);
@@ -161,14 +165,12 @@ const Header = ({ toggleSidebar, isOpen }) => {
           />
         </div>
         {/* Notification */}
-        {/* <div className="header-icons">
-          <IconButton title="Notification" icon={Bell} badge={1} />
-        </div> */}
+
         <div className="header-icons">
           <IconButton
             title="Notification"
             icon={Bell}
-            badge={unreadCount > 0 ? unreadCount : ""}
+            badge={unreadCount}
             onClick={() => setShowNotifications(true)}
           />
         </div>

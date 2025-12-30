@@ -13,7 +13,7 @@ const NotificationItem = ({
     <div
       onClick={() => {
         if (!n.read) markAsRead(n._id);
-        if (n.link) navigate(n.link);
+        // if (n.link) navigate(n.link);
       }}
       className={`p-4 border-b cursor-pointer transition ${
         !n.read ? "bg-accent-light/40 " : ""
@@ -28,6 +28,15 @@ const NotificationItem = ({
                   {n?.title?.charAt(0)?.toUpperCase()}
                 </span>
               </div> */}
+              <div className="w-10 h-10 rounded-full overflow-hidden  flex items-center justify-center bg-accent-dark">
+                {n?.sender?.profileImage ? (
+                  <img src={n?.sender?.profileImage} alt="image" />
+                ) : (
+                  <span className="text-white text-lg font-bold">
+                    {n?.sender?.fullName?.charAt(0)?.toUpperCase()}
+                  </span>
+                )}
+              </div>
               <p className="text-accent-dark font-semibold">{n.title}</p>
             </div>
             <span className="text-xs text-gray-600">
@@ -39,7 +48,12 @@ const NotificationItem = ({
 
           <div className="flex justify-between mt-2 items-center">
             <p className="text-xs text-gray-500">
-              Updated by: {n.sender?.email || "System"}
+              By:{" "}
+              {n.sender?.fullName
+                ? `${n.sender.fullName.split(" ")[0]} ${
+                    n.sender.fullName.split(" ")[1]?.[0] || ""
+                  }`
+                : "System"}
             </p>
 
             <div className="flex items-center gap-4">
