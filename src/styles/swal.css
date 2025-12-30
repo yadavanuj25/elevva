@@ -55,7 +55,6 @@
 .heads-up-popup {
   width: 460px !important;
   border-radius: 14px !important;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
   overflow: hidden;
 }
 
@@ -64,7 +63,6 @@
   display: flex;
   align-items: center;
   gap: 16px;
- 
 }
 
 .heads-up-icon {
@@ -99,7 +97,7 @@
 
 .heads-up-close {
   position:absolute;
-  right:10px;
+  right:5px;
   width: 30px !important;
   height: 30px !important;
   border-radius: 50%;

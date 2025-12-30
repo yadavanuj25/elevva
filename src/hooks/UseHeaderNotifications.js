@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useMemo } from "react";
-import Swal from "sweetalert2";
 import { io } from "socket.io-client";
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
@@ -33,9 +32,8 @@ export const useHeaderNotifications = (token) => {
   const notificationAudio = useRef(null);
   const notificationQueue = useRef([]);
 
-  // Initialize audio
   useEffect(() => {
-    notificationAudio.current = new Audio("/notification.wav");
+    notificationAudio.current = new Audio("/notification.mp3");
     notificationAudio.current.volume = 0.8;
 
     const unlockAudio = () => {
@@ -53,7 +51,6 @@ export const useHeaderNotifications = (token) => {
     return () => document.removeEventListener("click", unlockAudio);
   }, []);
 
-  // Play queued notifications sequentially
   const playNextNotification = () => {
     if (notificationQueue.current.length === 0) return;
     const audio = notificationAudio.current;
@@ -63,23 +60,12 @@ export const useHeaderNotifications = (token) => {
       .play()
       .catch(() => {})
       .finally(() => {
-        // After audio ends, play next in queue
         audio.onended = () => {
           audio.onended = null;
           playNextNotification();
         };
       });
 
-    // Show toast for this notification
-    // Swal.fire({
-    //   toast: true,
-    //   position: "top-end",
-    //   title: next.title,
-    //   text: next.message,
-    //   showConfirmButton: false,
-    //   showCloseButton: true,
-    //   timer: null,
-    // });
     NotificationSwal({
       title: next.title,
       message: next.message,

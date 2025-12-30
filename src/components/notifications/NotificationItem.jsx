@@ -1,10 +1,95 @@
+// import { X } from "lucide-react";
+
+// const NotificationItem = ({
+//   notification,
+//   markAsRead,
+//   deleteNotification,
+//   timeAgo,
+// }) => {
+//   const n = notification;
+
+//   return (
+//     <div
+//       onClick={() => {
+//         if (!n.read) markAsRead(n._id);
+//       }}
+//       className={`px-4 py-2 border-b cursor-pointer transition ${
+//         !n.read ? "bg-accent-light/40 " : ""
+//       } hover:bg-accent-light hover:dark:bg-gray-800 `}
+//     >
+//       <div className="flex gap-3">
+//         <div className="flex-1">
+//           <div className="flex justify-between items-start gap-4">
+//             <div className="flex gap-3 w-[90%]">
+//               <div className="w-10 h-10 shrink-0 rounded-full overflow-hidden flex items-center justify-center bg-accent-dark">
+//                 {n?.sender?.profileImage ? (
+//                   <img
+//                     src={n.sender.profileImage}
+//                     alt="profile"
+//                     className="w-full h-full object-cover"
+//                   />
+//                 ) : (
+//                   <span className="text-white text-lg font-bold">
+//                     {n?.sender?.fullName
+//                       ? n.sender.fullName.charAt(0).toUpperCase()
+//                       : "S"}
+//                   </span>
+//                 )}
+//               </div>
+//               <div className="min-w-0">
+//                 <p className="text-accent-dark text-sm font-semibold truncate">
+//                   {n.title}
+//                 </p>
+
+//                 <p className="text-xs text-gray-500">
+//                   By :
+//                   {n.sender?.fullName
+//                     ? `${n.sender.fullName.split(" ")[0]} ${
+//                         n.sender.fullName.split(" ")[1]?.[0] || ""
+//                       }`
+//                     : "System"}
+//                 </p>
+
+//                 <p className="text-sm text-gray-500 mt-0.5 line-clamp-2">
+//                   {n.message}
+//                 </p>
+//               </div>
+//             </div>
+//             <div className="flex flex-col items-end justify-between h-full gap-8">
+//               <span className="text-xs text-gray-500 whitespace-nowrap">
+//                 {timeAgo(n.createdAt)}
+//               </span>
+//               <div className="flex items-center gap-3">
+//                 {!n.read && (
+//                   <span className="w-2.5 h-2.5 bg-accent-dark rounded-full" />
+//                 )}
+
+//                 <button
+//                   onClick={(e) => {
+//                     e.stopPropagation();
+//                     deleteNotification(n._id);
+//                   }}
+//                   className="text-gray-400 hover:text-red-500 transition"
+//                 >
+//                   <X size={14} />
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default NotificationItem;
+
 import { X } from "lucide-react";
 
 const NotificationItem = ({
   notification,
   markAsRead,
   deleteNotification,
-  navigate,
   timeAgo,
 }) => {
   const n = notification;
@@ -13,64 +98,84 @@ const NotificationItem = ({
     <div
       onClick={() => {
         if (!n.read) markAsRead(n._id);
-        // if (n.link) navigate(n.link);
       }}
-      className={`p-4 border-b cursor-pointer transition ${
-        !n.read ? "bg-accent-light/40 " : ""
-      } hover:bg-accent-light hover:dark:bg-gray-800 `}
+      className={`relative px-4 py-2 border-b cursor-pointer transition ${
+        !n.read ? "bg-accent-light/40 dark:bg-gray-800/40" : ""
+      } hover:bg-accent-light hover:dark:bg-gray-800`}
     >
       <div className="flex gap-3">
-        <div className="flex-1">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center gap-4">
-              {/* <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-accent-dark">
-                <span className="text-white text-lg font-bold">
-                  {n?.title?.charAt(0)?.toUpperCase()}
-                </span>
-              </div> */}
-              <div className="w-10 h-10 rounded-full overflow-hidden  flex items-center justify-center bg-accent-dark">
-                {n?.sender?.profileImage ? (
-                  <img src={n?.sender?.profileImage} alt="image" />
-                ) : (
-                  <span className="text-white text-lg font-bold">
-                    {n?.sender?.fullName?.charAt(0)?.toUpperCase()}
-                  </span>
-                )}
-              </div>
-              <p className="text-accent-dark font-semibold">{n.title}</p>
+        <div className="w-10 h-10 shrink-0 rounded-full overflow-hidden flex items-center justify-center bg-accent-dark">
+          {n?.sender?.profileImage ? (
+            <img
+              src={n.sender.profileImage}
+              alt="profile"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-white text-lg font-bold">
+              {n?.sender?.fullName
+                ? n.sender.fullName.charAt(0).toUpperCase()
+                : "S"}
+            </span>
+          )}
+        </div>
+
+        <div className="flex-1 flex flex-col justify-between min-h-[60px]">
+          <div className="flex justify-between items-start gap-4">
+            <div className="min-w-0">
+              <p className="text-accent-dark text-sm font-semibold truncate">
+                {n.title}
+              </p>
+
+              <p className="text-xs text-gray-500">
+                By:{" "}
+                {n.sender?.fullName
+                  ? `${n.sender.fullName.split(" ")[0]} ${
+                      n.sender.fullName.split(" ")[1]?.[0] || ""
+                    }`
+                  : "System"}
+              </p>
+
+              <p className="text-sm text-gray-500  line-clamp-2">{n.message}</p>
             </div>
-            <span className="text-xs text-gray-600">
+            <span className="text-xs text-gray-500 whitespace-nowrap">
               {timeAgo(n.createdAt)}
             </span>
           </div>
-
-          <p className="text-sm text-gray-500 mt-1">{n.message}</p>
-
-          <div className="flex justify-between mt-2 items-center">
-            <p className="text-xs text-gray-500">
-              By:{" "}
-              {n.sender?.fullName
-                ? `${n.sender.fullName.split(" ")[0]} ${
-                    n.sender.fullName.split(" ")[1]?.[0] || ""
-                  }`
-                : "System"}
-            </p>
-
-            <div className="flex items-center gap-4">
-              {!n.read && (
-                <span className="w-3 h-3 bg-accent-dark rounded-full" />
-              )}
-
+          <div className="absolute right-2 bottom-[12px] flex justify-end items-center gap-3 ">
+            {!n.read && (
+              <div className="relative group">
+                <span className="w-2.5 h-2.5 bg-accent-dark rounded-full cursor-pointer block" />
+                <span className="absolute bottom-full mb-0.5 right-0 hidden group-hover:block text-[10px] text-white bg-accent-dark px-1 py-0 rounded whitespace-nowrap">
+                  Mark as Read
+                </span>
+              </div>
+            )}
+            <div className="relative group">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   deleteNotification(n._id);
                 }}
-                className="text-red-500"
+                className="text-red-400 p-0.5 hover:text-white hover:bg-red-400 rounded-full transition"
               >
                 <X size={16} />
               </button>
+
+              <span className="absolute bottom-full mb-0.5 right-0 hidden group-hover:block text-[10px] text-white bg-accent-dark px-1 py-0 rounded whitespace-nowrap">
+                Delete
+              </span>
             </div>
+
+            {/* <button
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteNotification(n._id);
+              }}
+              className="text-red-400 p-0.5 hover:text-white hover:bg-red-400 rounded-full transition"
+            >
+              <X size={16} />
+            </button> */}
           </div>
         </div>
       </div>

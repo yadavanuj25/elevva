@@ -185,13 +185,19 @@ const Header = ({ toggleSidebar, isOpen }) => {
           className="flex gap-3 items-center cursor-pointer"
           onClick={() => setPopupOpen((prev) => !prev)}
         >
-          <div className="header-icons">
+          {/* w-8 h-8 rounded flex justify-center items-center */}
+          <div
+            className={`w-8 h-8  flex justify-center items-center  rounded ${
+              user?.profileImage ? "" : "bg-white rounded"
+            }`}
+          >
             {user?.profileImage ? (
-              <img src={user?.profileImage} alt="image" />
+              <img src={user?.profileImage} alt="image" className="rounded" />
             ) : (
               <img
                 src="https://staging.ecodedash.com/cias/assets/dist/img/userimg.png"
                 alt="image"
+                className="rounded"
               />
             )}
           </div>
@@ -200,8 +206,8 @@ const Header = ({ toggleSidebar, isOpen }) => {
         {/* Popup */}
         {popupOpen && (
           <div className="absolute right-0 top-full mt-3 w-72 px-6 py-6 font-semibold text-black dark:text-white bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow z-50">
-            <div className="flex  items-center gap-5">
-              <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-accent-dark">
+            <div className="flex items-center gap-5">
+              <div className="w-10 h-10 shrink-0 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-accent-dark">
                 {user?.profileImage ? (
                   <img
                     src={user.profileImage}
@@ -215,12 +221,12 @@ const Header = ({ toggleSidebar, isOpen }) => {
                 )}
               </div>
 
-              <div>
-                <p className="text-lg font-bold text-accent-darkGray dark:text-accent-lightGray">
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-bold text-accent-darkGray dark:text-accent-lightGray truncate">
                   {user?.fullName}
                 </p>
 
-                <p className="text-xs text-accent-darkGray dark:text-accent-lightGray">
+                <p className="text-xs text-accent-darkGray dark:text-accent-lightGray break-all">
                   {user?.email}
                 </p>
               </div>
