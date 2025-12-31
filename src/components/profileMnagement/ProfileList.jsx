@@ -347,6 +347,7 @@ const ProfileList = () => {
                         { id: "submittedBy", label: "SubmittedBy" },
                         { id: "createdAt", label: "Created Dtm" },
                         { id: "updatedAt", label: "Modified Dtm" },
+                        // { id: "screening", label: "Screening" },
 
                         { id: "action", label: "Action", sticky: true },
                       ].map((column) => (
@@ -518,6 +519,11 @@ const ProfileList = () => {
                           <TableCell className="whitespace-nowrap  dark:text-gray-200">
                             <DateDisplay date={item.updatedAt} />
                           </TableCell>
+                          {/* <TableCell className="whitespace-nowrap  dark:text-gray-200">
+                            <button onClick={() => startScreening(row)}>
+                              Start Screening
+                            </button>
+                          </TableCell> */}
 
                           {/* <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                             <div className="flex gap-2 items-center">
