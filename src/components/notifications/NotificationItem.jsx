@@ -26,9 +26,12 @@ const NotificationItem = ({
               className="w-full h-full object-cover"
             />
           ) : (
-            <span className="text-white text-lg font-bold">
+            <span className="text-white  ">
               {n?.sender?.fullName
-                ? n.sender.fullName.charAt(0).toUpperCase()
+                ? n.sender.fullName
+                    .split(" ")
+                    .map((word) => word.charAt(0).toUpperCase())
+                    .join("")
                 : "S"}
             </span>
           )}
@@ -37,20 +40,21 @@ const NotificationItem = ({
         <div className="flex-1 flex flex-col justify-between min-h-[60px]">
           <div className="flex justify-between items-start gap-4">
             <div className="min-w-0">
-              <p className="text-accent-dark text-sm font-semibold truncate">
+              <p className="text-accent-dark dark:text-white text-sm font-semibold truncate">
                 {n.title}
               </p>
 
-              <p className="text-xs text-gray-500">
-                By:{" "}
-                {n.sender?.fullName
-                  ? `${n.sender.fullName.split(" ")[0]} ${
-                      n.sender.fullName.split(" ")[1]?.[0] || ""
+              <p className="text-sm text-gray-600 dark:text-gray-500  line-clamp-2">
+                {n.message}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-200 font-semibold">
+                By :{" "}
+                {n?.sender?.fullName
+                  ? `${n?.sender.fullName.split(" ")[0]} ${
+                      n?.sender?.fullName.split(" ")[1]?.[0] || ""
                     }`
                   : "System"}
               </p>
-
-              <p className="text-sm text-gray-500  line-clamp-2">{n.message}</p>
             </div>
             <span className="text-xs text-gray-500 whitespace-nowrap">
               {timeAgo(n.createdAt)}

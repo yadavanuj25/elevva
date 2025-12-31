@@ -121,18 +121,18 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     );
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (window.innerWidth < 768 && isOpen) {
-        const sidebar = document.getElementById("app-sidebar");
-        if (sidebar && !sidebar.contains(e.target)) {
-          setIsOpen(false);
-        }
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen, setIsOpen]);
+  // useEffect(() => {
+  //   const handleClickOutside = (e) => {
+  //     if (window.innerWidth < 768 && isOpen) {
+  //       const sidebar = document.getElementById("app-sidebar");
+  //       if (sidebar && !sidebar.contains(e.target)) {
+  //         setIsOpen(false);
+  //       }
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, [isOpen, setIsOpen]);
 
   const filteredSections = navSections
     .map((section) => {

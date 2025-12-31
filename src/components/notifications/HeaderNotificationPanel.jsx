@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useLocation } from "react-router-dom";
+
 import { Bell, X, Trash, CheckCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import NotificationItem from "./NotificationItem";
@@ -46,7 +48,10 @@ const HeaderNotificationPanel = ({
   markAllAsRead,
   deleteNotification,
 }) => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const panelRef = useRef(null);
+
   const [visible, setVisible] = useState(open);
   const { today, yesterday, earlier } = groupNotifications(notifications);
 
@@ -57,11 +62,32 @@ const HeaderNotificationPanel = ({
       return () => clearTimeout(timer);
     }
   }, [open]);
+
+  useEffect(() => {
+    onClose();
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handlePointerDown = (e) => {
+      if (panelRef.current && !panelRef.current.contains(e.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown, true);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown, true);
+    };
+  }, [open, onClose]);
+
   if (!visible) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-50 overflow-hidden transition-all duration-300 ${
+      className={`fixed inset-0 z-[60] overflow-hidden transition-all duration-300 ${
         open ? "pointer-events-auto" : "pointer-events-none"
       }`}
     >
@@ -72,6 +98,7 @@ const HeaderNotificationPanel = ({
         }`}
       />
       <div
+        ref={panelRef}
         className={`absolute right-0 top-0 h-full w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl flex flex-col
           transform transition-transform duration-300 ease-in-out
           ${open ? "translate-x-0" : "translate-x-full"}`}

@@ -31,6 +31,7 @@
   --bg-color: var(--gray-100);
   --text-color: var(--black);
   --accent-color: var(--accent-light);
+  
 }
 * {
   transition:
@@ -40,15 +41,10 @@
 }
 
 html.light {
-  /* --text-color: #000000;
-  --bg-color: #f7f8f9; */
   --bg-color: var(--lightBg);   
   --text-color: var(--black);
 }
-
 html.dark {
-  /* --text-color: #ffffff;
-  --bg-color: var(--darkBg); */
   --bg-color: var(--darkBg);
   --text-color: var(--white);
 }
