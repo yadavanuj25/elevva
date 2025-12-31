@@ -21,6 +21,7 @@ import {
   Settings,
   ChartNoAxesCombined,
 } from "lucide-react";
+import { useInterviews } from "../../context/InterViewContext";
 import { useAuth } from "../../auth/AuthContext";
 import DateDisplay from "../ui/DateDisplay";
 import NoData from "../ui/NoData";
@@ -41,12 +42,14 @@ import { useMessage } from "../../auth/MessageContext";
 import GroupButton from "../ui/buttons/GroupButton";
 import ActionMenu from "../ui/buttons/ActionMenu";
 import CustomSwal from "../../utils/CustomSwal";
-
+import SelectRequirementModal from "../modals/SelectRequirementModal";
+import { getAllRequirements } from "../../services/clientServices";
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { addInterviewRecords } = useInterviews();
   const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const [allProfiles, setAllProfiles] = useState([]);
   const [pagination, setPagination] = useState({
@@ -64,6 +67,11 @@ const ProfileList = () => {
   const [favourites, setFavourites] = useState([]);
   const [statusLoading, setStatusLoading] = useState(null);
   const [openStatusRow, setOpenStatusRow] = useState(null);
+  const [selectedProfiles, setSelectedProfiles] = useState([]);
+  const [openRequirementModal, setOpenRequirementModal] = useState(false);
+  const [requirementsFromAPI, setRequirementsFromAPI] = useState([]);
+  const [loadingRequirements, setLoadingRequirements] = useState(false);
+  const [interviewRecords, setInterviewRecords] = useState([]);
 
   const statusOptions = ["Active", "In-active", "Banned"];
   useEffect(() => {
@@ -80,6 +88,10 @@ const ProfileList = () => {
   useEffect(() => {
     fetchProfiles();
   }, [pagination.page, pagination.limit, searchQuery, activeTab]);
+
+  useEffect(() => {
+    fetchRequirements();
+  }, []);
 
   useEffect(() => {
     if (successMsg) {
@@ -129,6 +141,23 @@ const ProfileList = () => {
       setLoading(false);
     }
   };
+
+  const fetchRequirements = async () => {
+    try {
+      const response = await getAllRequirements(
+        pagination.page,
+        pagination.limit
+      );
+      console.log(response);
+      const allRequirements = response.requirements || [];
+      setRequirementsFromAPI(allRequirements);
+    } catch (error) {
+      console.error("Requirement fetch error", error);
+    } finally {
+      setLoadingRequirements(false);
+    }
+  };
+
   const handleChangePage = (event, newPage) => {
     setPagination((prev) => ({ ...prev, page: newPage + 1 }));
   };
@@ -255,6 +284,70 @@ const ProfileList = () => {
     setStatusTabs(tabsWithCounts);
   };
 
+  const handleStartScreening = (selectedRequirement) => {
+    if (!selectedRequirement) return;
+    const newRecords = selectedProfiles.map((profile) => ({
+      _id: crypto.randomUUID(),
+      profileId: profile._id,
+      profileName: profile.fullName,
+      requirementId: selectedRequirement._id,
+      requirementTitle: selectedRequirement.techStack,
+      hrId: profile.submittedBy._id,
+      hrName: profile.submittedBy.fullName,
+      bdeId: user?._id,
+      bdeName: user?.fullName,
+      status: "Screening",
+      stage: "BDE_SCREENING",
+      createdAt: new Date(),
+    }));
+    addInterviewRecords(newRecords);
+    setSelectedProfiles([]);
+    setOpenRequirementModal(false);
+    navigate("/admin/interviewmanagement");
+  };
+
+  // const handleStartScreening = (selectedRequirement) => {
+  //   if (!selectedRequirement || selectedProfiles.length === 0) return;
+
+  //   const payload = selectedProfiles.map((profile) => ({
+  //     _id: crypto.randomUUID(), // temporary (API will replace)
+  //     profileId: profile._id,
+  //     requirementId: selectedRequirement._id,
+
+  //     assignedBy: {
+  //       role: "BDE",
+  //       userId: user._id,
+  //       userName: user.fullName,
+  //     },
+
+  //     submittedBy: {
+  //       role: "HR",
+  //       userId: profile.submittedBy._id,
+  //       userName: profile.submittedBy.fullName,
+  //     },
+
+  //     currentStage: "BDE_SCREENING",
+  //     status: "Screening",
+
+  //     history: [
+  //       {
+  //         stage: "BDE_SCREENING",
+  //         actionBy: "BDE",
+  //         actionById: user._id,
+  //         actionByName: user.fullName,
+  //         action: "STARTED",
+  //         timestamp: new Date().toISOString(),
+  //       },
+  //     ],
+  //     rejectionReason: null,
+  //     createdAt: new Date().toISOString(),
+  //   }));
+  //   addInterviewRecords(payload);
+  //   setSelectedProfiles([]);
+  //   setOpenRequirementModal(false);
+  //   navigate("/admin/interviewmanagement");
+  // };
+
   return (
     <>
       <div>
@@ -291,7 +384,18 @@ const ProfileList = () => {
             <div className="filter flex items-center justify-between">
               <div className="inline-flex" role="group">
                 <GroupButton text="Profile" icon={<File size={16} />} />
-                <GroupButton text="Settings" icon={<Settings size={16} />} />
+                <GroupButton
+                  text="Settings"
+                  icon={<Settings size={16} />}
+                  onClick={() => {
+                    if (selectedProfiles.length === 0) {
+                      alert("Please select at least one profile!");
+                      return;
+                    }
+                    setOpenRequirementModal(true);
+                  }}
+                />
+
                 <GroupButton
                   text="Stats"
                   icon={<ChartNoAxesCombined size={16} />}
@@ -347,7 +451,7 @@ const ProfileList = () => {
                         { id: "submittedBy", label: "SubmittedBy" },
                         { id: "createdAt", label: "Created Dtm" },
                         { id: "updatedAt", label: "Modified Dtm" },
-                        // { id: "screening", label: "Screening" },
+                        { id: "screening", label: "Screening" },
 
                         { id: "action", label: "Action", sticky: true },
                       ].map((column) => (
@@ -400,7 +504,23 @@ const ProfileList = () => {
                             padding="checkbox"
                           >
                             <div className="flex flex-col items-center justify-center  ">
-                              <Checkbox color=" dark:text-white" />
+                              <Checkbox
+                                checked={selectedProfiles.some(
+                                  (p) => p._id === item._id
+                                )}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setSelectedProfiles((prev) => [
+                                      ...prev,
+                                      item,
+                                    ]);
+                                  } else {
+                                    setSelectedProfiles((prev) =>
+                                      prev.filter((p) => p._id !== item._id)
+                                    );
+                                  }
+                                }}
+                              />
 
                               {item.profileCode && (
                                 <small className="text-accent-dark bg-accent-light  p-[1px]   border-b border-accent-dark  rounded font-[500]">
@@ -519,33 +639,12 @@ const ProfileList = () => {
                           <TableCell className="whitespace-nowrap  dark:text-gray-200">
                             <DateDisplay date={item.updatedAt} />
                           </TableCell>
-                          {/* <TableCell className="whitespace-nowrap  dark:text-gray-200">
-                            <button onClick={() => startScreening(row)}>
+                          <TableCell className="whitespace-nowrap  dark:text-gray-200">
+                            <button onClick={() => startScreening(item)}>
                               Start Screening
                             </button>
-                          </TableCell> */}
+                          </TableCell>
 
-                          {/* <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
-                            <div className="flex gap-2 items-center">
-                              <EditButton
-                                onClick={() =>
-                                  navigate(
-                                    `/admin/profilemanagement/edit-profile/${item._id}`
-                                  )
-                                }
-                              />
-                              <ViewButton
-                                onClick={() =>
-                                  navigate(
-                                    `/admin/profilemanagement/view-profile/${item._id}`
-                                  )
-                                }
-                              />
-                              <button className="text-white bg-red-600 px-1 py-1 rounded hover:bg-[#222]">
-                                <Trash size={18} />
-                              </button>
-                            </div>
-                          </TableCell> */}
                           <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                             <ActionMenu
                               onEdit={() =>
@@ -585,6 +684,13 @@ const ProfileList = () => {
               limit={pagination.limit}
               onPageChange={handleChangePage}
               onLimitChange={handleChangeRowsPerPage}
+            />
+
+            <SelectRequirementModal
+              open={openRequirementModal}
+              onClose={() => setOpenRequirementModal(false)}
+              requirements={requirementsFromAPI}
+              onConfirm={handleStartScreening}
             />
           </div>
         </div>

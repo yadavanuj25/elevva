@@ -681,7 +681,7 @@ const Chat = ({ socket }) => {
                   conversation={conv}
                   isActive={activeConversation?._id === conv._id}
                   onClick={() => handleConversationClick(conv)}
-                  currentUserId={currentUser.id}
+                  currentUserId={currentUser._id}
                 />
               ))
             )}

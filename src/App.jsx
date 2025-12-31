@@ -42,6 +42,7 @@ import MyProfile from "./pages/MyProfile";
 import EditMyProfile from "./components/myProfile/EditMyProfile";
 import RequirementStats from "./components/stats/Requirements/RequirementStats";
 import InterviewDashboard from "./pages/InterviewDashboard";
+import { InterviewProvider } from "./context/InterViewContext";
 import NotFound from "./pages/NotFound";
 import Chat from "./pages/Chat";
 
@@ -69,331 +70,332 @@ const App = () => {
         theme="colored"
         transition={Slide}
       />
+      <InterviewProvider>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/lock-screen" element={<LockScreen />} />
 
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/lock-screen" element={<LockScreen />} />
-
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/lock-screen"
-          element={
-            <PublicRoute>
-              <LockScreen />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <PublicRoute>
-              <ForgotPassword />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/reset-password/:token"
-          element={
-            <PublicRoute>
-              <ResetPassword />
-            </PublicRoute>
-          }
-        />
-
-        {/* Private routes with layout */}
-        <Route element={<AdminLayout />}>
-          <Route path="/unauthorized" element={<UnauthorizedPage />} />
-          <Route path="/my-profile" element={<MyProfile />} />
-          <Route path="/edit-profile" element={<EditMyProfile />} />
           <Route
-            path="/admin/super-dashboard"
+            path="/login"
             element={
-              <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
-                <SuperDashboard />
-              </ProtectedRoute>
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/lock-screen"
+            element={
+              <PublicRoute>
+                <LockScreen />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <PublicRoute>
+                <ForgotPassword />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/reset-password/:token"
+            element={
+              <PublicRoute>
+                <ResetPassword />
+              </PublicRoute>
             }
           />
 
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
+          {/* Private routes with layout */}
+          <Route element={<AdminLayout />}>
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
+            <Route path="/my-profile" element={<MyProfile />} />
+            <Route path="/edit-profile" element={<EditMyProfile />} />
+            <Route
+              path="/admin/super-dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
+                  <SuperDashboard />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Reports */}
-          <Route
-            path="/admin/reports"
-            element={
-              <ProtectedRoute allowedModules={["reports"]}>
-                <Reports />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/reports/hr"
-            element={
-              <ProtectedRoute
-                allowedModules={["reports"]}
-                allowedSubmodules={["HR"]}
-              >
-                <Reports />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/reports/bde"
-            element={
-              <ProtectedRoute
-                allowedModules={["reports"]}
-                allowedSubmodules={["BDE"]}
-              >
-                <Reports />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/reports/sales"
-            element={
-              <ProtectedRoute
-                allowedModules={["reports"]}
-                allowedSubmodules={["Sales"]}
-              >
-                <Reports />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Settings */}
-          <Route
-            path="/admin/settings"
-            element={
-              <ProtectedRoute>
-                <Settings />
-              </ProtectedRoute>
-            }
-          />
+            {/* Reports */}
+            <Route
+              path="/admin/reports"
+              element={
+                <ProtectedRoute allowedModules={["reports"]}>
+                  <Reports />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/reports/hr"
+              element={
+                <ProtectedRoute
+                  allowedModules={["reports"]}
+                  allowedSubmodules={["HR"]}
+                >
+                  <Reports />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/reports/bde"
+              element={
+                <ProtectedRoute
+                  allowedModules={["reports"]}
+                  allowedSubmodules={["BDE"]}
+                >
+                  <Reports />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/reports/sales"
+              element={
+                <ProtectedRoute
+                  allowedModules={["reports"]}
+                  allowedSubmodules={["Sales"]}
+                >
+                  <Reports />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Profiles */}
-          <Route
-            path="/admin/profilemanagement/profiles"
-            element={
-              <ProtectedRoute allowedModules={["profile"]}>
-                <Profiles />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/profilemanagement/add-profile"
-            element={
-              <ProtectedRoute allowedModules={["profile"]}>
-                <ProfileSubmission />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/profilemanagement/edit-profile/:id"
-            element={
-              <ProtectedRoute allowedModules={["profile"]}>
-                <EditProfile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/profilemanagement/view-profile/:id"
-            element={
-              <ProtectedRoute allowedModules={["profile"]}>
-                <ViewProfile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/profilemanagement/profiles/stats"
-            element={
-              <ProtectedRoute allowedModules={["profile"]}>
-                <ProfileStats />
-              </ProtectedRoute>
-            }
-          />
-          {/* Roles */}
-          <Route
-            path="/admin/rolemanagement/roles"
-            element={
-              <ProtectedRoute allowedModules={["users", "roles"]}>
-                {/* allowedModules={["roles"]} */}
-                <RoleManagement />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/rolemanagement/add-roles"
-            element={
-              <ProtectedRoute allowedModules={["users", "roles"]}>
-                <CreateRole />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/rolemanagement/edit-roles/:id"
-            element={
-              <ProtectedRoute allowedModules={["users", "roles"]}>
-                <EditRole />
-              </ProtectedRoute>
-            }
-          />
-          {/* Users */}
-          <Route
-            path="/admin/usermanagement/users"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <UserManagement />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/usermanagement/add-user"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <CreateUser />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/usermanagement/edit-user/:id"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <EditUser />
-              </ProtectedRoute>
-            }
-          />
-          {/* Clients */}
-          <Route
-            path="/admin/clientmanagement/clients"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <ClientList />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/clientmanagement/clients/stats"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <ClientStats />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/clientmanagement/add-client"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <AddClient />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/clientmanagement/edit-client/:id"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <EditClient />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/clientmanagement/view-client/:id"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <ViewClient />
-              </ProtectedRoute>
-            }
-          />
-          {/* Client requirement */}
-          <Route
-            path="/admin/clientmanagement/clientrequirements"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                {/* <ClientsRequirementsList /> */}
-                <ClientsRequirementsList />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/clientmanagement/clientrequirements/stats"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <RequirementStats />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/clientmanagement/add-clientrequirement"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <ClientRequirement />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/clientmanagement/edit-requirement/:id"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <EditClientRequirement />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/clientmanagement/view-requirement/:id"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <ViewRequirement />
-              </ProtectedRoute>
-            }
-          />
+            {/* Settings */}
+            <Route
+              path="/admin/settings"
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Interview management */}
+            {/* Profiles */}
+            <Route
+              path="/admin/profilemanagement/profiles"
+              element={
+                <ProtectedRoute allowedModules={["profile"]}>
+                  <Profiles />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/profilemanagement/add-profile"
+              element={
+                <ProtectedRoute allowedModules={["profile"]}>
+                  <ProfileSubmission />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/profilemanagement/edit-profile/:id"
+              element={
+                <ProtectedRoute allowedModules={["profile"]}>
+                  <EditProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/profilemanagement/view-profile/:id"
+              element={
+                <ProtectedRoute allowedModules={["profile"]}>
+                  <ViewProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/profilemanagement/profiles/stats"
+              element={
+                <ProtectedRoute allowedModules={["profile"]}>
+                  <ProfileStats />
+                </ProtectedRoute>
+              }
+            />
+            {/* Roles */}
+            <Route
+              path="/admin/rolemanagement/roles"
+              element={
+                <ProtectedRoute allowedModules={["users", "roles"]}>
+                  {/* allowedModules={["roles"]} */}
+                  <RoleManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/rolemanagement/add-roles"
+              element={
+                <ProtectedRoute allowedModules={["users", "roles"]}>
+                  <CreateRole />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/rolemanagement/edit-roles/:id"
+              element={
+                <ProtectedRoute allowedModules={["users", "roles"]}>
+                  <EditRole />
+                </ProtectedRoute>
+              }
+            />
+            {/* Users */}
+            <Route
+              path="/admin/usermanagement/users"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <UserManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/usermanagement/add-user"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <CreateUser />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/usermanagement/edit-user/:id"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <EditUser />
+                </ProtectedRoute>
+              }
+            />
+            {/* Clients */}
+            <Route
+              path="/admin/clientmanagement/clients"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <ClientList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/clientmanagement/clients/stats"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <ClientStats />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/clientmanagement/add-client"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <AddClient />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/clientmanagement/edit-client/:id"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <EditClient />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/clientmanagement/view-client/:id"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <ViewClient />
+                </ProtectedRoute>
+              }
+            />
+            {/* Client requirement */}
+            <Route
+              path="/admin/clientmanagement/clientrequirements"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  {/* <ClientsRequirementsList /> */}
+                  <ClientsRequirementsList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/clientmanagement/clientrequirements/stats"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <RequirementStats />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/clientmanagement/add-clientrequirement"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <ClientRequirement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/clientmanagement/edit-requirement/:id"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <EditClientRequirement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/clientmanagement/view-requirement/:id"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <ViewRequirement />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/admin/interviewmanagement"
-            element={
-              <ProtectedRoute allowedModules={["users"]}>
-                <InterviewDashboard />
-              </ProtectedRoute>
-            }
-          />
+            {/* Interview management */}
 
-          {/* Task management */}
+            <Route
+              path="/admin/interviewmanagement"
+              element={
+                <ProtectedRoute allowedModules={["users"]}>
+                  <InterviewDashboard />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/taskboard"
-            element={
-              <ProtectedRoute>
-                <Tasks />
-              </ProtectedRoute>
-            }
-          />
+            {/* Task management */}
 
-          {/* Chats */}
-          <Route
-            path="/chats"
-            element={
-              <ProtectedRoute>
-                <Chat />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
+            <Route
+              path="/taskboard"
+              element={
+                <ProtectedRoute>
+                  <Tasks />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Chats */}
+            <Route
+              path="/chats"
+              element={
+                <ProtectedRoute>
+                  <Chat />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </InterviewProvider>
     </div>
   );
 };
