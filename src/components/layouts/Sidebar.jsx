@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { AiOutlineDashboard } from "react-icons/ai";
 import logo from "../../assets/logo/logo.png";
-import { FaUsers, FaUnlockAlt, FaHandshake } from "react-icons/fa";
+import { FaUsers, FaUnlockAlt, FaHandshake, FaUserTie } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { FaBriefcase, FaGears } from "react-icons/fa6";
 import { ImProfile } from "react-icons/im";
@@ -72,6 +72,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         },
       ],
     },
+    {
+      section: "INTERVIEW MANAGEMENT",
+      items: [
+        {
+          module: "users",
+          path: "/admin/interviewmanagement",
+          label: "Interviews",
+          icon: <FaUserTie size={16} />,
+        },
+      ],
+    },
 
     {
       section: "Settings",
@@ -80,6 +91,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           module: "settings",
           path: "/admin/settings",
           label: "Settings",
+          icon: <FaGears size={16} />,
+        },
+      ],
+    },
+    {
+      items: [
+        {
+          module: "settings",
+          path: "/chats",
+          label: "Chats",
           icon: <FaGears size={16} />,
         },
       ],

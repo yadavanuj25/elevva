@@ -41,7 +41,9 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import MyProfile from "./pages/MyProfile";
 import EditMyProfile from "./components/myProfile/EditMyProfile";
 import RequirementStats from "./components/stats/Requirements/RequirementStats";
+import InterviewDashboard from "./pages/InterviewDashboard";
 import NotFound from "./pages/NotFound";
+import Chat from "./pages/Chat";
 
 const App = () => {
   const location = useLocation();
@@ -358,6 +360,17 @@ const App = () => {
             }
           />
 
+          {/* Interview management */}
+
+          <Route
+            path="/admin/interviewmanagement"
+            element={
+              <ProtectedRoute allowedModules={["users"]}>
+                <InterviewDashboard />
+              </ProtectedRoute>
+            }
+          />
+
           {/* Task management */}
 
           <Route
@@ -365,6 +378,16 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Tasks />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Chats */}
+          <Route
+            path="/chats"
+            element={
+              <ProtectedRoute>
+                <Chat />
               </ProtectedRoute>
             }
           />
