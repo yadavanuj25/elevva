@@ -42,7 +42,7 @@ import { useMessage } from "../../auth/MessageContext";
 import GroupButton from "../ui/buttons/GroupButton";
 import ActionMenu from "../ui/buttons/ActionMenu";
 import CustomSwal from "../../utils/CustomSwal";
-import SelectRequirementModal from "../modals/SelectRequirementModal";
+import SelectRequirementModal from "../modals/interviewModal/SelectRequirementModal";
 import { getAllRequirements } from "../../services/clientServices";
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
@@ -691,6 +691,7 @@ const ProfileList = () => {
               onClose={() => setOpenRequirementModal(false)}
               requirements={requirementsFromAPI}
               onConfirm={handleStartScreening}
+              candidate={selectedProfiles[0]}
             />
           </div>
         </div>
