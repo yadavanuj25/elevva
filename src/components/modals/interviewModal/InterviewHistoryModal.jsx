@@ -15,7 +15,6 @@ const InterviewHistoryModal = ({ open, onClose, record }) => {
               {record.profileName} • {record.requirementTitle}
             </p>
           </div>
-
           <button onClick={onClose}>
             <X className="w-5 h-5" />
           </button>
