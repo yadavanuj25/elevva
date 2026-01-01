@@ -22,6 +22,10 @@ const Chat = ({ socket }) => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [typingUser, setTypingUser] = useState(null);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
+  const isUserOnline = (userId) => onlineUsers.includes(userId);
 
   useEffect(() => {
     getConversations().then((res) => {
@@ -29,8 +33,62 @@ const Chat = ({ socket }) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (!socket || !active) return;
+
+    // Join room
+    socket.emit("join_conversation", active._id);
+
+    // const handleNewMessage = (message) => {
+    //   setMessages((prev) => [...prev, message]);
+    // };
+
+    const handleNewMessage = (message) => {
+      setMessages((prev) => [...prev, message]);
+      if (message.sender._id !== user._id) {
+        markConversationAsRead(active._id);
+      }
+    };
+
+    const handleUserTyping = ({ userId, fullName }) => {
+      if (userId !== user._id) {
+        setTypingUser(fullName);
+      }
+    };
+
+    const handleUserStopTyping = () => {
+      setTypingUser(null);
+    };
+
+    const handleOnlineUsers = (users) => {
+      setOnlineUsers(users);
+    };
+
+    socket.on("new_message", handleNewMessage);
+    socket.on("user_typing", handleUserTyping);
+    socket.on("user_stop_typing", handleUserStopTyping);
+    socket.on("online_users", handleOnlineUsers);
+
+    return () => {
+      socket.emit("leave_conversation", active._id);
+      socket.off("new_message", handleNewMessage);
+      socket.off("user_typing", handleUserTyping);
+      socket.off("user_stop_typing", handleUserStopTyping);
+      socket.off("online_users", handleOnlineUsers);
+    };
+  }, [socket, active?._id, user._id]);
+
+  // const selectConversation = async (conv) => {
+  //   setActive(conv);
+  //   const res = await getMessages(conv._id);
+  //   setMessages(res.messages || []);
+  //   await markConversationAsRead(conv._id);
+  // };
   const selectConversation = async (conv) => {
+    setTypingUser(null);
+    setMessages([]);
     setActive(conv);
+
     const res = await getMessages(conv._id);
     setMessages(res.messages || []);
     await markConversationAsRead(conv._id);
@@ -40,6 +98,11 @@ const Chat = ({ socket }) => {
     if (!text.trim()) return;
     await sendMessage(active._id, text);
     setText("");
+  };
+
+  const handleDeleteMessage = async (messageId) => {
+    await deleteMessage(messageId);
+    setMessages((prev) => prev.filter((m) => m._id !== messageId));
   };
 
   if (!open) {
@@ -54,11 +117,15 @@ const Chat = ({ socket }) => {
   }
 
   return (
-    <div className="border border-gray-300 dark:border-gray-600 h-screen rounded-xl">
+    <div className="border border-gray-300 dark:border-gray-600 min-h-screen rounded-xl">
       <ChatHeader
         conversationsCount={conversations.length}
         onNewChat={() => setShowModal(true)}
         onClose={() => setOpen(false)}
+        activeConversation={active}
+        currentUserId={user._id}
+        isUserOnline={isUserOnline}
+        typingUser={typingUser}
       />
 
       <div className="flex flex-1">
@@ -75,12 +142,24 @@ const Chat = ({ socket }) => {
               <MessageList
                 messages={messages}
                 currentUserId={user._id}
-                onDelete={deleteMessage}
+                onDelete={handleDeleteMessage}
               />
+              {/* <MessageInput
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                onSend={sendMessages}
+              /> */}
+              {typingUser && (
+                <div className="px-4 pb-1 text-xs text-gray-400">
+                  {typingUser} is typing...
+                </div>
+              )}
               <MessageInput
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 onSend={sendMessages}
+                socket={socket}
+                conversationId={active?._id}
               />
             </>
           ) : (
@@ -94,8 +173,15 @@ const Chat = ({ socket }) => {
       <NewChatModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
+        // onCreateChat={(conv) => {
+        //   setConversations((p) => [conv, ...p]);
+        //   selectConversation(conv);
+        // }}
         onCreateChat={(conv) => {
-          setConversations((p) => [conv, ...p]);
+          setConversations((prev) => {
+            const exists = prev.some((c) => c._id === conv._id);
+            return exists ? prev : [conv, ...prev];
+          });
           selectConversation(conv);
         }}
         currentUserId={user._id}
