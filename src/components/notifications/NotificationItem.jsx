@@ -10,9 +10,9 @@ const NotificationItem = ({
 
   return (
     <div
-      onClick={() => {
-        if (!n.read) markAsRead(n._id);
-      }}
+      // onClick={() => {
+      //   if (!n.read) markAsRead(n._id);
+      // }}
       className={`relative px-4 py-2 border-b cursor-pointer transition ${
         !n.read ? "bg-accent-light/40 dark:bg-gray-800/40" : ""
       } hover:bg-accent-light hover:dark:bg-gray-800`}
@@ -62,7 +62,12 @@ const NotificationItem = ({
           </div>
           <div className="absolute right-2 bottom-[12px] flex justify-end items-center gap-3 ">
             {!n.read && (
-              <div className="relative group">
+              <div
+                onClick={() => {
+                  if (!n.read) markAsRead(n._id);
+                }}
+                className="relative group"
+              >
                 <span className="w-2.5 h-2.5 bg-accent-dark rounded-full cursor-pointer block" />
                 <span className="absolute bottom-full mb-0.5 right-0 hidden group-hover:block text-[10px] text-white bg-accent-dark px-1 py-0 rounded whitespace-nowrap">
                   Mark as Read
