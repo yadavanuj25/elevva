@@ -37,7 +37,7 @@ const UpdateInterviewStageModal = ({ open, record, onClose, onUpdate }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center">
-      <div className="bg-white dark:bg-gray-900 w-full max-w-md rounded-xl shadow-lg p-6">
+      <div className="bg-white dark:bg-gray-900 w-full max-w-xl rounded-xl shadow-lg p-6">
         <h2 className="text-lg font-semibold mb-4">Update Interview Stage</h2>
 
         <div className="space-y-3 text-sm">

@@ -6,8 +6,8 @@ const InterviewHistoryModal = ({ open, onClose, record }) => {
   console.log(record);
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-900 w-full max-w-lg rounded-xl shadow-lg overflow-hidden">
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-gray-900 w-full max-w-xl rounded-xl shadow-lg overflow-hidden">
         <div className="flex justify-between items-center px-5 py-3 border-b dark:border-gray-700">
           <div>
             <h2 className="text-lg font-semibold">Interview History</h2>
