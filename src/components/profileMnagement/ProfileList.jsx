@@ -385,7 +385,7 @@ const ProfileList = () => {
               <div className="inline-flex" role="group">
                 <GroupButton text="Profile" icon={<File size={16} />} />
                 <GroupButton
-                  text="Settings"
+                  text="Interview"
                   icon={<Settings size={16} />}
                   onClick={() => {
                     if (selectedProfiles.length === 0) {
