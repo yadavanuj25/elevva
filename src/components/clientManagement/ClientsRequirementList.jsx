@@ -68,6 +68,7 @@ const ClientsRequirementsList = () => {
   useEffect(() => {
     fetchAllOptions();
   }, []);
+
   useEffect(() => {
     if (successMsg) {
       CustomSwal.fire({

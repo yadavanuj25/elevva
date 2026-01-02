@@ -32,6 +32,7 @@ const MessageList = ({ messages, currentUserId, onDelete }) => {
           message={message}
           isOwn={message.sender?._id === currentUserId}
           onDelete={onDelete}
+          currentUserId={currentUserId}
         />
       ))}
     </div>

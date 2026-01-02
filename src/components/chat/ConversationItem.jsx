@@ -10,7 +10,7 @@ const ConversationItem = ({
     <div
       onClick={onClick}
       className={`p-3 cursor-pointer ${
-        isActive ? "bg-indigo-50 border-l-4 border-accent-dark" : ""
+        isActive ? "bg-accent-light border-l-4 border-accent-dark" : ""
       }`}
     >
       <h4 className="font-semibold">

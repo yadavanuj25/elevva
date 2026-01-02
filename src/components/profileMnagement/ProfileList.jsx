@@ -148,7 +148,7 @@ const ProfileList = () => {
         pagination.page,
         pagination.limit
       );
-      console.log(response);
+
       const allRequirements = response.requirements || [];
       setRequirementsFromAPI(allRequirements);
     } catch (error) {

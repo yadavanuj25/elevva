@@ -431,6 +431,8 @@ const Chat = ({ socket }) => {
     }
   }, []);
 
+  console.log(activeConversation);
+
   useEffect(() => {
     if (socket && activeConversation) {
       socket.emit("join_conversation", activeConversation._id);
