@@ -25,7 +25,6 @@ import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import GroupButton from "../ui/buttons/GroupButton";
 import axios from "axios";
-import Button from "../ui/Button";
 import SelectField from "../ui/SelectField";
 import CustomSwal from "../../utils/CustomSwal";
 
@@ -63,7 +62,6 @@ const ClientList = () => {
   const [viewMode, setViewMode] = useState("list");
   const [stats, setStats] = useState(null);
   const [settings, setSettings] = useState({});
-  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     search: "",
     clientCategory: "",
@@ -129,11 +127,8 @@ const ClientList = () => {
 
   const fetchSettings = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/clients/options`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setSettings(response.data.options);
-      console.log(response.data.options);
+      const response = await getAllOptions();
+      setSettings(response.options);
     } catch (err) {
       console.error("Error fetching settings:", err);
     }
@@ -141,7 +136,6 @@ const ClientList = () => {
 
   const formatStatus = (status = "") =>
     status.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
-
   const fetchClients = async () => {
     setLoading(true);
     try {
@@ -194,6 +188,7 @@ const ClientList = () => {
       const response = await axios.get(`${API_BASE_URL}/clients/stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log(response.data);
       setStats(response.data.stats);
     } catch (err) {
       console.error("Error fetching stats:", err);

@@ -21,7 +21,7 @@ const CandidateAssignment = ({ requirement, onCandidateAssigned }) => {
   }, []);
 
   const fetchProfiles = async () => {
-    const data = await getProfiles(); // from Profiles DB
+    const data = await getProfiles();
     setProfiles(data);
   };
 

@@ -30,6 +30,19 @@ const getStickyClass = (columnId) => {
   }
 };
 
+const checkboxSx = {
+  color: "#6b7280",
+  "&.Mui-checked": {
+    color: "#2563eb",
+  },
+  ".dark &": {
+    color: "#d1d5db",
+    "&.Mui-checked": {
+      color: "#60a5fa",
+    },
+  },
+};
+
 const TableLayout = ({
   loading = false,
   columns,
@@ -56,7 +69,7 @@ const TableLayout = ({
                   padding="checkbox"
                   className="bg-[#f2f4f5] dark:bg-darkGray"
                 >
-                  <Checkbox color=" dark:text-white" />
+                  <Checkbox sx={checkboxSx} />
                 </TableCell>
 
                 {/* Table Columns */}
@@ -104,7 +117,7 @@ const TableLayout = ({
                     className="hover:bg-[#f2f4f5] dark:hover:bg-darkGray"
                   >
                     <TableCell padding="checkbox">
-                      <Checkbox color=" dark:text-white" />
+                      <Checkbox sx={checkboxSx} />
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
                       <div className="flex items-center gap-2">

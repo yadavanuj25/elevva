@@ -20,9 +20,21 @@ import TableHeader from "../ui/tableComponents/TableHeader";
 import TableSkeleton from "../loaders/TableSkeleton";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
-import EditButton from "../ui/buttons/EditButton";
 import ToolTip from "../ui/ToolTip";
 import CustomSwal from "../../utils/CustomSwal";
+
+const checkboxSx = {
+  color: "#6b7280",
+  "&.Mui-checked": {
+    color: "#2563eb",
+  },
+  ".dark &": {
+    color: "#d1d5db",
+    "&.Mui-checked": {
+      color: "#60a5fa",
+    },
+  },
+};
 
 const RoleList = () => {
   PageTitle("Elevva | Roles");
@@ -258,12 +270,12 @@ const RoleList = () => {
                       className="bg-[#f2f4f5] dark:bg-darkGray"
                     >
                       <Checkbox
-                        color=" dark:text-white"
                         indeterminate={
                           numSelected > 0 && numSelected < rowCount
                         }
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={handleSelectAllClick}
+                        sx={checkboxSx}
                       />
                     </TableCell>
 
@@ -325,9 +337,9 @@ const RoleList = () => {
                         >
                           <TableCell padding="checkbox">
                             <Checkbox
-                              color=" dark:text-white"
                               checked={isItemSelected}
                               onChange={() => handleCheckboxClick(row.id)}
+                              sx={checkboxSx}
                             />
                           </TableCell>
                           <TableCell className="whitespace-nowrap text-accent-darkBg dark:text-white font-semibold">

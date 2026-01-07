@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { io } from "socket.io-client";
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
-
 import {
   getAllNotifications,
   getUnreadNotificationCount,
@@ -109,9 +108,7 @@ export const useHeaderNotifications = (token) => {
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
     });
-
     socketRef.current.on("connect", () => {});
-
     socketRef.current.on("notification", (data) => {
       const isNew = !notifications.some((n) => n._id === data._id);
       if (!isNew) return;

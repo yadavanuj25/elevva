@@ -1,22 +1,28 @@
 import React from "react";
 import { X } from "lucide-react";
+import CancelButton from "../../ui/buttons/Cancel";
 
 const InterviewHistoryModal = ({ open, onClose, record }) => {
-  if (!open || !record) return null;
   console.log(record);
+  if (!open || !record) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-900 w-full max-w-xl rounded-xl shadow-lg overflow-hidden">
-        <div className="flex justify-between items-center px-5 py-3 border-b dark:border-gray-700">
-          <div>
-            <h2 className="text-lg font-semibold">Interview History</h2>
-            <p className="text-sm text-gray-500">
-              {record.profileName} • {record.requirementTitle}
+    <div className="fixed inset-0 bg-black/90  z-50 flex items-center justify-center text-gray-800 p-4">
+      <div className="bg-white  w-full max-w-xl min-h-[250px] rounded-xl shadow-lg overflow-hidden">
+        <div className="flex justify-between items-center px-5 py-3 bg-accent-dark border-b dark:border-gray-700">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-white">
+              Interview History -
+            </h2>
+            <p className="text-sm text-gray-200">
+              <span>{record.profileName}</span> •{record.requirementTitle}
             </p>
           </div>
-          <button onClick={onClose}>
-            <X className="w-5 h-5" />
+          <button
+            onClick={onClose}
+            className="bg-gray-200 text-black p-1 rounded hover:bg-gray-400"
+          >
+            <X size={18} />
           </button>
         </div>
 
@@ -30,9 +36,9 @@ const InterviewHistoryModal = ({ open, onClose, record }) => {
               {record.history.map((h, index) => (
                 <li
                   key={index}
-                  className="relative pl-6 border-l-2 border-blue-500"
+                  className="relative pl-6 border-l-2 border-accent-dark"
                 >
-                  <span className="absolute -left-[6px] top-1 w-3 h-3 bg-blue-500 rounded-full" />
+                  <span className="absolute -left-[7px] top-0 w-3 h-3 bg-accent-dark rounded-full" />
 
                   <div className="flex justify-between items-center">
                     <p className="font-medium">{h.stage.replace("_", " ")}</p>
@@ -41,9 +47,7 @@ const InterviewHistoryModal = ({ open, onClose, record }) => {
                     </span>
                   </div>
 
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    {h.status}
-                  </p>
+                  <p className="text-sm text-gray-600 ">{h.status}</p>
 
                   {h.remark && (
                     <p className="text-sm italic text-gray-500 mt-1">
@@ -58,16 +62,6 @@ const InterviewHistoryModal = ({ open, onClose, record }) => {
               ))}
             </ul>
           )}
-        </div>
-
-        {/* Footer */}
-        <div className="px-5 py-3 border-t dark:border-gray-700 flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700"
-          >
-            Close
-          </button>
         </div>
       </div>
     </div>

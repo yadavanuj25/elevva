@@ -61,7 +61,6 @@ const EditProfile = () => {
     zipcode,
     profileImage,
   } = user;
-
   const [profilePreview, setProfilePreview] = useState(profileImage);
   const [profileFile, setProfileFile] = useState(null);
   const [countries, setCountries] = useState([]);
@@ -77,7 +76,6 @@ const EditProfile = () => {
     address: address || "",
     zipcode: zipcode || "",
   });
-
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -96,7 +94,6 @@ const EditProfile = () => {
       setLoadingCountries(true);
       const res = await fetch("https://countriesnow.space/api/v0.1/countries");
       const data = await res.json();
-
       if (data?.data?.length) {
         setFullCountryData(data.data);
         setCountries(data.data.map((c) => c.country));
@@ -113,7 +110,6 @@ const EditProfile = () => {
       setStates([]);
       return;
     }
-
     try {
       setLoadingStates(true);
       const res = await fetch(
@@ -124,9 +120,7 @@ const EditProfile = () => {
           body: JSON.stringify({ country: formData.country }),
         }
       );
-
       const data = await res.json();
-
       if (data?.data?.states?.length) {
         const stateList = data.data.states.map((s) => s.name);
         setStates(stateList);
@@ -149,13 +143,11 @@ const EditProfile = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    console.log(user);
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     setProfileFile(file);
     setProfilePreview(URL.createObjectURL(file));
   };
@@ -163,10 +155,8 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-
     try {
       await profileSchema.validate(formData, { abortEarly: false });
-
       const payload = {
         fullName: formData.fullName,
         dob: formData.dob,
@@ -175,7 +165,6 @@ const EditProfile = () => {
         state: formData.state,
         zipcode: formData.zipcode,
       };
-
       const res = await fetch(
         `https://crm-backend-qbz0.onrender.com/api/users/${user._id}`,
         {
@@ -187,10 +176,8 @@ const EditProfile = () => {
           body: JSON.stringify(payload),
         }
       );
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Update failed");
-
       navigate(-1);
     } catch (err) {
       if (err.inner) {

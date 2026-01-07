@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
-
-import { Bell, X, Trash, CheckCheck } from "lucide-react";
+import { Bell, X, CheckCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import NotificationItem from "./NotificationItem";
 

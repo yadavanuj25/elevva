@@ -56,7 +56,7 @@ const ProfileList = () => {
     total: 0,
     page: 1,
     pages: 1,
-    limit: 25,
+    limit: 5,
   });
   const [statusTabs, setStatusTabs] = useState([]);
   const [order, setOrder] = useState("asc");
@@ -89,9 +89,9 @@ const ProfileList = () => {
     fetchProfiles();
   }, [pagination.page, pagination.limit, searchQuery, activeTab]);
 
-  useEffect(() => {
-    fetchRequirements();
-  }, []);
+  // useEffect(() => {
+  //   fetchRequirements();
+  // }, []);
 
   useEffect(() => {
     if (successMsg) {
@@ -148,7 +148,6 @@ const ProfileList = () => {
         pagination.page,
         pagination.limit
       );
-
       const allRequirements = response.requirements || [];
       setRequirementsFromAPI(allRequirements);
     } catch (error) {
@@ -306,47 +305,37 @@ const ProfileList = () => {
     navigate("/admin/interviewmanagement");
   };
 
-  // const handleStartScreening = (selectedRequirement) => {
-  //   if (!selectedRequirement || selectedProfiles.length === 0) return;
+  const handleInterviewClick = () => {
+    if (selectedProfiles.length === 0) {
+      CustomSwal.fire({
+        text: "Please select the profile",
+        icon: "error",
+        showConfirmButton: true,
+      });
+      return;
+    }
+    setOpenRequirementModal(true);
+    fetchRequirements();
+  };
 
-  //   const payload = selectedProfiles.map((profile) => ({
-  //     _id: crypto.randomUUID(), // temporary (API will replace)
-  //     profileId: profile._id,
-  //     requirementId: selectedRequirement._id,
+  const visibleRows = sortedData;
+  const isAllSelected =
+    visibleRows.length > 0 &&
+    visibleRows.every((row) => selectedProfiles.some((p) => p._id === row._id));
+  const isIndeterminate = selectedProfiles.length > 0 && !isAllSelected;
 
-  //     assignedBy: {
-  //       role: "BDE",
-  //       userId: user._id,
-  //       userName: user.fullName,
-  //     },
-
-  //     submittedBy: {
-  //       role: "HR",
-  //       userId: profile.submittedBy._id,
-  //       userName: profile.submittedBy.fullName,
-  //     },
-
-  //     currentStage: "BDE_SCREENING",
-  //     status: "Screening",
-
-  //     history: [
-  //       {
-  //         stage: "BDE_SCREENING",
-  //         actionBy: "BDE",
-  //         actionById: user._id,
-  //         actionByName: user.fullName,
-  //         action: "STARTED",
-  //         timestamp: new Date().toISOString(),
-  //       },
-  //     ],
-  //     rejectionReason: null,
-  //     createdAt: new Date().toISOString(),
-  //   }));
-  //   addInterviewRecords(payload);
-  //   setSelectedProfiles([]);
-  //   setOpenRequirementModal(false);
-  //   navigate("/admin/interviewmanagement");
-  // };
+  const checkboxSx = {
+    color: "#6b7280",
+    "&.Mui-checked": {
+      color: "#2563eb",
+    },
+    ".dark &": {
+      color: "#d1d5db",
+      "&.Mui-checked": {
+        color: "#60a5fa",
+      },
+    },
+  };
 
   return (
     <>
@@ -387,13 +376,7 @@ const ProfileList = () => {
                 <GroupButton
                   text="Interview"
                   icon={<Settings size={16} />}
-                  onClick={() => {
-                    if (selectedProfiles.length === 0) {
-                      alert("Please select at least one profile!");
-                      return;
-                    }
-                    setOpenRequirementModal(true);
-                  }}
+                  onClick={handleInterviewClick}
                 />
 
                 <GroupButton
@@ -435,8 +418,20 @@ const ProfileList = () => {
                         padding="checkbox"
                         className="bg-[#f2f4f5] dark:bg-darkGray"
                       >
-                        <Checkbox color=" dark:text-white" />
+                        <Checkbox
+                          checked={isAllSelected}
+                          indeterminate={isIndeterminate}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedProfiles(visibleRows);
+                            } else {
+                              setSelectedProfiles([]);
+                            }
+                          }}
+                          sx={checkboxSx}
+                        />
                       </TableCell>
+
                       {[
                         { id: "favourite", label: "" },
                         { id: "fullName", label: "Name" },
@@ -452,7 +447,6 @@ const ProfileList = () => {
                         { id: "createdAt", label: "Created Dtm" },
                         { id: "updatedAt", label: "Modified Dtm" },
                         { id: "screening", label: "Screening" },
-
                         { id: "action", label: "Action", sticky: true },
                       ].map((column) => (
                         <TableCell
@@ -520,6 +514,7 @@ const ProfileList = () => {
                                     );
                                   }
                                 }}
+                                sx={checkboxSx}
                               />
 
                               {item.profileCode && (
@@ -685,7 +680,6 @@ const ProfileList = () => {
               onPageChange={handleChangePage}
               onLimitChange={handleChangeRowsPerPage}
             />
-
             <SelectRequirementModal
               open={openRequirementModal}
               onClose={() => setOpenRequirementModal(false)}
@@ -699,5 +693,4 @@ const ProfileList = () => {
     </>
   );
 };
-
 export default ProfileList;

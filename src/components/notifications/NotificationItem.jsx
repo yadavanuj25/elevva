@@ -10,9 +10,6 @@ const NotificationItem = ({
 
   return (
     <div
-      // onClick={() => {
-      //   if (!n.read) markAsRead(n._id);
-      // }}
       className={`relative px-4 py-2 border-b cursor-pointer transition ${
         !n.read ? "bg-accent-light/40 dark:bg-gray-800/40" : ""
       } hover:bg-accent-light hover:dark:bg-gray-800`}
@@ -89,16 +86,6 @@ const NotificationItem = ({
                 Delete
               </span>
             </div>
-
-            {/* <button
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteNotification(n._id);
-              }}
-              className="text-red-400 p-0.5 hover:text-white hover:bg-red-400 rounded-full transition"
-            >
-              <X size={16} />
-            </button> */}
           </div>
         </div>
       </div>

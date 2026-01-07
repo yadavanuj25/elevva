@@ -1,14 +1,12 @@
-import { useState, useEffect } from "react";
-import { ChevronDown, Settings, LayoutDashboard, X, Users } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import { AiOutlineDashboard } from "react-icons/ai";
 import logo from "../../assets/logo/logo.png";
 import { FaUsers, FaUnlockAlt, FaHandshake, FaUserTie } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { FaBriefcase, FaGears } from "react-icons/fa6";
 import { ImProfile } from "react-icons/im";
-import { CiUnlock } from "react-icons/ci";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { modules = [], role } = useAuth();
@@ -23,6 +21,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           module: "dashboard",
           path: dashboardPath,
           label: "Dashboard",
+          icon: <MdDashboard size={16} />,
+        },
+      ],
+    },
+    {
+      items: [
+        {
+          module: "dashboard",
+          path: "/attendance",
+          label: "Attendance",
           icon: <MdDashboard size={16} />,
         },
       ],
@@ -142,19 +150,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     );
   };
 
-  // useEffect(() => {
-  //   const handleClickOutside = (e) => {
-  //     if (window.innerWidth < 768 && isOpen) {
-  //       const sidebar = document.getElementById("app-sidebar");
-  //       if (sidebar && !sidebar.contains(e.target)) {
-  //         setIsOpen(false);
-  //       }
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => document.removeEventListener("mousedown", handleClickOutside);
-  // }, [isOpen, setIsOpen]);
-
   const filteredSections = navSections
     .map((section) => {
       const filteredItems = section.items
@@ -163,19 +158,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           if (!item.submodules) {
             return hasAccess(item.module) ? item : null;
           }
-
           // If has submodules, filter submodules
           const filteredSubmodules = item.submodules.filter((sub) =>
             hasSubmoduleAccess(item.module, sub.module)
           );
-
           // If no allowed submodules, remove the entire item
           if (filteredSubmodules.length === 0) return null;
-
           return { ...item, submodules: filteredSubmodules };
         })
         .filter(Boolean); // remove null items
-
       // Remove entire section if empty
       return filteredItems.length > 0
         ? { ...section, items: filteredItems }
@@ -185,14 +176,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   return (
     <>
-      {/* Overlay for mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
-
       {/* Sidebar */}
       <aside
         id="app-sidebar"
@@ -210,18 +199,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <img src={logo} alt="" className="w-7" />
               {isOpen && <span className="font-extrabold">Elevva CRM</span>}
             </Link>
-
-            {/* <button
-              className="sm:hidden text-gray-600 dark:text-gray-300 p-1 rounded-full hover:bg-accent-light  transition"
-              onClick={() => setIsOpen(false)}
-            >
-              <X size={20} />
-            </button> */}
           </div>
         </div>
 
         {/* Navigation */}
-        <ul className="flex-1 overflow-y-auto py-3 space-y-2">
+        <ul className="flex-1 overflow-y-auto py-3 space-y-2 sidebar-scroll">
           {filteredSections.map((section, sectionIndex) => (
             <div key={`section-${sectionIndex}`}>
               {isOpen && section.section && (

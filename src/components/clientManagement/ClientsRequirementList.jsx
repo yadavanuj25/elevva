@@ -314,6 +314,19 @@ const ClientsRequirementsList = () => {
       .toUpperCase();
   };
 
+  const checkboxSx = {
+    color: "#6b7280",
+    "&.Mui-checked": {
+      color: "#2563eb",
+    },
+    ".dark &": {
+      color: "#d1d5db",
+      "&.Mui-checked": {
+        color: "#60a5fa",
+      },
+    },
+  };
+
   return (
     <>
       <div className="flex justify-between items-center mb-4">
@@ -330,15 +343,6 @@ const ClientsRequirementsList = () => {
         </div>
       )}
 
-      {/* {successMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-green-300 
-               bg-[#28a745] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">✔ </span>
-          <p className="text-sm">{successMsg}</p>
-        </div>
-      )} */}
       {/* Tabs */}
       <Tabs
         statusTabs={statusTabs}
@@ -397,10 +401,7 @@ const ClientsRequirementsList = () => {
                           selectedRows.length < sortedData.length
                         }
                         onChange={handleSelectAll}
-                        sx={{
-                          color: "gray-700",
-                          ".dark &": { color: "white" },
-                        }}
+                        sx={checkboxSx}
                       />
                     </div>
                   </TableCell>
@@ -471,10 +472,7 @@ const ClientsRequirementsList = () => {
                           <Checkbox
                             checked={selectedRows.includes(row._id)}
                             onChange={() => handleSelectRow(row._id)}
-                            sx={{
-                              color: "gray-700",
-                              ".dark &": { color: "white" },
-                            }}
+                            sx={checkboxSx}
                           />
                           {row.requirementCode && (
                             <small className="text-accent-dark bg-accent-light p-[1px] border-b border-accent-dark rounded font-[500]">

@@ -30,7 +30,6 @@ export const getAllClients = ({
   if (clientCategory) params.append("clientCategory", clientCategory);
   if (clientSource) params.append("clientSource", clientSource);
   if (companySize) params.append("companySize", companySize);
-
   return fetchHandler(`/api/clients?${params.toString()}`);
 };
 export const getActiveClients = () => {
@@ -86,7 +85,6 @@ export const getClientStats = ({
   if (clientCategory) params.append("clientCategory", clientCategory);
   if (clientSource) params.append("clientSource", clientSource);
   if (companySize) params.append("companySize", companySize);
-
   return fetchHandler(`/api/clients/stats?${params.toString()}`);
 };
 

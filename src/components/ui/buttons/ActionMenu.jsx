@@ -34,7 +34,7 @@ const ActionMenu = ({ onEdit, onView, onDelete }) => {
       return (
         <div
           ref={menuRef}
-          className="absolute z-50 bg-white dark:bg-darkBg border border-gray-200 dark:border-gray-700 rounded-md shadow-md py-1"
+          className="absolute z-50 bg-white dark:bg-darkBg text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-md shadow-md "
           style={{ top, left, minWidth: menuWidth }}
         >
           <button
@@ -42,18 +42,18 @@ const ActionMenu = ({ onEdit, onView, onDelete }) => {
               onEdit();
               setOpen(false);
             }}
-            className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="w-full flex items-center gap-3 px-4 py-2 text-sm   hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            <Edit size={16} className="text-gray-500" /> Edit
+            <Edit size={16} className="text-blue-500" /> Edit
           </button>
           <button
             onClick={() => {
               onView();
               setOpen(false);
             }}
-            className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="w-full flex items-center gap-3 px-4 py-2 text-sm  hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            <Eye size={16} className="text-gray-500" /> View
+            <Eye size={16} className="text-green-500" /> View
           </button>
           <button
             onClick={() => {
@@ -62,7 +62,7 @@ const ActionMenu = ({ onEdit, onView, onDelete }) => {
             }}
             className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            <Trash size={16} className="text-gray-500" /> Delete
+            <Trash size={16} className="text-red-500" /> Delete
           </button>
         </div>
       );

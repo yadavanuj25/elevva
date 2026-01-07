@@ -1,171 +1,3 @@
-// import React, { useState } from "react";
-// import { useInterviews } from "../context/InterViewContext";
-// import InterviewHistoryModal from "../components/modals/InterviewHistoryModal";
-
-// const INTERVIEW_LEVELS = [
-//   "BDE_SCREENING",
-//   "CLIENT_L1",
-//   "CLIENT_L2",
-//   "CLIENT_L3",
-//   "HR_ROUND",
-//   "OFFERED",
-//   "REJECTED",
-// ];
-
-// const InterviewDashboard = () => {
-//   const { interviewRecords, updateInterviewRecord } = useInterviews();
-
-//   const [historyOpen, setHistoryOpen] = useState(false);
-//   const [selectedRecord, setSelectedRecord] = useState(null);
-//   const [remarks, setRemarks] = useState({});
-
-//   const handleStageChange = (record, nextStage) => {
-//     const currentIndex = INTERVIEW_LEVELS.indexOf(record.stage);
-//     const nextIndex = INTERVIEW_LEVELS.indexOf(nextStage);
-//     if (nextIndex < currentIndex) return;
-
-//     updateInterviewRecord(record._id, {
-//       stage: nextStage,
-//       status: `Moved to ${nextStage.replaceAll("_", " ")}`,
-//       history: [
-//         ...(record.history || []),
-//         {
-//           from: record.stage,
-//           to: nextStage,
-//           remark: remarks[record._id] || "",
-//           updatedBy: "BDE",
-//           updatedAt: new Date().toISOString(),
-//         },
-//       ],
-//     });
-
-//     setRemarks((prev) => ({ ...prev, [record._id]: "" }));
-//   };
-
-//   return (
-//     <>
-//       <div className="p-6">
-//         <h1 className="text-xl font-semibold mb-4">Interview Management</h1>
-
-//         {interviewRecords.length === 0 ? (
-//           <div className="text-gray-500">No interviews yet.</div>
-//         ) : (
-//           <div className="overflow-x-auto bg-white dark:bg-gray-900 rounded-xl shadow">
-//             <table className="w-full border-collapse text-sm">
-//               <thead className="bg-gray-100 dark:bg-gray-800">
-//                 <tr>
-//                   <th className="px-4 py-3">Candidate</th>
-//                   <th className="px-4 py-3">Requirement</th>
-//                   <th className="px-4 py-3">HR</th>
-//                   <th className="px-4 py-3">BDE</th>
-//                   <th className="px-4 py-3">Stage</th>
-//                   <th className="px-4 py-3">Status</th>
-//                   <th className="px-4 py-3">Actions</th>
-//                   <th className="px-4 py-3">History</th>
-//                 </tr>
-//               </thead>
-
-//               <tbody>
-//                 {interviewRecords.map((record) => {
-//                   const currentIndex = INTERVIEW_LEVELS.indexOf(record.stage);
-
-//                   return (
-//                     <tr
-//                       key={record._id}
-//                       className="border-t dark:border-gray-700"
-//                     >
-//                       <td className="px-4 py-3 font-medium">
-//                         {record.profileName}
-//                       </td>
-
-//                       <td className="px-4 py-3">{record.requirementTitle}</td>
-
-//                       <td className="px-4 py-3">{record.hrName}</td>
-//                       <td className="px-4 py-3">{record.bdeName}</td>
-
-//                       <td className="px-4 py-3">
-//                         <span className="px-2 py-1 rounded bg-blue-100 text-blue-700 text-xs">
-//                           {record.stage}
-//                         </span>
-//                       </td>
-
-//                       <td className="px-4 py-3">{record.status}</td>
-
-//                       {/* ACTIONS */}
-//                       <td className="px-4 py-3">
-//                         {record.stage !== "REJECTED" &&
-//                           record.stage !== "OFFERED" && (
-//                             <div className="flex flex-col gap-2">
-//                               <select
-//                                 className="border rounded p-1"
-//                                 value={record.stage}
-//                                 onChange={(e) =>
-//                                   handleStageChange(record, e.target.value)
-//                                 }
-//                               >
-//                                 {INTERVIEW_LEVELS.map((lvl, index) => (
-//                                   <option
-//                                     key={lvl}
-//                                     value={lvl}
-//                                     disabled={index < currentIndex}
-//                                     className={
-//                                       index < currentIndex
-//                                         ? "text-gray-400"
-//                                         : ""
-//                                     }
-//                                   >
-//                                     {lvl.replaceAll("_", " ")}
-//                                   </option>
-//                                 ))}
-//                               </select>
-
-//                               <input
-//                                 className="border rounded p-1"
-//                                 placeholder="Remark"
-//                                 value={remarks[record._id] || ""}
-//                                 onChange={(e) =>
-//                                   setRemarks((prev) => ({
-//                                     ...prev,
-//                                     [record._id]: e.target.value,
-//                                   }))
-//                                 }
-//                               />
-//                             </div>
-//                           )}
-//                       </td>
-//                       <td className="px-4 py-3">
-//                         <button
-//                           className="text-blue-600 text-sm underline"
-//                           onClick={() => {
-//                             setSelectedRecord(record);
-//                             setHistoryOpen(true);
-//                           }}
-//                         >
-//                           View
-//                         </button>
-//                       </td>
-//                     </tr>
-//                   );
-//                 })}
-//               </tbody>
-//             </table>
-//           </div>
-//         )}
-//       </div>
-//       <InterviewHistoryModal
-//         open={historyOpen}
-//         record={selectedRecord}
-//         onClose={() => {
-//           setHistoryOpen(false);
-//           setSelectedRecord(null);
-//         }}
-//       />
-//     </>
-//   );
-// };
-
-// export default InterviewDashboard;
-
 import React, { useState } from "react";
 import { useInterviews } from "../context/InterViewContext";
 import InterviewHistoryModal from "../components/modals/interviewModal/InterviewHistoryModal";
@@ -199,20 +31,17 @@ const InterviewDashboard = () => {
   const [selectedRecord, setSelectedRecord] = useState(null);
 
   const handleUpdateStage = ({ nextStage, remark }) => {
-    updateInterviewRecord(selectedRecord._id, {
-      stage: nextStage,
-      status: `Moved to ${nextStage.replaceAll("_", " ")}`,
-      history: [
-        ...(selectedRecord.history || []),
-        {
-          from: selectedRecord.stage,
-          to: nextStage,
-          remark,
-          updatedBy: "BDE",
-          updatedAt: new Date().toISOString(),
-        },
-      ],
-    });
+    updateInterviewRecord(
+      selectedRecord._id,
+      {
+        stage: nextStage,
+        status: `Moved to ${nextStage.replaceAll("_", " ")}`,
+        remark,
+      },
+      {
+        updatedBy: "BDE",
+      }
+    );
   };
 
   return (
@@ -227,67 +56,100 @@ const InterviewDashboard = () => {
             No interviews yet.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-sm">
-              <thead className="bg-gray-100 dark:bg-gray-800">
+          <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm">
+            <table className="w-full text-sm">
+              <thead className="bg-[#f2f4f5] dark:bg-darkGray text-gray-600 dark:text-gray-300">
                 <tr>
-                  <th className="px-4 py-3 text-left">Candidate</th>
-                  <th className="px-4 py-3 text-left">Requirement</th>
-                  <th className="px-4 py-3 text-left">HR</th>
-                  <th className="px-4 py-3 text-left">BDE</th>
-                  <th className="px-4 py-3 text-left">Stage</th>
-                  <th className="px-4 py-3 text-left">Status</th>
-                  <th className="px-4 py-3 text-left">History</th>
+                  <th className="px-5 py-4 text-left font-semibold">
+                    Candidate
+                  </th>
+
+                  <th className="px-5 py-4 text-left font-semibold">
+                    Requirement
+                  </th>
+                  <th className="px-5 py-4 text-left font-semibold">HR</th>
+                  <th className="px-5 py-4 text-left font-semibold">BDE</th>
+                  <th className="px-5 py-4 text-left font-semibold">Stage</th>
+                  <th className="px-5 py-4 text-left font-semibold">Status</th>
+                  <th className="px-5 py-4 text-center font-semibold">
+                    Actions
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {interviewRecords.map((record) => (
                   <tr
                     key={record._id}
-                    className="border-t dark:border-gray-700 hover:shadow-md transition-shadow bg-white dark:bg-gray-900 rounded-lg"
+                    className="group hover:bg-gray-50 dark:hover:bg-gray-800 px-2 py-2 transition-colors"
                   >
-                    <td className="px-4 py-3 font-medium text-gray-800 dark:text-gray-200 capitalize">
-                      {record.profileName}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300 capitalize">
-                      {record.requirementTitle}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300 capitalize">
-                      {record.hrName}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300 capitalize">
-                      {record.bdeName}
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-md bg-accent-light text-accent-dark flex items-center justify-center font-semibold capitalize">
+                          {record.profileName?.[0]}
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-800 dark:text-gray-200 capitalize">
+                            {record.profileName}
+                          </p>
+                        </div>
+                      </div>
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-5 py-4 capitalize text-gray-700 dark:text-gray-300">
+                      {record.requirementTitle}
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-2">
+                        <span className="h-7 w-7 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-semibold">
+                          {record.hrName?.[0]}
+                        </span>
+                        <span className="capitalize">{record.hrName}</span>
+                      </div>
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-2">
+                        <span className="h-7 w-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-semibold">
+                          {record.bdeName?.[0]}
+                        </span>
+                        <span className="capitalize">{record.bdeName}</span>
+                      </div>
+                    </td>
+
+                    <td className="px-5 py-4">
                       <button
-                        className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                          STAGE_COLORS[record.stage]
-                        } hover:scale-105 hover:brightness-95`}
-                        title="Click to update stage"
                         onClick={() => {
                           setSelectedRecord(record);
                           setStageModalOpen(true);
                         }}
+                        className={`inline-flex items-center gap-2 px-2 py-0.5 rounded text-xs  transition-all ${
+                          STAGE_COLORS[record.stage]
+                        } hover:scale-105`}
                       >
                         {record.stage.replaceAll("_", " ")}
-                        <Pencil size={14} className="text-gray-600" />
+                        <Pencil size={13} />
                       </button>
                     </td>
 
-                    <td className="px-4 py-3 text-gray-700 dark:text-gray-300 ">
-                      {record.status}
+                    <td className="px-5 py-4">
+                      <span className="inline-block text-xs   ">
+                        {record.status}
+                      </span>
                     </td>
 
-                    <td className="px-4 py-3">
+                    {/* Actions */}
+                    <td className=" text-center px-5 py-4">
                       <button
-                        className="text-blue-600 text-sm  hover:text-blue-800 transition-colors"
                         onClick={() => {
                           setSelectedRecord(record);
                           setHistoryOpen(true);
                         }}
+                        className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-gray-200 dark:border-gray-700 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition"
+                        title="View History"
                       >
-                        <Eye size={20} />
+                        <Eye size={18} />
                       </button>
                     </td>
                   </tr>

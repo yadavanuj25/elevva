@@ -45,13 +45,13 @@ import InterviewDashboard from "./pages/InterviewDashboard";
 import { InterviewProvider } from "./context/InterViewContext";
 import NotFound from "./pages/NotFound";
 import Chat from "./pages/Chat";
+import Attandance from "./pages/Attandance";
 
 const App = () => {
   const location = useLocation();
   const { user } = useAuth();
   const isLocked = user?.isLocked === true;
   const current = location.pathname;
-
   if (isLocked && current !== "/lock-screen") {
     return <Navigate to="/lock-screen" replace />;
   }
@@ -383,6 +383,17 @@ const App = () => {
               }
             />
 
+            {/* Attandance management */}
+
+            <Route
+              path="/attendance"
+              element={
+                <ProtectedRoute>
+                  <Attandance />
+                </ProtectedRoute>
+              }
+            />
+
             {/* Chats */}
             <Route
               path="/chats"
@@ -392,6 +403,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

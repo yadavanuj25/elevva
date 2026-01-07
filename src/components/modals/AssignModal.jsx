@@ -4,6 +4,7 @@ import { getAllUsers } from "../../services/userServices";
 import { assignRequirement } from "../../services/clientServices";
 import Button from "../ui/Button";
 import CustomSwal from "../../utils/CustomSwal";
+import CancelButton from "../ui/buttons/Cancel";
 
 const AssignModal = ({
   open,
@@ -100,14 +101,13 @@ const AssignModal = ({
       transform transition-all duration-300
       ${isVisible ? "scale-100 opacity-100" : "scale-90 opacity-0"}`}
       >
-        {/* HEADER */}
-        <div className="flex items-center justify-center gap-2 bg-accent-dark text-white py-3 rounded-t-2xl relative">
-          <FileText size={22} />
-          <h2 className="text-lg font-semibold">Assign Requirements</h2>
-
+        <div className="flex justify-between items-center px-5 py-3 rounded-t-2xl  bg-accent-dark border-b dark:border-gray-700">
+          <h2 className="text-lg font-semibold text-white">
+            Assign Requirements
+          </h2>
           <button
             onClick={closeWithAnimation}
-            className="absolute right-4 top-4 bg-white text-red-600 p-1 rounded-full"
+            className="bg-gray-200 text-black p-1 rounded hover:bg-gray-400"
           >
             <X size={18} />
           </button>
@@ -120,7 +120,6 @@ const AssignModal = ({
       text-gray-800 dark:text-gray-200"
         >
           <p className="font-semibold text-sm">Selected Requirements</p>
-
           {selectedRequirements.map((req) => (
             <div
               key={req._id}
@@ -165,14 +164,7 @@ const AssignModal = ({
       bg-white dark:bg-darkBg
       border-t border-gray-200 dark:border-gray-700"
         >
-          <button
-            onClick={closeWithAnimation}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded"
-          >
-            <X size={16} />
-            Cancel
-          </button>
-
+          <CancelButton onClick={closeWithAnimation} />
           <Button
             text="Assign"
             icon={<Save size={16} />}

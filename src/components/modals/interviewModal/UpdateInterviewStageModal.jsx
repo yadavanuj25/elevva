@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import CancelButton from "../../ui/buttons/Cancel";
+import { X } from "lucide-react";
 
 const INTERVIEW_LEVELS = [
   "BDE_SCREENING",
@@ -36,75 +38,92 @@ const UpdateInterviewStageModal = ({ open, record, onClose, onUpdate }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center">
-      <div className="bg-white dark:bg-gray-900 w-full max-w-xl rounded-xl shadow-lg p-6">
-        <h2 className="text-lg font-semibold mb-4">Update Interview Stage</h2>
+    <div className="fixed inset-0 z-50 bg-black/90  flex items-center justify-center p-4">
+      <div className="bg-white w-full max-w-xl rounded-xl shadow-xl overflow-hidden text-gray-800">
+        {/* HEADER */}
+        <div className="flex justify-between items-center px-5 py-3  bg-accent-dark border-b dark:border-gray-700">
+          <h2 className="text-lg font-semibold text-white">
+            Update Interview Stage
+          </h2>
 
-        <div className="space-y-3 text-sm">
-          <p>
-            <strong>Candidate:</strong> {record.profileName}
-          </p>
+          <button
+            onClick={onClose}
+            className="bg-gray-200 text-black p-1 rounded hover:bg-gray-400"
+          >
+            <X size={18} />
+          </button>
+        </div>
 
-          <p>
-            <strong>Current Stage:</strong>{" "}
-            <span className="text-blue-600">
-              {record.stage.replaceAll("_", " ")}
-            </span>
-          </p>
+        <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
+          <div className="space-y-1 text-sm">
+            <p>
+              <span className="font-medium text-gray-600">Candidate:</span>{" "}
+              <span className="capitalize text-gray-900">
+                {record.profileName}
+              </span>
+            </p>
 
-          {/* STAGE SELECT */}
+            <p>
+              <span className="font-medium text-gray-600">Current Stage:</span>{" "}
+              <span className="font-semibold text-accent-dark">
+                {record.stage.replaceAll("_", " ")}
+              </span>
+            </p>
+          </div>
+
           <div>
-            <label className="block mb-1 font-medium">Next Stage</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Next Stage
+            </label>
+
             <select
-              className="w-full border rounded p-2"
               value={nextStage}
               onChange={(e) => setNextStage(e.target.value)}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                     focus:outline-none "
             >
               {INTERVIEW_LEVELS.map((lvl, index) => {
                 const isDisabled =
                   index < currentIndex || completedStages.includes(lvl);
+
                 return (
                   <option key={lvl} value={lvl} disabled={isDisabled}>
                     {lvl.replaceAll("_", " ")}
-                    {completedStages.includes(lvl) ? " (done)" : ""}
+                    {completedStages.includes(lvl) ? " (completed)" : ""}
                   </option>
                 );
               })}
             </select>
           </div>
 
-          {/* REMARK (OPTIONAL) */}
           <div>
-            <label className="block mb-1 font-medium">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
               Remark <span className="text-gray-400">(optional)</span>
             </label>
+
             <textarea
-              className="w-full border rounded p-2"
               rows={3}
-              placeholder="Add any notes (optional)..."
               value={remark}
               onChange={(e) => setRemark(e.target.value)}
+              placeholder="Add any notes or feedback..."
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                     focus:outline-none resize-none"
             />
           </div>
         </div>
 
-        {/* ACTIONS */}
-        <div className="flex justify-end gap-3 mt-6">
-          <button
-            className="px-4 py-2 text-sm border rounded"
-            onClick={onClose}
-          >
-            Cancel
-          </button>
+        {/* FOOTER */}
+        <div className="px-5 py-4 border-t border-gray-200 flex justify-end gap-3">
+          <CancelButton onClick={onClose} />
 
           <button
-            className={`px-4 py-2 text-sm rounded text-white transition ${
-              hasStageChanged
-                ? "bg-blue-600 hover:bg-blue-700"
-                : "bg-gray-400 cursor-not-allowed"
-            }`}
             onClick={handleSubmit}
             disabled={!hasStageChanged}
+            className={`px-5 py-2 text-sm rounded-md text-white transition ${
+              hasStageChanged
+                ? "bg-accent-dark hover:opacity-90"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
           >
             Update Stage
           </button>

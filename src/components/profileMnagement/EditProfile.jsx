@@ -518,12 +518,12 @@ backdrop-blur-md overflow-hidden shadow-md"
               )}
             </div>
             {showResumePopup && (
-              <div className="fixed  inset-0 bg-black/80  flex items-center justify-center z-[9999] p-2 animate-fadeIn">
-                <div className="relative bg-white dark:bg-gray-900 w-full max-w-4xl rounded-xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+              <div className="fixed  inset-0 bg-black/90   flex items-center justify-center z-[9999] p-2 animate-fadeIn">
+                <div className="relative bg-white  w-full max-w-4xl rounded-xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
                   {/* Close button */}
                   <button
-                    className="absolute top-1 right-4 p-1 rounded-full bg-red-500 dark:bg-gray-800 
-                 text-white dark:text-gray-300 hover:bg-red-700 hover:text-white 
+                    className="absolute top-2 right-4 p-1 rounded-full bg-red-500  
+                 text-white  hover:bg-red-700  
                  transition-all shadow-md"
                     onClick={() => setShowResumePopup(false)}
                   >
@@ -532,7 +532,7 @@ backdrop-blur-md overflow-hidden shadow-md"
 
                   {/* Header */}
                   <div className="flex items-center justify-center py-2 border-b border-gray-200 dark:border-gray-700">
-                    <h2 className="text-center text-lg font-semibold text-gray-800 dark:text-gray-200">
+                    <h2 className="text-center text-lg font-semibold text-gray-800 ">
                       {selectedResume?.name ||
                         remoteResume?.name ||
                         "Resume.pdf"}
