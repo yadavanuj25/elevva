@@ -10,6 +10,7 @@ const STATIC_INTERVIEWS = [
     _id: "int_001",
     candidateId: "cand_1",
     profileName: "Rahul Sharma",
+    profileCode: "",
     requirementId: "req_1",
     requirementTitle: "React Developer",
     clientId: "client_1",
@@ -29,7 +30,6 @@ const STATIC_INTERVIEWS = [
         updatedAt: new Date().toISOString(),
       },
     ],
-
     createdAt: new Date().toISOString(),
   },
 ];

@@ -69,9 +69,8 @@ const ProfileList = () => {
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [selectedProfiles, setSelectedProfiles] = useState([]);
   const [openRequirementModal, setOpenRequirementModal] = useState(false);
-  const [requirementsFromAPI, setRequirementsFromAPI] = useState([]);
+  const [requirements, setRequirements] = useState([]);
   const [loadingRequirements, setLoadingRequirements] = useState(false);
-  const [interviewRecords, setInterviewRecords] = useState([]);
 
   const statusOptions = ["Active", "In-active", "Banned"];
   useEffect(() => {
@@ -88,10 +87,6 @@ const ProfileList = () => {
   useEffect(() => {
     fetchProfiles();
   }, [pagination.page, pagination.limit, searchQuery, activeTab]);
-
-  // useEffect(() => {
-  //   fetchRequirements();
-  // }, []);
 
   useEffect(() => {
     if (successMsg) {
@@ -149,7 +144,7 @@ const ProfileList = () => {
         pagination.limit
       );
       const allRequirements = response.requirements || [];
-      setRequirementsFromAPI(allRequirements);
+      setRequirements(allRequirements);
     } catch (error) {
       console.error("Requirement fetch error", error);
     } finally {
@@ -289,6 +284,7 @@ const ProfileList = () => {
       _id: crypto.randomUUID(),
       profileId: profile._id,
       profileName: profile.fullName,
+      profileCode: profile.profileCode,
       requirementId: selectedRequirement._id,
       requirementTitle: selectedRequirement.techStack,
       hrId: profile.submittedBy._id,
@@ -362,7 +358,6 @@ const ProfileList = () => {
           />
           <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
             {/* Search Box */}
-
             <TableHeader
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
@@ -446,7 +441,7 @@ const ProfileList = () => {
                         { id: "submittedBy", label: "SubmittedBy" },
                         { id: "createdAt", label: "Created Dtm" },
                         { id: "updatedAt", label: "Modified Dtm" },
-                        { id: "screening", label: "Screening" },
+
                         { id: "action", label: "Action", sticky: true },
                       ].map((column) => (
                         <TableCell
@@ -634,11 +629,6 @@ const ProfileList = () => {
                           <TableCell className="whitespace-nowrap  dark:text-gray-200">
                             <DateDisplay date={item.updatedAt} />
                           </TableCell>
-                          <TableCell className="whitespace-nowrap  dark:text-gray-200">
-                            <button onClick={() => startScreening(item)}>
-                              Start Screening
-                            </button>
-                          </TableCell>
 
                           <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                             <ActionMenu
@@ -683,7 +673,7 @@ const ProfileList = () => {
             <SelectRequirementModal
               open={openRequirementModal}
               onClose={() => setOpenRequirementModal(false)}
-              requirements={requirementsFromAPI}
+              requirements={requirements}
               onConfirm={handleStartScreening}
               candidate={selectedProfiles[0]}
             />

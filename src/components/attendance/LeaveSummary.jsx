@@ -2,12 +2,14 @@ import { Calendar } from "lucide-react";
 
 const LeaveSummary = () => {
   return (
-    <div className="bg-white rounded-lg border p-4 mb-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 p-4 mb-6">
       {/* Header */}
-      <div className="flex items-center justify-between pb-4 border-b">
-        <h2 className="text-lg font-semibold text-gray-800">Leave Details</h2>
+      <div className="flex items-center justify-between pb-4 border-b border-gray-300 dark:border-gray-600">
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+          Leave Details
+        </h2>
 
-        <div className="flex items-center gap-2 text-sm border rounded px-3 py-1">
+        <div className="flex items-center gap-2 text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1">
           <Calendar className="w-4 h-4" />
           2024
         </div>
@@ -16,39 +18,41 @@ const LeaveSummary = () => {
       {/* Content */}
       <div className="flex items-center gap-10 pt-6">
         {/* Legend */}
-        <ul className="space-y-4 text-sm text-gray-600">
+        <ul className="space-y-4 text-sm text-gray-600 dark:text-gray-400">
           <li className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-[#0B4A5A]" />
             <span>
-              <b className="text-gray-900">1254</b> on time
+              <b className="text-gray-900 dark:text-white">1254</b> on time
             </span>
           </li>
 
           <li className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-green-500" />
             <span>
-              <b className="text-gray-900">32</b> Late Attendance
+              <b className="text-gray-900 dark:text-white">32</b> Late
+              Attendance
             </span>
           </li>
 
           <li className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-orange-500" />
             <span>
-              <b className="text-gray-900">658</b> Work From Home
+              <b className="text-gray-900 dark:text-white">658</b> Work From
+              Home
             </span>
           </li>
 
           <li className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-red-500" />
             <span>
-              <b className="text-gray-900">14</b> Absent
+              <b className="text-gray-900 dark:text-white">14</b> Absent
             </span>
           </li>
 
           <li className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-yellow-400" />
             <span>
-              <b className="text-gray-900">68</b> Sick Leave
+              <b className="text-gray-900 dark:text-white">68</b> Sick Leave
             </span>
           </li>
         </ul>
@@ -119,9 +123,9 @@ const LeaveSummary = () => {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center gap-2 mt-6 text-sm text-gray-500">
+      <div className="flex items-center gap-2 mt-6 text-sm text-gray-500 dark:text-gray-400">
         <input type="checkbox" className="rounded" />
-        Better than <b className="text-gray-800">85%</b> of Employees
+        Better than <b>85%</b> of Employees
       </div>
     </div>
   );

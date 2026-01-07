@@ -2,7 +2,7 @@ import { Calendar, FileText, Mail, Pencil, Phone } from "lucide-react";
 
 const EmployeeProfileCard = () => {
   return (
-    <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-gray-800  rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden">
       {/* Header */}
       <div className="bg-[#1f2429] text-white px-4 py-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -16,7 +16,6 @@ const EmployeeProfileCard = () => {
 
           <div>
             <h3 className="font-semibold text-lg leading-tight">Anuj Yadav</h3>
-
             <p className="text-sm text-gray-300 flex items-center">
               Frontend Developer
             </p>
@@ -58,11 +57,11 @@ const EmployeeProfileCard = () => {
 
 const Info = ({ label, value, icon }) => (
   <div>
-    <p className="flex gap-2 items-center text-sm text-gray-600 mb-0.5">
+    <p className="flex gap-2 items-center text-xs font-medium text-gray-600 dark:text-gray-400 mb-0.5">
       {icon}
       {label}
     </p>
-    <p className=" font-medium text-gray-900">{value}</p>
+    <p className="  text-gray-900 dark:text-white">{value}</p>
   </div>
 );
 

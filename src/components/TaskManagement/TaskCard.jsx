@@ -391,24 +391,20 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
 
   const debounceTimeout = useRef(null);
 
-  // Fetch profiles from API
   const fetchProfiles = async (searchTerm = "") => {
     try {
-      setLoading(true);
       const data = await getAllProfiles(1, 10, "All", searchTerm);
       setOptions(data.profiles || []);
     } catch (error) {
       console.error("Dropdown profile fetch failed", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (openSelect) {
+    if (showMetricsForm) {
       fetchProfiles("");
     }
-  }, [openSelect]);
+  }, [showMetricsForm]);
 
   useEffect(() => {
     if (!openSelect) return;
@@ -417,7 +413,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
       fetchProfiles(search);
     }, 300);
     return () => clearTimeout(debounceTimeout.current);
-  }, [search, openSelect]);
+  }, [search]);
 
   const toggleOption = (option) => {
     setSelectedOptions((prev) =>
@@ -539,7 +535,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
               </label>
               <div
                 onClick={() => setOpenSelect(!openSelect)}
-                className="min-h-[38px] cursor-pointer flex flex-wrap gap-1 items-center border rounded px-2 py-1 text-sm bg-white dark:bg-[#1e2738] border-gray-300 dark:border-gray-600"
+                className="min-h-[30px] cursor-pointer flex flex-wrap gap-1 items-center border rounded px-2 py-1 text-sm bg-white dark:bg-[#1e2738] border-gray-300 dark:border-gray-600"
               >
                 {selectedOptions.length === 0 && (
                   <span className="text-gray-400">Select options</span>
@@ -567,13 +563,6 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
                   className="absolute z-20 mt-1 w-full border rounded bg-white dark:bg-[#1e2738] border-gray-300 dark:border-gray-600"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {/* <input
-                    type="text"
-                    placeholder="Search by name,mobile,email"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full px-2 py-1 text-sm text-black dark:text-white border-b bg-transparent outline-none border-gray-200 dark:border-gray-700"
-                  /> */}
                   <input
                     type="search"
                     placeholder="Search by name, email or phone..."
