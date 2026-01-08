@@ -16,7 +16,7 @@ const TableHeader = ({ searchQuery, onSearchChange, addLink, title }) => {
       </div>
 
       {/* Add New Button */}
-      <AddButton addLink={addLink} title={title} />
+      {addLink && <AddButton addLink={addLink} title={title} />}
     </div>
   );
 };

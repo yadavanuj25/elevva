@@ -91,10 +91,10 @@ export const getClientStats = ({
 // export const getRequirementByClientId = (id) =>
 //   fetchHandler(`/api/requirements/client/${id}`);
 
-export const getRequirementByClientId = (id, page = 1, limit = 5) =>
-  fetchHandler(`/api/requirements/client/${id}?page=${page}&limit=${limit}`);
-
 // --------- Requirements ---------
+
+export const getRequirementByClientId = (id, page = 1, limit = 25) =>
+  fetchHandler(`/api/requirements/client/${id}?page=${page}&limit=${limit}`);
 
 export const getRequirementById = (id) =>
   fetchHandler(`/api/requirements/${id}`);

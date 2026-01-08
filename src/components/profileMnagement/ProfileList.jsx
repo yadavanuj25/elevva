@@ -43,20 +43,19 @@ import GroupButton from "../ui/buttons/GroupButton";
 import ActionMenu from "../ui/buttons/ActionMenu";
 import CustomSwal from "../../utils/CustomSwal";
 import SelectRequirementModal from "../modals/interviewModal/SelectRequirementModal";
-import { getAllRequirements } from "../../services/clientServices";
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const { addInterviewRecords } = useInterviews();
+  const { addInterviewRecords, interviewRecords } = useInterviews();
   const { successMsg, errorMsg, showSuccess, showError } = useMessage();
   const [allProfiles, setAllProfiles] = useState([]);
   const [pagination, setPagination] = useState({
     total: 0,
     page: 1,
     pages: 1,
-    limit: 5,
+    limit: 25,
   });
   const [statusTabs, setStatusTabs] = useState([]);
   const [order, setOrder] = useState("asc");
@@ -69,8 +68,6 @@ const ProfileList = () => {
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [selectedProfiles, setSelectedProfiles] = useState([]);
   const [openRequirementModal, setOpenRequirementModal] = useState(false);
-  const [requirements, setRequirements] = useState([]);
-  const [loadingRequirements, setLoadingRequirements] = useState(false);
 
   const statusOptions = ["Active", "In-active", "Banned"];
   useEffect(() => {
@@ -134,21 +131,6 @@ const ProfileList = () => {
       showError(`"Errors  when fetching clients" || ${error}`);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchRequirements = async () => {
-    try {
-      const response = await getAllRequirements(
-        pagination.page,
-        pagination.limit
-      );
-      const allRequirements = response.requirements || [];
-      setRequirements(allRequirements);
-    } catch (error) {
-      console.error("Requirement fetch error", error);
-    } finally {
-      setLoadingRequirements(false);
     }
   };
 
@@ -280,25 +262,75 @@ const ProfileList = () => {
 
   const handleStartScreening = (selectedRequirement) => {
     if (!selectedRequirement) return;
-    const newRecords = selectedProfiles.map((profile) => ({
-      _id: crypto.randomUUID(),
-      profileId: profile._id,
-      profileName: profile.fullName,
-      profileCode: profile.profileCode,
-      requirementId: selectedRequirement._id,
-      requirementTitle: selectedRequirement.techStack,
-      hrId: profile.submittedBy._id,
-      hrName: profile.submittedBy.fullName,
-      bdeId: user?._id,
-      bdeName: user?.fullName,
-      status: "Screening",
-      stage: "BDE_SCREENING",
-      createdAt: new Date(),
-    }));
+    const duplicates = [];
+    const newRecords = [];
+    selectedProfiles.forEach((profile) => {
+      const alreadyExists = interviewRecords.some(
+        (record) =>
+          record.profileId === profile._id &&
+          record.clientId === selectedRequirement.client._id &&
+          record.requirementId === selectedRequirement._id
+      );
+      if (alreadyExists) {
+        duplicates.push(profile.fullName);
+        return;
+      }
+      newRecords.push({
+        _id: crypto.randomUUID(),
+        profileId: profile._id,
+        profileName: profile.fullName,
+        profileCode: profile.profileCode,
+        clientId: selectedRequirement.client._id,
+        clientName: selectedRequirement.clientName,
+        requirementId: selectedRequirement._id,
+        requirementTitle: selectedRequirement.techStack,
+        hrId: profile.submittedBy._id,
+        hrName: profile.submittedBy.fullName,
+        bdeId: user?._id,
+        bdeName: user?.fullName,
+        stage: "BDE_SCREENING",
+        status: "Screening Started",
+
+        history: [
+          {
+            stage: "BDE_SCREENING",
+            status: "Screening Started",
+            remark: "",
+            updatedBy: "BDE",
+            updatedAt: new Date().toISOString(),
+          },
+        ],
+
+        createdAt: new Date().toISOString(),
+      });
+    });
+    if (newRecords.length === 0) {
+      CustomSwal.fire({
+        icon: "warning",
+        title: "Interview Already Exists",
+        text: "This candidate already has an interview for the selected client and requirement.",
+        confirmButtonText: "Ok",
+      });
+      return;
+    }
+    if (duplicates.length > 0) {
+      CustomSwal.fire({
+        icon: "info",
+        title: "Some Candidates Skipped",
+        text: "One or more selected candidates already have an interview for this client and requirement.",
+        confirmButtonText: "Continue",
+      });
+    }
     addInterviewRecords(newRecords);
     setSelectedProfiles([]);
     setOpenRequirementModal(false);
     navigate("/admin/interviewmanagement");
+    CustomSwal.fire({
+      icon: "success",
+      title: "Success",
+      text: "Interview screening started successfully.",
+      confirmButtonText: "Great!",
+    });
   };
 
   const handleInterviewClick = () => {
@@ -311,7 +343,6 @@ const ProfileList = () => {
       return;
     }
     setOpenRequirementModal(true);
-    fetchRequirements();
   };
 
   const visibleRows = sortedData;
@@ -411,7 +442,7 @@ const ProfileList = () => {
                     <TableRow>
                       <TableCell
                         padding="checkbox"
-                        className="bg-[#f2f4f5] dark:bg-darkGray"
+                        className="bg-[#f2f4f5] dark:bg-darkGray "
                       >
                         <Checkbox
                           checked={isAllSelected}
@@ -673,8 +704,7 @@ const ProfileList = () => {
             <SelectRequirementModal
               open={openRequirementModal}
               onClose={() => setOpenRequirementModal(false)}
-              requirements={requirements}
-              onConfirm={handleStartScreening}
+              handleScreening={handleStartScreening}
               candidate={selectedProfiles[0]}
             />
           </div>

@@ -1,16 +1,23 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { X, User } from "lucide-react";
 import SelectField from "../../ui/SelectField";
+import {
+  getAllClients,
+  getRequirementByClientId,
+} from "../../../services/clientServices";
 
 const SelectRequirementModal = ({
   open,
   onClose,
   candidate,
-  requirements,
-  onConfirm,
+  handleScreening,
 }) => {
+  const [clients, setClients] = useState([]);
+  const [requirements, setRequirements] = useState([]);
   const [selectedClient, setSelectedClient] = useState("");
   const [selectedRequirement, setSelectedRequirement] = useState(null);
+  const [loadingReq, setLoadingReq] = useState(false);
+  const [loadingClient, setLoadingClient] = useState(false);
 
   useEffect(() => {
     if (!open) {
@@ -19,42 +26,78 @@ const SelectRequirementModal = ({
     }
   }, [open]);
 
-  const clientOptions = useMemo(() => {
-    const map = new Map();
-    requirements.forEach((req) => {
-      if (req.client?._id) {
-        map.set(req.client._id, {
-          label: req.client.clientName,
-          value: req.client._id,
-        });
-      }
-    });
-    return Array.from(map.values());
-  }, [requirements]);
+  useEffect(() => {
+    if (open) fetchClients();
+  }, [open]);
 
+  useEffect(() => {
+    if (selectedClient) {
+      fetchRequirements();
+    }
+  }, [selectedClient]);
+
+  const fetchClients = async () => {
+    setLoadingClient(true);
+    try {
+      const res = await getAllClients();
+      setClients(res.clients || []);
+    } catch (error) {
+      console.error("Failed to fetch clients", error);
+    } finally {
+      setLoadingClient(false);
+    }
+  };
+  const clientOptions = useMemo(() => {
+    return clients.map((client) => ({
+      label: client.clientName,
+      value: client._id,
+    }));
+  }, [clients]);
+
+  const fetchRequirements = async () => {
+    setLoadingReq(true);
+    try {
+      const response = await getRequirementByClientId(selectedClient);
+      const allRequirements = response.requirements || [];
+      const openRequirements = allRequirements.filter(
+        (req) => req.positionStatus === "Open"
+      );
+      setRequirements(openRequirements);
+    } catch (error) {
+      console.error("Requirement fetch error", error);
+    } finally {
+      setLoadingReq(false);
+    }
+  };
   const requirementOptions = useMemo(() => {
     if (!selectedClient) return [];
-    return requirements
-      .filter((req) => req.client?._id === selectedClient)
-      .map((req) => ({
-        label: `${req.requirementCode} (${req.techStack})`,
-        value: req._id,
-        data: req,
-      }));
+    return requirements.map((req) => ({
+      label: `${req.requirementCode} (${req.techStack})`,
+      value: req._id,
+      data: req,
+    }));
   }, [requirements, selectedClient]);
-  if (!open) return null;
+
   const handleRequirementChange = (e) => {
     const selected = requirementOptions.find(
       (opt) => opt.value === e.target.value
     );
-    setSelectedRequirement(selected?.data || null);
+    if (!selected) return;
+    const clientObj = clients.find((c) => c._id === selectedClient);
+    const requirementWithClientName = {
+      ...selected.data,
+      clientName: clientObj?.clientName || "Unknown",
+    };
+    setSelectedRequirement(requirementWithClientName);
   };
+
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
-      <div className="w-full max-w-xl overflow-hidden bg-white dark:bg-gray-800 rounded-2xl shadow-xl ">
+      <div className="w-full max-w-xl  bg-white dark:bg-gray-800 rounded-2xl shadow-xl ">
         {/* Header */}
-        <div className="flex justify-between items-center px-5 py-3 bg-accent-dark border-b dark:border-gray-700">
+        <div className="flex justify-between items-center px-5 py-3 rounded-t-2xl bg-accent-dark border-b dark:border-gray-700">
           <h3 className="text-lg font-semibold text-white">
             Start Interview Screening
           </h3>
@@ -66,7 +109,6 @@ const SelectRequirementModal = ({
           </button>
         </div>
 
-        {/* Body */}
         <div className="px-6 py-5 space-y-5">
           <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-700/40 border">
             <div className="w-10 h-10 rounded-lg bg-accent-dark text-white flex items-center justify-center">
@@ -94,6 +136,7 @@ const SelectRequirementModal = ({
                 setSelectedClient(e.target.value);
                 setSelectedRequirement(null);
               }}
+              loading={loadingClient}
             />
           </div>
 
@@ -107,11 +150,11 @@ const SelectRequirementModal = ({
               options={requirementOptions}
               handleChange={handleRequirementChange}
               disabled={!selectedClient}
+              loading={loadingReq}
             />
           </div>
         </div>
 
-        {/* Footer */}
         <div className="flex justify-end gap-3 px-6 py-4 border-t dark:border-gray-700">
           <button
             onClick={onClose}
@@ -122,7 +165,7 @@ const SelectRequirementModal = ({
 
           <button
             disabled={!selectedRequirement}
-            onClick={() => onConfirm(selectedRequirement)}
+            onClick={() => handleScreening(selectedRequirement)}
             className={`px-5 py-2 rounded-lg font-medium text-white transition ${
               selectedRequirement
                 ? "bg-accent-dark hover:opacity-90"

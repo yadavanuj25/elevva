@@ -2,19 +2,18 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 const InterviewContext = createContext();
 export const useInterviews = () => useContext(InterviewContext);
-
 const STORAGE_KEY = "interview_records";
 
 const STATIC_INTERVIEWS = [
   {
     _id: "int_001",
-    candidateId: "cand_1",
+    profileId: "cand_1",
     profileName: "Rahul Sharma",
-    profileCode: "",
-    requirementId: "req_1",
-    requirementTitle: "React Developer",
+    profileCode: "00001",
     clientId: "client_1",
-    clientName: "Infosys",
+    clientName: "EcodeDash Pvt Ltd",
+    requirementId: "req_1",
+    requirementTitle: "AWS Developer",
     hrId: "hr_1",
     hrName: "Neha HR",
     bdeId: "bde_1",
@@ -24,7 +23,7 @@ const STATIC_INTERVIEWS = [
     history: [
       {
         stage: "BDE_SCREENING",
-        status: "Started",
+        status: "Screening Started",
         remark: "",
         updatedBy: "BDE",
         updatedAt: new Date().toISOString(),

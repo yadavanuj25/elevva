@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
+import { BarLoader, PulseLoader } from "react-spinners";
 
 const SelectField = ({
   name,
@@ -80,7 +81,9 @@ const SelectField = ({
             {/* Options */}
             <div className="max-h-52 overflow-auto">
               {loading ? (
-                <p className="p-3 text-sm text-gray-500">Loading...</p>
+                <p className="p-3 text-sm text-gray-500 text-center">
+                  <PulseLoader size={14} />
+                </p>
               ) : filteredOptions.length ? (
                 filteredOptions.map((opt) => (
                   <div

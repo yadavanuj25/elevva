@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as yup from "yup";
-import { ArrowLeft, Save, SaveAll, User } from "lucide-react";
+import { Save, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import Input from "../../components/ui/Input";
-import profileImg from "../../assets/userImage/profileImg.png";
 import ReadOnlyInput from "../ui/formFields/ReadOnlyInput";
 import Button from "../ui/Button";
 import BasicDatePicker from "../ui/BasicDatePicker";
@@ -352,12 +351,7 @@ const EditProfile = () => {
           >
             Cancel
           </button>
-          <Button
-            type="submit"
-            text="Update"
-            icon={<Save size={18} />}
-            // loading={loading}
-          />
+          <Button type="submit" text="Update" icon={<Save size={18} />} />
         </div>
       </div>
     </form>
@@ -378,10 +372,8 @@ const InfoGrid = ({ children }) => (
 );
 const InfoRow = ({ label, value }) => {
   const isEmail = label?.toLowerCase() === "email";
-
   const formattedValue =
     value && !isEmail ? value.charAt(0).toUpperCase() + value.slice(1) : value;
-
   return (
     <div className="grid grid-cols-[80px_1fr] items-center text-sm">
       <span className="text-gray-900 dark:text-white font-medium">

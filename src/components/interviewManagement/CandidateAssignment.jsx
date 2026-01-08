@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 // Services
-import {
-  getProfiles,
-  assignCandidate,
-  addNewCandidate,
-} from "../../services/interviewService";
+import { getProfiles, assignCandidate } from "../../services/interviewService";
 
 const CandidateAssignment = ({ requirement, onCandidateAssigned }) => {
   const [profiles, setProfiles] = useState([]);

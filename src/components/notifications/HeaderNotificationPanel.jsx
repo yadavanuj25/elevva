@@ -31,11 +31,17 @@ const groupNotifications = (notifications = []) => {
 };
 
 const timeAgo = (date) => {
-  const diff = Math.floor((Date.now() - new Date(date)) / 1000);
-  if (diff < 60) return "Just now";
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  return `${Math.floor(diff / 86400)}d ago`;
+  const createdDate = new Date(date);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - createdDate) / 1000);
+  if (diffInSeconds < 60) return "Just now";
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+  return createdDate.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 };
 
 const HeaderNotificationPanel = ({
@@ -51,8 +57,13 @@ const HeaderNotificationPanel = ({
   const navigate = useNavigate();
   const panelRef = useRef(null);
 
+  const [visibleCount, setVisibleCount] = useState(5);
   const [visible, setVisible] = useState(open);
   const { today, yesterday, earlier } = groupNotifications(notifications);
+
+  useEffect(() => {
+    if (open) setVisibleCount(5);
+  }, [open]);
 
   useEffect(() => {
     if (open) setVisible(true);
@@ -68,19 +79,30 @@ const HeaderNotificationPanel = ({
 
   useEffect(() => {
     if (!open) return;
-
     const handlePointerDown = (e) => {
       if (panelRef.current && !panelRef.current.contains(e.target)) {
         onClose();
       }
     };
-
     document.addEventListener("pointerdown", handlePointerDown, true);
-
     return () => {
       document.removeEventListener("pointerdown", handlePointerDown, true);
     };
   }, [open, onClose]);
+
+  const totalNotifications = notifications;
+  let countRef = 0;
+  const sliceWithLimit = (items) => {
+    if (countRef >= visibleCount) return [];
+    const remaining = visibleCount - countRef;
+    const sliced = items.slice(0, remaining);
+    countRef += sliced.length;
+    return sliced;
+  };
+
+  const visibleToday = sliceWithLimit(today);
+  const visibleYesterday = sliceWithLimit(yesterday);
+  const visibleEarlier = sliceWithLimit(earlier);
 
   if (!visible) return null;
 
@@ -129,7 +151,7 @@ const HeaderNotificationPanel = ({
         )}
 
         <div className="flex-1 overflow-y-auto">
-          {notifications.length === 0 ? (
+          {totalNotifications.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-accent-dark">
               <Bell size={40} />
               <p>No notifications</p>
@@ -137,12 +159,12 @@ const HeaderNotificationPanel = ({
           ) : (
             <>
               {/* TODAY */}
-              {today.length > 0 && (
+              {visibleToday.length > 0 && (
                 <>
                   <p className="px-4 py-2 text-xs font-semibold text-gray-500">
                     Today
                   </p>
-                  {today.map((n) => (
+                  {visibleToday.map((n) => (
                     <NotificationItem
                       key={n._id}
                       notification={n}
@@ -156,12 +178,12 @@ const HeaderNotificationPanel = ({
               )}
 
               {/* YESTERDAY */}
-              {yesterday.length > 0 && (
+              {visibleYesterday.length > 0 && (
                 <>
                   <p className="px-4 py-2 text-xs font-semibold text-gray-500">
                     Yesterday
                   </p>
-                  {yesterday.map((n) => (
+                  {visibleYesterday.map((n) => (
                     <NotificationItem
                       key={n._id}
                       notification={n}
@@ -175,12 +197,12 @@ const HeaderNotificationPanel = ({
               )}
 
               {/* EARLIER */}
-              {earlier.length > 0 && (
+              {visibleEarlier.length > 0 && (
                 <>
                   <p className="px-4 py-2 text-xs font-semibold text-gray-500">
                     Earlier
                   </p>
-                  {earlier.map((n) => (
+                  {visibleEarlier.map((n) => (
                     <NotificationItem
                       key={n._id}
                       notification={n}
@@ -193,6 +215,16 @@ const HeaderNotificationPanel = ({
                 </>
               )}
             </>
+          )}
+          {visibleCount < totalNotifications.length && (
+            <div className="flex items-center justify-center py-5">
+              <button
+                onClick={() => setVisibleCount((prev) => prev + 5)}
+                className="w-max px-4 py-1.5 text-sm font-medium text-accent-dark bg-accent-light rounded hover:bg-accent-dark hover:text-accent-light transition-colors"
+              >
+                View more
+              </button>
+            </div>
           )}
         </div>
       </div>

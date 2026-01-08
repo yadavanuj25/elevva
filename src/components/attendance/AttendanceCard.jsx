@@ -1,27 +1,60 @@
+import React, { useState, useEffect } from "react";
 import { Clock } from "lucide-react";
 
 const AttendanceCard = () => {
+  const [dateTime, setDateTime] = useState("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const time = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+      const date = now.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+      setDateTime(`${time}, ${date}`);
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="bg-white rounded-lg border-2 border-orange-300 p-6">
-      <p className="text-center text-lg font-semibold mb-4">
-        08:35 AM, 11 Mar 2025
-      </p>
+    <div>
+      <h3 className="text-center text-gray-600 dark:text-gray-300 font-medium">
+        Attendance
+      </h3>
+      <p className="text-center text-lg font-semibold mb-4">{dateTime}</p>
 
-      <div className="text-center mb-4">
-        <p className="text-gray-500 text-sm">Total Hours</p>
-        <p className="text-2xl font-bold">5:45:32</p>
+      <div className="flex justify-center mt-6">
+        <div
+          className="relative w-40 h-40 rounded-full"
+          style={{
+            background: "conic-gradient(#22c55e 75%, #e5e7eb 0)",
+          }}
+        >
+          <div className="absolute inset-3 bg-white dark:bg-gray-900 rounded-full flex flex-col items-center justify-center">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
+              Total Hours
+            </p>
+            <p className="font-bold text-lg text-gray-900 dark:text-white">
+              5:45:32
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="bg-gray-900 text-white text-center py-2 rounded mb-3">
-        Production : 3.45 hrs
-      </div>
-
-      <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+      <div className="flex items-center justify-center text-sm text-gray-600 mb-4">
         <Clock className="w-4 h-4" />
         Punch In at 10:00 AM
       </div>
 
-      <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg">
+      <button className="w-full bg-accent-dark hover:opacity-80 text-accent-light font-semibold py-3 rounded-lg">
         Punch Out
       </button>
     </div>

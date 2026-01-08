@@ -42,60 +42,15 @@ const Login = () => {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setErrors({});
-  //   showError("");
-  //   showSuccess("");
-  //   setLoading(true);
-  //   try {
-  //     await schema.validate(formdata, { abortEarly: false });
-  //     const response = await fetch(
-  //       "https://crm-backend-qbz0.onrender.com/api/auth/login",
-  //       {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify(formdata),
-  //       }
-  //     );
-  //     const data = await response.json();
-  //     if (!response.ok || !data.token || !data.user) {
-  //       showError(data.message || "Invalid credentials");
-  //       return;
-  //     }
-  //     await login(data);
-  //     const userRole = data.user.role?.name?.toLowerCase() || "user";
-  //     if (userRole === "admin") navigate("/admin/super-dashboard");
-  //     else navigate("/dashboard");
-  //   } catch (err) {
-  //     if (err.name === "ValidationError") {
-  //       const newErrors = {};
-  //       err.inner.forEach((e) => (newErrors[e.path] = e.message));
-  //       setErrors(newErrors);
-  //     } else {
-  //       showError("Something went wrong. Please try again.");
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //     setTimeout(() => {
-  //       showSuccess("");
-  //       showError("");
-  //     }, 4000);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
     showError("");
     showSuccess("");
     setLoading(true);
-
     try {
-      // 1️⃣ Validate form
       await schema.validate(formdata, { abortEarly: false });
 
-      // 2️⃣ Login API call
       const response = await fetch(
         "https://crm-backend-qbz0.onrender.com/api/auth/login",
         {
@@ -111,11 +66,7 @@ const Login = () => {
         showError(data.message || "Invalid credentials");
         return;
       }
-
-      // 3️⃣ Store user & token in context
       await login(data);
-
-      // 4️⃣ Redirect based on lock status
       if (data.user.isLocked) {
         navigate("/lock-screen", { replace: true });
       } else {
