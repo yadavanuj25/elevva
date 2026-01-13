@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { profileSchema } from "./ProfileSchema";
+import { profileSchema } from "./profileSchema";
 
 export const EditSchema = yup.object().shape({
   ...profileSchema,
