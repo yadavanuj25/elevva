@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
-import { BarLoader, PulseLoader } from "react-spinners";
+import { PulseLoader } from "react-spinners";
 
 const SelectField = ({
   name,

@@ -2,7 +2,7 @@ import { Calendar, FileText, Mail, Pencil, Phone } from "lucide-react";
 
 const EmployeeProfileCard = () => {
   return (
-    <div className="bg-white dark:bg-gray-800  rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden">
+    <div className="h-full bg-white dark:bg-gray-800  rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden">
       {/* Header */}
       <div className="bg-[#1f2429] text-white px-4 py-2 flex items-center justify-between">
         <div className="flex items-center gap-2">

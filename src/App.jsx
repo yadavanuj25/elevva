@@ -19,7 +19,7 @@ import Settings from "./pages/Settings";
 import CreateRole from "./components/roleManagement/CreateRole";
 import EditRole from "./components/roleManagement/EditRole";
 import EditUser from "./components/userManagement/EditUser";
-import ProfileSubmission from "./components/profileMnagement/ProfileSubmission";
+import AddProfile from "./components/profileMnagement/AddProfile";
 import EditProfile from "./components/profileMnagement/EditProfile";
 import Profiles from "./pages/Profiles";
 import ViewProfile from "./components/profileMnagement/ViewProfile";
@@ -45,7 +45,10 @@ import InterviewDashboard from "./pages/InterviewDashboard";
 import { InterviewProvider } from "./context/InterViewContext";
 import NotFound from "./pages/NotFound";
 import Chat from "./pages/Chat";
-import Attandance from "./pages/Attandance";
+import Attandance from "./pages/Attendance/Attandance";
+import LeaveApplication from "./pages/Attendance/LeaveApplication";
+import MyLeaves from "./pages/Attendance/MyLeaves";
+import LeaveBalance from "./pages/Attendance/LeaveBalance";
 
 const App = () => {
   const location = useLocation();
@@ -198,7 +201,8 @@ const App = () => {
               path="/admin/profilemanagement/add-profile"
               element={
                 <ProtectedRoute allowedModules={["profile"]}>
-                  <ProfileSubmission />
+                  <AddProfile />
+                  {/* <AddProfile /> */}
                 </ProtectedRoute>
               }
             />
@@ -390,6 +394,30 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Attandance />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/attendance/leave-application"
+              element={
+                <ProtectedRoute>
+                  <LeaveApplication />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/attendance/my-leaves"
+              element={
+                <ProtectedRoute>
+                  <MyLeaves />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/attendance/balance-leave"
+              element={
+                <ProtectedRoute>
+                  <LeaveBalance />
                 </ProtectedRoute>
               }
             />

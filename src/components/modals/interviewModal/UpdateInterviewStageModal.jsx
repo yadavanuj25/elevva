@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CancelButton from "../../ui/buttons/Cancel";
 import { X } from "lucide-react";
+import Close from "../../ui/buttons/Close";
 
 const INTERVIEW_LEVELS = [
   "BDE_SCREENING",
@@ -46,12 +47,13 @@ const UpdateInterviewStageModal = ({ open, record, onClose, onUpdate }) => {
             Update Interview Stage
           </h2>
 
-          <button
+          {/* <button
             onClick={onClose}
             className="bg-gray-200 text-black p-1 rounded hover:bg-gray-400"
           >
             <X size={18} />
-          </button>
+          </button> */}
+          <Close handleClose={onClose} />
         </div>
 
         <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto">

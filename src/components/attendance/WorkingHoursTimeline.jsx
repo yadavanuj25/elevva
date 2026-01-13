@@ -1,8 +1,10 @@
 import { Calendar } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const WorkingHoursTimeline = () => {
+  const navigate = useNavigate();
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 p-4 mb-6 shadow-sm">
+    <div className="h-full bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 p-4  shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-600">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -31,11 +33,12 @@ const WorkingHoursTimeline = () => {
 
       {/* Action */}
       <button
+        onClick={() => navigate("/attendance/leave-application")}
         className="w-full flex items-center justify-center font-semibold py-2 rounded-lg
                    bg-accent-dark text-white hover:opacity-80 
                     transition-colors"
       >
-        Apply Here
+        Apply Leave
       </button>
     </div>
   );

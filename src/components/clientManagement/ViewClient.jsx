@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
-  FileText,
   MapPin,
   Phone,
   RefreshCcw,
   Mail,
   Building,
-  Star,
-  Pencil,
-  ArrowLeft,
   Briefcase,
   Info,
   Users,
@@ -19,7 +15,6 @@ import NoData from "../ui/NoData";
 import { getClientById } from "../../services/clientServices";
 import ViewInfo from "../ui/ViewInfo";
 import ViewSection from "../ui/ViewSection";
-import RefreshButton from "../ui/tableComponents/RefreshButton";
 import ViewTabs from "../ui/viewComponents/ViewTabs";
 import PageTitle from "../../hooks/PageTitle";
 import { BarLoader } from "react-spinners";
@@ -93,7 +88,6 @@ const ViewClient = () => {
             </p>
           )}
         </div>
-        {/* <RefreshButton fetchData={fetchClientById} /> */}
         <button
           className="flex items-center gap-2 "
           onClick={() => fetchClientById()}

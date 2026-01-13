@@ -206,6 +206,7 @@ const AssignTaskView = () => {
               text="Assign"
               icon={<Save size={18} />}
               loading={loading}
+              disabled={loading}
             />
           </div>
         </form>

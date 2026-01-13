@@ -1,6 +1,5 @@
 const BASE_URL = "https://countriesnow.space/api/v0.1";
 
-// Get all countries
 export const getCountries = async () => {
   const response = await fetch(`${BASE_URL}/countries`);
   if (!response.ok) {
@@ -8,8 +7,6 @@ export const getCountries = async () => {
   }
   return response.json();
 };
-
-//  Get states by country
 
 export const getStatesByCountry = async (country) => {
   const response = await fetch(

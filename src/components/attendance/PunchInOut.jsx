@@ -46,9 +46,9 @@ export default function AttendanceSummary() {
 
         {/* Timeline (fills remaining height) */}
         <div className="flex-1">
-          <div className="h-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm p-6 flex flex-col justify-between">
+          <div className="h-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm p-4 flex flex-col justify-between">
             <div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-4">
                 <TimelineStat
                   label="Total Working hours"
                   value="12h 36m"
@@ -111,7 +111,7 @@ const TimelineStat = ({ label, value, dot }) => (
       <span className={`w-2 h-2 rounded-full ${dot}`} />
       {label}
     </p>
-    <h3 className="font-bold text-xl text-gray-900 dark:text-white mt-1">
+    <h3 className="font-bold text-xl text-gray-900 dark:text-white ">
       {value}
     </h3>
   </div>

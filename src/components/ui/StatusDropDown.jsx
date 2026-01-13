@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
-import Spinner from "../loaders/Spinner";
 import StatusLoader from "../loaders/StatusLoader";
 
 const getStatusColor = (s) => {

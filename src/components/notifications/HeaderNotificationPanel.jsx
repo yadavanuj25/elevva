@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Bell, X, CheckCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import NotificationItem from "./NotificationItem";
+import Close from "../ui/buttons/Close";
 
 const groupNotifications = (notifications = []) => {
   const today = [];
@@ -56,7 +57,6 @@ const HeaderNotificationPanel = ({
   const location = useLocation();
   const navigate = useNavigate();
   const panelRef = useRef(null);
-
   const [visibleCount, setVisibleCount] = useState(5);
   const [visible, setVisible] = useState(open);
   const { today, yesterday, earlier } = groupNotifications(notifications);
@@ -133,9 +133,10 @@ const HeaderNotificationPanel = ({
               <p className="text-xs">{unreadCount} unread</p>
             </div>
           </div>
-          <button onClick={onClose}>
+          {/* <button onClick={onClose}>
             <X />
-          </button>
+          </button> */}
+          <Close handleClose={onClose} />
         </div>
 
         {unreadCount > 0 && (

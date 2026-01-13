@@ -1,97 +1,37 @@
-import React, { useMemo, useRef } from "react";
+import React from "react";
 import Input from "../ui/Input";
 import SelectField from "../ui/SelectField";
 import Button from "../ui/Button";
 import ReactQuill from "react-quill-new";
-import "react-quill-new/dist/quill.snow.css";
 import BasicDatePicker from "../ui/BasicDatePicker";
-import ReadOnlyInput from "../ui/formFields/ReadOnlyInput";
 import Textareafield from "../ui/formFields/Textareafield";
+import ReadOnlyInput from "../ui/formFields/ReadOnlyInput";
 import { Save } from "lucide-react";
 
 const RequirementForm = ({
-  mode = "add", // add | edit
+  isEdit = false,
   formData,
   setFormData,
   errors,
-  setErrors,
   options,
   activeClients,
+  jobDescriptionRef,
+  quillRef,
+  modules,
+  handleChange,
+  handleQuillChange,
+  handleSubmit,
   loading,
-  onSubmit,
+  submitText,
 }) => {
-  const quillRef = useRef(null);
-  const jobDescriptionRef = useRef(formData.jobDescription || "");
-
-  /* ---------- Quill Image Handler ---------- */
-  const imageHandler = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
-    input.click();
-    input.onchange = () => {
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        const quill = quillRef.current.getEditor();
-        const range = quill.getSelection();
-        quill.insertEmbed(range.index, "image", reader.result);
-      };
-      reader.readAsDataURL(file);
-    };
-  };
-
-  const modules = useMemo(
-    () => ({
-      toolbar: {
-        container: [
-          [{ header: [1, 2, 3, false] }],
-          ["bold", "italic", "underline"],
-          [{ list: "ordered" }, { list: "bullet" }],
-          ["link", "image"],
-        ],
-        handlers: { image: imageHandler },
-      },
-    }),
-    []
-  );
-
-  /* ---------- Common Change Handler ---------- */
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    let newValue = value;
-    let errorMsg = "";
-
-    if (["budget", "totalPositions"].includes(name)) {
-      const clean =
-        name === "budget" ? value.replace(/,/g, "") : value.replace(/\D/g, "");
-
-      if (value !== clean) errorMsg = "Only numbers allowed";
-
-      newValue =
-        name === "budget" && clean
-          ? new Intl.NumberFormat("en-IN").format(clean)
-          : clean;
-    }
-
-    setFormData((p) => ({ ...p, [name]: newValue }));
-    setErrors((p) => ({ ...p, [name]: errorMsg }));
-  };
-
-  const handleQuillChange = (content, delta, source, editor) => {
-    jobDescriptionRef.current = editor.getHTML();
-    setFormData((p) => ({ ...p, jobDescription: jobDescriptionRef.current }));
-    setErrors((p) => ({ ...p, jobDescription: "" }));
-  };
-
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
-      {/* ---------- Basic Details ---------- */}
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="section">
-        <h3 className="form-section-subtitle">Basic Details</h3>
-
+        <h3 className="form-section-subtitle border-b">Basic Details</h3>
         <div className="grid md:grid-cols-2 gap-4">
-          {mode === "add" ? (
+          {isEdit ? (
+            <ReadOnlyInput labelName="Client" value={formData.client} />
+          ) : (
             <SelectField
               name="client"
               label="Client"
@@ -103,8 +43,6 @@ const RequirementForm = ({
               handleChange={handleChange}
               error={errors.client}
             />
-          ) : (
-            <ReadOnlyInput labelName="Client" value={formData.client} />
           )}
 
           <SelectField
@@ -135,19 +73,18 @@ const RequirementForm = ({
           />
         </div>
       </div>
-
-      {/* ---------- Work Details ---------- */}
       <div className="section">
-        <h3 className="form-section-subtitle">Work Details</h3>
-
+        <h3 className="form-section-subtitle border-b">Work Details</h3>
         <div className="grid md:grid-cols-2 gap-4">
-          <Input
+          <SelectField
             name="workRole"
+            label="Work Role"
             value={formData.workRole}
+            options={options.workRole}
             handleChange={handleChange}
-            labelName="Work Role"
-            errors={errors}
+            error={errors.workRole}
           />
+
           <SelectField
             name="workMode"
             label="Work Mode"
@@ -156,6 +93,7 @@ const RequirementForm = ({
             handleChange={handleChange}
             error={errors.workMode}
           />
+
           <Input
             name="workLocation"
             value={formData.workLocation}
@@ -163,6 +101,7 @@ const RequirementForm = ({
             labelName="Work Location"
             errors={errors}
           />
+
           <Input
             name="totalPositions"
             value={formData.totalPositions}
@@ -172,11 +111,8 @@ const RequirementForm = ({
           />
         </div>
       </div>
-
-      {/* ---------- Budget ---------- */}
       <div className="section">
-        <h3 className="form-section-subtitle">Budget Details</h3>
-
+        <h3 className="form-section-subtitle border-b">Budget Details</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <SelectField
             name="budgetType"
@@ -186,6 +122,7 @@ const RequirementForm = ({
             handleChange={handleChange}
             error={errors.budgetType}
           />
+
           <SelectField
             name="currency"
             label="Currency"
@@ -194,6 +131,7 @@ const RequirementForm = ({
             handleChange={handleChange}
             error={errors.currency}
           />
+
           <Input
             name="budget"
             value={formData.budget}
@@ -201,6 +139,7 @@ const RequirementForm = ({
             labelName="Budget Amount"
             errors={errors}
           />
+
           <BasicDatePicker
             name="expectedClosureDate"
             value={formData.expectedClosureDate}
@@ -210,17 +149,18 @@ const RequirementForm = ({
         </div>
       </div>
 
-      <Input
-        name="techStack"
-        value={formData.techStack}
-        handleChange={handleChange}
-        labelName="Tech Stack"
-        errors={errors}
-      />
-
-      {/* ---------- Job Description ---------- */}
-      <div>
-        <label className="font-medium">Job Description</label>
+      <div className="section">
+        <h3 className="form-section-subtitle border-b">Technical Info</h3>
+        <Input
+          name="techStack"
+          value={formData.techStack}
+          handleChange={handleChange}
+          labelName="Tech Stack(Position)"
+          errors={errors}
+        />
+      </div>
+      <div className="section">
+        <label className="font-medium block mb-1">Job Description</label>
         <ReactQuill
           ref={quillRef}
           value={jobDescriptionRef.current}
@@ -228,24 +168,25 @@ const RequirementForm = ({
           modules={modules}
         />
         {errors.jobDescription && (
-          <p className="text-red-500">{errors.jobDescription}</p>
+          <p className="text-red-500 text-sm mt-1">{errors.jobDescription}</p>
         )}
       </div>
-
-      {/* ---------- Other Info ---------- */}
-      <Textareafield
-        name="otherInformation"
-        label="Other Information"
-        value={formData.otherInformation}
-        handleChange={handleChange}
-      />
-
+      <div className="section">
+        <h3 className="form-section-subtitle border-b">Other Information</h3>
+        <Textareafield
+          name="otherInformation"
+          label="Other Information"
+          value={formData.otherInformation}
+          handleChange={handleChange}
+        />
+      </div>
       <div className="flex justify-end">
         <Button
           type="submit"
-          text={mode === "add" ? "Submit" : "Update"}
+          text={submitText}
           icon={<Save size={18} />}
           loading={loading}
+          disabled={loading}
         />
       </div>
     </form>

@@ -3,12 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import Input from "../ui/Input";
 import SelectField from "../ui/SelectField";
 import Button from "../ui/Button";
-import { Save, ArrowLeft } from "lucide-react";
+import { Save } from "lucide-react";
 import * as yup from "yup";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import {
-  addClientsRequirement,
   getActiveClients,
   getRequirementsOptions,
   getRequirementById,
@@ -21,6 +20,7 @@ import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
 import ReadOnlyInput from "../ui/formFields/ReadOnlyInput";
 import Textareafield from "../ui/formFields/Textareafield";
+import RequirementForm from "../requirementManagement/RequirementForm";
 
 const schema = yup.object().shape({
   client: yup.string().required("Client is required"),
@@ -256,170 +256,185 @@ const EditClientRequirement = () => {
         {loading ? (
           <FormSkeleton rows={6} />
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6 ">
-            <div className="section">
-              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
-                Basic Details
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <ReadOnlyInput labelName="Client" value={formData.client} />
-                <SelectField
-                  name="requirementPriority"
-                  label="Requirement Priority"
-                  value={formData.requirementPriority}
-                  options={options.priorities}
-                  handleChange={handleChange}
-                  error={errors.requirementPriority}
-                />
-                <SelectField
-                  name="positionStatus"
-                  label="Position Status"
-                  value={formData.positionStatus}
-                  options={options.statuses}
-                  handleChange={handleChange}
-                  error={errors.positionStatus}
-                />
-                <SelectField
-                  name="experience"
-                  label="Experience"
-                  value={formData.experience}
-                  options={options.experiences}
-                  handleChange={handleChange}
-                  error={errors.experience}
-                />
-              </div>
-            </div>
+          // <form onSubmit={handleSubmit} className="space-y-6 ">
+          //   <div className="section">
+          //     <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
+          //       Basic Details
+          //     </h3>
+          //     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          //       <ReadOnlyInput labelName="Client" value={formData.client} />
+          //       <SelectField
+          //         name="requirementPriority"
+          //         label="Requirement Priority"
+          //         value={formData.requirementPriority}
+          //         options={options.priorities}
+          //         handleChange={handleChange}
+          //         error={errors.requirementPriority}
+          //       />
+          //       <SelectField
+          //         name="positionStatus"
+          //         label="Position Status"
+          //         value={formData.positionStatus}
+          //         options={options.statuses}
+          //         handleChange={handleChange}
+          //         error={errors.positionStatus}
+          //       />
+          //       <SelectField
+          //         name="experience"
+          //         label="Experience"
+          //         value={formData.experience}
+          //         options={options.experiences}
+          //         handleChange={handleChange}
+          //         error={errors.experience}
+          //       />
+          //     </div>
+          //   </div>
 
-            <div className="section">
-              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
-                Work Details
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <SelectField
-                  name="workRole"
-                  label="Work Role"
-                  value={formData.workRole}
-                  options={options.workRole}
-                  handleChange={handleChange}
-                  error={errors.workRole}
-                />
-                <SelectField
-                  name="workMode"
-                  label="Work Mode"
-                  value={formData.workMode}
-                  options={options.workModes}
-                  handleChange={handleChange}
-                  error={errors.workMode}
-                />
-                <Input
-                  name="workLocation"
-                  value={formData.workLocation}
-                  handleChange={handleChange}
-                  labelName="Work Location"
-                  errors={errors}
-                />
-                <Input
-                  name="totalPositions"
-                  value={formData.totalPositions}
-                  handleChange={handleChange}
-                  labelName="Total Positions"
-                  errors={errors}
-                />
-              </div>
-            </div>
+          //   <div className="section">
+          //     <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
+          //       Work Details
+          //     </h3>
+          //     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          //       <SelectField
+          //         name="workRole"
+          //         label="Work Role"
+          //         value={formData.workRole}
+          //         options={options.workRole}
+          //         handleChange={handleChange}
+          //         error={errors.workRole}
+          //       />
+          //       <SelectField
+          //         name="workMode"
+          //         label="Work Mode"
+          //         value={formData.workMode}
+          //         options={options.workModes}
+          //         handleChange={handleChange}
+          //         error={errors.workMode}
+          //       />
+          //       <Input
+          //         name="workLocation"
+          //         value={formData.workLocation}
+          //         handleChange={handleChange}
+          //         labelName="Work Location"
+          //         errors={errors}
+          //       />
+          //       <Input
+          //         name="totalPositions"
+          //         value={formData.totalPositions}
+          //         handleChange={handleChange}
+          //         labelName="Total Positions"
+          //         errors={errors}
+          //       />
+          //     </div>
+          //   </div>
 
-            <div className="section">
-              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
-                Budget Details
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <SelectField
-                  name="budgetType"
-                  label="Budget Type"
-                  value={formData.budgetType}
-                  options={options.budgetTypes}
-                  handleChange={handleChange}
-                  error={errors.budgetType}
-                />
-                <SelectField
-                  name="currency"
-                  label="Currency"
-                  value={formData.currency}
-                  options={options.currencies}
-                  handleChange={handleChange}
-                  error={errors.currency}
-                />
-                <Input
-                  name="budget"
-                  value={formData.budget}
-                  handleChange={handleChange}
-                  labelName="Budget Amount"
-                  errors={errors}
-                />
+          //   <div className="section">
+          //     <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
+          //       Budget Details
+          //     </h3>
+          //     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          //       <SelectField
+          //         name="budgetType"
+          //         label="Budget Type"
+          //         value={formData.budgetType}
+          //         options={options.budgetTypes}
+          //         handleChange={handleChange}
+          //         error={errors.budgetType}
+          //       />
+          //       <SelectField
+          //         name="currency"
+          //         label="Currency"
+          //         value={formData.currency}
+          //         options={options.currencies}
+          //         handleChange={handleChange}
+          //         error={errors.currency}
+          //       />
+          //       <Input
+          //         name="budget"
+          //         value={formData.budget}
+          //         handleChange={handleChange}
+          //         labelName="Budget Amount"
+          //         errors={errors}
+          //       />
 
-                <BasicDatePicker
-                  name="expectedClosureDate"
-                  value={formData.expectedClosureDate}
-                  handleChange={handleChange}
-                  labelName="Expected Closure Date"
-                />
-              </div>
-            </div>
-            <div className="col-span-2 section">
-              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
-                Technical Info
-              </h3>
-              <Input
-                name="techStack"
-                value={formData.techStack}
-                handleChange={handleChange}
-                labelName="Tech Stack(Position)"
-                errors={errors}
-              />
-            </div>
+          //       <BasicDatePicker
+          //         name="expectedClosureDate"
+          //         value={formData.expectedClosureDate}
+          //         handleChange={handleChange}
+          //         labelName="Expected Closure Date"
+          //       />
+          //     </div>
+          //   </div>
+          //   <div className="col-span-2 section">
+          //     <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
+          //       Technical Info
+          //     </h3>
+          //     <Input
+          //       name="techStack"
+          //       value={formData.techStack}
+          //       handleChange={handleChange}
+          //       labelName="Tech Stack(Position)"
+          //       errors={errors}
+          //     />
+          //   </div>
 
-            <div className="section">
-              <div className="col-span-2">
-                <label className="font-medium block mb-1">
-                  Job Description
-                </label>
+          //   <div className="section">
+          //     <div className="col-span-2">
+          //       <label className="font-medium block mb-1">
+          //         Job Description
+          //       </label>
 
-                <ReactQuill
-                  ref={quillRef}
-                  theme="snow"
-                  value={jobDescriptionRef.current}
-                  onChange={handleQuillChange}
-                  modules={modules}
-                  className=" bg-white dark:bg-darkBg dark:text-white "
-                />
-                {errors.jobDescription && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.jobDescription}
-                  </p>
-                )}
-              </div>
-            </div>
+          //       <ReactQuill
+          //         ref={quillRef}
+          //         theme="snow"
+          //         value={jobDescriptionRef.current}
+          //         onChange={handleQuillChange}
+          //         modules={modules}
+          //         className=" bg-white dark:bg-darkBg dark:text-white "
+          //       />
+          //       {errors.jobDescription && (
+          //         <p className="text-red-500 text-sm mt-1">
+          //           {errors.jobDescription}
+          //         </p>
+          //       )}
+          //     </div>
+          //   </div>
 
-            <div className="section">
-              <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
-                Other Information
-              </h3>
-              <Textareafield
-                name="otherInformation"
-                label="Other Information"
-                value={formData.otherInformation}
-                handleChange={handleChange}
-              />
-            </div>
-            <div className="flex justify-end">
-              <Button
-                type="submit"
-                text="Update"
-                icon={<Save size={18} />}
-                loading={updating}
-              />
-            </div>
-          </form>
+          //   <div className="section">
+          //     <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
+          //       Other Information
+          //     </h3>
+          //     <Textareafield
+          //       name="otherInformation"
+          //       label="Other Information"
+          //       value={formData.otherInformation}
+          //       handleChange={handleChange}
+          //     />
+          //   </div>
+          //   <div className="flex justify-end">
+          //     <Button
+          //       type="submit"
+          //       text="Update"
+          //       icon={<Save size={18} />}
+          //       loading={updating}
+          //     />
+          //   </div>
+          // </form>
+          <RequirementForm
+            isEdit={true}
+            formData={formData}
+            setFormData={setFormData}
+            errors={errors}
+            options={options}
+            jobDescriptionRef={jobDescriptionRef}
+            quillRef={quillRef}
+            modules={modules}
+            handleChange={handleChange}
+            handleQuillChange={handleQuillChange}
+            handleSubmit={handleSubmit}
+            loading={updating}
+            submitText="Update"
+          />
         )}
       </div>
     </div>

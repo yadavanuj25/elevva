@@ -1,6 +1,6 @@
 import React from "react";
 import { X } from "lucide-react";
-import CancelButton from "../../ui/buttons/Cancel";
+import Close from "../../ui/buttons/Close";
 
 const InterviewHistoryModal = ({ open, onClose, record }) => {
   console.log(record);
@@ -18,12 +18,13 @@ const InterviewHistoryModal = ({ open, onClose, record }) => {
               <span>{record.profileName}</span> •{record.requirementTitle}
             </p>
           </div>
-          <button
+          {/* <button
             onClick={onClose}
             className="bg-gray-200 text-black p-1 rounded hover:bg-gray-400"
           >
             <X size={18} />
-          </button>
+          </button> */}
+          <Close handleClose={onClose} />
         </div>
 
         <div className="p-5 max-h-[400px] overflow-y-auto">

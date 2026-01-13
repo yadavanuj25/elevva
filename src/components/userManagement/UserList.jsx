@@ -19,7 +19,6 @@ import {
   ChartNoAxesCombined,
 } from "lucide-react";
 import DateDisplay from "../ui/DateDisplay";
-import Spinner from "../loaders/Spinner";
 import NoData from "../ui/NoData";
 import { getAllUsers, updateUserStatus } from "../../services/userServices";
 import Search from "../sharedComponents/Search";

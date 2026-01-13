@@ -2,7 +2,7 @@ import { Calendar } from "lucide-react";
 
 const LeaveSummary = () => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 p-4 mb-6">
+    <div className="h-full bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 p-4">
       {/* Header */}
       <div className="flex items-center justify-between pb-4 border-b border-gray-300 dark:border-gray-600">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
@@ -16,9 +16,9 @@ const LeaveSummary = () => {
       </div>
 
       {/* Content */}
-      <div className="flex items-center gap-10 pt-6">
+      <div className="flex items-center justify-between pt-2">
         {/* Legend */}
-        <ul className="space-y-4 text-sm text-gray-600 dark:text-gray-400">
+        <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
           <li className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-[#0B4A5A]" />
             <span>
@@ -123,7 +123,7 @@ const LeaveSummary = () => {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center gap-2 mt-6 text-sm text-gray-500 dark:text-gray-400">
+      <div className="flex items-center gap-2  text-sm text-gray-500 dark:text-gray-400">
         <input type="checkbox" className="rounded" />
         Better than <b>85%</b> of Employees
       </div>

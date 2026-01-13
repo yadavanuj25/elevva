@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import DOMPurify from "dompurify";
 import Detail from "../TaskManagement/Detail";
 import { Copy, X } from "lucide-react";
-import Modal from "../modals/Modal";
+import Modal from "../modals/taskModal/Modal";
+import Close from "../ui/buttons/Close";
 
 const TaskQuickViewModal = ({ task, onClose }) => {
   const [copied, setCopied] = useState(false);
@@ -60,12 +61,13 @@ const TaskQuickViewModal = ({ task, onClose }) => {
                 <p>{task.requirement?.techStack}</p>
               </div>
 
-              <button
+              {/* <button
                 onClick={handleClose}
-                className="text-red-600 bg-white p-1 rounded-full hover:bg-gray-100 transition"
+                className="bg-gray-200 text-black p-1 rounded hover:bg-gray-400"
               >
                 <X size={20} />
-              </button>
+              </button> */}
+              <Close handleClose={handleClose} />
             </div>
           </div>
 

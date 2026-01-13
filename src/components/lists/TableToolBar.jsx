@@ -10,7 +10,6 @@ const TableToolbar = ({
 }) => (
   <div className="flex items-center justify-between mb-2">
     <div className="inline-flex gap-2">{children}</div>
-
     <CommonPagination
       total={pagination.total}
       page={pagination.page}
@@ -18,7 +17,6 @@ const TableToolbar = ({
       onPageChange={onPageChange}
       onLimitChange={onLimitChange}
     />
-
     <RefreshButton fetchData={onRefresh} />
   </div>
 );

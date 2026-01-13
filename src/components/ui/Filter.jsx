@@ -70,12 +70,13 @@ const Filter = ({ clients }) => {
               <Funnel size={16} />
               <h2 className="font-semibold text-lg">Filter</h2>
             </div>
-            <button
+            {/* <button
               className=" p-1 flex justify-center items-center rounded-full bg-red-300"
               onClick={() => setOpen(false)}
             >
               <X className="text-red-600" size={18} />
-            </button>
+            </button> */}
+            <Close handleClose={() => setOpen(false)} />
           </div>
 
           {/* Filter Sections */}

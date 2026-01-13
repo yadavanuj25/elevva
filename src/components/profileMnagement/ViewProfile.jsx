@@ -21,9 +21,7 @@ import {
   CalendarDays,
   ReceiptIndianRupee,
 } from "lucide-react";
-import { useAuth } from "../../auth/AuthContext";
 import { useParams, useNavigate } from "react-router-dom";
-import Spinner from "../loaders/Spinner";
 import Tippy from "@tippyjs/react";
 import ToolTip from "../ui/ToolTip";
 import { getProfileById } from "../../services/profileServices";
@@ -98,7 +96,7 @@ const ViewProfile = () => {
           />
         </button>
       </div>
-      <div className=" mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg  border border-gray-300 dark:border-gray-600 ">
+      <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg  border border-gray-300 dark:border-gray-600 ">
         <div>
           {loading ? (
             <div className="h-screen flex justify-center items-center text-center py-10 ">

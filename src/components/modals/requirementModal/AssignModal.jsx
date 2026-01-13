@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FileText, Hash, Save, X } from "lucide-react";
-import { getAllUsers } from "../../services/userServices";
-import { assignRequirement } from "../../services/clientServices";
-import Button from "../ui/Button";
-import CustomSwal from "../../utils/CustomSwal";
-import CancelButton from "../ui/buttons/Cancel";
+import { getAllUsers } from "../../../services/userServices";
+import { assignRequirement } from "../../../services/clientServices";
+import Button from "../../ui/Button";
+import CustomSwal from "../../../utils/CustomSwal";
+import CancelButton from "../../ui/buttons/Cancel";
+import Close from "../../ui/buttons/Close";
 
 const AssignModal = ({
   open,
@@ -15,6 +16,7 @@ const AssignModal = ({
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -23,7 +25,7 @@ const AssignModal = ({
     }
   }, [open]);
 
-  const closeWithAnimation = () => {
+  const handleClose = () => {
     setIsVisible(false);
     setTimeout(() => {
       resetForm();
@@ -57,6 +59,7 @@ const AssignModal = ({
       requirementId: selectedRequirements.map((r) => r._id),
       assignedTo: selectedOptions,
     };
+    setLoading(true);
     try {
       const res = await assignRequirement(payload);
       CustomSwal.fire({
@@ -66,7 +69,7 @@ const AssignModal = ({
         confirmButtonText: "OK",
       });
       setSelectedRows([]);
-      closeWithAnimation();
+      handleClose();
     } catch (err) {
       CustomSwal.fire({
         icon: "error",
@@ -77,6 +80,8 @@ const AssignModal = ({
           "Something went wrong while assigning",
         confirmButtonText: "OK",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,12 +110,8 @@ const AssignModal = ({
           <h2 className="text-lg font-semibold text-white">
             Assign Requirements
           </h2>
-          <button
-            onClick={closeWithAnimation}
-            className="bg-gray-200 text-black p-1 rounded hover:bg-gray-400"
-          >
-            <X size={18} />
-          </button>
+
+          <Close handleClose={handleClose} />
         </div>
 
         {/* CONTENT */}
@@ -164,11 +165,13 @@ const AssignModal = ({
       bg-white dark:bg-darkBg
       border-t border-gray-200 dark:border-gray-700"
         >
-          <CancelButton onClick={closeWithAnimation} />
+          <CancelButton onClick={handleClose} />
           <Button
             text="Assign"
             icon={<Save size={16} />}
             handleClick={handleAssign}
+            loading={loading}
+            disabled={loading}
           />
         </div>
       </div>

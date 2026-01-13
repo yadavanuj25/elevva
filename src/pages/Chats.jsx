@@ -11,6 +11,7 @@ import {
   CheckCheck,
 } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
+import Close from "../components/ui/buttons/Close";
 
 // API Service for Chat
 const chatAPI = {
@@ -285,12 +286,13 @@ const NewChatModal = ({ isOpen, onClose, onCreateChat, currentUserId }) => {
           <h3 className="text-lg font-bold">
             {isGroupMode ? "New Group Chat" : "New Chat"}
           </h3>
-          <button
+          {/* <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
           >
             <X size={24} />
-          </button>
+          </button> */}
+          <Close handleClose={onClose} />
         </div>
 
         {/* Mode Toggle & Search */}
@@ -652,12 +654,13 @@ const Chat = ({ socket }) => {
             >
               <Plus size={20} />
             </button>
-            <button
+            {/* <button
               onClick={() => setIsOpen(false)}
               className="p-1.5 hover:bg-accent-light hover:text-accent-dark rounded transition"
             >
               <X size={20} />
-            </button>
+            </button> */}
+            <Close handleClose={() => setIsOpen(false)} />
           </div>
         </div>
 

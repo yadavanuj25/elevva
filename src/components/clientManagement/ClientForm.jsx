@@ -58,7 +58,7 @@ const ClientForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <BasicDatePicker
           name="empanelmentDate"
@@ -150,8 +150,8 @@ const ClientForm = ({
 
       {/* POCs */}
       {["poc1", "poc2"].map((poc, idx) => (
-        <div key={poc} className="md:col-span-2 mt-6">
-          <div className="flex items-center gap-1 mb-3  pb-2">
+        <div key={poc} className="md:col-span-2 ">
+          <div className="flex items-center gap-1 mb-1  ">
             <h3 className="text-lg font-semibold ">{`POC-${idx + 1}`}</h3>
             <span className="text-sm text-gray-500 ">{`(Point of Contact-${
               idx + 1
@@ -198,6 +198,7 @@ const ClientForm = ({
           text="Submit"
           icon={<Save size={18} />}
           loading={loading}
+          disabled={loading}
         />
       </div>
     </form>

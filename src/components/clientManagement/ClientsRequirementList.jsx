@@ -29,10 +29,8 @@ import ErrorToast from "../ui/toaster/ErrorToast";
 import SuccessToast from "../ui/toaster/SuccessToast";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
-import AssignModal from "../modals/AssignModal";
+import AssignModal from "../modals/requirementModal/AssignModal";
 import GroupButton from "../ui/buttons/GroupButton";
-import EditButton from "../ui/buttons/EditButton";
-import ViewButton from "../ui/buttons/ViewButton";
 import CustomSwal from "../../utils/CustomSwal";
 import ActionMenu from "../ui/buttons/ActionMenu";
 

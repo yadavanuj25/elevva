@@ -167,6 +167,7 @@ const CreateRole = () => {
             text="Submit"
             icon={<Save size={18} />}
             loading={loading}
+            disabled={loading}
           />
         </div>
       </form>

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "CL",
+    "name": "Casual Leave",
+    "requiresProof": false,
+    "maxPerYear": 12
+  },
+  {
+    "id": "SL",
+    "name": "Sick Leave",
+    "requiresProof": true,
+    "maxPerYear": 8
+  },
+  {
+    "id": "PL",
+    "name": "Paid Leave",
+    "requiresProof": false,
+    "maxPerYear": 15
+  },
+  {
+    "id": "LOP",
+    "name": "Loss of Pay",
+    "requiresProof": false,
+    "maxPerYear": null
+  }
+]

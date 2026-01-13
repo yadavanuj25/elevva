@@ -1,4 +1,5 @@
 import React from "react";
+import { PulseLoader } from "react-spinners";
 
 const Button = ({
   text,
@@ -7,23 +8,25 @@ const Button = ({
   icon,
   handleClick,
   loading,
+  disabled,
 }) => {
   const isSubmit = type === "submit";
   return (
     <button
       type={type}
-      disabled={loading}
+      disabled={loading || disabled}
       onClick={!isSubmit ? handleClick : undefined}
-      // onClick={handleClick}
       className={`
-        w-max flex items-center gap-2 py-1.5 px-3 rounded transition-all duration-200 ease-in-out
+        w-max flex items-center gap-2 py-1.5 px-3 font-medium rounded transition-all duration-200 ease-in-out
         bg-accent-dark text-white  hover:bg-[#222]
-        ${loading ? "opacity-60 cursor-not-allowed" : ""}
+        ${loading || disabled ? "opacity-60 cursor-not-allowed" : ""}
         ${className}
       `}
     >
       {loading ? (
-        "Loading..."
+        <p className=" text-center">
+          <PulseLoader size={6} />
+        </p>
       ) : (
         <>
           {icon} {text}

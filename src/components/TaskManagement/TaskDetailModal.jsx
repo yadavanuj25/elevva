@@ -3,9 +3,8 @@ import MetricCard from "../TaskManagement/MetricCard";
 import { addTaskFeedback, addTaskRejection } from "../../services/taskServices";
 import { Save, X } from "lucide-react";
 import Detail from "./Detail";
-import Textareafield from "../ui/formFields/Textareafield";
-import SelectField from "../ui/SelectField";
 import Button from "../ui/Button";
+import Close from "../ui/buttons/Close";
 
 const TaskDetailModal = ({ task, onClose, onRefresh }) => {
   const [activeTab, setActiveTab] = useState("details");
@@ -18,6 +17,8 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
     stage: "Sales Review",
   });
   const [visible, setVisible] = useState(false);
+  const [loadingFeedback, setLoadingFeedback] = useState(false);
+  const [loadingRejection, setLoadingRejection] = useState(false);
 
   useEffect(() => {
     setVisible(true);
@@ -36,11 +37,16 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
       message: feedback,
       type: feedbackType,
     };
+    setLoadingFeedback(true);
     try {
       await addTaskFeedback(task._id, payload);
       setFeedback("");
       onRefresh();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingFeedback(false);
+    }
   };
 
   const handleAddRejection = async () => {
@@ -53,6 +59,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
       rejectedBy: rejection.rejectedBy,
       stage: rejection.stage,
     };
+    setLoadingRejection(true);
     try {
       await addTaskRejection(task._id, payload);
 
@@ -63,7 +70,11 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
         stage: "Sales Review",
       });
       onRefresh();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingRejection(false);
+    }
   };
 
   return (
@@ -74,7 +85,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
         bg-black bg-opacity-90`}
     >
       <div
-        className={`bg-white border  rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto
+        className={`bg-white   rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto
           transform transition-all duration-200
           ${visible ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
       >
@@ -84,12 +95,13 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
               <h2 className="text-xl font-semibold">{task?.taskCode}</h2>-{" "}
               <p>{task?.requirement?.techStack}</p>
             </div>
-            <button
+            {/* <button
               onClick={handleClose}
-              className="text-red-600 bg-white p-1 rounded-full hover:bg-gray-100 "
+              className="bg-gray-200 text-black p-1 rounded hover:bg-gray-400"
             >
               <X size={20} />
-            </button>
+            </button> */}
+            <Close handleClose={handleClose} />
           </div>
         </div>
 
@@ -206,6 +218,8 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                     text="Add Feedback"
                     icon={<Save size={18} />}
                     handleClick={handleAddFeedback}
+                    loading={loadingFeedback}
+                    disabled={loadingFeedback}
                   />
                 </div>
               </div>
@@ -294,17 +308,14 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                     }
                     className="w-full border rounded px-3 py-2 h-24"
                   />
-                  {/* <button
-                    onClick={handleAddRejection}
-                    className="bg-accent-dark text-white px-6 py-2 rounded hover:opacity-70"
-                  >
-                    Record Rejection
-                  </button> */}
+
                   <Button
                     type="button"
                     text="Record Rejection"
                     icon={<Save size={18} />}
                     handleClick={handleAddRejection}
+                    loading={loadingRejection}
+                    disabled={loadingRejection}
                   />
                 </div>
               </div>

@@ -6,6 +6,8 @@ import logo from "../../assets/logo/logo.png";
 import { FaUsers, FaUnlockAlt, FaHandshake, FaUserTie } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { FaBriefcase, FaGears } from "react-icons/fa6";
+import { TbHandClick } from "react-icons/tb";
+import { BsChatQuoteFill } from "react-icons/bs";
 import { ImProfile } from "react-icons/im";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -31,7 +33,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           module: "dashboard",
           path: "/attendance",
           label: "Attendance",
-          icon: <MdDashboard size={16} />,
+          icon: <TbHandClick size={16} />,
         },
       ],
     },
@@ -109,7 +111,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           module: "settings",
           path: "/chats",
           label: "Chats",
-          icon: <FaGears size={16} />,
+          icon: <BsChatQuoteFill size={16} />,
         },
       ],
     },

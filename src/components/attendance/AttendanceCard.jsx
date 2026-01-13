@@ -54,7 +54,11 @@ const AttendanceCard = () => {
         Punch In at 10:00 AM
       </div>
 
-      <button className="w-full bg-accent-dark hover:opacity-80 text-accent-light font-semibold py-3 rounded-lg">
+      <button
+        className="w-full flex items-center justify-center font-semibold py-2 rounded-lg
+                   bg-accent-dark text-white hover:opacity-80 
+                    transition-colors"
+      >
         Punch Out
       </button>
     </div>

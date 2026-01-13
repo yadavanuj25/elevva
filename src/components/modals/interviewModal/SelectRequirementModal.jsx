@@ -5,6 +5,7 @@ import {
   getAllClients,
   getRequirementByClientId,
 } from "../../../services/clientServices";
+import Close from "../../ui/buttons/Close";
 
 const SelectRequirementModal = ({
   open,
@@ -101,12 +102,13 @@ const SelectRequirementModal = ({
           <h3 className="text-lg font-semibold text-white">
             Start Interview Screening
           </h3>
-          <button
+          {/* <button
             onClick={onClose}
             className="bg-gray-200 text-black p-1 rounded hover:bg-gray-400"
           >
             <X size={18} />
-          </button>
+          </button> */}
+          <Close handleClose={onClose} />
         </div>
 
         <div className="px-6 py-5 space-y-5">

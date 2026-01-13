@@ -7,7 +7,6 @@ const NotificationItem = ({
   timeAgo,
 }) => {
   const n = notification;
-
   return (
     <div
       className={`relative px-4 py-2 border-b cursor-pointer transition ${

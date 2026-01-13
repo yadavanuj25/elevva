@@ -8,6 +8,11 @@ import ReadOnlyInput from "../ui/formFields/ReadOnlyInput";
 import Button from "../ui/Button";
 import BasicDatePicker from "../ui/BasicDatePicker";
 import SelectField from "../ui/SelectField";
+import {
+  getCountries,
+  getStatesByCountry,
+} from "../../services/commonServices";
+import CancelButton from "../ui/buttons/Cancel";
 
 const statusStyles = {
   active: "bg-green-600 text-white ",
@@ -67,6 +72,7 @@ const EditProfile = () => {
   const [fullCountryData, setFullCountryData] = useState([]);
   const [loadingCountries, setLoadingCountries] = useState(false);
   const [loadingStates, setLoadingStates] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: fullName || "",
     dob: formatDateForInput(dob) || "",
@@ -78,7 +84,7 @@ const EditProfile = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    getAllCountries();
+    fetchCountries();
   }, []);
 
   useEffect(() => {
@@ -88,14 +94,13 @@ const EditProfile = () => {
     }
   }, [formData.country]);
 
-  const getAllCountries = async () => {
+  const fetchCountries = async () => {
+    setLoadingCountries(true);
     try {
-      setLoadingCountries(true);
-      const res = await fetch("https://countriesnow.space/api/v0.1/countries");
-      const data = await res.json();
-      if (data?.data?.length) {
-        setFullCountryData(data.data);
-        setCountries(data.data.map((c) => c.country));
+      const res = await getCountries();
+      if (res?.data?.length) {
+        setFullCountryData(res.data);
+        setCountries(res.data.map((c) => c.country));
       }
     } catch (err) {
       console.error("Error fetching countries:", err);
@@ -109,19 +114,11 @@ const EditProfile = () => {
       setStates([]);
       return;
     }
+    setLoadingStates(true);
     try {
-      setLoadingStates(true);
-      const res = await fetch(
-        "https://countriesnow.space/api/v0.1/countries/states",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ country: formData.country }),
-        }
-      );
-      const data = await res.json();
-      if (data?.data?.states?.length) {
-        const stateList = data.data.states.map((s) => s.name);
+      const res = await getStatesByCountry(formData.country);
+      if (res?.data?.states?.length) {
+        const stateList = res.data.states.map((s) => s.name);
         setStates(stateList);
         if (!isInitial && !stateList.includes(formData.state)) {
           setFormData((prev) => ({ ...prev, state: "" }));
@@ -137,11 +134,10 @@ const EditProfile = () => {
     }
   };
 
-  if (!user) return null;
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleImageChange = (e) => {
@@ -154,6 +150,7 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+    setLoading(true);
     try {
       await profileSchema.validate(formData, { abortEarly: false });
       const payload = {
@@ -187,6 +184,8 @@ const EditProfile = () => {
       } else {
         console.error(err.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -199,162 +198,162 @@ const EditProfile = () => {
       address: address || "",
       zipcode: zipcode || "",
     });
+    setErrors({});
   };
 
+  if (!user) return null;
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-6 bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 p-6 rounded-xl"
-    >
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
-          My Profile
-        </h2>
-      </div>
-      <div className="relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-          <div className="flex items-center gap-6">
-            <div className="relative">
-              <div className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-600 flex items-center justify-center">
-                {profilePreview ? (
-                  <img
-                    src={profilePreview}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
+    <>
+      <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+        My Profile
+      </h2>
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 p-6 rounded-xl"
+      >
+        <div className="relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+            <div className="flex items-center gap-6">
+              <div className="relative">
+                <div className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-600 flex items-center justify-center">
+                  {profilePreview ? (
+                    <img
+                      src={profilePreview}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <img
+                      src="https://staging.ecodedash.com/cias/assets/dist/img/userimg.png"
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+
+                <label className="absolute inset-0 flex items-center justify-center rounded-xl cursor-pointer bg-black/40 opacity-0 hover:opacity-100 transition">
+                  <User size={20} className="text-white" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageChange}
                   />
-                ) : (
-                  <img
-                    src="https://staging.ecodedash.com/cias/assets/dist/img/userimg.png"
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                )}
+                </label>
               </div>
 
-              <label className="absolute inset-0 flex items-center justify-center rounded-xl cursor-pointer bg-black/40 opacity-0 hover:opacity-100 transition">
-                <User size={20} className="text-white" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
-              </label>
-            </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white capitalize">
+                  {fullName}
+                </h3>
 
-            <div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white capitalize">
-                {fullName}
-              </h3>
-
-              <span
-                className={`inline-block mt-1 px-3 py-1 rounded-md text-xs font-semibold capitalize 
+                <span
+                  className={`inline-block mt-1 px-3 py-1 rounded-md text-xs font-semibold capitalize 
                  ${
                    statusStyles[status?.toLowerCase()] ||
                    "bg-gray-100 text-gray-600"
                  }`}
-              >
-                {status}
-              </span>
+                >
+                  {status}
+                </span>
 
-              <p className="mt-2 text-sm text-gray-400 capitalize">
-                {state}, {country}
-              </p>
+                <p className="mt-2 text-sm text-gray-400 capitalize">
+                  {state}, {country}
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3 md:border-l md:border-gray-300 md:dark:border-gray-600 md:pl-8">
+              <InfoRow label="Email" value={email} />
+              <InfoRow label="Phone" value={phone} />
+              <InfoRow label="Role" value={role?.name} />
+              <InfoRow label="Status" value={status} />
+            </div>
+            <div className="space-y-3 md:border-l md:border-gray-300 md:dark:border-gray-600 md:pl-8">
+              <InfoRow label="Country" value={country} />
+              <InfoRow label="State" value={state} />
+              <InfoRow label="Zip Code" value={zipcode} />
+              <InfoRow label="Address" value={address} />
             </div>
           </div>
+        </div>
 
-          <div className="space-y-3 md:border-l md:border-gray-300 md:dark:border-gray-600 md:pl-8">
-            <InfoRow label="Email" value={email} />
-            <InfoRow label="Phone" value={phone} />
-            <InfoRow label="Role" value={role?.name} />
-            <InfoRow label="Status" value={status} />
+        {/* Editable Information */}
+        <Section title="Account Information">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Input
+              name="fullName"
+              labelName="Full Name"
+              value={formData.fullName}
+              handleChange={handleChange}
+              errors={errors}
+            />
+
+            <BasicDatePicker
+              name="dob"
+              labelName="Date of Birth"
+              value={formData.dob}
+              handleChange={handleChange}
+              errors={errors}
+            />
+
+            <ReadOnlyInput labelName="Email Address" value={email} />
+            <ReadOnlyInput labelName="Phone Number" value={phone} />
+            <ReadOnlyInput labelName="User Role" value={role?.name} />
+            <ReadOnlyInput labelName="Status" value={status} />
           </div>
-          <div className="space-y-3 md:border-l md:border-gray-300 md:dark:border-gray-600 md:pl-8">
-            <InfoRow label="Country" value={country} />
-            <InfoRow label="State" value={state} />
-            <InfoRow label="Zip Code" value={zipcode} />
-            <InfoRow label="Address" value={address} />
+        </Section>
+
+        {/* Address */}
+        <Section title="Address Details">
+          <InfoGrid>
+            <SelectField
+              name="country"
+              label="Country"
+              value={formData.country}
+              options={countries}
+              handleChange={handleChange}
+              loading={loadingCountries}
+              error={errors.country}
+            />
+            <SelectField
+              name="state"
+              label="State"
+              value={formData.state}
+              options={states}
+              handleChange={handleChange}
+              loading={loadingStates}
+              error={errors.state}
+            />
+            <Input
+              name="zipcode"
+              labelName="Zip Code"
+              value={formData.zipcode}
+              handleChange={handleChange}
+              errors={errors}
+            />
+            <Input
+              name="address"
+              labelName="Address"
+              value={formData.address}
+              handleChange={handleChange}
+              errors={errors}
+            />
+          </InfoGrid>
+        </Section>
+        <div className="flex items-center justify-end">
+          <div className="flex gap-2  items-stretch">
+            <CancelButton onClick={handleCancel} />
+            <Button
+              type="submit"
+              text="Update"
+              icon={<Save size={18} loading={loading} disabled={loading} />}
+            />
           </div>
         </div>
-      </div>
-
-      {/* Editable Information */}
-      <Section title="Account Information">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input
-            name="fullName"
-            labelName="Full Name"
-            value={formData.fullName}
-            handleChange={handleChange}
-            errors={errors}
-          />
-
-          <BasicDatePicker
-            name="dob"
-            labelName="Date of Birth"
-            value={formData.dob}
-            handleChange={handleChange}
-            errors={errors}
-          />
-
-          <ReadOnlyInput labelName="Email Address" value={email} />
-          <ReadOnlyInput labelName="Phone Number" value={phone} />
-          <ReadOnlyInput labelName="User Role" value={role?.name} />
-          <ReadOnlyInput labelName="Status" value={status} />
-        </div>
-      </Section>
-
-      {/* Address */}
-      <Section title="Address Details">
-        <InfoGrid>
-          <SelectField
-            name="country"
-            label="Country"
-            value={formData.country}
-            options={countries}
-            handleChange={handleChange}
-            loading={loadingCountries}
-            error={errors.country}
-          />
-          <SelectField
-            name="state"
-            label="State"
-            value={formData.state}
-            options={states}
-            handleChange={handleChange}
-            loading={loadingStates}
-            error={errors.state}
-          />
-          <Input
-            name="zipcode"
-            labelName="Zip Code"
-            value={formData.zipcode}
-            handleChange={handleChange}
-            errors={errors}
-          />
-          <Input
-            name="address"
-            labelName="Address"
-            value={formData.address}
-            handleChange={handleChange}
-            errors={errors}
-          />
-        </InfoGrid>
-      </Section>
-      <div className="flex items-center justify-end">
-        <div className="flex gap-2 items-center">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-gray-500 text-white hover:bg-gray-600 transition"
-          >
-            Cancel
-          </button>
-          <Button type="submit" text="Update" icon={<Save size={18} />} />
-        </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 
