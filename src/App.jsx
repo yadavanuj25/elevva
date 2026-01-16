@@ -49,6 +49,8 @@ import Attandance from "./pages/Attendance/Attandance";
 import LeaveApplication from "./pages/Attendance/LeaveApplication";
 import MyLeaves from "./pages/Attendance/MyLeaves";
 import LeaveBalance from "./pages/Attendance/LeaveBalance";
+import ManagerLeaveApproval from "./pages/Attendance/ManagerLeaveApproval";
+import AttendanceHistory from "./pages/Attendance/AttendanceHistory";
 
 const App = () => {
   const location = useLocation();
@@ -77,8 +79,7 @@ const App = () => {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/lock-screen" element={<LockScreen />} />
-
+          {/* <Route path="/lock-screen" element={<LockScreen />} /> */}
           <Route
             path="/login"
             element={
@@ -116,7 +117,7 @@ const App = () => {
           <Route element={<AdminLayout />}>
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
             <Route path="/my-profile" element={<MyProfile />} />
-            <Route path="/edit-profile" element={<EditMyProfile />} />
+            {/* <Route path="/edit-profile" element={<EditMyProfile />} /> */}
             <Route
               path="/admin/super-dashboard"
               element={
@@ -125,55 +126,11 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/dashboard"
               element={
                 <ProtectedRoute>
                   <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Reports */}
-            <Route
-              path="/admin/reports"
-              element={
-                <ProtectedRoute allowedModules={["reports"]}>
-                  <Reports />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/reports/hr"
-              element={
-                <ProtectedRoute
-                  allowedModules={["reports"]}
-                  allowedSubmodules={["HR"]}
-                >
-                  <Reports />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/reports/bde"
-              element={
-                <ProtectedRoute
-                  allowedModules={["reports"]}
-                  allowedSubmodules={["BDE"]}
-                >
-                  <Reports />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/reports/sales"
-              element={
-                <ProtectedRoute
-                  allowedModules={["reports"]}
-                  allowedSubmodules={["Sales"]}
-                >
-                  <Reports />
                 </ProtectedRoute>
               }
             />
@@ -398,7 +355,15 @@ const App = () => {
               }
             />
             <Route
-              path="/attendance/leave-application"
+              path="/attendance/history"
+              element={
+                <ProtectedRoute>
+                  <AttendanceHistory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/leave/apply"
               element={
                 <ProtectedRoute>
                   <LeaveApplication />
@@ -406,7 +371,7 @@ const App = () => {
               }
             />
             <Route
-              path="/attendance/my-leaves"
+              path="/leave/my-leaves"
               element={
                 <ProtectedRoute>
                   <MyLeaves />
@@ -414,10 +379,18 @@ const App = () => {
               }
             />
             <Route
-              path="/attendance/balance-leave"
+              path="/leave/balance"
               element={
                 <ProtectedRoute>
                   <LeaveBalance />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/leave/approvals"
+              element={
+                <ProtectedRoute>
+                  <ManagerLeaveApproval />
                 </ProtectedRoute>
               }
             />

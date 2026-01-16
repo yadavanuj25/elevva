@@ -7,18 +7,21 @@ import { BrowserRouter } from "react-router-dom";
 import { MessageProvider } from "./auth/MessageContext.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
+import { AttendanceProvider } from "./context/AttendanceContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider>
-      <AuthProvider>
-        <MessageProvider>
-          <BrowserRouter>
-            <ScrollToTop />
-            <App />
-          </BrowserRouter>
-        </MessageProvider>
-      </AuthProvider>
+      <AttendanceProvider>
+        <AuthProvider>
+          <MessageProvider>
+            <BrowserRouter>
+              <ScrollToTop />
+              <App />
+            </BrowserRouter>
+          </MessageProvider>
+        </AuthProvider>
+      </AttendanceProvider>
     </ThemeProvider>
   </StrictMode>
 );

@@ -1,6 +1,6 @@
+import AttendanceSummary from "../../components/attendance/AttendanceSummry";
 import EmployeeProfileCard from "../../components/attendance/EmployeeProfileCard";
 import LeaveSummary from "../../components/attendance/LeaveSummary";
-import AttendanceSummary from "../../components/attendance/PunchInOut";
 import SuccessBanner from "../../components/attendance/SuccessBanner";
 import WorkingHoursTimeline from "../../components/attendance/WorkingHoursTimeline";
 

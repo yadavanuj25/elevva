@@ -1,14 +1,17 @@
 import { ArrowUp, ArrowDown } from "lucide-react";
 
 const StatCard = ({ iconBg, value, total, label, trend, up }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm p-4 w-full">
+  <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm p-4 w-full group">
     <div
-      className={`w-9 h-9 rounded-lg flex items-center justify-center ${iconBg}`}
+      className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300
+        group-hover:scale-110
+        group-hover:rotate-6
+        group-hover:shadow-lg ${iconBg}`}
     >
       <span className="text-white font-bold">⏱</span>
     </div>
 
-    <h2 className="mt-2 text-2xl font-bold text-gray-900 dark:text-white">
+    <h2 className="mt-2 text-xl font-bold text-gray-900 dark:text-white">
       {value}
       <span className="text-gray-400 dark:text-gray-500 font-medium">
         {" "}

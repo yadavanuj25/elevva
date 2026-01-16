@@ -155,7 +155,6 @@ const InterviewList = () => {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-semibold ">All Interview</h2>
         </div>
-
         <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
           <Tabs
             statusTabs={statusTabs}

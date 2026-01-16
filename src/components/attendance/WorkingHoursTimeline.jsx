@@ -33,7 +33,7 @@ const WorkingHoursTimeline = () => {
 
       {/* Action */}
       <button
-        onClick={() => navigate("/attendance/leave-application")}
+        onClick={() => navigate("/leave/apply")}
         className="w-full flex items-center justify-center font-semibold py-2 rounded-lg
                    bg-accent-dark text-white hover:opacity-80 
                     transition-colors"

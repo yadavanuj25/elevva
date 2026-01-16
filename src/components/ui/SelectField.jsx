@@ -25,9 +25,15 @@ const SelectField = ({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const normalizedOptions = options.map((opt) =>
-    typeof opt === "string" ? { label: opt, value: opt } : opt
-  );
+  // const normalizedOptions = options.map((opt) =>
+  //   typeof opt === "string" ? { label: opt, value: opt } : opt
+  // );
+  const normalizedOptions = [
+    { label: "-- Select --", value: "" },
+    ...options.map((opt) =>
+      typeof opt === "string" ? { label: opt, value: opt } : opt
+    ),
+  ];
 
   const filteredOptions = normalizedOptions.filter((opt) =>
     opt.label.toLowerCase().includes(search.toLowerCase())
