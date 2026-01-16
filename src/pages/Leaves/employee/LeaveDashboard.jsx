@@ -46,11 +46,10 @@ const LeaveDashboard = () => {
       {/* 🔹 Leave Balance Section */}
       <div>
         <h3 className="text-lg font-semibold mb-4">Leave Balance</h3>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {leaveBalance &&
             Object.entries(leaveBalance.balances).map(([type, data]) => (
-              <div key={type} className="transition hover:scale-[1.02]">
+              <div key={type}>
                 <LeaveBalanceCard
                   title={type}
                   total={data.total}

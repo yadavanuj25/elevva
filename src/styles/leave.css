@@ -1,7 +1,7 @@
 /* Card container */
 .leave-card {
-  @apply bg-white dark:bg-gray-900 rounded-xl p-5 shadow-sm border border-gray-200
-         transition-all duration-300 hover:shadow-md hover:-translate-y-1;
+  @apply rounded-xl p-5 shadow-sm 
+         transition-all duration-300 hover:shadow-md;
 }
 
 /* Icon wrapper */

@@ -3,17 +3,17 @@
     "employeeId": "EMP001",
     "year": 2026,
     "balances": {
-      "CL": {
+      "Casual": {
         "total": 12,
         "used": 4,
         "remaining": 8
       },
-      "SL": {
+      "Sick": {
         "total": 8,
         "used": 2,
         "remaining": 6
       },
-      "PL": {
+      "Paid": {
         "total": 15,
         "used": 5,
         "remaining": 10

@@ -9,9 +9,9 @@ const iconMap = {
 
 const colorMap = {
   casual: {
-    bar: "bg-amber-500",
-    iconBg: "bg-amber-500/20",
-    iconText: "text-amber-600",
+    bar: "bg-yellow-500",
+    iconBg: "bg-yellow-500/20",
+    iconText: "text-yellow-600",
   },
   sick: {
     bar: "bg-red-500",
@@ -30,7 +30,6 @@ const colorMap = {
   },
 };
 
-// Safe fallback (prevents crash)
 const defaultColors = {
   bar: "bg-gray-400",
   iconBg: "bg-gray-400/20",
@@ -38,19 +37,22 @@ const defaultColors = {
 };
 
 const LeaveBalanceCard = ({ title, total, used, remaining }) => {
-  const key = title?.toLowerCase(); // normalize
+  const key = title?.toLowerCase();
   const Icon = iconMap[key] || CalendarCheck;
   const colors = colorMap[key] || defaultColors;
-
   const percentUsed = total > 0 ? Math.min((used / total) * 100, 100) : 0;
 
   return (
-    <div className="leave-card bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition">
+    <div className="leave-card bg-white rounded-xl border border-accent-dark p-4 hover:shadow-md transition">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h4 className="text-sm font-medium text-gray-500">{title} Leave</h4>
-          <p className="text-2xl font-semibold text-gray-800">
+          <h4
+            className={`text-sm font-medium text-gray-500 ${colors.iconText}`}
+          >
+            {title} Leave
+          </h4>
+          <p className="flex items-center gap-2 text-2xl font-semibold text-gray-800">
             {remaining}
             <span className="text-sm font-normal text-gray-500"> left</span>
           </p>
