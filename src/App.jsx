@@ -51,10 +51,15 @@ import MyLeaves from "./pages/Attendance/MyLeaves";
 import LeaveBalance from "./pages/Attendance/LeaveBalance";
 import ManagerLeaveApproval from "./pages/Attendance/ManagerLeaveApproval";
 import AttendanceHistory from "./pages/Attendance/AttendanceHistory";
+import LeaveDashboard from "./pages/Leaves/employee/LeaveDashboard";
+import ApplyLeave from "./pages/Leaves/employee/ApplyLeave";
+import TeamLeaves from "./pages/Leaves/manager/TeamLeaves";
+import AllLeaves from "./pages/Leaves/admin/AllLeaves";
 
 const App = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const role = user?.role?.name;
   const isLocked = user?.isLocked === true;
   const current = location.pathname;
   if (isLocked && current !== "/lock-screen") {
@@ -159,7 +164,6 @@ const App = () => {
               element={
                 <ProtectedRoute allowedModules={["profile"]}>
                   <AddProfile />
-                  {/* <AddProfile /> */}
                 </ProtectedRoute>
               }
             />
@@ -192,7 +196,6 @@ const App = () => {
               path="/admin/rolemanagement/roles"
               element={
                 <ProtectedRoute allowedModules={["users", "roles"]}>
-                  {/* allowedModules={["roles"]} */}
                   <RoleManagement />
                 </ProtectedRoute>
               }
@@ -362,7 +365,8 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
+            {/* Leaves management */}
+            {/* <Route
               path="/leave/apply"
               element={
                 <ProtectedRoute>
@@ -393,7 +397,32 @@ const App = () => {
                   <ManagerLeaveApproval />
                 </ProtectedRoute>
               }
-            />
+            /> */}
+
+            {/* EMPLOYEE */}
+
+            <>
+              <Route path="/leaves" element={<LeaveDashboard />} />
+              <Route path="/leaves/apply" element={<ApplyLeave />} />
+            </>
+
+            {/* MANAGER */}
+            {role === "manager" && (
+              <>
+                <Route path="/leaves" element={<LeaveDashboard />} />
+                <Route path="/leaves/apply" element={<ApplyLeave />} />
+                <Route path="/leaves/team" element={<TeamLeaves />} />
+              </>
+            )}
+
+            {/* ADMIN */}
+            {role === "admin" && (
+              <>
+                <Route path="/leaves" element={<LeaveDashboard />} />
+                <Route path="/leaves/apply" element={<ApplyLeave />} />
+                <Route path="/leaves/all" element={<AllLeaves />} />
+              </>
+            )}
 
             {/* Chats */}
             <Route

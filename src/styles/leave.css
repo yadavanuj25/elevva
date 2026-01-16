@@ -1,0 +1,81 @@
+/* Card container */
+.leave-card {
+  @apply bg-white dark:bg-gray-900 rounded-xl p-5 shadow-sm border border-gray-200
+         transition-all duration-300 hover:shadow-md hover:-translate-y-1;
+}
+
+/* Icon wrapper */
+.leave-icon {
+  @apply w-10 h-10 rounded-lg flex items-center justify-center
+         bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10;
+}
+
+/* Section title */
+.leave-title {
+  @apply text-lg font-semibold text-gray-800 mb-4;
+}
+
+/* Badge base */
+.leave-badge {
+  @apply px-3 py-1 rounded-full text-xs font-medium;
+}
+
+/* Status colors */
+.leave-pending {
+  @apply bg-yellow-100 text-yellow-700;
+}
+
+.leave-approved {
+  @apply bg-green-100 text-green-700;
+}
+
+.leave-rejected {
+  @apply bg-red-100 text-red-700;
+}
+
+/* Table */
+.leave-table {
+  @apply w-full border border-gray-200 rounded-lg overflow-hidden;
+}
+
+.leave-th {
+  @apply bg-gray-100 text-left text-sm font-medium text-gray-700 px-4 py-2;
+}
+
+.leave-td {
+  @apply px-4 py-2 text-sm text-gray-700 border-t;
+}
+
+/* Buttons */
+.leave-btn-primary {
+  @apply bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition;
+}
+
+/* Form */
+.leave-form {
+  @apply bg-white border border-gray-200 rounded-xl p-6 space-y-4;
+}
+
+.leave-label {
+  @apply block text-sm font-medium text-gray-700 mb-1;
+}
+
+.leave-input {
+  @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.leave-select {
+  @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.leave-textarea {
+  @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.leave-error {
+  @apply text-sm text-red-600;
+}
+
+.leave-btn-secondary {
+  @apply border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-100 transition;
+}

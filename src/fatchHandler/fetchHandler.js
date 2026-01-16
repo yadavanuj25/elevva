@@ -29,9 +29,8 @@ export const fetchHandler = async (
 
   const responseData = await response.json().catch(() => ({}));
 
-  // 🔥 THIS IS THE KEY FIX
   if (!response.ok) {
-    throw responseData; // 👈 THROW FULL API RESPONSE
+    throw responseData; //  THROW FULL API RESPONSE
   }
 
   return responseData;

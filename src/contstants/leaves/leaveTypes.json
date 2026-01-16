@@ -1,0 +1,26 @@
+[
+  {
+    "id": "CL",
+    "name": "Casual Leave",
+    "maxPerYear": 12,
+    "carryForward": false,
+    "requiresApproval": true,
+    "halfDayAllowed": true
+  },
+  {
+    "id": "SL",
+    "name": "Sick Leave",
+    "maxPerYear": 8,
+    "carryForward": false,
+    "requiresApproval": true,
+    "halfDayAllowed": false
+  },
+  {
+    "id": "PL",
+    "name": "Paid Leave",
+    "maxPerYear": 15,
+    "carryForward": true,
+    "requiresApproval": true,
+    "halfDayAllowed": true
+  }
+]

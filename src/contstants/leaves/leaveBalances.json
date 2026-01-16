@@ -1,0 +1,23 @@
+[
+  {
+    "employeeId": "EMP001",
+    "year": 2026,
+    "balances": {
+      "CL": {
+        "total": 12,
+        "used": 4,
+        "remaining": 8
+      },
+      "SL": {
+        "total": 8,
+        "used": 2,
+        "remaining": 6
+      },
+      "PL": {
+        "total": 15,
+        "used": 5,
+        "remaining": 10
+      }
+    }
+  }
+]
