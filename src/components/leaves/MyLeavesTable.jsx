@@ -1,35 +1,76 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import LeaveStatusBadge from "./LeaveStatusBadge";
 
 const MyLeavesTable = ({ leaves }) => {
   return (
-    <div className="leave-card">
-      <h3 className="leave-title">My Leaves</h3>
+    <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 mt-4">
+      <div className="overflow-x-auto">
+        <Table className="min-w-full">
+          {/* Table Head */}
+          <TableHead className="sticky top-0 bg-[#f2f4f5] dark:bg-darkGray z-20">
+            <TableRow>
+              {["Type", "From", "To", "Days", "Status"].map((head) => (
+                <TableCell
+                  key={head}
+                  className="font-bold text-gray-700 dark:text-gray-200 whitespace-nowrap"
+                >
+                  {head}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
 
-      <table className="leave-table">
-        <thead>
-          <tr>
-            <th className="leave-th">Type</th>
-            <th className="leave-th">From</th>
-            <th className="leave-th">To</th>
-            <th className="leave-th">Days</th>
-            <th className="leave-th">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {leaves.map((leave) => (
-            <tr key={leave.id}>
-              <td className="leave-td">{leave.leaveType}</td>
-              <td className="leave-td">{leave.startDate}</td>
-              <td className="leave-td">{leave.endDate}</td>
-              <td className="leave-td">{leave.totalDays}</td>
-              <td className="leave-td">
-                <LeaveStatusBadge status={leave.status} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          {/* Table Body */}
+          <TableBody>
+            {leaves.length > 0 ? (
+              leaves.map((leave) => (
+                <TableRow
+                  key={leave.id}
+                  hover
+                  className="hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
+                  <TableCell className="whitespace-nowrap dark:text-gray-300">
+                    {leave.leaveType}
+                  </TableCell>
+
+                  <TableCell className="whitespace-nowrap dark:text-gray-300">
+                    {leave.startDate}
+                  </TableCell>
+
+                  <TableCell className="whitespace-nowrap dark:text-gray-300">
+                    {leave.endDate}
+                  </TableCell>
+
+                  <TableCell className="whitespace-nowrap dark:text-gray-300">
+                    {leave.totalDays}
+                  </TableCell>
+
+                  <TableCell className="whitespace-nowrap">
+                    <LeaveStatusBadge status={leave.status} />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className="py-10 text-center bg-white dark:bg-darkBg"
+                >
+                  No leave records found
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </TableContainer>
   );
 };
 

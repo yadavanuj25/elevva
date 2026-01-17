@@ -17,6 +17,11 @@
         "total": 15,
         "used": 5,
         "remaining": 10
+      },
+      "Earned": {
+        "total": 2,
+        "used": 1,
+        "remaining": 1
       }
     }
   }

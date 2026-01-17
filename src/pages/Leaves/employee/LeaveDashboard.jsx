@@ -45,8 +45,7 @@ const LeaveDashboard = () => {
 
       {/* 🔹 Leave Balance Section */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">Leave Balance</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {leaveBalance &&
             Object.entries(leaveBalance.balances).map(([type, data]) => (
               <div key={type}>
@@ -62,9 +61,9 @@ const LeaveDashboard = () => {
       </div>
 
       {/* 🔹 My Leaves Section */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-5">
+      <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">My Leave Requests</h3>
+          <h2 className="text-2xl font-semibold ">My Leave Requests</h2>
           <span className="text-sm text-gray-500">
             Total: {myLeaves?.length || 0}
           </span>

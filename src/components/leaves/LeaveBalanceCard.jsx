@@ -18,15 +18,16 @@ const colorMap = {
     iconBg: "bg-red-500/20",
     iconText: "text-red-600",
   },
-  earned: {
-    bar: "bg-green-500",
-    iconBg: "bg-green-500/20",
-    iconText: "text-green-600",
-  },
+
   paid: {
     bar: "bg-green-500",
     iconBg: "bg-green-500/20",
     iconText: "text-green-600",
+  },
+  earned: {
+    bar: "bg-pink-500",
+    iconBg: "bg-pink-500/20",
+    iconText: "text-pink-600",
   },
 };
 
@@ -43,7 +44,7 @@ const LeaveBalanceCard = ({ title, total, used, remaining }) => {
   const percentUsed = total > 0 ? Math.min((used / total) * 100, 100) : 0;
 
   return (
-    <div className="leave-card bg-white rounded-xl border border-accent-dark p-4 hover:shadow-md transition">
+    <div className="leave-card   border border-accent-dark ">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -52,9 +53,12 @@ const LeaveBalanceCard = ({ title, total, used, remaining }) => {
           >
             {title} Leave
           </h4>
-          <p className="flex items-center gap-2 text-2xl font-semibold text-gray-800">
+          <p className="flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-white">
             {remaining}
-            <span className="text-sm font-normal text-gray-500"> left</span>
+            <span className="text-sm font-normal text-gray-500 dark:text-gray-300">
+              {" "}
+              left
+            </span>
           </p>
         </div>
 
@@ -66,7 +70,7 @@ const LeaveBalanceCard = ({ title, total, used, remaining }) => {
       </div>
 
       {/* Progress */}
-      <div className="mt-4">
+      <div className="mt-2">
         <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
           <div
             className={`h-full ${colors.bar} transition-all duration-500`}
@@ -74,7 +78,7 @@ const LeaveBalanceCard = ({ title, total, used, remaining }) => {
           />
         </div>
 
-        <div className="mt-2 flex justify-between text-xs text-gray-500">
+        <div className="mt-1 flex justify-between text-xs text-gray-500 dark:text-gray-300">
           <span>Used: {used}</span>
           <span>Total: {total}</span>
         </div>

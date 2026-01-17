@@ -1,6 +1,6 @@
 /* Card container */
 .leave-card {
-  @apply rounded-xl p-5 shadow-sm 
+  @apply bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm 
          transition-all duration-300 hover:shadow-md;
 }
 
