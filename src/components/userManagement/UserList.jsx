@@ -88,7 +88,7 @@ const UserList = () => {
         pagination.page,
         pagination.limit,
         activeTab,
-        searchQuery
+        searchQuery,
       );
       setAllUsers(data.users || []);
       setPagination((prev) => ({
@@ -179,7 +179,7 @@ const UserList = () => {
       const res = await updateUserStatus(id, payload);
       setAllUsers((prev) => {
         const updatedUsers = prev.map((item) =>
-          item._id === id ? { ...item, status: newStatus } : item
+          item._id === id ? { ...item, status: newStatus } : item,
         );
         updateStatusTabs(updatedUsers);
         return updatedUsers;
@@ -234,6 +234,7 @@ const UserList = () => {
               onSearchChange={handleSearchChange}
               addLink="/admin/usermanagement/add-user"
               title="User"
+              resource="users"
             />
 
             <div className="filter flex items-center justify-between">
@@ -406,7 +407,7 @@ const UserList = () => {
                                 className=" text-white bg-accent-dark px-1 py-1 rounded hover:bg-[#222]"
                                 onClick={() =>
                                   navigate(
-                                    `/admin/usermanagement/edit-user/${row._id}`
+                                    `/admin/usermanagement/edit-user/${row._id}`,
                                   )
                                 }
                               >

@@ -105,12 +105,12 @@ const ProfileList = () => {
         pagination.page,
         pagination.limit,
         activeTab,
-        searchQuery
+        searchQuery,
       );
       const profilesData = data.profiles || [];
       setAllProfiles(data.profiles || []);
       const statusesFromAPI = profilesData.map(
-        (item) => item.status || "Unknown"
+        (item) => item.status || "Unknown",
       );
       statusesFromAPI.sort((a, b) => a.localeCompare(b));
       const uniqueStatuses = ["All", ...new Set(statusesFromAPI)];
@@ -220,7 +220,7 @@ const ProfileList = () => {
     setFavourites((prev) =>
       prev.includes(profileId)
         ? prev.filter((id) => id !== profileId)
-        : [...prev, profileId]
+        : [...prev, profileId],
     );
   };
 
@@ -233,7 +233,7 @@ const ProfileList = () => {
       const res = await updateProfileStatus(id, payload);
       setAllProfiles((prev) => {
         const updatedProfiles = prev.map((item) =>
-          item._id === id ? { ...item, status: newStatus } : item
+          item._id === id ? { ...item, status: newStatus } : item,
         );
         updateStatusTabs(updatedProfiles);
         return updatedProfiles;
@@ -269,7 +269,7 @@ const ProfileList = () => {
         (record) =>
           record.profileId === profile._id &&
           record.clientId === selectedRequirement.client._id &&
-          record.requirementId === selectedRequirement._id
+          record.requirementId === selectedRequirement._id,
       );
       if (alreadyExists) {
         duplicates.push(profile.fullName);
@@ -394,6 +394,7 @@ const ProfileList = () => {
               onSearchChange={handleSearchChange}
               addLink="/admin/profilemanagement/add-profile"
               title="Profile"
+              resource="profiles"
             />
 
             <div className="filter flex items-center justify-between">
@@ -526,7 +527,7 @@ const ProfileList = () => {
                             <div className="flex flex-col items-center justify-center  ">
                               <Checkbox
                                 checked={selectedProfiles.some(
-                                  (p) => p._id === item._id
+                                  (p) => p._id === item._id,
                                 )}
                                 onChange={(e) => {
                                   if (e.target.checked) {
@@ -536,7 +537,7 @@ const ProfileList = () => {
                                     ]);
                                   } else {
                                     setSelectedProfiles((prev) =>
-                                      prev.filter((p) => p._id !== item._id)
+                                      prev.filter((p) => p._id !== item._id),
                                     );
                                   }
                                 }}
@@ -665,12 +666,12 @@ const ProfileList = () => {
                             <ActionMenu
                               onEdit={() =>
                                 navigate(
-                                  `/admin/profilemanagement/edit-profile/${item._id}`
+                                  `/admin/profilemanagement/edit-profile/${item._id}`,
                                 )
                               }
                               onView={() =>
                                 navigate(
-                                  `/admin/profilemanagement/view-profile/${item._id}`
+                                  `/admin/profilemanagement/view-profile/${item._id}`,
                                 )
                               }
                               onDelete={() => {

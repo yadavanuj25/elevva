@@ -13,19 +13,19 @@ import { LeaveProvider } from "./context/LeaveProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider>
-      <AttendanceProvider>
-        <AuthProvider>
-          <MessageProvider>
-            <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider>
+        <AttendanceProvider>
+          <AuthProvider>
+            <MessageProvider>
               <ScrollToTop />
               <LeaveProvider>
                 <App />
               </LeaveProvider>
-            </BrowserRouter>
-          </MessageProvider>
-        </AuthProvider>
-      </AttendanceProvider>
-    </ThemeProvider>
-  </StrictMode>
+            </MessageProvider>
+          </AuthProvider>
+        </AttendanceProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  </StrictMode>,
 );

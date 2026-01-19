@@ -154,7 +154,9 @@ const ClientList = () => {
       const uniqueStatuses = [
         "All",
         ...new Set(
-          allClients.map((c) => (c.status ? formatStatus(c.status) : "Unknown"))
+          allClients.map((c) =>
+            c.status ? formatStatus(c.status) : "Unknown",
+          ),
         ),
       ];
 
@@ -272,7 +274,7 @@ const ClientList = () => {
       const res = await updateClientStatus(id, payload);
       setClients((prev) => {
         const updatedClients = prev.map((item) =>
-          item._id === id ? { ...item, status: newStatus } : item
+          item._id === id ? { ...item, status: newStatus } : item,
         );
         updateStatusTabs(updatedClients);
         return updatedClients;
@@ -355,6 +357,7 @@ const ClientList = () => {
           }
           addLink="/admin/clientManagement/add-client"
           title="Client"
+          resource="customers"
         />
 
         <div className="mt-3">

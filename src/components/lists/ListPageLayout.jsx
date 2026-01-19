@@ -4,6 +4,7 @@ import TableHeader from "../ui/tableComponents/TableHeader";
 const ListPageLayout = ({
   title,
   tabs,
+  resource,
   activeTab,
   onTabChange,
   searchQuery,
@@ -27,6 +28,7 @@ const ListPageLayout = ({
           onSearchChange={onSearchChange}
           addLink={addLink}
           title={title}
+          resource={resource}
         />
         {children}
       </div>

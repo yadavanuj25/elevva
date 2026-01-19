@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ApproveRejectModal = ({ type, leave, onClose, onSubmit }) => {
+const ApproveRejectLeave = ({ type, leave, onClose, onSubmit }) => {
   const [remarks, setRemarks] = useState("");
 
   return (
@@ -42,4 +42,4 @@ const ApproveRejectModal = ({ type, leave, onClose, onSubmit }) => {
   );
 };
 
-export default ApproveRejectModal;
+export default ApproveRejectLeave;

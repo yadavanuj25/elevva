@@ -2,14 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { Mail, Eye, EyeOff } from "lucide-react";
-import { FaFacebookF, FaTwitter } from "react-icons/fa";
 import { useAuth } from "../auth/AuthContext";
 import Input from "../components/ui/Input";
 import { useMessage } from "../auth/MessageContext";
-import loginbg from "../assets/login/login4.png";
 import logo from "../assets/logo/logo.png";
-import login3 from "../assets/login/login3.png";
-import googleLogo from "../assets/images/google-logo.svg";
 import PageTitle from "../hooks/PageTitle";
 import LoginCard from "../components/cards/LoginCard";
 import { loginUser } from "../services/authServices";
@@ -50,19 +46,17 @@ const Login = () => {
     setLoading(true);
     try {
       await schema.validate(formdata, { abortEarly: false });
-
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/auth/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formdata),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok || !data.token || !data.user) {
+      // const response = await fetch(
+      //   "https://crm-backend-qbz0.onrender.com/api/auth/login",
+      //   {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify(formdata),
+      //   },
+      // );
+      // const data = await response.json();
+      const data = await loginUser(formdata);
+      if (!data.token || !data.user) {
         showError(data.message || "Invalid credentials");
         return;
       }

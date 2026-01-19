@@ -24,7 +24,6 @@ import {
   Legend,
 } from "recharts";
 import BasicDatePicker from "../../ui/BasicDatePicker";
-import SearchableSelect from "../../ui/SearchableSelect";
 import CustomTooltip from "../CustomToolTip";
 import { BarLoader } from "react-spinners";
 import NoData from "../../ui/NoData";

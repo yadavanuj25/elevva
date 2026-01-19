@@ -100,7 +100,7 @@ const ClientsRequirementsList = () => {
         pagination.page,
         pagination.limit,
         activeTab,
-        searchQuery
+        searchQuery,
       );
       const allRequirements = data.requirements || [];
       setRequirements(allRequirements);
@@ -135,7 +135,7 @@ const ClientsRequirementsList = () => {
       const data = await getAllClients(
         pagination.page,
         pagination.limit,
-        searchQuery
+        searchQuery,
       );
       const allClients = data.clients || [];
       const formattedClients = allClients.map((c) => ({
@@ -252,7 +252,7 @@ const ClientsRequirementsList = () => {
       const res = await updateRequirementStatus(id, payload);
       setRequirements((prev) => {
         const updatedRequirements = prev.map((item) =>
-          item._id === id ? { ...item, positionStatus: newStatus } : item
+          item._id === id ? { ...item, positionStatus: newStatus } : item,
         );
         updateStatusTabs(updatedRequirements);
         return updatedRequirements;
@@ -283,12 +283,12 @@ const ClientsRequirementsList = () => {
 
   const handleSelectRow = (id) => {
     setSelectedRows((prev) =>
-      prev.includes(id) ? prev.filter((row) => row !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((row) => row !== id) : [...prev, id],
     );
   };
 
   const selectedRequirements = requirements.filter((r) =>
-    selectedRows.includes(r._id)
+    selectedRows.includes(r._id),
   );
 
   const handleAssignClick = () => {
@@ -354,6 +354,7 @@ const ClientsRequirementsList = () => {
           onSearchChange={handleSearchChange}
           addLink="/admin/clientmanagement/add-clientRequirement"
           title="Requirement"
+          resource="customers"
         />
 
         <div className="filter flex items-center justify-between">
@@ -628,13 +629,13 @@ const ClientsRequirementsList = () => {
                       </TableCell>
                       <TableCell
                         className={`whitespace-nowrap bg-[#f2f4f5] dark:bg-darkGray ${getStickyClass(
-                          "requirementPriority"
+                          "requirementPriority",
                         )}`}
                         style={{ overflow: "visible", zIndex: 20 }}
                       >
                         <div
                           className={`w-max px-2 py-1 text-xs text-center font-[500] text-white rounded-md ${getPriorityColor(
-                            row.requirementPriority
+                            row.requirementPriority,
                           )}`}
                         >
                           {row.requirementPriority
@@ -648,12 +649,12 @@ const ClientsRequirementsList = () => {
                         <ActionMenu
                           onEdit={() =>
                             navigate(
-                              `/admin/clientmanagement/edit-requirement/${row._id}`
+                              `/admin/clientmanagement/edit-requirement/${row._id}`,
                             )
                           }
                           onView={() =>
                             navigate(
-                              `/admin/clientmanagement/view-requirement/${row._id}`
+                              `/admin/clientmanagement/view-requirement/${row._id}`,
                             )
                           }
                           onDelete={() => {

@@ -1,50 +1,62 @@
+import React, { useState } from "react";
 import LeaveStatusBadge from "./LeaveStatusBadge";
+import ApproveRejectLeave from "../modals/leavesModal/ApproveRejectLeave";
 
-const TeamLeavesTable = ({ leaves, onApprove, onReject }) => {
+const initialLeaves = [
+  {
+    id: "LV001",
+    employee: "Anuj Yadav",
+    type: "Sick Leave",
+    dates: "10 Jan - 12 Jan",
+    days: 3,
+    status: "PENDING",
+  },
+  {
+    id: "LV002",
+    employee: "Rahul Singh",
+    type: "Casual Leave",
+    dates: "15 Jan",
+    days: 1,
+    status: "APPROVED",
+  },
+];
+
+const LeaveTable = () => {
+  const [leaves, setLeaves] = useState(initialLeaves);
+
+  const updateStatus = (id, status, note = "") => {
+    setLeaves((prev) =>
+      prev.map((l) => (l.id === id ? { ...l, status, rejectionNote: note } : l))
+    );
+  };
   return (
-    <div className="leave-card">
-      <h3 className="leave-title">Team Leave Requests</h3>
-
-      <table className="leave-table">
-        <thead>
+    <div className="bg-white dark:bg-darkBg rounded-xl shadow-sm overflow-hidden">
+      <table className="w-full text-sm">
+        <thead className="bg-gray-100 dark:bg-gray-800">
           <tr>
-            <th className="leave-th">Employee</th>
-            <th className="leave-th">Type</th>
-            <th className="leave-th">From</th>
-            <th className="leave-th">To</th>
-            <th className="leave-th">Days</th>
-            <th className="leave-th">Status</th>
-            <th className="leave-th">Action</th>
+            <th className="table-th">Employee</th>
+            <th className="table-th">Leave Type</th>
+            <th className="table-th">Dates</th>
+            <th className="table-th">Days</th>
+            <th className="table-th">Status</th>
+            <th className="table-th text-right">Action</th>
           </tr>
         </thead>
-
         <tbody>
           {leaves.map((leave) => (
-            <tr key={leave.id}>
-              <td className="leave-td">{leave.employeeName}</td>
-              <td className="leave-td">{leave.leaveType}</td>
-              <td className="leave-td">{leave.startDate}</td>
-              <td className="leave-td">{leave.endDate}</td>
-              <td className="leave-td">{leave.totalDays}</td>
-              <td className="leave-td">
+            <tr key={leave.id} className="border-t dark:border-gray-700">
+              <td className="table-td">{leave.employee}</td>
+              <td className="table-td">{leave.type}</td>
+              <td className="table-td">{leave.dates}</td>
+              <td className="table-td">{leave.days}</td>
+              <td className="table-td">
                 <LeaveStatusBadge status={leave.status} />
               </td>
-              <td className="leave-td">
-                {leave.status === "PENDING" && (
-                  <div className="flex gap-2">
-                    <button
-                      className="leave-btn-approve"
-                      onClick={() => onApprove(leave)}
-                    >
-                      Approve
-                    </button>
-                    <button
-                      className="leave-btn-reject"
-                      onClick={() => onReject(leave)}
-                    >
-                      Reject
-                    </button>
-                  </div>
+              <td className="table-td text-right">
+                {leave.status === "PENDING" ? (
+                  <ApproveRejectLeave leave={leave} onUpdate={updateStatus} />
+                ) : (
+                  <span className="text-gray-400 text-xs">No Action</span>
                 )}
               </td>
             </tr>
@@ -55,4 +67,4 @@ const TeamLeavesTable = ({ leaves, onApprove, onReject }) => {
   );
 };
 
-export default TeamLeavesTable;
+export default LeaveTable;

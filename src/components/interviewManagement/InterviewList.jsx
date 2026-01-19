@@ -87,7 +87,7 @@ const InterviewList = () => {
 
   const handleSelectRow = (id) => {
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
   };
 
@@ -109,7 +109,7 @@ const InterviewList = () => {
         status: `Moved to ${nextStage.replaceAll("_", " ")}`,
         remark,
       },
-      { updatedBy: "BDE" }
+      { updatedBy: "BDE" },
     );
   };
 
@@ -122,7 +122,7 @@ const InterviewList = () => {
 
         return acc;
       },
-      { All: 0, Offer: 0, Rejected: 0 }
+      { All: 0, Offer: 0, Rejected: 0 },
     );
 
     return [
@@ -165,6 +165,7 @@ const InterviewList = () => {
             searchQuery={search}
             onSearchChange={handleSearch}
             title="Interview"
+            resource="interview"
           />
           <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 mt-4">
             <div className="overflow-x-auto">
