@@ -122,11 +122,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
   const menuItems = [
     { icon: FaRegUser, text: "My Profile", path: "/my-profile" },
-    {
-      icon: Settings,
-      text: "Account Settings",
-      path: "/admin/account-settings",
-    },
+
     { icon: Settings, text: "Settings", path: "/admin/settings" },
   ];
 
@@ -207,7 +203,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
         {popupOpen && (
           <div className="absolute right-0 top-full mt-3 w-72 px-6 py-6 font-semibold text-black dark:text-white bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow z-50">
             <div className="flex items-center gap-5">
-              <div className="w-10 h-10 shrink-0 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-accent-dark">
+              <div className="w-10 h-10 shrink-0 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-accent-dark">
                 {user?.profileImage ? (
                   <img
                     src={user.profileImage}
@@ -225,10 +221,12 @@ const Header = ({ toggleSidebar, isOpen }) => {
                 <p className="text-sm font-bold text-accent-darkGray dark:text-accent-lightGray truncate">
                   {user?.fullName}
                 </p>
-
-                <p className="text-xs text-accent-darkGray dark:text-accent-lightGray break-all">
+                <span className="text-xs font-thin text-accent-dark dark:text-gray-300 truncate">
+                  {user?.role?.name}
+                </span>
+                {/* <p className="text-xs text-accent-darkGray dark:text-accent-lightGray break-all">
                   {user?.email}
-                </p>
+                </p> */}
               </div>
             </div>
 

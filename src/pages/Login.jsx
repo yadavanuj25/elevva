@@ -9,6 +9,7 @@ import logo from "../assets/logo/logo.png";
 import PageTitle from "../hooks/PageTitle";
 import LoginCard from "../components/cards/LoginCard";
 import { loginUser } from "../services/authServices";
+import { MdErrorOutline } from "react-icons/md";
 
 const schema = yup.object().shape({
   email: yup
@@ -38,6 +39,80 @@ const Login = () => {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setErrors({});
+  //   showError("");
+  //   showSuccess("");
+  //   setLoading(true);
+  //   try {
+  //     await schema.validate(formdata, { abortEarly: false });
+  //     const data = await loginUser(formdata);
+  //     if (!data.token || !data.user) {
+  //       showError(data.message || "Invalid credentials");
+  //       return;
+  //     }
+  //     await login(data);
+  //     if (data.user.isLocked) {
+  //       navigate("/lock-screen", { replace: true });
+  //     } else {
+  //       const userRole = data.user.role?.name?.toLowerCase() || "user";
+  //       if (userRole === "admin")
+  //         navigate("/admin/super-dashboard", { replace: true });
+  //       else navigate("/dashboard", { replace: true });
+  //     }
+  //   } catch (err) {
+  //     if (err.name === "ValidationError") {
+  //       const newErrors = {};
+  //       err.inner.forEach((e) => (newErrors[e.path] = e.message));
+  //       setErrors(newErrors);
+  //     } else {
+  //       showError("Something went wrong. Please try again.");
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //     setTimeout(() => {
+  //       showSuccess("");
+  //       showError("");
+  //     }, 4000);
+  //   }
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setErrors({});
+  //   showError("");
+  //   showSuccess("");
+  //   setLoading(true);
+  //   try {
+  //     await schema.validate(formdata, { abortEarly: false });
+  //     const data = await loginUser(formdata);
+  //     if (!data?.token || !data?.user) {
+  //       showError(data?.message || "Invalid email or password");
+  //       return;
+  //     }
+  //     await login(data);
+  //     if (data.user.isLocked) {
+  //       navigate("/lock-screen", { replace: true });
+  //     } else {
+  //       const userRole = data.user.role?.name?.toLowerCase() || "user";
+  //       navigate(
+  //         userRole === "admin" ? "/admin/super-dashboard" : "/dashboard",
+  //         { replace: true },
+  //       );
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //     showError(err.message);
+  //   } finally {
+  //     setLoading(false);
+  //     setTimeout(() => {
+  //       showSuccess("");
+  //       showError("");
+  //     }, 4000);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -46,34 +121,40 @@ const Login = () => {
     setLoading(true);
     try {
       await schema.validate(formdata, { abortEarly: false });
-      const data = await loginUser(formdata);
-      if (!data.token || !data.user) {
-        showError(data.message || "Invalid credentials");
+      const res = await loginUser(formdata);
+      if (!res.success) {
+        showError(res.message);
         return;
       }
-      await login(data);
-      if (data.user.isLocked) {
+      await login(res);
+      if (res.user?.isLocked) {
         navigate("/lock-screen", { replace: true });
-      } else {
-        const userRole = data.user.role?.name?.toLowerCase() || "user";
-        if (userRole === "admin")
-          navigate("/admin/super-dashboard", { replace: true });
-        else navigate("/dashboard", { replace: true });
+        return;
       }
+      const role = res.user?.role?.name?.toLowerCase() || "user";
+      navigate(role === "admin" ? "/admin/super-dashboard" : "/dashboard", {
+        replace: true,
+      });
     } catch (err) {
       if (err.name === "ValidationError") {
-        const newErrors = {};
-        err.inner.forEach((e) => (newErrors[e.path] = e.message));
-        setErrors(newErrors);
-      } else {
-        showError("Something went wrong. Please try again.");
+        const fieldErrors = {};
+        err.inner.forEach((e) => {
+          fieldErrors[e.path] = e.message;
+        });
+        setErrors(fieldErrors);
+        return;
       }
+      if (err.message) {
+        showError(err?.message || "Login failed");
+        return;
+      }
+      showError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
-      setTimeout(() => {
-        showSuccess("");
-        showError("");
-      }, 4000);
+      // setTimeout(() => {
+      //   showError("");
+      //   showSuccess("");
+      // }, 4000);
     }
   };
 
@@ -89,10 +170,12 @@ const Login = () => {
           <div className="w-full rounded-xl p-3 sm:p-12 border border-gray-300">
             {errorMsg && (
               <div
-                className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
+                className="mb-4 flex items-center justify-center gap-2 p-3 rounded-xl border border-red-300 
                bg-[#d72b16] text-white shadow-sm animate-slideDown"
               >
-                <span className=" font-semibold">⚠ {"  "}</span>
+                <p className=" font-semibold">
+                  <MdErrorOutline size={20} />
+                </p>
                 <p className="text-sm"> {errorMsg}</p>
               </div>
             )}
