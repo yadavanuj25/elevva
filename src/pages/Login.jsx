@@ -46,15 +46,6 @@ const Login = () => {
     setLoading(true);
     try {
       await schema.validate(formdata, { abortEarly: false });
-      // const response = await fetch(
-      //   "https://crm-backend-qbz0.onrender.com/api/auth/login",
-      //   {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify(formdata),
-      //   },
-      // );
-      // const data = await response.json();
       const data = await loginUser(formdata);
       if (!data.token || !data.user) {
         showError(data.message || "Invalid credentials");
@@ -187,24 +178,6 @@ const Login = () => {
               >
                 {loading ? "Signing in..." : "Sign In"}
               </button>
-
-              {/* <div className="flex items-center justify-center my-5 text-gray-500 text-sm">
-                <span className="border-b w-1/3"></span>
-                <span className="px-2 font-semibold">or login with</span>
-                <span className="border-b w-1/3"></span>
-              </div> */}
-
-              {/* <div className="grid grid-cols-3 gap-3">
-                <button className="flex items-center justify-center p-3 bg-[#3282ff] rounded border hover:opacity-90">
-                  <FaFacebookF className="text-[#3282ff] text-2xl p-1 bg-white rounded-full" />
-                </button>
-                <button className="flex items-center justify-center p-3 border rounded hover:opacity-90">
-                  <img src={googleLogo} alt="google" />
-                </button>
-                <button className="flex items-center justify-center p-3 bg-black border rounded hover:opacity-90">
-                  <FaTwitter className="text-[#3282ff] text-2xl p-1 bg-white rounded-full" />
-                </button>
-              </div> */}
             </form>
           </div>
         </div>

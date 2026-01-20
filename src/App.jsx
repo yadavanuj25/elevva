@@ -625,7 +625,7 @@ const App = () => {
             <Route
               path="/admin/rolemanagement/roles"
               element={
-                <ProtectedRoute resource="users" action="read">
+                <ProtectedRoute resource="roles" action="read">
                   <RoleManagement />
                 </ProtectedRoute>
               }
@@ -633,7 +633,7 @@ const App = () => {
             <Route
               path="/admin/rolemanagement/add-roles"
               element={
-                <ProtectedRoute allowedModules={["users", "roles"]}>
+                <ProtectedRoute resource="roles" action="create">
                   <CreateRole />
                 </ProtectedRoute>
               }
@@ -641,7 +641,7 @@ const App = () => {
             <Route
               path="/admin/rolemanagement/edit-roles/:id"
               element={
-                <ProtectedRoute allowedModules={["users", "roles"]}>
+                <ProtectedRoute resource="roles" action="update">
                   <EditRole />
                 </ProtectedRoute>
               }

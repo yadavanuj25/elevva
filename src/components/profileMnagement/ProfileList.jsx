@@ -238,11 +238,13 @@ const ProfileList = () => {
         updateStatusTabs(updatedProfiles);
         return updatedProfiles;
       });
-      setOpenStatusRow(null);
-      setStatusLoading(null);
+
       SuccessToast(res?.message || "Status updated successfully");
     } catch (error) {
       ErrorToast(error.message || "Failed to update status");
+    } finally {
+      setStatusLoading(null);
+      setOpenStatusRow(null);
     }
   };
   const updateStatusTabs = (updatedProfiles) => {
@@ -465,11 +467,11 @@ const ProfileList = () => {
                         { id: "techStack", label: "Tech Stack" },
                         { id: "status", label: "Status" },
                         { id: "skills", label: "Skills" },
-                        { id: "currentCompany", label: "Current Company" },
-                        { id: "totalExp", label: "Total Exp" },
-                        { id: "expectedCTC", label: "Expected CTC" },
-                        { id: "workMode", label: "Work Mode" },
-                        { id: "noticePeriod", label: "Notice Period" },
+                        // { id: "currentCompany", label: "Current Company" },
+                        // { id: "totalExp", label: "Total Exp" },
+                        // { id: "expectedCTC", label: "Expected CTC" },
+                        // { id: "workMode", label: "Work Mode" },
+                        // { id: "noticePeriod", label: "Notice Period" },
                         { id: "submittedBy", label: "SubmittedBy" },
                         { id: "createdAt", label: "Created Dtm" },
                         { id: "updatedAt", label: "Modified Dtm" },
@@ -630,7 +632,7 @@ const ProfileList = () => {
                             })()}
                           </TableCell>
 
-                          <TableCell className="whitespace-nowrap  dark:text-gray-300">
+                          {/* <TableCell className="whitespace-nowrap  dark:text-gray-300">
                             {item.currentCompany}
                           </TableCell>
                           <TableCell className="whitespace-nowrap  dark:text-gray-300">
@@ -644,7 +646,7 @@ const ProfileList = () => {
                           </TableCell>
                           <TableCell className="whitespace-nowrap  dark:text-gray-300">
                             {item.noticePeriod}
-                          </TableCell>
+                          </TableCell> */}
                           <TableCell className="whitespace-nowrap  dark:text-gray-300">
                             {item.submittedBy.fullName}
                           </TableCell>

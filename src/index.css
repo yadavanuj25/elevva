@@ -32,6 +32,12 @@
   --text-color: var(--black);
   --accent-color: var(--accent-light);
 }
+
+.dark {
+  --accent-light: #e3edff; /* dark-friendly highlight */
+  --accent-dark: #25499f; /* light text on dark bg */
+}
+
 * {
   transition:
     background-color 0.25s ease,
@@ -93,16 +99,7 @@ body {
     border-color: var(--accent-color);
   }
 }
-/* Search cancel button */
-input[type="search"]::-webkit-search-cancel-button {
-  -webkit-appearance: none;
-  height: 14px;
-  width: 14px;
-  background-color: red;
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.41 4.29 19.71 2.88 18.3 9.17 12 2.88 5.71 4.29 4.29 10.59 10.59 16.89 4.29z'/%3E%3C/svg%3E");
-  mask-size: cover;
-  cursor: pointer;
-}
+
 .sidebar-link {
   transition: all 0.3s;
   border-top-right-radius: 10px;
@@ -123,18 +120,25 @@ input[type="search"]::-webkit-search-cancel-button {
   margin: 0 !important;
 }
 
+/* Search cancel button */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  background-color: red;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.41 4.29 19.71 2.88 18.3 9.17 12 2.88 5.71 4.29 4.29 10.59 10.59 16.89 4.29z'/%3E%3C/svg%3E");
+  mask-size: cover;
+  cursor: pointer;
+}
 /* MUI Style */
-
 html.dark .css-h7cjts-MuiButtonBase-root-MuiIconButton-root.Mui-disabled {
   color: white;
 }
-
 .MuiTableCell-root {
   font-family: "Golos Text", sans-serif !important;
   letter-spacing: 0 !important;
   /* padding:11px !important; */
 }
-
 html.dark .tippy-box[data-theme~="custom"] {
   background-color: var(--tooltip-bg-dark);
   color: var(--tooltip-text-dark);

@@ -748,7 +748,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           icon: <FaUsers size={16} />,
         },
         {
-          resource: "users",
+          resource: "roles",
           path: "/admin/rolemanagement/roles",
           label: "Roles & Permission",
           icon: <FaUnlockAlt size={16} />,
@@ -816,16 +816,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         },
       ],
     },
-    // {
-    //   items: [
-    //     {
-    //       resource: "chats",
-    //       path: "/chats",
-    //       label: "Chats",
-    //       icon: <BsChatQuoteFill size={16} />,
-    //     },
-    //   ],
-    // },
   ];
 
   const filteredSections = navSections
@@ -838,10 +828,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     .filter(Boolean);
 
   const isActive = (path) => location.pathname.startsWith(path);
-
-  const toggleDropdown = (key) => {
-    setOpenDropdowns((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
 
   return (
     <>
@@ -885,7 +871,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   <Link
                     to={item.path}
                     onClick={() => window.innerWidth < 768 && setIsOpen(false)}
-                    className={`flex items-center gap-4 px-4 py-2 text-gray-700 dark:text-gray-400 sidebar-link ${
+                    className={`flex items-center gap-4 px-4 py-2  sidebar-link ${
                       isActive(item.path) ? "active" : ""
                     }`}
                   >
@@ -894,7 +880,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         {item.icon}
                       </div>
                       {isOpen && (
-                        <p className="font-medium text-[14px]">{item.label}</p>
+                        <p className="font-medium text-[14px] text-inherit">
+                          {item.label}
+                        </p>
                       )}
                     </div>
                   </Link>

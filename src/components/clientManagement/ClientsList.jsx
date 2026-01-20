@@ -279,13 +279,13 @@ const ClientList = () => {
         updateStatusTabs(updatedClients);
         return updatedClients;
       });
-      setStatusLoading(null);
-      setOpenStatusRow(null);
+
       SuccessToast(res?.message || "Status updated successfully");
     } catch (error) {
       ErrorToast(error.message || "Failed to update status");
     } finally {
       setStatusLoading(null);
+      setOpenStatusRow(null);
     }
   };
   const updateStatusTabs = (updatedClients) => {
