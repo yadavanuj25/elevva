@@ -748,7 +748,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           icon: <FaUsers size={16} />,
         },
         {
-          resource: "roles",
+          resource: "users",
           path: "/admin/rolemanagement/roles",
           label: "Roles & Permission",
           icon: <FaUnlockAlt size={16} />,
