@@ -18,6 +18,7 @@ import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
 import Textareafield from "../ui/formFields/Textareafield";
 import RequirementForm from "../requirementManagement/RequirementForm";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 const schema = yup.object().shape({
   client: yup.string().required("Client is required"),
@@ -33,7 +34,7 @@ const schema = yup.object().shape({
   totalPositions: yup.string().required("Total positions required"),
   workRole: yup.string().required("Work role is required"),
   workMode: yup.string().required("Work mode is required"),
-  workLocation: yup.string().required("Work location is required"),
+  workLocation: yup.string(),
   jobDescription: yup
     .string()
     .trim()
@@ -138,7 +139,7 @@ const ClientRequirement = () => {
       },
       clipboard: { matchVisual: true },
     }),
-    []
+    [],
   );
 
   const handleChange = (e) => {
@@ -219,15 +220,7 @@ const ClientRequirement = () => {
         />
       </div>
 
-      {errorMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300
-               bg-[#d72b16] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">⚠ {"  "}</span>
-          <p className="text-sm">{errorMsg}</p>
-        </div>
-      )}
+      <ErrorMessage errorMsg={errorMsg} />
 
       {/* <form onSubmit={handleSubmit} className="space-y-6 ">
         <div className="section">
