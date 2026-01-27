@@ -151,7 +151,7 @@ const ClientRequirement = () => {
         ? value.replace(/,/g, "")
         : value.replace(/\D/g, "");
       if (["totalPositions"].includes(name) && value !== cleanValue) {
-        errorMsg = "Only numbers are allowed";
+        errorMsg = "please enter number only";
       }
       if (["budget"].includes(name)) {
         if (cleanValue && !isNaN(cleanValue)) {
