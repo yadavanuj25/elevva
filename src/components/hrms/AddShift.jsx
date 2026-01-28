@@ -59,18 +59,18 @@ const shiftSchema = yup.object({
 });
 
 const initialFormState = {
-  name: "Morning",
-  timezone: "Asia/Kolkata",
-  startTime: "10:00",
-  endTime: "19:00",
-  workingDays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-  breakTime: { duration: 60, isPaid: false },
-  graceTime: 15,
-  halfDayHours: 4,
-  fullDayHours: 8,
+  name: "",
+  timezone: "",
+  startTime: "",
+  endTime: "",
+  workingDays: [],
+  breakTime: { duration: 0, isPaid: false },
+  graceTime: 0,
+  halfDayHours: 0,
+  fullDayHours: 0,
   overtimeEnabled: false,
   overtimeRate: "",
-  color: "#3B82F6",
+  color: "",
 };
 
 const AddShift = () => {
@@ -392,7 +392,12 @@ const AddShift = () => {
 
         {/* Actions */}
         <div className="flex justify-end gap-3 pt-3">
-          <CancelButton onClick={() => setFormData(initialFormState)} />
+          <CancelButton
+            onClick={() => {
+              setFormData(initialFormState);
+              setErrors({});
+            }}
+          />
           <Button
             type="submit"
             text={loading ? "Saving..." : "Save"}
