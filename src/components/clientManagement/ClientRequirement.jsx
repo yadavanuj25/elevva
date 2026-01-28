@@ -89,8 +89,7 @@ const ClientRequirement = () => {
       }
       setOptions(data.options);
     } catch (error) {
-      console.error("Error fetching options:", error);
-      showError("Failed to load dropdown options");
+      showError("Error fetching options:", error);
     }
   };
 
