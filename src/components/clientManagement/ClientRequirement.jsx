@@ -12,11 +12,9 @@ import {
   getAllClients,
   getRequirementsOptions,
 } from "../../services/clientServices";
-import BasicDatePicker from "../ui/BasicDatePicker";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
-import Textareafield from "../ui/formFields/Textareafield";
 import RequirementForm from "../requirementManagement/RequirementForm";
 import ErrorMessage from "../modals/errors/ErrorMessage";
 
@@ -34,7 +32,7 @@ const schema = yup.object().shape({
   totalPositions: yup.string().required("Total positions required"),
   workRole: yup.string().required("Work role is required"),
   workMode: yup.string().required("Work mode is required"),
-  workLocation: yup.string(),
+  // workLocation: yup.string().required("Work location is required"),
   jobDescription: yup
     .string()
     .trim()
