@@ -8,6 +8,8 @@ import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
 import UserForm from "./UserForm";
 import UseScrollOnError from "../../hooks/UseScrollOnError";
+import ErrorMessage from "../modals/errors/ErrorMessage";
+import UserTabs from "./UserTabs";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Name is required"),
@@ -26,11 +28,24 @@ const schema = yup.object().shape({
     .required("Zip Code is required"),
   country: yup.string().required("Country is required"),
   state: yup.string().required("State is required"),
+  shift: yup.string().required("Shift is required"),
+  attendanceEnabled: yup.boolean().required("Attendance enabled is required"),
+  joiningDate: yup
+    .date()
+    .typeError("Joining date is required")
+    .required("Joining date is required")
+    .max(new Date(), "Joining date cannot be in the future"),
+  department: yup.string().required("Department is required"),
+  designation: yup
+    .string()
+    .trim()
+    .min(2, "Designation must be at least 2 characters")
+    .required("Designation is required"),
+  reportingManager: yup.string().required("Reporting manager is required"),
 });
 
 export default function EditUser() {
   PageTitle("Elevva | Edit-User");
-
   const { id } = useParams();
   const { errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
@@ -50,12 +65,18 @@ export default function EditUser() {
     profileImage: null,
     status: "active",
     sendWelcomeEmail: true,
+    shift: "",
+    attendanceEnabled: true,
+    joiningDate: null,
+    department: "",
+    designation: "",
+    reportingManager: "",
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
+  const [activeTab, setActiveTab] = useState("Basic Information");
   // UseScrollOnError(errors);
-
   useEffect(() => {
     if (id) fetchUserById(id);
   }, [id]);
@@ -84,6 +105,12 @@ export default function EditUser() {
           profileImage: user.profileImage || null,
           status: user.status || "active",
           sendWelcomeEmail: true,
+          shift: user.shift || "",
+          attendanceEnabled: user.attendanceEnabled || true,
+          joiningDate: user.joiningDate || null,
+          department: user.department || "",
+          designation: user.designation || "",
+          reportingManager: user.reportingManager || "",
         });
       }
     } catch (err) {
@@ -134,6 +161,12 @@ export default function EditUser() {
         about: formData.about,
         status: formData.status,
         sendWelcomeEmail: formData.sendWelcomeEmail,
+        shift: formData.shift || "",
+        attendanceEnabled: formData.attendanceEnabled || true,
+        joiningDate: formData.joiningDate || null,
+        department: formData.department || "",
+        designation: formData.designation || "",
+        reportingManager: formData.reportingManager || "",
       };
       const res = await updateUser(id, payload);
       if (!res || res.error || res.success === false) {
@@ -162,25 +195,21 @@ export default function EditUser() {
         <h2 className="text-2xl font-semibold">Update User</h2>
         <BackButton onClick={() => navigate("/admin/usermanagement/users")} />
       </div>
-
-      {errorMsg && (
-        <div className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 bg-[#d72b16] text-white shadow-sm animate-slideDown">
-          <span className="font-semibold">⚠{"  "}</span>
-          <p className="text-sm">{errorMsg}</p>
-        </div>
-      )}
-
+      <UserTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      <ErrorMessage errorMsg={errorMsg} />
       {loading ? (
         <FormSkeleton rows={6} />
       ) : (
         <form onSubmit={handleSubmit} autoComplete="off">
           <UserForm
+            title="Update"
             formData={formData}
             setFormData={setFormData}
             errors={errors}
             setErrors={setErrors}
             handleChange={handleChange}
             loading={updating}
+            activeTab={activeTab}
           />
         </form>
       )}

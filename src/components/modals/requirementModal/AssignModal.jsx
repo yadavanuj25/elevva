@@ -36,7 +36,7 @@ const AssignModal = ({
   const fetchUsers = async () => {
     try {
       const res = await getAllUsers(1, 50, "active");
-      setOptions(res.users);
+      setOptions(res?.users);
     } catch (err) {
       console.error(err);
     }
@@ -87,7 +87,7 @@ const AssignModal = ({
 
   const toggleUser = (id) => {
     setSelectedOptions((prev) =>
-      prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id],
     );
   };
 

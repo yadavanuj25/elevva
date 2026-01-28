@@ -43,6 +43,7 @@ import GroupButton from "../ui/buttons/GroupButton";
 import ActionMenu from "../ui/buttons/ActionMenu";
 import CustomSwal from "../../utils/CustomSwal";
 import SelectRequirementModal from "../modals/interviewModal/SelectRequirementModal";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
   const { user } = useAuth();
@@ -372,15 +373,7 @@ const ProfileList = () => {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-semibold ">All Profiles</h2>
         </div>
-        {errorMsg && (
-          <div
-            className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-red-50 text-red-700 shadow-sm animate-slideDown"
-          >
-            <span className=" font-semibold">⚠ {"  "}</span>
-            <p className="text-sm">{errorMsg}</p>
-          </div>
-        )}
+        <ErrorMessage errorMsg={errorMsg} />
 
         <div>
           {/* Tabs */}
@@ -467,11 +460,7 @@ const ProfileList = () => {
                         { id: "techStack", label: "Tech Stack" },
                         { id: "status", label: "Status" },
                         { id: "skills", label: "Skills" },
-                        // { id: "currentCompany", label: "Current Company" },
-                        // { id: "totalExp", label: "Total Exp" },
-                        // { id: "expectedCTC", label: "Expected CTC" },
-                        // { id: "workMode", label: "Work Mode" },
-                        // { id: "noticePeriod", label: "Notice Period" },
+
                         { id: "submittedBy", label: "SubmittedBy" },
                         { id: "createdAt", label: "Created Dtm" },
                         { id: "updatedAt", label: "Modified Dtm" },

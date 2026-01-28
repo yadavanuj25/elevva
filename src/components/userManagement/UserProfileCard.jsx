@@ -1,5 +1,6 @@
 import React from "react";
 import { Upload, User } from "lucide-react";
+import ToggleButton from "../ui/buttons/ToggleButton";
 
 const UserProfileCard = ({
   profilePreview,
@@ -61,7 +62,7 @@ const UserProfileCard = ({
       </p>
 
       {/* Status Toggle */}
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <div className="flex items-center bg-gray-100 border border-gray-300 rounded-full p-1">
           <button
             type="button"
@@ -87,7 +88,15 @@ const UserProfileCard = ({
             Inactive
           </button>
         </div>
-      </div>
+      </div> */}
+      <ToggleButton
+        value={status}
+        onChange={onStatusChange}
+        activeValue="active"
+        inactiveValue="inactive"
+        activeLabel="Active"
+        inactiveLabel="Inactive"
+      />
     </div>
   );
 };

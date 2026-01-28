@@ -3,6 +3,9 @@ import { fetchHandler } from "../fatchHandler/fetchHandler";
 export const logoutUser = () => {
   return fetchHandler("/api/auth/login");
 };
+export const getMe = () => {
+  return fetchHandler("/api/auth/me");
+};
 
 export const loginUser = (formData) => {
   return fetchHandler(`/api/auth/login`, "POST", formData);

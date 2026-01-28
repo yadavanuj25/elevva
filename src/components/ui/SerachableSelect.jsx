@@ -13,7 +13,7 @@ const SearchableSelect = ({
   const dropdownRef = useRef(null);
 
   const filteredOptions = options.filter((opt) =>
-    opt.label.toLowerCase().includes(search.toLowerCase())
+    opt.label.toLowerCase().includes(search.toLowerCase()),
   );
 
   // Close dropdown when clicking outside

@@ -22,6 +22,7 @@ import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import ToolTip from "../ui/ToolTip";
 import CustomSwal from "../../utils/CustomSwal";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 const checkboxSx = {
   color: "#6b7280",
@@ -78,7 +79,7 @@ const RoleList = () => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
       let data;
       try {
@@ -93,10 +94,10 @@ const RoleList = () => {
       const rolesArray = Array.isArray(data?.data)
         ? data.data
         : Array.isArray(data?.roles)
-        ? data.roles
-        : Array.isArray(data)
-        ? data
-        : [];
+          ? data.roles
+          : Array.isArray(data)
+            ? data
+            : [];
 
       const formatted = rolesArray.map((role, i) => ({
         id: role._id || i,
@@ -169,8 +170,8 @@ const RoleList = () => {
       const query = searchQuery.toLowerCase();
       data = data.filter((role) =>
         Object.values(role).some((value) =>
-          value?.toString().toLowerCase().includes(query)
-        )
+          value?.toString().toLowerCase().includes(query),
+        ),
       );
     }
     return data;
@@ -200,7 +201,7 @@ const RoleList = () => {
 
   const paginatedData = sortedData.slice(
     page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
+    page * rowsPerPage + rowsPerPage,
   );
 
   const numSelected = selected.length;
@@ -225,15 +226,7 @@ const RoleList = () => {
           />
         </button>
       </div>
-      {errorMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-[#d72b16] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">⚠ {"  "}</span>
-          <p className="text-sm">{errorMsg}</p>
-        </div>
-      )}
+      <ErrorMessage errorMsg={errorMsg} />
 
       <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
         {/* Search and Add */}
@@ -360,7 +353,7 @@ const RoleList = () => {
                               className=" text-white bg-accent-dark px-1 py-1 rounded hover:bg-[#222]"
                               onClick={() =>
                                 navigate(
-                                  `/admin/rolemanagement/edit-roles/${row.id}`
+                                  `/admin/rolemanagement/edit-roles/${row.id}`,
                                 )
                               }
                             >

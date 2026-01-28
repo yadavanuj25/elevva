@@ -9,6 +9,7 @@ import { Eye, EyeOff } from "lucide-react";
 import * as Yup from "yup";
 import { resetPassword } from "../services/authServices";
 import LoginCard from "../components/cards/LoginCard";
+import { MdErrorOutline } from "react-icons/md";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -52,7 +53,7 @@ const ResetPassword = () => {
     try {
       await validationSchema.validate(
         { password, confirmPassword },
-        { abortEarly: false }
+        { abortEarly: false },
       );
       setErrors({});
       return true;
@@ -105,10 +106,11 @@ const ResetPassword = () => {
             </p>
             {errors.general && (
               <div
-                className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-[#d72b16] text-white shadow-sm animate-slideDown"
+                className={`mb-4 flex items-center justify-center gap-2 p-3 rounded-xl border border-red-300
+                                  bg-[#d72b16] text-white shadow-sm transform transition-all duration-1000
+                                  opacity-100 translate-y-0`}
               >
-                <span className=" font-semibold">⚠ {"  "}</span>
+                <MdErrorOutline size={18} />
                 <p className="text-sm">{errors.general}</p>
               </div>
             )}

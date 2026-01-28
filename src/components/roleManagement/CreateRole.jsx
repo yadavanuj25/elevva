@@ -9,6 +9,7 @@ import PageTitle from "../../hooks/PageTitle";
 import Button from "../ui/Button";
 import BackButton from "../ui/buttons/BackButton";
 import Textareafield from "../ui/formFields/Textareafield";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 // Validation Schema
 const schema = yup.object().shape({
@@ -61,7 +62,7 @@ const CreateRole = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(payload),
-        }
+        },
       );
       if (!res.ok) {
         const errorData = await res.json();
@@ -92,15 +93,7 @@ const CreateRole = () => {
         <h2 className="text-2xl font-semibold">Add New Role</h2>
         <BackButton onClick={() => navigate("/admin/rolemanagement/roles")} />
       </div>
-      {errorMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-[#d72b16] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">⚠ {"  "}</span>
-          <p className="text-sm">{errorMsg}</p>
-        </div>
-      )}
+      <ErrorMessage errorMsg={errorMsg} />
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">

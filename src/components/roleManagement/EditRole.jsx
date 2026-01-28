@@ -10,6 +10,7 @@ import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import Button from "../ui/Button";
 import BackButton from "../ui/buttons/BackButton";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 const schema = yup.object().shape({
   name: yup.string().trim().required("Role name is required"),
@@ -37,7 +38,7 @@ const EditRole = () => {
       try {
         const res = await fetch(
           `https://crm-backend-qbz0.onrender.com/api/roles/${id}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         const data = await res.json();
         if (data?.role) {
@@ -80,7 +81,7 @@ const EditRole = () => {
       try {
         const res = await fetch(
           "https://crm-backend-qbz0.onrender.com/api/roles/permissions/all",
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         const data = await res.json();
         if (data?.permissions) setPermissions(data.permissions);
@@ -188,7 +189,7 @@ const EditRole = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       const data = await res.json();
@@ -225,15 +226,7 @@ const EditRole = () => {
         <BackButton onClick={() => navigate("/admin/rolemanagement/roles")} />
       </div>
       <div className="space-y-6">
-        {errorMsg && (
-          <div
-            className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-red-50 text-red-700 shadow-sm animate-slideDown"
-          >
-            <span className=" font-semibold">⚠ {"  "}</span>
-            <p className="text-sm">{errorMsg}</p>
-          </div>
-        )}
+        <ErrorMessage errorMsg={errorMsg} />
 
         <form onSubmit={handleUpdate}>
           {loading ? (
@@ -350,7 +343,7 @@ const EditRole = () => {
                                 onChange={() => handleToggle(module, action)}
                               />
                             </td>
-                          )
+                          ),
                         )}
                         <td className="border text-center">
                           <input

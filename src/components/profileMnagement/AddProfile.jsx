@@ -13,6 +13,7 @@ import useSkillHandlers from "../../hooks/profiles/useSkills";
 import useDuplicateCheck from "../../hooks/profiles/useDuplicateCheck";
 import profileInitialForm from "../../contstants/profileInitialForm";
 import ResumeUpload from "./ResumeUpload";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 const AddProfile = () => {
   PageTitle("Elevva | Add-Profile");
@@ -123,7 +124,7 @@ const AddProfile = () => {
     showSuccess("");
     showError("");
     const hasErrors = Object.values(errors).some(
-      (err) => err && err.length > 0
+      (err) => err && err.length > 0,
     );
     if (hasErrors) {
       return;
@@ -166,15 +167,7 @@ const AddProfile = () => {
         title="Add New Profile"
         onBack={() => navigate("/admin/profilemanagement/profiles")}
       />
-      {errorMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300
-               bg-[#d72b16] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">⚠ {"  "}</span>
-          <p className="text-sm">{errorMsg}</p>
-        </div>
-      )}
+      <ErrorMessage errorMsg={errorMsg} />
       <form onSubmit={handleSubmit} className="space-y-6 ">
         <ResumeUpload
           fileInputRef={fileInputRef}

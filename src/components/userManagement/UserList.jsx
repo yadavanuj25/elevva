@@ -17,11 +17,11 @@ import {
   File,
   Settings,
   ChartNoAxesCombined,
+  Phone,
 } from "lucide-react";
 import DateDisplay from "../ui/DateDisplay";
 import NoData from "../ui/NoData";
 import { getAllUsers, updateUserStatus } from "../../services/userServices";
-import Search from "../sharedComponents/Search";
 import StatusDropDown from "../ui/StatusDropDown";
 import Tabs from "../ui/tableComponents/Tabs";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
@@ -36,6 +36,7 @@ import GroupButton from "../ui/buttons/GroupButton";
 import EditButton from "../ui/buttons/EditButton";
 import ViewButton from "../ui/buttons/ViewButton";
 import CustomSwal from "../../utils/CustomSwal";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 const UserList = () => {
   PageTitle("Elevva | Users");
@@ -214,15 +215,7 @@ const UserList = () => {
           <h2 className="text-2xl font-semibold ">All Users</h2>
         </div>
         <div>
-          {errorMsg && (
-            <div
-              className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-[#d72b16] text-white shadow-sm animate-slideDown"
-            >
-              <span className=" font-semibold">⚠ {"  "}</span>
-              <p className="text-sm">{errorMsg}</p>
-            </div>
-          )}
+          <ErrorMessage errorMsg={errorMsg} />
           <Tabs
             statusTabs={statusTabs}
             activeTab={activeTab}
@@ -245,7 +238,6 @@ const UserList = () => {
                   text="Stats"
                   icon={<ChartNoAxesCombined size={16} />}
                 />
-
                 <RefreshButton fetchData={fetchUsers} />
               </div>
 
@@ -272,13 +264,15 @@ const UserList = () => {
                         padding="checkbox"
                         className="bg-[#f2f4f5] dark:bg-darkGray"
                       >
-                        <Checkbox color=" dark:text-white" />
+                        <div className="flex items-center justify-center">
+                          <Checkbox color=" dark:text-white" />
+                        </div>
                       </TableCell>
                       {[
                         { id: "fullName", label: "Name" },
                         { id: "status", label: "Status" },
                         { id: "role", label: "Role" },
-                        { id: "phone", label: "Phone" },
+                        { id: "shift", label: "Shift" },
                         { id: "dob", label: "DOB" },
                         { id: "createdAt", label: "Created Dtm" },
                         { id: "updatedAt", label: "Modified Dtm" },
@@ -328,9 +322,16 @@ const UserList = () => {
                         >
                           <TableCell
                             padding="checkbox"
-                            className="whitespace-nowrap  "
+                            className="whitespace-nowrap "
                           >
-                            <Checkbox color=" dark:text-white" />
+                            <div className="flex flex-col items-center justify-center">
+                              <Checkbox color=" dark:text-white" />
+                              {row.employeeId && (
+                                <small className="text-accent-dark bg-accent-light p-[1px] border-b border-accent-dark rounded font-[500]">
+                                  #{row.employeeId}
+                                </small>
+                              )}
+                            </div>
                           </TableCell>
                           <TableCell className="whitespace-nowrap ">
                             <div className="flex items-center gap-2">
@@ -338,7 +339,7 @@ const UserList = () => {
                                 <img
                                   src={row.profileImage}
                                   alt={row.fullName}
-                                  className="w-10 h-10 rounded-md object-cover border border-accent-dark"
+                                  className="w-10 h-10 rounded-md object-cover "
                                 />
                               ) : (
                                 <div className="w-10 h-10 rounded-md flex items-center justify-center bg-gray-200 text-accent-dark font-semibold">
@@ -358,6 +359,10 @@ const UserList = () => {
                                 <p className="flex items-center gap-1 text-gray-600 dark:text-gray-300 text-sm">
                                   <Mail size={14} />
                                   {row.email}
+                                </p>
+                                <p className="flex items-center gap-1 text-gray-600 dark:text-gray-300 text-sm">
+                                  <Phone size={14} />
+                                  {row.phone}
                                 </p>
                               </div>
                             </div>
@@ -381,7 +386,7 @@ const UserList = () => {
                               : "-"}
                           </TableCell>
                           <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                            {row.phone}
+                            {row.shift}
                           </TableCell>
                           <TableCell className="whitespace-nowrap  dark:text-gray-300">
                             {formatDate(row.dob)}
