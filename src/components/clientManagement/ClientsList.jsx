@@ -27,6 +27,7 @@ import GroupButton from "../ui/buttons/GroupButton";
 import axios from "axios";
 import SelectField from "../ui/SelectField";
 import CustomSwal from "../../utils/CustomSwal";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 const columns = [
   { id: "clientName", label: "Client Name" },
@@ -308,15 +309,7 @@ const ClientList = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">All Clients</h2>
       </div>
-      {errorMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-[#d72b16] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">⚠ {"  "}</span>
-          <p className="text-sm">{errorMsg}</p>
-        </div>
-      )}
+      <ErrorMessage errorMsg={errorMsg} />
 
       <Tabs
         statusTabs={statusTabs}

@@ -33,6 +33,7 @@ import AssignModal from "../modals/requirementModal/AssignModal";
 import GroupButton from "../ui/buttons/GroupButton";
 import CustomSwal from "../../utils/CustomSwal";
 import ActionMenu from "../ui/buttons/ActionMenu";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 const ClientsRequirementsList = () => {
   PageTitle("Elevva | Client Requirements");
@@ -333,15 +334,7 @@ const ClientsRequirementsList = () => {
         <h2 className="text-2xl font-semibold">All Requirements</h2>
       </div>
 
-      {errorMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-[#d72b16] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">⚠ {"  "}</span>
-          <p className="text-sm">{errorMsg}</p>
-        </div>
-      )}
+      <ErrorMessage errorMsg={errorMsg} />
 
       {/* Tabs */}
       <Tabs

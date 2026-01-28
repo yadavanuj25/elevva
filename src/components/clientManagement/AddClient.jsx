@@ -6,6 +6,7 @@ import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
 import { addClients, getAllOptions } from "../../services/clientServices";
 import { useMessage } from "../../auth/MessageContext";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 const schema = yup.object().shape({
   empanelmentDate: yup
@@ -14,7 +15,7 @@ const schema = yup.object().shape({
     .test(
       "is-valid-date",
       "Invalid date format",
-      (val) => !!val && !isNaN(Date.parse(val))
+      (val) => !!val && !isNaN(Date.parse(val)),
     )
     .test("is-recent", "Date must be within last 7 days", (val) => {
       const d = new Date(val);
@@ -105,7 +106,7 @@ const AddClient = () => {
         Object.entries(formData.poc2).map(([k, v]) => [
           k,
           v === "" ? undefined : v,
-        ])
+        ]),
       );
       const cleanedData = { ...formData, poc2: cleanedPoc2 };
       await schema.validate(cleanedData, { abortEarly: false });
@@ -145,12 +146,7 @@ const AddClient = () => {
         />
       </div>
 
-      {errorMsg && (
-        <div className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 bg-[#d72b16] text-white shadow-sm animate-slideDown">
-          <span className="font-semibold">⚠{"  "}</span>
-          <p className="text-sm">{errorMsg}</p>
-        </div>
-      )}
+      <ErrorMessage errorMsg={errorMsg} />
 
       <ClientForm
         formData={formData}

@@ -21,6 +21,7 @@ import BackButton from "../ui/buttons/BackButton";
 import ReadOnlyInput from "../ui/formFields/ReadOnlyInput";
 import Textareafield from "../ui/formFields/Textareafield";
 import RequirementForm from "../requirementManagement/RequirementForm";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 const schema = yup.object().shape({
   client: yup.string().required("Client is required"),
@@ -166,7 +167,7 @@ const EditClientRequirement = () => {
         handlers: { image: imageHandler },
       },
     }),
-    []
+    [],
   );
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -242,15 +243,7 @@ const EditClientRequirement = () => {
         />
       </div>
 
-      {errorMsg && (
-        <div
-          className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 
-               bg-[#d72b16] text-white shadow-sm animate-slideDown"
-        >
-          <span className=" font-semibold">⚠ {"  "}</span>
-          <p className="text-sm">{errorMsg}</p>
-        </div>
-      )}
+      <ErrorMessage errorMsg={errorMsg} />
 
       <div>
         {loading ? (

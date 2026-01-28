@@ -14,6 +14,7 @@ import {
   getRequirementOptions,
 } from "../../services/clientServices";
 import CustomSwal from "../../utils/CustomSwal";
+import ErrorMessage from "../modals/errors/ErrorMessage";
 
 const schema = yup.object().shape({
   requirementId: yup.string().required("Requirement is required"),
@@ -138,12 +139,7 @@ const AssignTaskView = () => {
           </h2>
         </div>
 
-        {errorMsg && (
-          <div className="mb-4 flex items-center justify-center p-3 rounded-xl border border-red-300 bg-red-50 text-red-700 shadow-sm animate-slideDown">
-            <span className="font-semibold">⚠ </span>
-            <p className="text-sm">{errorMsg}</p>
-          </div>
-        )}
+        <ErrorMessage errorMsg={errorMsg} />
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
