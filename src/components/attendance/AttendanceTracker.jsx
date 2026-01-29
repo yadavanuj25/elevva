@@ -22,7 +22,7 @@ import {
   punchOut,
   startBreak,
 } from "../../services/attendanceServices";
-import WorkingHoursCircle from "./WorkingHoursCircle";
+// import WorkingHoursCircle from "./WorkingHoursCircle";
 
 const CircularProgress = ({
   workingTime,
