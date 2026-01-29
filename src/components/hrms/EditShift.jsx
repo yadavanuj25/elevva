@@ -92,6 +92,16 @@ const EditShift = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const workingShifts = [
+    { label: "General-Shift", value: "General-Shift" },
+    { label: "Morning-Shift", value: "Morning-Shift" },
+    { label: "Evening-Shift", value: "Evening-Shift" },
+    { label: "Night-Shift", value: "Night-Shift" },
+    { label: "Rotational-Shift", value: "Rotational-Shift" },
+    { label: "Flexible-Shift", value: "Flexible-Shift" },
+    { label: "Split-Shift", value: "Split-Shift" },
+  ];
+
   const weekDays = [
     "Monday",
     "Tuesday",
@@ -228,12 +238,13 @@ const EditShift = () => {
         ) : (
           <form onSubmit={handleSubmit} className="p-4 space-y-5">
             <div className="grid grid-cols-2 gap-4">
-              <Input
-                labelName="Shift Name"
+              <SelectField
+                label="Shift Name"
                 name="name"
                 value={formData.name}
                 handleChange={handleChange}
-                errors={errors}
+                options={workingShifts}
+                error={errors.name}
               />
               <SelectField
                 label="Timezone"

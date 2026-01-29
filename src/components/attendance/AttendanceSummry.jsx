@@ -5,12 +5,12 @@ import PunchInOut from "./PunchInOut";
 export default function AttendanceSummary() {
   return (
     <div className="grid grid-cols-12 gap-4 items-stretch">
-      <div className="col-span-12 lg:col-span-4 h-full">
+      <div className="col-span-12  h-full">
         <div className="h-full bg-white dark:bg-gray-800 border border-accent-dark dark:border-gray-600 rounded-lg p-4 ">
           <PunchInOut />
         </div>
       </div>
-      <div className="col-span-12 lg:col-span-8 h-full flex flex-col gap-4">
+      {/* <div className="col-span-12 lg:col-span-4 h-full flex flex-col gap-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <StatCard
             iconBg="bg-orange-500"
@@ -44,7 +44,7 @@ export default function AttendanceSummary() {
           />
         </div>
 
-        {/* Timeline */}
+        
         <div className="flex-1">
           <div className="h-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm p-4 flex flex-col justify-between">
             <div>
@@ -100,7 +100,7 @@ export default function AttendanceSummary() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

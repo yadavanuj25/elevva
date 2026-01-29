@@ -387,8 +387,8 @@ const UserList = () => {
                           </TableCell>
                           <TableCell className="whitespace-nowrap dark:text-gray-300">
                             <div
-                              className="px-2 py-1 text-xs rounded text-white inline-block"
-                              style={{ backgroundColor: row?.shift?.color }}
+                              className="px-2 py-1 font-bold rounded  inline-block"
+                              style={{ color: row?.shift?.color }}
                             >
                               {row.shift?.name}
                             </div>

@@ -80,63 +80,14 @@ const AddShift = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const IT_SHIFTS = [
-    {
-      id: "general",
-      label: "General Shift",
-      startTime: "09:00",
-      endTime: "18:00",
-      type: "fixed",
-    },
-    {
-      id: "morning",
-      label: "Morning Shift",
-      startTime: "06:00",
-      endTime: "14:00",
-      type: "fixed",
-    },
-    {
-      id: "evening",
-      label: "Evening Shift",
-      startTime: "14:00",
-      endTime: "22:00",
-      type: "fixed",
-    },
-    {
-      id: "night",
-      label: "Night Shift",
-      startTime: "22:00",
-      endTime: "06:00",
-      type: "fixed",
-    },
-    {
-      id: "rotational",
-      label: "Rotational Shift",
-      startTime: null,
-      endTime: null,
-      type: "rotational",
-    },
-    {
-      id: "flexible",
-      label: "Flexible Shift",
-      startTime: null,
-      endTime: null,
-      type: "flexible",
-    },
-    {
-      id: "split",
-      label: "Split Shift",
-      startTime: null,
-      endTime: null,
-      type: "split",
-    },
-    {
-      id: "on_call",
-      label: "On-Call Shift",
-      startTime: null,
-      endTime: null,
-      type: "on-call",
-    },
+  const workingShifts = [
+    { label: "General-Shift", value: "General-Shift" },
+    { label: "Morning-Shift", value: "Morning-Shift" },
+    { label: "Evening-Shift", value: "Evening-Shift" },
+    { label: "Night-Shift", value: "Night-Shift" },
+    { label: "Rotational-Shift", value: "Rotational-Shift" },
+    { label: "Flexible-Shift", value: "Flexible-Shift" },
+    { label: "Split-Shift", value: "Split-Shift" },
   ];
 
   const weekDays = [
@@ -247,12 +198,13 @@ const AddShift = () => {
       <form onSubmit={handleCreateShift} className="p-4 space-y-5">
         {/* Name + Timezone */}
         <div className="grid grid-cols-2 gap-4">
-          <Input
-            labelName="Shift Name"
+          <SelectField
+            label="Shift Name"
             name="name"
             value={formData.name}
             handleChange={handleChange}
-            errors={errors}
+            options={workingShifts}
+            error={errors.name}
           />
           <SelectField
             label="Timezone"
