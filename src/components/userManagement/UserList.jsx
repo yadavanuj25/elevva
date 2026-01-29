@@ -385,9 +385,15 @@ const UserList = () => {
                                 row.role.name.slice(1)
                               : "-"}
                           </TableCell>
-                          <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                            {row.shift}
+                          <TableCell className="whitespace-nowrap dark:text-gray-300">
+                            <div
+                              className="px-2 py-1 text-xs rounded text-white inline-block"
+                              style={{ backgroundColor: row?.shift?.color }}
+                            >
+                              {row.shift?.name}
+                            </div>
                           </TableCell>
+
                           <TableCell className="whitespace-nowrap  dark:text-gray-300">
                             {formatDate(row.dob)}
                           </TableCell>
