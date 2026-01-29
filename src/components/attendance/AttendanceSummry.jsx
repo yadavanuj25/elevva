@@ -1,13 +1,14 @@
 import React from "react";
 import StatCard from "./StatCard";
-import PunchInOut from "./PunchInOut";
+
+import AttendanceTracker from "./AttendanceTracker";
 
 export default function AttendanceSummary() {
   return (
     <div className="grid grid-cols-12 gap-4 items-stretch">
       <div className="col-span-12  h-full">
-        <div className="h-full bg-white dark:bg-gray-800 border border-accent-dark dark:border-gray-600 rounded-lg p-4 ">
-          <PunchInOut />
+        <div className="h-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-4 ">
+          <AttendanceTracker />
         </div>
       </div>
       {/* <div className="col-span-12 lg:col-span-4 h-full flex flex-col gap-4">

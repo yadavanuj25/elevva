@@ -1,252 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { Clock } from "lucide-react";
-// import { useAttendance } from "../../context/AttendanceContext";
-// import { useAuth } from "../../auth/AuthContext";
-
-// const DAILY_WORK_MINUTES = 9 * 60; // 9 hours
-// const RADIUS = 70;
-// const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-
-// const timeToMinutes = (time) => {
-//   const [h, m, s] = time.split(":").map(Number);
-//   return h * 60 + m + Math.floor(s / 60);
-// };
-
-// const PunchInOut = () => {
-//   const { punch } = useAttendance();
-//   const { user } = useAuth();
-//   const userId = user?._id;
-//   const name = user?.fullName;
-//   const [dateTime, setDateTime] = useState("");
-//   const [currentDate, setCurrentDate] = useState(new Date().toDateString());
-//   const [punchInTime, setPunchInTime] = useState(null);
-//   const [punchOutTime, setPunchOutTime] = useState(null);
-//   const [lunchStartTime, setLunchStartTime] = useState(null);
-//   const [lunchEndTime, setLunchEndTime] = useState(null);
-//   const [totalLunchMs, setTotalLunchMs] = useState(0);
-//   const [totalHours, setTotalHours] = useState("00:00:00");
-//   const [status, setStatus] = useState("Not Punched");
-
-//   const workedMinutes = timeToMinutes(totalHours);
-
-//   const progressPercent = Math.min(
-//     Math.round((workedMinutes / DAILY_WORK_MINUTES) * 100),
-//     100,
-//   );
-
-//   const strokeOffset = CIRCUMFERENCE - (progressPercent / 100) * CIRCUMFERENCE;
-
-//   /* ---------------- helpers ---------------- */
-//   const getTodayTime = (h, m = 0) => {
-//     const d = new Date();
-//     d.setHours(h, m, 0, 0);
-//     return d;
-//   };
-
-//   /* ---------------- clock + auto reset ---------------- */
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       const now = new Date();
-
-//       if (now.toDateString() !== currentDate) {
-//         setPunchInTime(null);
-//         setPunchOutTime(null);
-//         setLunchStartTime(null);
-//         setLunchEndTime(null);
-//         setTotalLunchMs(0);
-//         setTotalHours("00:00:00");
-//         setStatus("Not Punched");
-//         setCurrentDate(now.toDateString());
-//       }
-
-//       setDateTime(
-//         now.toLocaleTimeString("en-US", {
-//           hour: "2-digit",
-//           minute: "2-digit",
-//           hour12: true,
-//         }),
-//       );
-
-//       if (punchInTime && !punchOutTime) {
-//         let diff = now - punchInTime - totalLunchMs;
-
-//         if (lunchStartTime && !lunchEndTime) {
-//           diff -= now - lunchStartTime;
-//         }
-
-//         const h = Math.floor(diff / 3600000);
-//         const m = Math.floor((diff % 3600000) / 60000);
-//         const s = Math.floor((diff % 60000) / 1000);
-
-//         setTotalHours(
-//           `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s
-//             .toString()
-//             .padStart(2, "0")}`,
-//         );
-//       }
-//     }, 1000);
-
-//     return () => clearInterval(interval);
-//   }, [
-//     punchInTime,
-//     punchOutTime,
-//     lunchStartTime,
-//     lunchEndTime,
-//     totalLunchMs,
-//     currentDate,
-//   ]);
-
-//   /* ---------------- actions ---------------- */
-//   const handlePunchIn = () => {
-//     const now = new Date();
-//     const graceLimit = getTodayTime(10, 10);
-//     setPunchInTime(now);
-//     setStatus(now > graceLimit ? "Late" : "On Time");
-//     punch(userId, name, "in", now.toTimeString().slice(0, 5));
-//   };
-
-//   const handleLunchStart = () => {
-//     const now = new Date();
-//     setLunchStartTime(now);
-
-//     punch(userId, name, "lunchStart", now.toTimeString().slice(0, 5));
-//   };
-
-//   const handleLunchEnd = () => {
-//     const now = new Date();
-//     const diffMinutes = Math.floor((now - lunchStartTime) / 60000);
-
-//     setLunchEndTime(now);
-//     setTotalLunchMs((prev) => prev + diffMinutes * 60000);
-//     setLunchStartTime(null);
-
-//     punch(userId, name, "lunchEnd", now.toTimeString().slice(0, 5), {
-//       lunchMinutes: diffMinutes,
-//     });
-//   };
-
-//   const handlePunchOut = () => {
-//     const now = new Date();
-//     setPunchOutTime(now);
-
-//     const workedMs = now - punchInTime - totalLunchMs;
-//     const workedHours = workedMs / 3600000;
-
-//     let finalStatus = "Completed";
-//     if (workedHours < 4.5) finalStatus = "Half Day";
-//     else if (now < getTodayTime(19, 0)) finalStatus = "Early Leave";
-
-//     setStatus(finalStatus);
-//     punch(userId, name, "out", now.toTimeString().slice(0, 5), finalStatus);
-//   };
-
-//   const getStatusColor = () => {
-//     switch (status) {
-//       case "Late":
-//         return "text-orange-600";
-//       case "Early Leave":
-//       case "Half Day":
-//         return "text-red-600";
-//       case "On Time":
-//       case "Completed":
-//         return "text-green-600";
-//       default:
-//         return "text-gray-600";
-//     }
-//   };
-
-//   /* ---------------- UI ---------------- */
-//   return (
-//     <div>
-//       <h3 className="text-center font-medium">Welcome {name}</h3>
-//       <p className="text-center font-semibold mb-4">{dateTime}</p>
-//       <div className="flex justify-center mt-2">
-//         <div className="flex justify-center mt-6">
-//           <div className="relative w-44 h-44 flex items-center justify-center">
-//             <svg
-//               width="180"
-//               height="180"
-//               viewBox="0 0 180 180"
-//               className="absolute"
-//             >
-//               {/* Background circle */}
-//               <circle
-//                 cx="90"
-//                 cy="90"
-//                 r={RADIUS}
-//                 stroke="#e5e7eb"
-//                 strokeWidth="5"
-//                 fill="none"
-//               />
-
-//               {/* Progress circle */}
-//               <circle
-//                 cx="90"
-//                 cy="90"
-//                 r={RADIUS}
-//                 stroke="#22c55e"
-//                 strokeWidth="5"
-//                 fill="none"
-//                 strokeLinecap="round"
-//                 strokeDasharray={CIRCUMFERENCE}
-//                 strokeDashoffset={strokeOffset}
-//                 transform="rotate(-90 90 90)"
-//                 style={{ transition: "stroke-dashoffset 0.5s ease" }}
-//               />
-//             </svg>
-
-//             {/* Inner content */}
-//             <div className="w-36 h-36  rounded-full flex flex-col items-center justify-center shadow">
-//               <p className="text-sm font-semibold">Total Hours</p>
-//               <p className="font-bold text-lg">{totalHours}</p>
-//               <p className="text-xs text-green-600 font-semibold">
-//                 {progressPercent}%
-//               </p>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//       <p className={`text-center font-semibold my-2 ${getStatusColor()}`}>
-//         Status: {status}
-//       </p>
-//       <div className="flex flex-col gap-3">
-//         {!punchInTime && (
-//           <button
-//             onClick={handlePunchIn}
-//             className="bg-accent-dark text-white py-2 rounded-lg"
-//           >
-//             Punch In
-//           </button>
-//         )}
-//         {punchInTime && !lunchStartTime && !lunchEndTime && !punchOutTime && (
-//           <button
-//             onClick={handleLunchStart}
-//             className="bg-yellow-500 text-white py-2 rounded-lg"
-//           >
-//             Start Lunch Break
-//           </button>
-//         )}
-//         {lunchStartTime && (
-//           <button
-//             onClick={handleLunchEnd}
-//             className="bg-blue-500 text-white py-2 rounded-lg"
-//           >
-//             End Lunch Break
-//           </button>
-//         )}
-//         {punchInTime && !punchOutTime && !lunchStartTime && (
-//           <button
-//             onClick={handlePunchOut}
-//             className="bg-accent-dark text-white py-2 rounded-lg"
-//           >
-//             Punch Out
-//           </button>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
 import React, { useState, useEffect } from "react";
 import {
   Clock,
@@ -271,8 +22,110 @@ import {
   punchOut,
   startBreak,
 } from "../../services/attendanceServices";
+import WorkingHoursCircle from "./WorkingHoursCircle";
 
-const PunchInOut = () => {
+const CircularProgress = ({
+  workingTime,
+  shiftStartTime,
+  shiftEndTime,
+  isPunchedIn,
+  workingHours,
+}) => {
+  const calculateProgress = () => {
+    if (!shiftStartTime || !shiftEndTime) return 0;
+    const parseTime = (timeStr) => {
+      if (!timeStr) return 0;
+      if (!timeStr.includes("AM") && !timeStr.includes("PM")) {
+        const [hours, minutes] = timeStr.split(":").map(Number);
+        return hours + minutes / 60;
+      }
+      const [time, period] = timeStr.split(" ");
+      const [hours, minutes] = time.split(":").map(Number);
+      let totalHours = hours;
+
+      if (period === "PM" && hours !== 12) totalHours += 12;
+      if (period === "AM" && hours === 12) totalHours = 0;
+
+      return totalHours + minutes / 60;
+    };
+
+    const shiftStart = parseTime(shiftStartTime);
+    const shiftEnd = parseTime(shiftEndTime);
+
+    // Calculate total shift duration
+    let shiftDuration = shiftEnd - shiftStart;
+    if (shiftDuration < 0) shiftDuration += 24; // Handle overnight shifts
+
+    // Get current working hours
+    let currentHours = 0;
+    if (isPunchedIn && workingTime) {
+      const [hours, minutes, seconds] = workingTime.split(":").map(Number);
+      currentHours = hours + minutes / 60 + seconds / 3600;
+    } else if (workingHours) {
+      currentHours = workingHours;
+    }
+
+    // Calculate percentage (max 100%)
+    const percentage = Math.min((currentHours / shiftDuration) * 100, 100);
+    return percentage;
+  };
+
+  const formatDisplayTime = () => {
+    if (isPunchedIn && workingTime) {
+      return workingTime;
+    } else if (workingHours) {
+      const hours = Math.floor(workingHours);
+      const minutes = Math.floor((workingHours % 1) * 60);
+      return `${hours}:${minutes.toString().padStart(2, "0")}:00`;
+    }
+    return "0:00:00";
+  };
+
+  const progress = calculateProgress();
+  const circumference = 2 * Math.PI * 70; // radius = 70
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
+
+  return (
+    <div className="relative inline-flex items-center justify-center">
+      <svg className="transform -rotate-90" width="160" height="160">
+        {/* Background circle */}
+        <circle
+          cx="80"
+          cy="80"
+          r="70"
+          stroke="gray"
+          strokeWidth="15"
+          fill="#fff"
+        />
+        {/* Progress circle */}
+        <circle
+          cx="80"
+          cy="80"
+          r="70"
+          stroke="green"
+          strokeWidth="8"
+          fill="#fff"
+          strokeDasharray={circumference}
+          strokeDashoffset={strokeDashoffset}
+          strokeLinecap="round"
+          style={{
+            transition: "stroke-dashoffset 0.5s ease",
+          }}
+        />
+      </svg>
+      {/* Center text */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <p className=" text-gray-500 mb-1">Total Hours</p>
+        <p className="font-bold text-black ">{formatDisplayTime()}</p>
+        <p className="text-xs text-green-600 font-medium mt-1">
+          {progress.toFixed(0)}%
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const AttendanceTracker = () => {
   const [todayAttendance, setTodayAttendance] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [location, setLocation] = useState(null);
@@ -284,6 +137,13 @@ const PunchInOut = () => {
   const [activeBreak, setActiveBreak] = useState(null);
   const [isBreakActive, setIsBreakActive] = useState(false);
 
+  // New states for break modal and timers
+  const [showBreakModal, setShowBreakModal] = useState(false);
+  const [showPunchOutModal, setShowPunchOutModal] = useState(false);
+  const [selectedBreakType, setSelectedBreakType] = useState(null);
+  const [workingTime, setWorkingTime] = useState("00:00:00");
+  const [breakTime, setBreakTime] = useState("00:00:00");
+
   const [filters, setFilters] = useState({
     startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
       .toISOString()
@@ -292,6 +152,19 @@ const PunchInOut = () => {
     page: 1,
     limit: 30,
   });
+
+  // Break types configuration
+
+  const breakTypes = {
+    lunch: { name: "Lunch-Break", desc: "Meal time break", icon: "🍽️" },
+    tea: { name: "Tea-Break", desc: "Tea time break", icon: "🍽️" },
+
+    personal: {
+      name: "Personal-Break",
+      desc: "Restroom, coffee",
+      icon: "👤",
+    },
+  };
 
   useEffect(() => {
     fetchTodayAttendance();
@@ -307,6 +180,94 @@ const PunchInOut = () => {
       fetchHistory();
     }
   }, [activeTab, filters]);
+
+  // Update working time counter
+  useEffect(() => {
+    let interval;
+    if (
+      todayAttendance?.punchIn?.time &&
+      !todayAttendance?.punchOut?.time &&
+      !isBreakActive
+    ) {
+      interval = setInterval(() => {
+        const elapsed = calculateElapsedWorkTime();
+        setWorkingTime(formatTimeFromMs(elapsed));
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [todayAttendance, isBreakActive]);
+
+  // Update break time counter
+  useEffect(() => {
+    let interval;
+    if (isBreakActive && activeBreak?.breakStart) {
+      interval = setInterval(() => {
+        const elapsed = new Date() - new Date(activeBreak.breakStart);
+        setBreakTime(formatTimeFromMs(elapsed));
+      }, 1000);
+    } else {
+      setBreakTime("00:00:00");
+    }
+    return () => clearInterval(interval);
+  }, [isBreakActive, activeBreak]);
+
+  // Calculate elapsed work time excluding breaks
+  const calculateElapsedWorkTime = () => {
+    if (!todayAttendance?.punchIn?.time) return 0;
+
+    const start = new Date(todayAttendance.punchIn.time);
+    const end = todayAttendance.punchOut?.time
+      ? new Date(todayAttendance.punchOut.time)
+      : new Date();
+
+    let totalBreakTime = 0;
+    if (todayAttendance.breaks) {
+      todayAttendance.breaks.forEach((b) => {
+        if (b.breakEnd) {
+          const breakStart = new Date(b.breakStart);
+          const breakEnd = new Date(b.breakEnd);
+          totalBreakTime += breakEnd - breakStart;
+        }
+      });
+    }
+
+    // Add current break time if active
+    if (isBreakActive && activeBreak?.breakStart) {
+      totalBreakTime += new Date() - new Date(activeBreak.breakStart);
+    }
+
+    return end - start - totalBreakTime;
+  };
+
+  // Format time from milliseconds
+  const formatTimeFromMs = (ms) => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  };
+
+  const formatDay = (date) => {
+    if (!date) return "";
+
+    const d = new Date(date);
+
+    const datePart = new Intl.DateTimeFormat("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    }).format(d);
+
+    const timePart = new Intl.DateTimeFormat("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }).format(d);
+
+    return `${datePart} at ${timePart}`;
+  };
 
   const getLocation = () => {
     if (navigator.geolocation) {
@@ -394,6 +355,7 @@ const PunchInOut = () => {
 
       if (response.success) {
         setTodayAttendance(response.data);
+        setShowPunchOutModal(false);
         alert(
           `${response.message}\n\nWorking Hours: ${response.summary.workingHours} hrs\nOvertime: ${response.summary.overtimeHours} hrs`,
         );
@@ -406,13 +368,26 @@ const PunchInOut = () => {
     setIsPunchingOut(false);
   };
 
+  const handleShowBreakModal = () => {
+    getLocation();
+    setShowBreakModal(true);
+  };
+
+  const handleSelectBreakType = (type) => {
+    setSelectedBreakType(type);
+  };
+
   const handleStartBreak = async () => {
+    if (!selectedBreakType) return;
+
     try {
-      const payload = { breakType: "lunch" };
+      const payload = { breakType: selectedBreakType };
       const response = await startBreak(payload);
 
       if (response.success) {
         setIsBreakActive(true);
+        setShowBreakModal(false);
+        setSelectedBreakType(null);
         fetchTodayAttendance();
         alert("Break started");
       } else {
@@ -436,6 +411,11 @@ const PunchInOut = () => {
     } catch (error) {
       alert("Failed to end break");
     }
+  };
+
+  const handleShowPunchOutModal = () => {
+    getLocation();
+    setShowPunchOutModal(true);
   };
 
   const exportAttendance = async () => {
@@ -509,97 +489,149 @@ const PunchInOut = () => {
     return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
+  const formatHoursToHM = (hours) => {
+    if (hours === null || hours === undefined) return "0h 0m";
+
+    const totalMinutes = Math.round(hours * 60);
+    const h = Math.floor(totalMinutes / 60);
+    const m = totalMinutes % 60;
+
+    return `${h}h ${m}m`;
+  };
+
+  const getTotalBreakTime = () => {
+    if (!todayAttendance?.breaks) return 0;
+
+    let totalBreakTime = 0;
+    todayAttendance.breaks.forEach((b) => {
+      if (b.breakEnd) {
+        const breakStart = new Date(b.breakStart);
+        const breakEnd = new Date(b.breakEnd);
+        totalBreakTime += breakEnd - breakStart;
+      }
+    });
+
+    // Add current break time if active
+    if (isBreakActive && activeBreak?.breakStart) {
+      totalBreakTime += new Date() - new Date(activeBreak.breakStart);
+    }
+
+    return totalBreakTime;
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Attendance System
-          </h1>
-          <p className="text-gray-600">
-            Track your daily attendance and working hours
-          </p>
+    <div className="min-h-screen">
+      <div className=" mx-auto">
+        <div className=" mb-2 animate-slideDown">
+          <h2 className="text-2xl font-semibold  ">⏱️ Attendance Tracker</h2>
         </div>
 
         {/* Current Time Card */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg p-8 mb-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center space-x-3 mb-2">
-                <Clock className="w-8 h-8" />
-                <div className="text-5xl font-bold">
-                  {currentTime.toLocaleTimeString("en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: true,
-                  })}
-                </div>
-              </div>
-              <div className="text-blue-100 text-lg">
-                {currentTime.toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </div>
-            </div>
+        <div className="flex justify-between items-center  bg-accent-dark rounded-xl shadow-lg p-4 mb-3 text-white">
+          <div>
             {location && (
-              <div className="text-right">
-                <MapPin className="w-6 h-6 mb-2 ml-auto" />
-                <p className="text-blue-100 text-sm">Location Enabled</p>
-                <p className="text-xs text-blue-200">
+              <div className=" flex items-center gap-4">
+                <MapPin size={20} />
+                <p className="text-white-500 text-sm">Location Enabled : </p>
+                <p className="text-xs text-white-500">
                   {location.latitude.toFixed(4)},{" "}
                   {location.longitude.toFixed(4)}
                 </p>
               </div>
             )}
           </div>
+          <div className="flex items-center gap-4">
+            <div className="flex  items-center gap-4  text-white-500 ">
+              <Clock size={20} />
+              {currentTime.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </div>
+            <div className="">
+              <div className="text-medium font-bold">
+                {currentTime.toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                  hour12: true,
+                })}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,40%)_minmax(0,60%)] gap-6 mb-6">
           {/* Punch Card */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className=" bg-accent-light rounded-xl border border-accent-dark shadow-lg p-4">
+            <h3 className="text-lg text-center font-semibold text-gray-900 mb-4">
               Today's Attendance
             </h3>
-
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-4 bg-green-50 rounded-lg">
-                <div>
-                  <p className="text-sm text-gray-600">Punch In</p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {formatTime(todayAttendance?.punchIn?.time)}
+              <div className="p-4 text-center  rounded-lg">
+                <CircularProgress
+                  workingTime={workingTime}
+                  shiftStartTime={todayAttendance?.shift?.startTime}
+                  shiftEndTime={todayAttendance?.shift?.endTime}
+                  isPunchedIn={
+                    todayAttendance?.punchIn?.time &&
+                    !todayAttendance?.punchOut?.time
+                  }
+                  workingHours={todayAttendance?.workingHours}
+                />
+              </div>
+
+              <div className="flex items-stretch w-full gap-4">
+                <div className="w-1/2 flex items-center gap-2 px-4 py-2  rounded-lg border bg-white">
+                  <LogIn className="w-6 h-6 text-green-600" />
+                  <div>
+                    <div className="  flex gap-4 items-center ">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm text-gray-600">Punch In</p>
+                        <p className=" font-bold text-gray-900">
+                          {formatTime(todayAttendance?.punchIn?.time)}
+                        </p>
+                      </div>
+                    </div>
+                    {todayAttendance?.isLate && (
+                      <span className="inline-flex items-center text-xs text-orange-600 mt-1">
+                        <AlertCircle className="w-3 h-3 mr-1" />
+                        Late by {todayAttendance.lateBy} mins
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="w-1/2 px-4 py-2  rounded-lg bg-white">
+                  <div className=" flex gap-4 items-center ">
+                    <LogOut className="w-6 h-6 text-red-600" />
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-gray-600">Punch Out</p>
+                      <p className=" font-bold text-gray-900">
+                        {formatTime(todayAttendance?.punchOut?.time)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Break Time Display */}
+              {isBreakActive && (
+                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <p className="text-sm text-yellow-700 mb-1">Break Time</p>
+                  <p className="text-3xl font-bold text-yellow-600 font-mono">
+                    {breakTime}
                   </p>
-                  {todayAttendance?.isLate && (
-                    <span className="inline-flex items-center text-xs text-orange-600 mt-1">
-                      <AlertCircle className="w-3 h-3 mr-1" />
-                      Late by {todayAttendance.lateBy} mins
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
+                    <span className="text-xs text-yellow-700 capitalize">
+                      {activeBreak?.type} Break
                     </span>
-                  )}
+                  </div>
                 </div>
-                <LogIn className="w-8 h-8 text-green-600" />
-              </div>
-
-              <div className="flex justify-between items-center p-4 bg-red-50 rounded-lg">
-                <div>
-                  <p className="text-sm text-gray-600">Punch Out</p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {formatTime(todayAttendance?.punchOut?.time)}
-                  </p>
-                </div>
-                <LogOut className="w-8 h-8 text-red-600" />
-              </div>
-
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <p className="text-sm text-gray-600">Working Hours</p>
-                <p className="text-3xl font-bold text-blue-600">
-                  {todayAttendance?.workingHours?.toFixed(2) ||
-                    calculateWorkingHours()}
-                </p>
-              </div>
+              )}
 
               <div className="grid grid-cols-2 gap-3">
                 <button
@@ -616,7 +648,7 @@ const PunchInOut = () => {
                 </button>
 
                 <button
-                  onClick={handlePunchOut}
+                  onClick={handleShowPunchOutModal}
                   disabled={
                     isPunchingOut ||
                     !todayAttendance?.punchIn?.time ||
@@ -638,7 +670,9 @@ const PunchInOut = () => {
               {todayAttendance?.punchIn?.time &&
                 !todayAttendance?.punchOut?.time && (
                   <button
-                    onClick={isBreakActive ? handleEndBreak : handleStartBreak}
+                    onClick={
+                      isBreakActive ? handleEndBreak : handleShowBreakModal
+                    }
                     className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium transition-colors ${
                       isBreakActive
                         ? "bg-orange-600 text-white hover:bg-orange-700"
@@ -653,7 +687,7 @@ const PunchInOut = () => {
           </div>
 
           {/* Status Card */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className=" bg-white rounded-xl shadow-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Today's Status
             </h3>
@@ -768,10 +802,10 @@ const PunchInOut = () => {
             {activeTab === "today" && todayAttendance && (
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="border rounded-lg p-4">
+                  <div className=" rounded-lg p-4">
                     <p className="text-sm text-gray-600 mb-1">Working Hours</p>
                     <p className="text-2xl font-bold text-blue-600">
-                      {todayAttendance.workingHours?.toFixed(2) || "0.00"} hrs
+                      {formatHoursToHM(todayAttendance?.workingHours)}
                     </p>
                   </div>
                   <div className="border rounded-lg p-4">
@@ -878,7 +912,8 @@ const PunchInOut = () => {
                         <div>
                           <p className="text-gray-600">Hours</p>
                           <p className="font-medium">
-                            {record.workingHours?.toFixed(2)} hrs
+                            {formatHoursToHM(record.workingHours)}
+                            {/* {record.workingHours?.toFixed(2)} hrs */}
                           </p>
                         </div>
                       </div>
@@ -949,8 +984,130 @@ const PunchInOut = () => {
           </div>
         </div>
       </div>
+
+      {/* Break Type Modal */}
+      {showBreakModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-5 z-50 animate-fadeIn">
+          <div className="bg-white rounded-xl p-7 max-w-xl w-full shadow-2xl animate-scaleIn">
+            <div className="text-xl font-semibold mb-5 text-gray-900">
+              Select Break Type
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-3">
+              {Object.entries(breakTypes).map(([key, value]) => (
+                <div
+                  key={key}
+                  onClick={() => handleSelectBreakType(value.name)}
+                  className={`cursor-pointer transition-all border-2 rounded-xl
+        flex flex-col items-center justify-between p-4
+        min-h-[120px]
+        ${
+          selectedBreakType === key
+            ? "bg-blue-50 border-blue-500"
+            : "bg-gray-50 border-transparent hover:bg-gray-100 hover:border-blue-300"
+        }`}
+                >
+                  {/* Icon */}
+                  <div className="w-10 h-10 mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-xl text-white">
+                    {value.icon}
+                  </div>
+
+                  {/* Text */}
+                  <div className="text-center">
+                    <div className="font-semibold text-gray-900">
+                      {value.name}
+                    </div>
+                    <div className="text-sm text-gray-600">{value.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={handleStartBreak}
+                disabled={!selectedBreakType}
+                className={`w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-3 transition-all ${
+                  selectedBreakType
+                    ? "bg-gradient-to-r from-green-600 to-green-500 text-white hover:shadow-lg hover:shadow-green-500/30 hover:-translate-y-0.5"
+                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                <Coffee className="w-5 h-5" />
+                Start Break
+              </button>
+              <button
+                onClick={() => {
+                  setShowBreakModal(false);
+                  setSelectedBreakType(null);
+                }}
+                className="w-full bg-gray-100 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Punch Out Confirmation Modal */}
+      {showPunchOutModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-5 z-50 animate-fadeIn">
+          <div className="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl animate-scaleIn">
+            <div className="text-xl font-semibold mb-5 text-gray-900">
+              Confirm Punch Out
+            </div>
+
+            <div className="bg-gray-50 rounded-xl p-4 mb-4">
+              <h3 className="text-sm text-gray-600 mb-3">Today's Summary</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 mb-1">Total Work</div>
+                  <div className="text-lg font-semibold font-mono text-gray-900">
+                    {workingTime}
+                  </div>
+                </div>
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 mb-1">Total Breaks</div>
+                  <div className="text-lg font-semibold font-mono text-gray-900">
+                    {formatTimeFromMs(getTotalBreakTime())}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 rounded-xl p-4 mb-5 border border-gray-200">
+              <div className="flex items-center gap-2 text-gray-600 text-sm mb-2">
+                <MapPin className="w-4 h-4" />
+                Punch Out Location
+              </div>
+              <div className="text-gray-900 text-sm">
+                {location
+                  ? `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`
+                  : "Detecting location..."}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={handlePunchOut}
+                disabled={isPunchingOut}
+                className="w-full bg-gradient-to-r from-red-600 to-red-500 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-red-500/30 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <LogOut className="w-5 h-5" />
+                {isPunchingOut ? "Punching Out..." : "Confirm Punch Out"}
+              </button>
+              <button
+                onClick={() => setShowPunchOutModal(false)}
+                className="w-full bg-gray-100 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default PunchInOut;
+export default AttendanceTracker;

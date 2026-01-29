@@ -7,7 +7,6 @@ import WorkingHoursTimeline from "../../components/attendance/WorkingHoursTimeli
 export default function Attandance() {
   return (
     <div className="min-h-screen space-y-4">
-      <SuccessBanner message='Your leave request on "24 April 2024" was approved!' />
       <div>
         <AttendanceSummary />
       </div>
