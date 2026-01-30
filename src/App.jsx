@@ -51,6 +51,8 @@ import ManagerLeaveDashboard from "./pages/Leaves/manager/ManagerLeaveDashboard"
 import Shifts from "./pages/HRMS/Shifts";
 import AddShift from "./components/hrms/AddShift";
 import EditShift from "./components/hrms/EditShift";
+import DemoHolidays from "./pages/DemoHolidays";
+import DemoLeaves from "./pages/DemoLeaves";
 
 const App = () => {
   const location = useLocation();
@@ -180,6 +182,25 @@ const App = () => {
               element={
                 <ProtectedRoute resource="users" action="update">
                   <EditShift />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Holidays */}
+            <Route
+              path="/demo-holidays"
+              element={
+                <ProtectedRoute resource="customers" action="read">
+                  <DemoHolidays />
+                </ProtectedRoute>
+              }
+            />
+            {/* Leaves */}
+            <Route
+              path="/demo-leaves"
+              element={
+                <ProtectedRoute resource="customers" action="read">
+                  <DemoLeaves />
                 </ProtectedRoute>
               }
             />

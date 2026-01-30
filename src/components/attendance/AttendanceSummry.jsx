@@ -7,7 +7,7 @@ export default function AttendanceSummary() {
   return (
     <div className="grid grid-cols-12 gap-4 items-stretch">
       <div className="col-span-12  h-full">
-        <div className="h-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-4 ">
+        <div className="h-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl p-4 ">
           <AttendanceTracker />
         </div>
       </div>
@@ -45,7 +45,6 @@ export default function AttendanceSummary() {
           />
         </div>
 
-        
         <div className="flex-1">
           <div className="h-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm p-4 flex flex-col justify-between">
             <div>

@@ -8,6 +8,9 @@ export default function Attandance() {
   return (
     <div className="min-h-screen space-y-4">
       <div>
+        <div className=" mb-2 animate-slideDown">
+          <h2 className="text-2xl font-semibold  ">Attendance Tracker</h2>
+        </div>
         <AttendanceSummary />
       </div>
       <div className="grid grid-cols-12 gap-3 items-stretch">

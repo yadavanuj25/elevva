@@ -13,7 +13,12 @@ import {
   Briefcase,
   Download,
   Filter,
+  CookingPot,
+  BedDouble,
+  Utensils,
+  Soup,
 } from "lucide-react";
+import { IoFingerPrint } from "react-icons/io5";
 import {
   endBreak,
   getAttendanceHistory,
@@ -22,108 +27,9 @@ import {
   punchOut,
   startBreak,
 } from "../../services/attendanceServices";
-// import WorkingHoursCircle from "./WorkingHoursCircle";
-
-const CircularProgress = ({
-  workingTime,
-  shiftStartTime,
-  shiftEndTime,
-  isPunchedIn,
-  workingHours,
-}) => {
-  const calculateProgress = () => {
-    if (!shiftStartTime || !shiftEndTime) return 0;
-    const parseTime = (timeStr) => {
-      if (!timeStr) return 0;
-      if (!timeStr.includes("AM") && !timeStr.includes("PM")) {
-        const [hours, minutes] = timeStr.split(":").map(Number);
-        return hours + minutes / 60;
-      }
-      const [time, period] = timeStr.split(" ");
-      const [hours, minutes] = time.split(":").map(Number);
-      let totalHours = hours;
-
-      if (period === "PM" && hours !== 12) totalHours += 12;
-      if (period === "AM" && hours === 12) totalHours = 0;
-
-      return totalHours + minutes / 60;
-    };
-
-    const shiftStart = parseTime(shiftStartTime);
-    const shiftEnd = parseTime(shiftEndTime);
-
-    // Calculate total shift duration
-    let shiftDuration = shiftEnd - shiftStart;
-    if (shiftDuration < 0) shiftDuration += 24; // Handle overnight shifts
-
-    // Get current working hours
-    let currentHours = 0;
-    if (isPunchedIn && workingTime) {
-      const [hours, minutes, seconds] = workingTime.split(":").map(Number);
-      currentHours = hours + minutes / 60 + seconds / 3600;
-    } else if (workingHours) {
-      currentHours = workingHours;
-    }
-
-    // Calculate percentage (max 100%)
-    const percentage = Math.min((currentHours / shiftDuration) * 100, 100);
-    return percentage;
-  };
-
-  const formatDisplayTime = () => {
-    if (isPunchedIn && workingTime) {
-      return workingTime;
-    } else if (workingHours) {
-      const hours = Math.floor(workingHours);
-      const minutes = Math.floor((workingHours % 1) * 60);
-      return `${hours}:${minutes.toString().padStart(2, "0")}:00`;
-    }
-    return "0:00:00";
-  };
-
-  const progress = calculateProgress();
-  const circumference = 2 * Math.PI * 70; // radius = 70
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
-
-  return (
-    <div className="relative inline-flex items-center justify-center">
-      <svg className="transform -rotate-90" width="160" height="160">
-        {/* Background circle */}
-        <circle
-          cx="80"
-          cy="80"
-          r="70"
-          stroke="gray"
-          strokeWidth="15"
-          fill="#fff"
-        />
-        {/* Progress circle */}
-        <circle
-          cx="80"
-          cy="80"
-          r="70"
-          stroke="green"
-          strokeWidth="8"
-          fill="#fff"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          style={{
-            transition: "stroke-dashoffset 0.5s ease",
-          }}
-        />
-      </svg>
-      {/* Center text */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <p className=" text-gray-500 mb-1">Total Hours</p>
-        <p className="font-bold text-black ">{formatDisplayTime()}</p>
-        <p className="text-xs text-green-600 font-medium mt-1">
-          {progress.toFixed(0)}%
-        </p>
-      </div>
-    </div>
-  );
-};
+import CircularProgress from "./CircularProgress";
+import AttendanceStats from "./AttendanceStats";
+import StatCard from "./StatCard";
 
 const AttendanceTracker = () => {
   const [todayAttendance, setTodayAttendance] = useState(null);
@@ -143,7 +49,7 @@ const AttendanceTracker = () => {
   const [selectedBreakType, setSelectedBreakType] = useState(null);
   const [workingTime, setWorkingTime] = useState("00:00:00");
   const [breakTime, setBreakTime] = useState("00:00:00");
-
+  const [address, setAddress] = useState("");
   const [filters, setFilters] = useState({
     startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
       .toISOString()
@@ -156,15 +62,33 @@ const AttendanceTracker = () => {
   // Break types configuration
 
   const breakTypes = {
-    lunch: { name: "Lunch-Break", desc: "Meal time break", icon: "🍽️" },
-    tea: { name: "Tea-Break", desc: "Tea time break", icon: "🍽️" },
-
+    lunch: {
+      name: "Lunch-Break",
+      desc: "Meal time break",
+      icon: <Utensils />,
+      bg: "bg-green-600",
+    },
+    tea: {
+      name: "Tea-Break",
+      desc: "Tea time break",
+      icon: <Soup />,
+      bg: "bg-orange-600",
+    },
     personal: {
       name: "Personal-Break",
       desc: "Restroom, coffee",
-      icon: "👤",
+      icon: <BedDouble />,
+      bg: "bg-blue-600",
     },
   };
+
+  useEffect(() => {
+    if (location?.latitude && location?.longitude) {
+      getAddressFromCoords(location.latitude, location.longitude).then(
+        setAddress,
+      );
+    }
+  }, [location]);
 
   useEffect(() => {
     fetchTodayAttendance();
@@ -176,7 +100,7 @@ const AttendanceTracker = () => {
   }, []);
 
   useEffect(() => {
-    if (activeTab === "history") {
+    if (activeTab === "history" || activeTab === "stats") {
       fetchHistory();
     }
   }, [activeTab, filters]);
@@ -248,27 +172,6 @@ const AttendanceTracker = () => {
     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   };
 
-  const formatDay = (date) => {
-    if (!date) return "";
-
-    const d = new Date(date);
-
-    const datePart = new Intl.DateTimeFormat("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "2-digit",
-    }).format(d);
-
-    const timePart = new Intl.DateTimeFormat("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    }).format(d);
-
-    return `${datePart} at ${timePart}`;
-  };
-
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -307,7 +210,6 @@ const AttendanceTracker = () => {
         page: filters.page,
         limit: filters.limit,
       });
-
       setHistory(res.data || []);
       setStats(res.stats || null);
     } catch (error) {
@@ -445,7 +347,7 @@ const AttendanceTracker = () => {
   };
 
   const formatTime = (date) => {
-    if (!date) return "--:--";
+    if (!date) return "00 : 00";
     return new Date(date).toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
@@ -473,35 +375,28 @@ const AttendanceTracker = () => {
     return colors[status] || "bg-gray-100 text-gray-800";
   };
 
-  const calculateWorkingHours = () => {
-    if (!todayAttendance?.punchIn?.time) return "00:00:00";
-
-    const start = new Date(todayAttendance.punchIn.time);
-    const end = todayAttendance.punchOut?.time
-      ? new Date(todayAttendance.punchOut.time)
-      : new Date();
-    const diff = end - start;
-
-    const hours = Math.floor(diff / 3600000);
-    const minutes = Math.floor((diff % 3600000) / 60000);
-    const seconds = Math.floor((diff % 60000) / 1000);
-
-    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  };
-
   const formatHoursToHM = (hours) => {
     if (hours === null || hours === undefined) return "0h 0m";
-
     const totalMinutes = Math.round(hours * 60);
     const h = Math.floor(totalMinutes / 60);
     const m = totalMinutes % 60;
-
     return `${h}h ${m}m`;
+  };
+  const getAddressFromCoords = async (lat, lng) => {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+      );
+      const data = await res.json();
+      return data.display_name;
+    } catch (err) {
+      console.error("Failed to fetch address", err);
+      return "";
+    }
   };
 
   const getTotalBreakTime = () => {
     if (!todayAttendance?.breaks) return 0;
-
     let totalBreakTime = 0;
     todayAttendance.breaks.forEach((b) => {
       if (b.breakEnd) {
@@ -521,28 +416,26 @@ const AttendanceTracker = () => {
 
   return (
     <div className="min-h-screen">
-      <div className=" mx-auto">
-        <div className=" mb-2 animate-slideDown">
-          <h2 className="text-2xl font-semibold  ">⏱️ Attendance Tracker</h2>
-        </div>
-
+      <div>
         {/* Current Time Card */}
-        <div className="flex justify-between items-center  bg-accent-dark rounded-xl shadow-lg p-4 mb-3 text-white">
-          <div>
-            {location && (
-              <div className=" flex items-center gap-4">
-                <MapPin size={20} />
-                <p className="text-white-500 text-sm">Location Enabled : </p>
-                <p className="text-xs text-white-500">
-                  {location.latitude.toFixed(4)},{" "}
-                  {location.longitude.toFixed(4)}
+        <div className="flex justify-between items-center border border-accent-dark  bg-accent-light rounded-xl  p-4 mb-6 text-accent-dark">
+          <div className=" flex items-center gap-2">
+            <MapPin size={18} />
+            {location ? (
+              <div className="flex items-center gap-2 max-w-xs">
+                <p className="text-sm  truncate" title={address}>
+                  {address || "Detecting location..."}
                 </p>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 ">
+                <p className="text-sm">Location unavailable</p>
               </div>
             )}
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex  items-center gap-4  text-white-500 ">
-              <Clock size={20} />
+          <div className="flex items-center gap-2">
+            <div className="flex  items-center gap-2   ">
+              <Clock size={18} />
               {currentTime.toLocaleDateString("en-US", {
                 weekday: "long",
                 month: "long",
@@ -550,8 +443,9 @@ const AttendanceTracker = () => {
                 year: "numeric",
               })}
             </div>
-            <div className="">
-              <div className="text-medium font-bold">
+
+            <div className="rounded-lg bg-white/80 px-4 py-1 backdrop-blur-sm">
+              <div className="font-mono text-lg font-semibold">
                 {currentTime.toLocaleTimeString("en-US", {
                   hour: "2-digit",
                   minute: "2-digit",
@@ -564,14 +458,14 @@ const AttendanceTracker = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,40%)_minmax(0,60%)] gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,40%)_minmax(0,70%)] gap-6 mb-6">
           {/* Punch Card */}
-          <div className=" bg-accent-light rounded-xl border border-accent-dark shadow-lg p-4">
-            <h3 className="text-lg text-center font-semibold text-gray-900 mb-4">
-              Today's Attendance
-            </h3>
-            <div className="space-y-4">
-              <div className="p-4 text-center  rounded-lg">
+          <div className="  rounded-xl border border-accent-dark  p-4">
+            <div className="">
+              <h3 className="text-lg text-center font-semibold  ">
+                Today's Attendance
+              </h3>
+              <div className=" text-center  p-2">
                 <CircularProgress
                   workingTime={workingTime}
                   shiftStartTime={todayAttendance?.shift?.startTime}
@@ -584,14 +478,14 @@ const AttendanceTracker = () => {
                 />
               </div>
 
-              <div className="flex items-stretch w-full gap-4">
-                <div className="w-1/2 flex items-center gap-2 px-4 py-2  rounded-lg border bg-white">
-                  <LogIn className="w-6 h-6 text-green-600" />
+              <div className="flex items-center justify-center ">
+                <div className="w-1/2 flex items-center gap-2  mb-4  ">
+                  <IoFingerPrint className="w-8 h-8 text-accent-dark" />
                   <div>
                     <div className="  flex gap-4 items-center ">
                       <div className="flex items-center gap-2">
-                        <p className="text-sm text-gray-600">Punch In</p>
-                        <p className=" font-bold text-gray-900">
+                        <p className="text-sm text-gray-500">Punch In</p>
+                        <p className=" font-bold ">
                           {formatTime(todayAttendance?.punchIn?.time)}
                         </p>
                       </div>
@@ -604,40 +498,33 @@ const AttendanceTracker = () => {
                     )}
                   </div>
                 </div>
-                <div className="w-1/2 px-4 py-2  rounded-lg bg-white">
-                  <div className=" flex gap-4 items-center ">
-                    <LogOut className="w-6 h-6 text-red-600" />
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-gray-600">Punch Out</p>
-                      <p className=" font-bold text-gray-900">
-                        {formatTime(todayAttendance?.punchOut?.time)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               {/* Break Time Display */}
               {isBreakActive && (
-                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <p className="text-sm text-yellow-700 mb-1">Break Time</p>
-                  <p className="text-3xl font-bold text-yellow-600 font-mono">
-                    {breakTime}
-                  </p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
-                    <span className="text-xs text-yellow-700 capitalize">
-                      {activeBreak?.type} Break
-                    </span>
+                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200 mb-2">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm text-yellow-700 ">Break Time</p>
+                      <div className="flex items-center gap-2 ">
+                        <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
+                        <span className="text-xs text-yellow-700 capitalize">
+                          {activeBreak?.type} Break
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-medium font-bold text-yellow-600">
+                      {breakTime}
+                    </p>
                   </div>
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 ">
                 <button
                   onClick={handlePunchIn}
                   disabled={isPunchingIn || todayAttendance?.punchIn?.time}
-                  className={`flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium transition-colors ${
+                  className={`flex items-center justify-center mb-2 space-x-2 py-3 px-4 rounded-lg font-medium transition-colors ${
                     todayAttendance?.punchIn?.time
                       ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                       : "bg-green-600 text-white hover:bg-green-700"
@@ -646,7 +533,6 @@ const AttendanceTracker = () => {
                   <LogIn className="w-5 h-5" />
                   <span>{isPunchingIn ? "Punching..." : "Punch In"}</span>
                 </button>
-
                 <button
                   onClick={handleShowPunchOutModal}
                   disabled={
@@ -654,7 +540,7 @@ const AttendanceTracker = () => {
                     !todayAttendance?.punchIn?.time ||
                     todayAttendance?.punchOut?.time
                   }
-                  className={`flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium transition-colors ${
+                  className={`flex items-center justify-center space-x-2 mb-2 py-3 px-4 rounded-lg font-medium transition-colors ${
                     !todayAttendance?.punchIn?.time ||
                     todayAttendance?.punchOut?.time
                       ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -686,83 +572,94 @@ const AttendanceTracker = () => {
             </div>
           </div>
 
-          {/* Status Card */}
-          <div className=" bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Today's Status
-            </h3>
-
-            {todayAttendance ? (
-              <div className="space-y-4">
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-600 mb-2">Status</p>
-                  <span
-                    className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(todayAttendance.status)}`}
-                  >
-                    {todayAttendance.status}
-                  </span>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-600 mb-2">Shift</p>
-                  <p className="font-semibold text-gray-900">
-                    {todayAttendance.shift?.name || "No Shift"}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    {todayAttendance.shift?.startTime} -{" "}
-                    {todayAttendance.shift?.endTime}
-                  </p>
-                </div>
-
-                {todayAttendance.breaks &&
-                  todayAttendance.breaks.length > 0 && (
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-sm text-gray-600 mb-2">Breaks Taken</p>
-                      <div className="space-y-2">
-                        {todayAttendance.breaks.map((breakItem, idx) => (
-                          <div
-                            key={idx}
-                            className="flex justify-between text-sm"
-                          >
-                            <span className="text-gray-700 capitalize">
-                              {breakItem.type}
-                            </span>
-                            <span className="font-semibold text-gray-900">
-                              {breakItem.duration
-                                ? `${breakItem.duration} mins`
-                                : "Ongoing"}
-                            </span>
-                          </div>
-                        ))}
+          <div className="space-y-4 h-full p-4 rounded-xl border border-gray-300 dark:border-gray-600">
+            <h3 className="text-lg  font-semibold  ">Today's Status</h3>
+            <div className="flex flex-col gap-4 ">
+              {<AttendanceStats attendance={todayAttendance} />}
+              {/* Status Card */}
+              <div>
+                {todayAttendance ? (
+                  <div className="space-y-4">
+                    <div className=" flex -items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                          Status
+                        </p>
+                        <span
+                          className={`inline-block px-2 py-1 rounded text-xs font-semibold capitalize ${getStatusColor(todayAttendance.status)}`}
+                        >
+                          {todayAttendance.status}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                          Shift
+                        </p>
+                        <p className="font-semibold text-gray-700 dark:text-gray-200">
+                          {todayAttendance.shift?.name || "No Shift"}
+                        </p>
+                        <p className="text-sm text-gray-700 dark:text-gray-200">
+                          {todayAttendance.shift?.startTime} -{" "}
+                          {todayAttendance.shift?.endTime}
+                        </p>
                       </div>
                     </div>
-                  )}
 
-                {todayAttendance.overtimeHours > 0 && (
-                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-sm text-green-700 mb-1">
-                      Overtime Hours
+                    {todayAttendance.breaks &&
+                      todayAttendance.breaks.length > 0 && (
+                        <div className="px-4 py-2  bg-gray-50 dark:bg-gray-700 rounded-lg">
+                          <p className="text-sm  text-gray-500 dark:text-gray-400 mb-2">
+                            Breaks History
+                          </p>
+                          <div className="space-y-2">
+                            {todayAttendance.breaks.map((breakItem, idx) => (
+                              <div
+                                key={idx}
+                                className="flex justify-between text-sm text-gray-700 dark:text-gray-300"
+                              >
+                                <span className=" capitalize">
+                                  {breakItem.type}
+                                </span>
+                                <span className="font-semibold ">
+                                  {breakItem.duration
+                                    ? `${breakItem.duration} mins`
+                                    : "Ongoing"}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                    {todayAttendance.overtimeHours > 0 && (
+                      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <p className="text-sm text-green-700 mb-1">
+                          Overtime Hours
+                        </p>
+                        <p className="text-2xl font-bold text-green-600">
+                          {todayAttendance.overtimeHours.toFixed(2)} hrs
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <Calendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                    <p className="text-gray-500">
+                      No attendance record for today
                     </p>
-                    <p className="text-2xl font-bold text-green-600">
-                      {todayAttendance.overtimeHours.toFixed(2)} hrs
+                    <p className="text-sm text-gray-400 mt-2">
+                      Punch in to start tracking
                     </p>
                   </div>
                 )}
               </div>
-            ) : (
-              <div className="text-center py-8">
-                <Calendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                <p className="text-gray-500">No attendance record for today</p>
-                <p className="text-sm text-gray-400 mt-2">
-                  Punch in to start tracking
-                </p>
-              </div>
-            )}
+            </div>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-xl shadow-lg">
+        <div className="border border-gray-300 dark:border-gray-600 rounded-xl ">
           <div className="border-b border-gray-200">
             <nav className="flex -mb-px">
               <button
@@ -798,7 +695,7 @@ const AttendanceTracker = () => {
             </nav>
           </div>
 
-          <div className="p-6">
+          <div className="p-4">
             {activeTab === "today" && todayAttendance && (
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -881,7 +778,7 @@ const AttendanceTracker = () => {
                       key={index}
                       className="border rounded-lg p-4 hover:shadow-md transition-shadow"
                     >
-                      <div className="flex justify-between items-start mb-2">
+                      <div className="grid grid-cols-5 gap-4 text-sm">
                         <div>
                           <p className="font-medium text-gray-900">
                             {formatDate(record.date)}
@@ -890,19 +787,19 @@ const AttendanceTracker = () => {
                             {record.shift?.name}
                           </p>
                         </div>
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(record.status)}`}
-                        >
-                          {record.status}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-3 gap-4 text-sm">
+
                         <div>
                           <p className="text-gray-600">In</p>
                           <p className="font-medium">
                             {formatTime(record.punchIn?.time)}
                           </p>
                         </div>
+                        <span
+                          className={`px-1 py-1  flex justify-center items-center rounded text-xs font-medium capitalize ${getStatusColor(record.status)}`}
+                        >
+                          {record.status}
+                        </span>
+
                         <div>
                           <p className="text-gray-600">Out</p>
                           <p className="font-medium">
@@ -913,7 +810,6 @@ const AttendanceTracker = () => {
                           <p className="text-gray-600">Hours</p>
                           <p className="font-medium">
                             {formatHoursToHM(record.workingHours)}
-                            {/* {record.workingHours?.toFixed(2)} hrs */}
                           </p>
                         </div>
                       </div>
@@ -924,61 +820,49 @@ const AttendanceTracker = () => {
             )}
 
             {activeTab === "stats" && stats && (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="bg-blue-50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <Calendar className="w-8 h-8 text-blue-600" />
-                  </div>
-                  <p className="text-sm text-gray-600">Total Days</p>
-                  <p className="text-3xl font-bold text-blue-600">
-                    {stats.totalDays}
-                  </p>
-                </div>
-                <div className="bg-green-50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <CheckCircle className="w-8 h-8 text-green-600" />
-                  </div>
-                  <p className="text-sm text-gray-600">Present</p>
-                  <p className="text-3xl font-bold text-green-600">
-                    {stats.present}
-                  </p>
-                </div>
-                <div className="bg-red-50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <XCircle className="w-8 h-8 text-red-600" />
-                  </div>
-                  <p className="text-sm text-gray-600">Absent</p>
-                  <p className="text-3xl font-bold text-red-600">
-                    {stats.absent}
-                  </p>
-                </div>
-                <div className="bg-yellow-50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <AlertCircle className="w-8 h-8 text-yellow-600" />
-                  </div>
-                  <p className="text-sm text-gray-600">Half Day</p>
-                  <p className="text-3xl font-bold text-yellow-600">
-                    {stats.halfDay}
-                  </p>
-                </div>
-                <div className="bg-purple-50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <Briefcase className="w-8 h-8 text-purple-600" />
-                  </div>
-                  <p className="text-sm text-gray-600">Total Hours</p>
-                  <p className="text-3xl font-bold text-purple-600">
-                    {stats.totalWorkingHours}
-                  </p>
-                </div>
-                <div className="bg-indigo-50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <TrendingUp className="w-8 h-8 text-indigo-600" />
-                  </div>
-                  <p className="text-sm text-gray-600">Overtime</p>
-                  <p className="text-3xl font-bold text-indigo-600">
-                    {stats.totalOvertimeHours}
-                  </p>
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+                <StatCard
+                  bgColor="bg-orange-100"
+                  iconBg="bg-orange-500"
+                  icon={Calendar}
+                  value={stats.totalDays}
+                  label="Total Days"
+                />
+                <StatCard
+                  bgColor="bg-green-100"
+                  iconBg="bg-green-500"
+                  icon={CheckCircle}
+                  value={stats.present}
+                  label="Total Present"
+                />
+                <StatCard
+                  bgColor="bg-red-100"
+                  iconBg="bg-red-500"
+                  icon={XCircle}
+                  value={stats.absent}
+                  label="Total Absent"
+                />
+                <StatCard
+                  bgColor="bg-yellow-100"
+                  iconBg="bg-yellow-500"
+                  icon={AlertCircle}
+                  value={stats.halfDay}
+                  label="Total HalfDay"
+                />
+                <StatCard
+                  bgColor="bg-purple-100"
+                  iconBg="bg-purple-500"
+                  icon={Briefcase}
+                  value={stats.totalWorkingHours}
+                  label="Total Working Hours"
+                />
+                <StatCard
+                  bgColor="bg-indigo-100"
+                  iconBg="bg-indigo-500"
+                  icon={TrendingUp}
+                  value={stats.totalOvertimeHours}
+                  label="Total Overtime Hours"
+                />
               </div>
             )}
           </div>
@@ -1002,12 +886,15 @@ const AttendanceTracker = () => {
         min-h-[120px]
         ${
           selectedBreakType === key
-            ? "bg-blue-50 border-blue-500"
+            ? "bg-blue-50 border border-blue-500  "
             : "bg-gray-50 border-transparent hover:bg-gray-100 hover:border-blue-300"
         }`}
                 >
                   {/* Icon */}
-                  <div className="w-10 h-10 mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-xl text-white">
+                  <div
+                    className={`w-10 h-10 mb-4 ${value.bg} rounded-lg flex items-center justify-center text-xl text-whit`}
+                    e
+                  >
                     {value.icon}
                   </div>
 
