@@ -14,6 +14,7 @@ import { useMessage } from "../../auth/MessageContext";
 import BackButton from "../ui/buttons/BackButton";
 import FormSkeleton from "../loaders/FormSkeleton";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { TimePicker } from "../ui/TimePicker";
 
 const shiftSchema = yup.object({
   name: yup.string().required("Shift name is required"),
@@ -256,7 +257,7 @@ const EditShift = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-2 gap-4">
               <Input
                 type="time"
                 labelName="Start Time"
@@ -272,6 +273,24 @@ const EditShift = () => {
                 value={formData.endTime}
                 handleChange={handleChange}
                 errors={errors}
+              />
+            </div> */}
+
+            <div className="grid grid-cols-2 gap-4">
+              <TimePicker
+                label="Start Time"
+                name="startTime"
+                value={formData.startTime}
+                handleChange={handleChange}
+                error={errors?.startTime}
+              />
+
+              <TimePicker
+                label="End Time"
+                name="endTime"
+                value={formData.endTime}
+                handleChange={handleChange}
+                error={errors?.endTime}
               />
             </div>
 

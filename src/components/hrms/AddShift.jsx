@@ -11,6 +11,7 @@ import BackButton from "../ui/buttons/BackButton";
 import { useNavigate } from "react-router-dom";
 import { useMessage } from "../../auth/MessageContext";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { TimePicker } from "../ui/TimePicker";
 const shiftSchema = yup.object({
   name: yup.string().required("Shift name is required"),
   timezone: yup.string().required("Timezone is required"),
@@ -75,7 +76,7 @@ const initialFormState = {
 
 const AddShift = () => {
   const navigate = useNavigate();
-  const { errorMsg, showSuccess, showError } = useMessage();
+  const { errorMsg, showError } = useMessage();
   const [formData, setFormData] = useState(initialFormState);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -217,7 +218,7 @@ const AddShift = () => {
         </div>
 
         {/* Timing */}
-        <div className="grid grid-cols-2 gap-4">
+        {/* <div className="grid grid-cols-2 gap-4">
           <Input
             type="time"
             labelName="Start Time"
@@ -233,6 +234,23 @@ const AddShift = () => {
             value={formData.endTime}
             handleChange={handleChange}
             errors={errors}
+          />
+        </div> */}
+        <div className="grid grid-cols-2 gap-4">
+          <TimePicker
+            label="Start Time"
+            name="startTime"
+            value={formData.startTime}
+            handleChange={handleChange}
+            error={errors?.startTime}
+          />
+
+          <TimePicker
+            label="End Time"
+            name="endTime"
+            value={formData.endTime}
+            handleChange={handleChange}
+            error={errors?.endTime}
           />
         </div>
 

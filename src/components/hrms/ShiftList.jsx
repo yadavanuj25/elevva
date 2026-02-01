@@ -23,6 +23,9 @@ import CustomSwal from "../../utils/CustomSwal";
 import { useMessage } from "../../auth/MessageContext";
 import ErrorMessage from "../modals/errors/ErrorMessage";
 import NoData from "../ui/NoData";
+import SuccessToast from "../ui/toaster/SuccessToast";
+import ErrorToast from "../ui/toaster/ErrorToast";
+import StatusDropDown from "../ui/StatusDropDown";
 
 const ShiftList = () => {
   const navigate = useNavigate();
@@ -30,6 +33,9 @@ const ShiftList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [shift, setShift] = useState([]);
   const [activeTab, setActiveTab] = useState("All");
+  const [openStatusRow, setOpenStatusRow] = useState(null);
+  const [statusLoading, setStatusLoading] = useState(null);
+  // const [statusOptions, setStatusOptions] = useState(["active", "inactive"]);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("users.createdAt");
   const [pagination, setPagination] = useState({
@@ -108,6 +114,18 @@ const ShiftList = () => {
         : bVal.localeCompare?.(aVal);
     });
   }, [filteredData, order, orderBy]);
+
+  const handleStatusUpdate = async (id) => {
+    setStatusLoading(id);
+    try {
+      SuccessToast("Status updated successfully");
+    } catch (error) {
+      ErrorToast(error.message || "Failed to update status");
+    } finally {
+      setStatusLoading(null);
+      setOpenStatusRow(null);
+    }
+  };
 
   return (
     <>
@@ -282,16 +300,18 @@ const ShiftList = () => {
                       </TableCell>
 
                       {/* Status */}
-                      <TableCell>
-                        <Chip
-                          label={row.isActive ? "Active" : "Inactive"}
-                          size="small"
-                          sx={{
-                            borderRadius: "6px",
-                            fontWeight: 500,
-                            bgcolor: row.isActive ? "#1ABE17" : "#9CA3AF",
-                            color: "#FFFFFF",
-                          }}
+
+                      <TableCell className={`relative whitespace-nowrap  `}>
+                        <StatusDropDown
+                          rowId={row._id}
+                          status={row.isActive ? "active" : "inactive"}
+                          openStatusRow={openStatusRow}
+                          setOpenStatusRow={setOpenStatusRow}
+                          statusOptions={["active", "inactive"]}
+                          handleStatusUpdate={(rowId, status) =>
+                            handleStatusUpdate(rowId, status === "active")
+                          }
+                          statusLoading={statusLoading}
                         />
                       </TableCell>
 

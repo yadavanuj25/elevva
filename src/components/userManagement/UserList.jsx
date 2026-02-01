@@ -386,11 +386,38 @@ const UserList = () => {
                               : "-"}
                           </TableCell>
                           <TableCell className="whitespace-nowrap dark:text-gray-300">
-                            <div
-                              className="px-2 py-1 font-bold rounded  inline-block"
-                              style={{ color: row?.shift?.color }}
-                            >
-                              {row.shift?.name}
+                            <div className="relative inline-block group">
+                              <div
+                                className="px-2 py-1 font-bold rounded cursor-pointer"
+                                style={{ color: row?.shift?.color }}
+                              >
+                                {row.shift?.name || "—"}
+                              </div>
+
+                              {/* Tooltip */}
+                              <div
+                                className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2
+      hidden group-hover:block z-50
+      px-3 py-2 text-xs rounded-lg shadow-lg
+      bg-gray-200  dark:bg-black "
+                              >
+                                {row?.shift ? (
+                                  <>
+                                    <p>
+                                      Shift Time :{row.shift.startTime} –{" "}
+                                      {row.shift.endTime}
+                                    </p>
+                                  </>
+                                ) : (
+                                  <p>No shift assigned</p>
+                                )}
+
+                                {/* Arrow */}
+                                <div
+                                  className="absolute left-1/2 -translate-x-1/2 top-full
+        w-2 h-2 bg-gray-900 dark:bg-black rotate-45"
+                                />
+                              </div>
                             </div>
                           </TableCell>
 
