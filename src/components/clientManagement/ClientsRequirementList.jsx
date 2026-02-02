@@ -88,6 +88,7 @@ const ClientsRequirementsList = () => {
         return;
       }
       setStatusOptions(data.options.statuses);
+      console.log(data.options.statuses);
     } catch (error) {
       console.error("Error fetching options:", error);
       showError("Failed to load dropdown options");
