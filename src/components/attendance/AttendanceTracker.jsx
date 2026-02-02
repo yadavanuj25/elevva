@@ -21,6 +21,13 @@ import {
 import { BsBuildings } from "react-icons/bs";
 import { IoFingerPrint } from "react-icons/io5";
 import {
+  swalSuccess,
+  swalError,
+  swalWarning,
+  swalInfo,
+} from "../../utils/swalHelper";
+
+import {
   endBreak,
   getAttendanceHistory,
   getTodayAttendance,
@@ -34,6 +41,7 @@ import StatCard from "./StatCard";
 import AttendanceHistoryTable from "./AttendanceTable";
 import ToggleButton from "../ui/buttons/ToggleButton";
 import Textareafield from "../ui/formFields/Textareafield";
+import CustomSwal from "../../utils/CustomSwal";
 
 const AttendanceTracker = () => {
   const [todayAttendance, setTodayAttendance] = useState(null);
@@ -70,7 +78,6 @@ const AttendanceTracker = () => {
   });
 
   // Break types configuration
-
   const breakTypes = {
     lunch: {
       name: "Lunch-Break",
@@ -148,12 +155,10 @@ const AttendanceTracker = () => {
   // Calculate elapsed work time excluding breaks
   const calculateElapsedWorkTime = () => {
     if (!todayAttendance?.punchIn?.time) return 0;
-
     const start = new Date(todayAttendance.punchIn.time);
     const end = todayAttendance.punchOut?.time
       ? new Date(todayAttendance.punchOut.time)
       : new Date();
-
     let totalBreakTime = 0;
     if (todayAttendance.breaks) {
       todayAttendance.breaks.forEach((b) => {
@@ -164,7 +169,6 @@ const AttendanceTracker = () => {
         }
       });
     }
-
     // Add current break time if active
     if (isBreakActive && activeBreak?.breakStart) {
       totalBreakTime += new Date() - new Date(activeBreak.breakStart);
@@ -236,7 +240,7 @@ const AttendanceTracker = () => {
 
   const handlePunchIn = async () => {
     if (!location) {
-      alert("Please enable location access");
+      swalWarning("Location Required", "Please enable location access");
       return;
     }
     if (!formData.workMode) {
@@ -254,19 +258,22 @@ const AttendanceTracker = () => {
       if (data.success) {
         setTodayAttendance(data.data);
         setShowPunchInModal(false);
-        alert(data.message);
+        swalSuccess("Punch In Successful", data.message);
       } else {
-        alert(data.message);
+        console.log(data.message);
       }
     } catch (error) {
-      alert("Failed to punch in", error);
+      swalError(
+        error || "Punch In Failed",
+        "Something went wrong. Please try again.",
+      );
     }
     setIsPunchingIn(false);
   };
 
   const handlePunchOut = async () => {
     if (!location) {
-      alert("Please enable location access");
+      swalWarning("Location Required", "Please enable location access");
       return;
     }
     setIsPunchingOut(true);
@@ -279,14 +286,22 @@ const AttendanceTracker = () => {
       if (response.success) {
         setTodayAttendance(response.data);
         setShowPunchOutModal(false);
-        alert(
-          `${response.message}\n\nWorking Hours: ${response.summary.workingHours} hrs\nOvertime: ${response.summary.overtimeHours} hrs`,
-        );
+        CustomSwal.fire({
+          icon: "success",
+          title: "Punch Out Successful",
+          html: `
+    <p>${response.message}</p>
+    <hr />
+    <p><b>Working Hours:</b> ${response.summary.workingHours} hrs</p>
+    <p><b>Overtime:</b> ${response.summary.overtimeHours} hrs</p>
+  `,
+          confirmButtonText: "Done",
+        });
       } else {
-        alert(response.message);
+        console.log(response.message);
       }
     } catch (error) {
-      alert("Failed to punch out");
+      swalError("Failed to punch out", error);
     }
     setIsPunchingOut(false);
   };
@@ -318,12 +333,12 @@ const AttendanceTracker = () => {
         setShowBreakModal(false);
         setSelectedBreakType(null);
         fetchTodayAttendance();
-        alert("Break started");
+        swalSuccess("Break Started");
       } else {
-        alert(response.message);
+        console.log(response.message);
       }
     } catch (error) {
-      alert("Failed to start break");
+      swalError("Failed to start break", error);
     }
   };
 
@@ -333,12 +348,12 @@ const AttendanceTracker = () => {
       if (response.success) {
         setIsBreakActive(false);
         fetchTodayAttendance();
-        alert(response.message);
+        swalInfo("Break Ended", response.message);
       } else {
-        alert(response.message);
+        console.log(response.message);
       }
     } catch (error) {
-      alert("Failed to end break");
+      swalError("Failed to end break", error);
     }
   };
 
@@ -364,7 +379,7 @@ const AttendanceTracker = () => {
       a.download = `attendance-${filters.startDate}-to-${filters.endDate}.csv`;
       a.click();
     } catch (error) {
-      alert("Failed to export attendance");
+      swalError("Export Failed", error);
     }
   };
 
@@ -374,14 +389,6 @@ const AttendanceTracker = () => {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
-    });
-  };
-
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
     });
   };
 
@@ -811,7 +818,6 @@ const AttendanceTracker = () => {
                 </div>
 
                 {/* History List */}
-
                 <AttendanceHistoryTable history={history} />
               </div>
             )}
