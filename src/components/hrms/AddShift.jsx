@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useMessage } from "../../auth/MessageContext";
 import ErrorMessage from "../modals/errors/ErrorMessage";
 import { TimePicker } from "../ui/TimePicker";
+import ToggleButton from "../ui/buttons/ToggleButton";
 const shiftSchema = yup.object({
   name: yup.string().required("Shift name is required"),
   timezone: yup.string().required("Timezone is required"),
@@ -71,7 +72,8 @@ const initialFormState = {
   fullDayHours: 0,
   overtimeEnabled: false,
   overtimeRate: "",
-  color: "",
+  color: "#3b82f6",
+  isActive: true,
 };
 
 const AddShift = () => {
@@ -158,6 +160,10 @@ const AddShift = () => {
     }));
   };
 
+  const handleShiftToggle = (shift) => {
+    setFormData((p) => ({ ...p, isActive: shift }));
+  };
+
   const handleCreateShift = async (e) => {
     e.preventDefault();
     try {
@@ -218,24 +224,7 @@ const AddShift = () => {
         </div>
 
         {/* Timing */}
-        {/* <div className="grid grid-cols-2 gap-4">
-          <Input
-            type="time"
-            labelName="Start Time"
-            name="startTime"
-            value={formData.startTime}
-            handleChange={handleChange}
-            errors={errors}
-          />
-          <Input
-            type="time"
-            labelName="End Time"
-            name="endTime"
-            value={formData.endTime}
-            handleChange={handleChange}
-            errors={errors}
-          />
-        </div> */}
+
         <div className="grid grid-cols-2 gap-4">
           <TimePicker
             label="Start Time"
@@ -360,6 +349,16 @@ const AddShift = () => {
           ))}
         </div>
 
+        <ToggleButton
+          label="Shift"
+          value={formData.isActive}
+          onChange={handleShiftToggle}
+          activeValue={true}
+          inactiveValue={false}
+          activeLabel="Active"
+          inactiveLabel="InActive"
+        />
+
         {/* Actions */}
         <div className="flex justify-end gap-3 pt-3">
           <CancelButton
@@ -381,3 +380,55 @@ const AddShift = () => {
 };
 
 export default AddShift;
+
+// import React, { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { createShift } from "../../services/hrmsServices";
+// import { useMessage } from "../../auth/MessageContext";
+
+// import ShiftForm from "./ShiftForm";
+// import { INITIAL_SHIFT_STATE } from "../../contstants/shifts/shift";
+// import { shiftSchema } from "./shiftSchema";
+
+// const AddShift = () => {
+//   const navigate = useNavigate();
+//   const { showError, showSuccess } = useMessage();
+
+//   const [formData, setFormData] = useState(INITIAL_SHIFT_STATE);
+//   const [errors, setErrors] = useState({});
+//   const [loading, setLoading] = useState(false);
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       setLoading(true);
+//       await shiftSchema.validate(formData, { abortEarly: false });
+//       await createShift(formData);
+//       showSuccess("Shift created successfully");
+//       navigate("/shifts");
+//     } catch (err) {
+//       if (err.inner) {
+//         const map = {};
+//         err.inner.forEach((e) => (map[e.path] = e.message));
+//         setErrors(map);
+//       } else showError(err.message);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <ShiftForm
+//       title="Add Shift"
+//       formData={formData}
+//       setFormData={setFormData}
+//       errors={errors}
+//       loading={loading}
+//       onSubmit={handleSubmit}
+//       onCancel={() => setFormData(INITIAL_SHIFT_STATE)}
+//       submitText="Save"
+//     />
+//   );
+// };
+
+// export default AddShift;

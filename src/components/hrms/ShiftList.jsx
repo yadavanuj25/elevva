@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { File, Pencil, Settings } from "lucide-react";
 import TableHeader from "../ui/tableComponents/TableHeader";
-import { getShift } from "../../services/hrmsServices";
+import { getShift, updateShift } from "../../services/hrmsServices";
 import GroupButton from "../ui/buttons/GroupButton";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
@@ -27,6 +27,17 @@ import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
 import StatusDropDown from "../ui/StatusDropDown";
 
+const statusOptions = [
+  {
+    label: "Active",
+    value: true,
+  },
+  {
+    label: "Inactive",
+    value: false,
+  },
+];
+
 const ShiftList = () => {
   const navigate = useNavigate();
   const { successMsg, errorMsg, showError } = useMessage();
@@ -35,7 +46,7 @@ const ShiftList = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
-  // const [statusOptions, setStatusOptions] = useState(["active", "inactive"]);
+
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("users.createdAt");
   const [pagination, setPagination] = useState({
@@ -115,10 +126,18 @@ const ShiftList = () => {
     });
   }, [filteredData, order, orderBy]);
 
-  const handleStatusUpdate = async (id) => {
+  const handleStatusUpdate = async (id, newStatus) => {
     setStatusLoading(id);
     try {
-      SuccessToast("Status updated successfully");
+      const payload = { isActive: newStatus };
+      const res = await updateShift(id, payload);
+      setShift((prev) => {
+        const updatedShift = prev.map((item) =>
+          item._id === id ? { ...item, isActive: newStatus } : item,
+        );
+        return updatedShift;
+      });
+      SuccessToast(res?.message || "Status updated successfully");
     } catch (error) {
       ErrorToast(error.message || "Failed to update status");
     } finally {
@@ -307,10 +326,8 @@ const ShiftList = () => {
                           status={row.isActive ? "active" : "inactive"}
                           openStatusRow={openStatusRow}
                           setOpenStatusRow={setOpenStatusRow}
-                          statusOptions={["active", "inactive"]}
-                          handleStatusUpdate={(rowId, status) =>
-                            handleStatusUpdate(rowId, status === "active")
-                          }
+                          statusOptions={statusOptions}
+                          handleStatusUpdate={handleStatusUpdate}
                           statusLoading={statusLoading}
                         />
                       </TableCell>

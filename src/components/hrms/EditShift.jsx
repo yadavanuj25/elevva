@@ -15,6 +15,7 @@ import BackButton from "../ui/buttons/BackButton";
 import FormSkeleton from "../loaders/FormSkeleton";
 import ErrorMessage from "../modals/errors/ErrorMessage";
 import { TimePicker } from "../ui/TimePicker";
+import ToggleButton from "../ui/buttons/ToggleButton";
 
 const shiftSchema = yup.object({
   name: yup.string().required("Shift name is required"),
@@ -81,7 +82,8 @@ const initialFormState = {
   fullDayHours: "",
   overtimeEnabled: false,
   overtimeRate: null,
-  color: "#3B82F6",
+  color: "",
+  isActive: true,
 };
 
 const EditShift = () => {
@@ -159,6 +161,7 @@ const EditShift = () => {
         overtimeEnabled: data?.overtimeEnabled ?? false,
         overtimeRate: data?.overtimeRate ?? null,
         color: data?.color ?? "#3B82F6",
+        isActive: data?.isActive ?? true,
       });
     } catch (err) {
       console.error("Failed to fetch shift", err);
@@ -192,6 +195,9 @@ const EditShift = () => {
             ? Number(value)
             : value,
     }));
+  };
+  const handleShiftToggle = (shift) => {
+    setFormData((p) => ({ ...p, isActive: shift }));
   };
 
   const toggleWorkingDay = (day) => {
@@ -256,25 +262,6 @@ const EditShift = () => {
                 error={errors.timezone}
               />
             </div>
-
-            {/* <div className="grid grid-cols-2 gap-4">
-              <Input
-                type="time"
-                labelName="Start Time"
-                name="startTime"
-                value={formData.startTime}
-                handleChange={handleChange}
-                errors={errors}
-              />
-              <Input
-                type="time"
-                labelName="End Time"
-                name="endTime"
-                value={formData.endTime}
-                handleChange={handleChange}
-                errors={errors}
-              />
-            </div> */}
 
             <div className="grid grid-cols-2 gap-4">
               <TimePicker
@@ -397,6 +384,15 @@ const EditShift = () => {
                 </button>
               ))}
             </div>
+            <ToggleButton
+              label="Shift"
+              value={formData.isActive}
+              onChange={handleShiftToggle}
+              activeValue={true}
+              inactiveValue={false}
+              activeLabel="Active"
+              inactiveLabel="InActive"
+            />
 
             <div className="flex justify-end gap-3 pt-3">
               <CancelButton onClick={() => setFormData(initialFormState)} />
@@ -416,3 +412,60 @@ const EditShift = () => {
 };
 
 export default EditShift;
+
+// import React, { useEffect, useState } from "react";
+// import { useParams, useNavigate } from "react-router-dom";
+// import { getShiftById, updateShift } from "../../services/hrmsServices";
+// import { useMessage } from "../../auth/MessageContext";
+
+// import ShiftForm from "./ShiftForm";
+// import { INITIAL_SHIFT_STATE } from "../../contstants/shifts/shift";
+// import { shiftSchema } from "./shiftSchema";
+
+// const EditShift = () => {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+//   const { showError, showSuccess } = useMessage();
+
+//   const [formData, setFormData] = useState(INITIAL_SHIFT_STATE);
+//   const [errors, setErrors] = useState({});
+//   const [loading, setLoading] = useState(false);
+
+//   useEffect(() => {
+//     getShiftById(id).then((res) => setFormData(res.data));
+//   }, [id]);
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       setLoading(true);
+//       await shiftSchema.validate(formData, { abortEarly: false });
+//       await updateShift(id, formData);
+//       showSuccess("Shift updated successfully");
+//       navigate("/shifts");
+//     } catch (err) {
+//       if (err.inner) {
+//         const map = {};
+//         err.inner.forEach((e) => (map[e.path] = e.message));
+//         setErrors(map);
+//       } else showError(err.message);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <ShiftForm
+//       title="Update Shift"
+//       formData={formData}
+//       setFormData={setFormData}
+//       errors={errors}
+//       loading={loading}
+//       onSubmit={handleSubmit}
+//       onCancel={() => navigate("/shifts")}
+//       submitText="Update"
+//     />
+//   );
+// };
+
+// export default EditShift;

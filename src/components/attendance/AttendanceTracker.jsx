@@ -13,11 +13,12 @@ import {
   Briefcase,
   Download,
   Filter,
-  CookingPot,
+  House,
   BedDouble,
   Utensils,
   Soup,
 } from "lucide-react";
+import { BsBuildings } from "react-icons/bs";
 import { IoFingerPrint } from "react-icons/io5";
 import {
   endBreak,
@@ -30,6 +31,9 @@ import {
 import CircularProgress from "./CircularProgress";
 import AttendanceStats from "./AttendanceStats";
 import StatCard from "./StatCard";
+import AttendanceHistoryTable from "./AttendanceTable";
+import ToggleButton from "../ui/buttons/ToggleButton";
+import Textareafield from "../ui/formFields/Textareafield";
 
 const AttendanceTracker = () => {
   const [todayAttendance, setTodayAttendance] = useState(null);
@@ -43,9 +47,15 @@ const AttendanceTracker = () => {
   const [activeBreak, setActiveBreak] = useState(null);
   const [isBreakActive, setIsBreakActive] = useState(false);
 
+  const [formData, setFormData] = useState({
+    workMode: "office",
+    notes: "",
+  });
+
   // New states for break modal and timers
   const [showBreakModal, setShowBreakModal] = useState(false);
   const [showPunchOutModal, setShowPunchOutModal] = useState(false);
+  const [showPunchInModal, setShowPunchInModal] = useState(false);
   const [selectedBreakType, setSelectedBreakType] = useState(null);
   const [workingTime, setWorkingTime] = useState("00:00:00");
   const [breakTime, setBreakTime] = useState("00:00:00");
@@ -217,9 +227,19 @@ const AttendanceTracker = () => {
     }
   };
 
+  const handleWorkModeToggle = (mode) => {
+    setFormData((p) => ({ ...p, workMode: mode }));
+  };
+  const handleNoteChange = (e) => {
+    setFormData((p) => ({ ...p, notes: e.target.value }));
+  };
+
   const handlePunchIn = async () => {
     if (!location) {
       alert("Please enable location access");
+      return;
+    }
+    if (!formData.workMode) {
       return;
     }
     setIsPunchingIn(true);
@@ -227,10 +247,13 @@ const AttendanceTracker = () => {
       const payload = {
         latitude: location.latitude,
         longitude: location.longitude,
+        workMode: formData.workMode,
+        notes: formData.notes,
       };
       const data = await punchIn(payload);
       if (data.success) {
         setTodayAttendance(data.data);
+        setShowPunchInModal(false);
         alert(data.message);
       } else {
         alert(data.message);
@@ -246,7 +269,6 @@ const AttendanceTracker = () => {
       alert("Please enable location access");
       return;
     }
-
     setIsPunchingOut(true);
     try {
       const payload = {
@@ -254,7 +276,6 @@ const AttendanceTracker = () => {
         longitude: location.longitude,
       };
       const response = await punchOut(payload);
-
       if (response.success) {
         setTodayAttendance(response.data);
         setShowPunchOutModal(false);
@@ -270,6 +291,14 @@ const AttendanceTracker = () => {
     setIsPunchingOut(false);
   };
 
+  const handleShowPunchOutModal = () => {
+    getLocation();
+    setShowPunchOutModal(true);
+  };
+  const handleShowPunchInModal = () => {
+    setShowPunchInModal(true);
+  };
+
   const handleShowBreakModal = () => {
     getLocation();
     setShowBreakModal(true);
@@ -281,11 +310,9 @@ const AttendanceTracker = () => {
 
   const handleStartBreak = async () => {
     if (!selectedBreakType) return;
-
     try {
       const payload = { breakType: selectedBreakType };
       const response = await startBreak(payload);
-
       if (response.success) {
         setIsBreakActive(true);
         setShowBreakModal(false);
@@ -313,11 +340,6 @@ const AttendanceTracker = () => {
     } catch (error) {
       alert("Failed to end break");
     }
-  };
-
-  const handleShowPunchOutModal = () => {
-    getLocation();
-    setShowPunchOutModal(true);
   };
 
   const exportAttendance = async () => {
@@ -433,6 +455,7 @@ const AttendanceTracker = () => {
               </div>
             )}
           </div>
+
           <div className="flex items-center gap-2">
             <div className="flex  items-center gap-2   ">
               <Clock size={18} />
@@ -478,8 +501,8 @@ const AttendanceTracker = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-center ">
-                <div className="w-1/2 flex items-center gap-2  mb-4  ">
+              <div className="flex items-center justify-between mb-2 ">
+                <div className="w-1/2 flex items-center gap-2    ">
                   <IoFingerPrint className="w-8 h-8 text-accent-dark" />
                   <div>
                     <div className="  flex gap-4 items-center ">
@@ -498,6 +521,22 @@ const AttendanceTracker = () => {
                     )}
                   </div>
                 </div>
+                {todayAttendance?.workMode && (
+                  <div
+                    className={`flex gap-1 items-center px-5 py-1.5 text-sm text-white font-medium rounded-full transition-all duration-300 ${
+                      todayAttendance?.workMode === "office"
+                        ? "bg-green-600  "
+                        : "bg-red-600  "
+                    }`}
+                  >
+                    {todayAttendance?.workMode == "office" ? (
+                      <BsBuildings size={16} />
+                    ) : (
+                      <House size={16} />
+                    )}
+                    {todayAttendance?.workMode}
+                  </div>
+                )}
               </div>
 
               {/* Break Time Display */}
@@ -522,7 +561,7 @@ const AttendanceTracker = () => {
 
               <div className="grid grid-cols-2 gap-3 ">
                 <button
-                  onClick={handlePunchIn}
+                  onClick={handleShowPunchInModal}
                   disabled={isPunchingIn || todayAttendance?.punchIn?.time}
                   className={`flex items-center justify-center mb-2 space-x-2 py-3 px-4 rounded-lg font-medium transition-colors ${
                     todayAttendance?.punchIn?.time
@@ -772,50 +811,8 @@ const AttendanceTracker = () => {
                 </div>
 
                 {/* History List */}
-                <div className="space-y-3">
-                  {history.map((record, index) => (
-                    <div
-                      key={index}
-                      className="border rounded-lg p-4 hover:shadow-md transition-shadow"
-                    >
-                      <div className="grid grid-cols-5 gap-4 text-sm">
-                        <div>
-                          <p className="font-medium text-gray-900">
-                            {formatDate(record.date)}
-                          </p>
-                          <p className="text-sm text-gray-600">
-                            {record.shift?.name}
-                          </p>
-                        </div>
 
-                        <div>
-                          <p className="text-gray-600">In</p>
-                          <p className="font-medium">
-                            {formatTime(record.punchIn?.time)}
-                          </p>
-                        </div>
-                        <span
-                          className={`px-1 py-1  flex justify-center items-center rounded text-xs font-medium capitalize ${getStatusColor(record.status)}`}
-                        >
-                          {record.status}
-                        </span>
-
-                        <div>
-                          <p className="text-gray-600">Out</p>
-                          <p className="font-medium">
-                            {formatTime(record.punchOut?.time)}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-gray-600">Hours</p>
-                          <p className="font-medium">
-                            {formatHoursToHM(record.workingHours)}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <AttendanceHistoryTable history={history} />
               </div>
             )}
 
@@ -885,9 +882,9 @@ const AttendanceTracker = () => {
         flex flex-col items-center justify-between p-4
         min-h-[120px]
         ${
-          selectedBreakType === key
-            ? "bg-blue-50 border border-blue-500  "
-            : "bg-gray-50 border-transparent hover:bg-gray-100 hover:border-blue-300"
+          selectedBreakType === value.name
+            ? "bg-accent-light border border-accent-dark"
+            : "bg-gray-50 border-transparent hover:bg-gray-100 hover:border-accent-dark"
         }`}
                 >
                   {/* Icon */}
@@ -927,6 +924,68 @@ const AttendanceTracker = () => {
                   setShowBreakModal(false);
                   setSelectedBreakType(null);
                 }}
+                className="w-full bg-gray-100 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Punch In Confirmation Modal */}
+
+      {showPunchInModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-5 z-50 animate-fadeIn">
+          <div className="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl animate-scaleIn">
+            <div className="text-xl font-semibold mb-5 text-gray-900">
+              Confirm Punch In
+            </div>
+            <div className="bg-gray-50 rounded-xl p-4 mb-4">
+              <div>
+                <ToggleButton
+                  label="Choose your remote mode"
+                  className="flex-col gap-2"
+                  value={formData.workMode}
+                  onChange={handleWorkModeToggle}
+                  activeValue="office"
+                  inactiveValue="home"
+                  activeLabel="Office"
+                  inactiveLabel="Home"
+                  icon1={<BsBuildings size={16} />}
+                  icon2={<House size={16} />}
+                />
+              </div>
+            </div>
+            <Textareafield
+              name="notes"
+              label="Notes (Optional)"
+              value={formData.notes}
+              handleChange={handleNoteChange}
+            />
+            <div className="bg-gray-50 rounded-xl p-4 mb-5 mt-4 border border-gray-200">
+              <div className="flex items-center gap-2 text-gray-600 text-sm mb-2">
+                <MapPin className="w-4 h-4" />
+                Punch in Location
+              </div>
+              <div className="text-gray-900 text-sm">
+                {location
+                  ? `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`
+                  : "Detecting location..."}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={handlePunchIn}
+                disabled={isPunchingIn}
+                className="w-full bg-gradient-to-r from-red-600 to-red-500 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-red-500/30 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <LogIn className="w-5 h-5" />
+                {isPunchingOut ? "Punching in..." : "Confirm Punch in"}
+              </button>
+              <button
+                onClick={() => setShowPunchInModal(false)}
                 className="w-full bg-gray-100 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
               >
                 Cancel

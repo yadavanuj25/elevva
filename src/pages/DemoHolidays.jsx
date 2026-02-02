@@ -17,30 +17,11 @@ import {
 import SelectField from "../components/ui/SelectField";
 
 const years = [
-  {
-    label: "2021",
-    value: 2025,
-  },
-  {
-    label: "2022",
-    value: 2025,
-  },
-  {
-    label: "2023",
-    value: 2025,
-  },
-  {
-    label: "2024",
-    value: 2025,
-  },
-  {
-    label: "2025",
-    value: 2025,
-  },
-  {
-    label: "2026",
-    value: 2025,
-  },
+  { label: "2021", value: "2021" },
+  { label: "2022", value: "2022" },
+  { label: "2023", value: "2023" },
+  { label: "2024", value: "2024" },
+  { label: "2025", value: "2025" },
 ];
 
 const holidaysTypes = [
@@ -139,11 +120,9 @@ const DemoHolidays = () => {
     try {
       const token = localStorage.getItem("token");
       const queryParams = new URLSearchParams();
-
       if (filters.year) queryParams.append("year", filters.year);
       if (filters.type) queryParams.append("type", filters.type);
       if (filters.isActive) queryParams.append("isActive", filters.isActive);
-
       const response = await fetch(
         `https://crm-backend-qbz0.onrender.com/api/holidays?${queryParams}`,
         {
@@ -163,7 +142,7 @@ const DemoHolidays = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/holidays/upcoming?limit=5",
+        "https://crm-backend-qbz0.onrender.com/api/holidays/upcoming?limit=25",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -177,7 +156,6 @@ const DemoHolidays = () => {
 
   const fetchStats = async () => {
     // if (!isAdmin) return;
-
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
@@ -502,7 +480,7 @@ const DemoHolidays = () => {
                   name="year"
                   value={filters.year}
                   handleChange={(e) =>
-                    setFilters({ ...filters, year: e.target.value })
+                    setFilters((prev) => ({ ...prev, year: e.target.value }))
                   }
                   options={years}
                 />
@@ -514,7 +492,7 @@ const DemoHolidays = () => {
                   name="type"
                   value={filters.type}
                   handleChange={(e) =>
-                    setFilters({ ...filters, type: e.target.value })
+                    setFilters((prev) => ({ ...prev, type: e.target.value }))
                   }
                   options={holidaysTypes}
                 />
@@ -526,7 +504,10 @@ const DemoHolidays = () => {
                   name="isActive"
                   value={filters.isActive}
                   handleChange={(e) =>
-                    setFilters({ ...filters, isActive: e.target.value })
+                    setFilters((prev) => ({
+                      ...prev,
+                      isActive: e.target.value,
+                    }))
                   }
                   options={holidaysStatus}
                 />
@@ -542,12 +523,10 @@ const DemoHolidays = () => {
             <p className="mt-4 text-gray-600">Loading holidays...</p>
           </div>
         ) : holidays.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+          <div className="border border-gray-300 dark:border-gray-600 rounded-xl  p-12 text-center">
             <Calendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              No Holidays Found
-            </h3>
-            <p className="text-gray-600">
+            <h3 className="text-xl font-semibold  mb-2">No Holidays Found</h3>
+            <p className="text-gray-500">
               No holidays for the selected filters
             </p>
           </div>
@@ -652,11 +631,11 @@ const DemoHolidays = () => {
           </div>
         )}
 
-        {/* Create/Edit Modal */}
+        {/* Create/Edit Modals */}
         {(showCreateModal || showEditModal) && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="sticky top-0 bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 flex justify-between items-center">
+            <div className="bg-white rounded-xl  max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 bg-accent-dark text-white p-6 flex justify-between items-center">
                 <h2 className="text-2xl font-bold">
                   {showCreateModal ? "Add New Holiday" : "Edit Holiday"}
                 </h2>
@@ -670,6 +649,23 @@ const DemoHolidays = () => {
                 >
                   <X className="w-6 h-6" />
                 </button>
+              </div>
+              <div className="bg-accent-dark text-white px-5 py-3 rounded-t-lg">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-4">
+                    <h2 className="text-xl font-semibold">
+                      {showCreateModal ? "Add New Holiday" : "Edit Holiday"}
+                    </h2>
+                  </div>
+
+                  <Close
+                    handleClose={() => {
+                      setShowCreateModal(false);
+                      setShowEditModal(false);
+                      resetForm();
+                    }}
+                  />
+                </div>
               </div>
 
               <div className="p-6 space-y-4">

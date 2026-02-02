@@ -1,59 +1,3 @@
-// const AttendanceTable = ({ data, isAdmin }) => {
-//   if (!data.length) {
-//     return (
-//       <p className="text-center text-gray-500">
-//         Click "Show History" to load attendance history
-//       </p>
-//     );
-//   }
-//   return (
-//     <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
-//       <table className="min-w-full text-sm">
-//         <thead className="bg-gray-100 dark:bg-gray-700">
-//           <tr>
-//             {isAdmin && <th className="p-3 text-left">Employee</th>}
-//             <th className="p-3 text-left">Date</th>
-//             <th className="p-3">Punch In</th>
-//             <th className="p-3">Status</th>
-//             <th className="p-3">Punch Out</th>
-//             <th className="p-3">Break</th>
-//             <th className="p-3">Working Hours</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {data.map((item, i) => (
-//             <tr key={i} className="border-t">
-//               {isAdmin && <td className="p-3">{item.name}</td>}
-//               <td className="p-3">{item.date}</td>
-//               <td className="p-3 text-center">{item.punchIn || "-"}</td>
-//               <td className="p-3 text-center">
-//                 <span
-//                   className={`px-2 py-1 rounded text-xs font-semibold
-//                     ${
-//                       item.status === "Present" && "bg-green-100 text-green-700"
-//                     }
-//                     ${item.status === "Absent" && "bg-red-100 text-red-700"}
-//                     ${item.status === "Late" && "bg-yellow-100 text-yellow-700"}
-//                   `}
-//                 >
-//                   {item.status}
-//                 </span>
-//               </td>
-//               <td className="p-3 text-center">{item.punchOut || "-"}</td>
-//               <td className="text-center">
-//                 {item.lunchDuration ? `${item.lunchDuration} min` : "-"}
-//               </td>
-//               <td className="p-3 text-center">{item.totalHours}</td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// };
-
-// export default AttendanceTable;
-
 import React, { useMemo, useState } from "react";
 import {
   Table,
@@ -68,13 +12,6 @@ import {
 import NoData from "../ui/NoData";
 import { MdLocationOff } from "react-icons/md";
 
-const STATUS_COLORS = {
-  Present: "bg-[#1abe17] ",
-  Absent: "bg-red-600 ",
-  Late: "bg-yellow-800 ",
-  Completed: "bg-blue-500 ",
-};
-
 const checkboxSx = {
   color: "#6b7280",
   "&.Mui-checked": {
@@ -88,17 +25,57 @@ const checkboxSx = {
   },
 };
 
-export const formatToAmPm = (time) => {
-  if (!time) return "--";
-  const [hours, minutes] = time.split(":").map(Number);
-  const period = hours >= 12 ? "PM" : "AM";
-  return `${time} ${period}`;
+const formatTime = (date) => {
+  if (!date) return "--";
+  return new Date(date).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
 };
 
-const AttendanceHistoryTable = ({ data = [], isAdmin }) => {
+const formatDate = (date) => {
+  if (!date) return "--";
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};
+
+// total break minutes
+const calculateTotalBreakMinutes = (breaks = []) => {
+  return breaks.reduce((total, br) => {
+    if (br.duration) return total + br.duration;
+    if (br.breakStart && br.breakEnd) {
+      const start = new Date(br.breakStart);
+      const end = new Date(br.breakEnd);
+      return total + Math.floor((end - start) / 60000);
+    }
+    return total;
+  }, 0);
+};
+
+// productive hours calculation
+const calculateProductiveHours = (punchIn, punchOut, breaks) => {
+  if (!punchIn || !punchOut) return "--";
+  const start = new Date(punchIn);
+  const end = new Date(punchOut);
+  const totalMinutes = Math.floor((end - start) / 60000);
+  const breakMinutes = calculateTotalBreakMinutes(breaks);
+  const productiveMinutes = Math.max(totalMinutes - breakMinutes, 0);
+  const hrs = Math.floor(productiveMinutes / 60);
+  const mins = productiveMinutes % 60;
+  return `${hrs}h ${mins}m`;
+};
+
+const AttendanceHistoryTable = ({ history = [], isAdmin }) => {
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("date");
   const [selected, setSelected] = useState([]);
+
+  /* ---------- Sorting ---------- */
+
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -109,9 +86,7 @@ const AttendanceHistoryTable = ({ data = [], isAdmin }) => {
     const aVal = a[orderBy] ?? "";
     const bVal = b[orderBy] ?? "";
 
-    if (typeof aVal === "string") {
-      return bVal.localeCompare(aVal);
-    }
+    if (typeof aVal === "string") return bVal.localeCompare(aVal);
     return bVal > aVal ? 1 : -1;
   };
 
@@ -120,13 +95,38 @@ const AttendanceHistoryTable = ({ data = [], isAdmin }) => {
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
 
+  /* ---------- Normalize API Data ---------- */
+
+  const formattedData = useMemo(() => {
+    return history.map((item) => {
+      const breakMinutes = calculateTotalBreakMinutes(item.breaks);
+
+      return {
+        id: item._id,
+        name: item?.user?.name || "",
+        date: item.date,
+        punchInTime: item.punchIn?.time,
+        punchOutTime: item.punchOut?.time || null,
+        breakMinutes,
+        productiveHours: calculateProductiveHours(
+          item.punchIn?.time,
+          item.punchOut?.time,
+          item.breaks,
+        ),
+        location: item.punchIn?.location?.address || "Unknown Location",
+      };
+    });
+  }, [history]);
+
   const sortedData = useMemo(() => {
-    return [...data].sort(getComparator());
-  }, [data, order, orderBy]);
+    return [...formattedData].sort(getComparator());
+  }, [formattedData, order, orderBy]);
+
+  /* ---------- Selection ---------- */
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      setSelected(sortedData.map((r) => r.date));
+      setSelected(sortedData.map((r) => r.id));
     } else {
       setSelected([]);
     }
@@ -134,150 +134,135 @@ const AttendanceHistoryTable = ({ data = [], isAdmin }) => {
 
   const handleSelectRow = (id) => {
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
   };
 
   const isSelected = (id) => selected.includes(id);
 
+  /* =========================
+     Render
+  ========================= */
+
   return (
-    <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
-      <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900">
-        <div className="overflow-x-auto">
-          <Table className="min-w-full">
-            <TableHead className="sticky top-0 bg-[#f2f4f5] dark:bg-darkGray z-20">
-              <TableRow>
-                {isAdmin && (
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selected.length === sortedData.length}
-                      indeterminate={
-                        selected.length > 0 &&
-                        selected.length < sortedData.length
-                      }
-                      onChange={handleSelectAll}
-                      sx={checkboxSx}
-                    />
-                  </TableCell>
-                )}
-
-                {[
-                  isAdmin && { id: "name", label: "Employee" },
-                  { id: "date", label: "Date" },
-                  { id: "punchIn", label: "Check In" },
-                  { id: "status", label: "Status" },
-                  { id: "punchOut", label: "Check Out" },
-                  { id: "lunchDuration", label: "Break" },
-                  { id: "lateTime", label: "Late" },
-                  { id: "totalHours", label: "Working Hours" },
-                  { id: "workingFrom", label: "Working From" },
-                ]
-                  .filter(Boolean)
-                  .map((col) => (
-                    <TableCell
-                      key={col.id}
-                      sortDirection={orderBy === col.id ? order : false}
-                      className="font-bold text-gray-700 dark:text-gray-200"
-                    >
-                      <TableSortLabel
-                        active={orderBy === col.id}
-                        direction={orderBy === col.id ? order : "asc"}
-                        onClick={() => handleRequestSort(col.id)}
-                        className="font-bold text-gray-700 dark:text-gray-200"
-                      >
-                        {col.label}
-                      </TableSortLabel>
-                    </TableCell>
-                  ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {sortedData && sortedData.length > 0 ? (
-                sortedData.map((item) => {
-                  const checked = isSelected(item.date);
-                  return (
-                    <TableRow
-                      key={`${item.userId}-${item.date}`}
-                      hover
-                      selected={checked}
-                      className="hover:bg-gray-50 dark:hover:bg-darkGray"
-                    >
-                      {isAdmin && (
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={checked}
-                            onChange={() => handleSelectRow(item.date)}
-                            sx={checkboxSx}
-                          />
-                        </TableCell>
-                      )}
-                      {isAdmin && (
-                        <TableCell className="capitalize whitespace-nowrap  dark:text-gray-300">
-                          {item.name}
-                        </TableCell>
-                      )}
-
-                      <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                        {item.date}
-                      </TableCell>
-
-                      <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                        {/* {item.punchIn || "-"} */}
-                        {formatToAmPm(item.punchIn)}
-                      </TableCell>
-
-                      <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                        <span
-                          className={` px-2 py-1 rounded text-xs font-medium text-white ${
-                            STATUS_COLORS[item.status] || "bg-gray-500 "
-                          }`}
-                        >
-                          {item.status}
-                        </span>
-                      </TableCell>
-
-                      <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                        {/* {item.punchOut || "-"} */}
-                        {formatToAmPm(item.punchOut)}
-                      </TableCell>
-
-                      <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                        {item.lunchDuration ? `${item.lunchDuration} min` : "-"}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                        {item.isLate ? (
-                          <span className="text-red-600 font-semibold">
-                            {item.lateTime}
-                          </span>
-                        ) : (
-                          "On Time"
-                        )}
-                      </TableCell>
-
-                      <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                        {item.totalHours}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap ">
-                        <div className="w-max px-3 py-0.5 text-xs text-white font-medium flex items-center gap-1 bg-green-600 rounded ">
-                          <MdLocationOff size={16} />
-                          Office
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={10} className="py-10 text-center">
-                    <NoData title="No Data Found" />
-                  </TableCell>
-                </TableRow>
+    <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900">
+      <div className="overflow-x-auto">
+        <Table className="min-w-full">
+          <TableHead className="sticky top-0 bg-[#f2f4f5] dark:bg-darkGray z-20">
+            <TableRow>
+              {isAdmin && (
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    checked={selected.length === sortedData.length}
+                    indeterminate={
+                      selected.length > 0 && selected.length < sortedData.length
+                    }
+                    onChange={handleSelectAll}
+                    sx={checkboxSx}
+                  />
+                </TableCell>
               )}
-            </TableBody>
-          </Table>
-        </div>
-      </TableContainer>
-    </div>
+
+              {[
+                isAdmin && { id: "name", label: "Employee" },
+                { id: "date", label: "Date" },
+                { id: "punchInTime", label: "Punch In" },
+                { id: "breakMinutes", label: "Break" },
+                { id: "punchOutTime", label: "Punch Out" },
+                { id: "productiveHours", label: "Productive Hours" },
+                { id: "location", label: "Location" },
+                { id: "workFrom", label: "WorkFrom" },
+              ]
+                .filter(Boolean)
+                .map((col) => (
+                  <TableCell
+                    key={col.id}
+                    sortDirection={orderBy === col.id ? order : false}
+                    className="font-bold text-gray-700 dark:text-gray-200"
+                  >
+                    <TableSortLabel
+                      active={orderBy === col.id}
+                      direction={orderBy === col.id ? order : "asc"}
+                      onClick={() => handleRequestSort(col.id)}
+                    >
+                      {col.label}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {sortedData.length > 0 ? (
+              sortedData.map((row) => {
+                const checked = isSelected(row.id);
+
+                return (
+                  <TableRow
+                    key={row.id}
+                    hover
+                    selected={checked}
+                    className="hover:bg-gray-50 dark:hover:bg-darkGray"
+                  >
+                    {isAdmin && (
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={checked}
+                          onChange={() => handleSelectRow(row.id)}
+                          sx={checkboxSx}
+                        />
+                      </TableCell>
+                    )}
+
+                    {isAdmin && (
+                      <TableCell className="capitalize dark:text-gray-300">
+                        {row.name}
+                      </TableCell>
+                    )}
+
+                    <TableCell className="dark:text-gray-300">
+                      {formatDate(row.date)}
+                    </TableCell>
+
+                    <TableCell className="dark:text-gray-300">
+                      {formatTime(row.punchInTime)}
+                    </TableCell>
+
+                    <TableCell className="dark:text-gray-300">
+                      {row.breakMinutes} min
+                    </TableCell>
+
+                    <TableCell className="dark:text-gray-300">
+                      {formatTime(row.punchOutTime)}
+                    </TableCell>
+
+                    <TableCell className="dark:text-gray-300 ">
+                      {row.productiveHours}
+                    </TableCell>
+
+                    <TableCell>
+                      <MdLocationOff
+                        size={16}
+                        title={row.location}
+                        className="text-gray-500 dark:text-gray-300 cursor-pointer"
+                      />
+                    </TableCell>
+
+                    <TableCell className="dark:text-gray-300">Office</TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell colSpan={10} className="py-10 text-center">
+                  <NoData title="No Data Found" />
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </TableContainer>
   );
 };
 
