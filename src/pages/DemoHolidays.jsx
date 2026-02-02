@@ -15,6 +15,7 @@ import {
   Upload,
 } from "lucide-react";
 import SelectField from "../components/ui/SelectField";
+import { swalError, swalSuccess } from "../utils/swalHelper";
 
 const years = [
   { label: "2021", value: "2021" },
@@ -189,16 +190,16 @@ const DemoHolidays = () => {
 
       const data = await response.json();
       if (data.success) {
-        alert("Holiday created successfully!");
+        swalSuccess("Holiday created successfully!");
         setShowCreateModal(false);
         fetchHolidays();
         fetchStats();
         resetForm();
       } else {
-        alert(data.message);
+        console.log(data.message);
       }
     } catch (error) {
-      alert("Failed to create holiday");
+      swalError("Failed to create holiday", error);
     }
   };
 
@@ -219,15 +220,15 @@ const DemoHolidays = () => {
 
       const data = await response.json();
       if (data.success) {
-        alert("Holiday updated successfully!");
+        swalSuccess("Holiday updated successfully!");
         setShowEditModal(false);
         fetchHolidays();
         resetForm();
       } else {
-        alert(data.message);
+        console.log(data.message);
       }
     } catch (error) {
-      alert("Failed to update holiday");
+      swalError("Failed to update holiday", error);
     }
   };
 
@@ -247,14 +248,14 @@ const DemoHolidays = () => {
 
       const data = await response.json();
       if (data.success) {
-        alert("Holiday deleted successfully!");
+        swalSuccess("Holiday deleted successfully!");
         fetchHolidays();
         fetchStats();
       } else {
-        alert(data.message);
+        console.log(data.message);
       }
     } catch (error) {
-      alert("Failed to delete holiday");
+      swalError("Failed to delete holiday", error);
     }
   };
 
@@ -286,16 +287,16 @@ const DemoHolidays = () => {
 
       const data = await response.json();
       if (data.success) {
-        alert(data.message);
+        swalSuccess(data.message);
         setShowBulkModal(false);
         setBulkHolidays("");
         fetchHolidays();
         fetchStats();
       } else {
-        alert(data.message);
+        console.log(data.message);
       }
     } catch (error) {
-      alert("Failed to create holidays");
+      swalError("Failed to create holidays", error);
     }
   };
 

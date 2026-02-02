@@ -8,6 +8,7 @@ import Textareafield from "../../../components/ui/formFields/Textareafield";
 import ReadOnlyInput from "../../../components/ui/formFields/ReadOnlyInput";
 import Button from "../../../components/ui/Button";
 import CancelButton from "../../../components/ui/buttons/Cancel";
+import { swalSuccess } from "../../../utils/swalHelper";
 
 const todayStr = new Date().toISOString().split("T")[0];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -20,7 +21,7 @@ const leaveSchema = yup.object().shape({
     .test(
       "not-past",
       "From date cannot be in the past",
-      (val) => !!val && val >= todayStr
+      (val) => !!val && val >= todayStr,
     )
     .required("From date is required"),
   toDate: yup
@@ -32,7 +33,7 @@ const leaveSchema = yup.object().shape({
         const { fromDate } = this.parent;
         if (!val || !fromDate) return true;
         return val >= fromDate;
-      }
+      },
     )
     .required("To date is required"),
   isHalfDay: yup.boolean(),
@@ -117,7 +118,7 @@ const ApplyLeaveForm = () => {
         totalDays: calculateDays(
           values.fromDate,
           values.toDate,
-          values.isHalfDay
+          values.isHalfDay,
         ),
         status: "PENDING",
         createdAt: new Date().toISOString(),
@@ -126,7 +127,7 @@ const ApplyLeaveForm = () => {
         JSON.parse(localStorage.getItem("leaveApplications")) || [];
       existingLeaves.push(payload);
       localStorage.setItem("leaveApplications", JSON.stringify(existingLeaves));
-      alert("Leave applied successfully");
+      swalSuccess("Leave applied successfully");
       setValues(initialValues);
       setErrors({});
       setAttachmentError("");
@@ -200,7 +201,7 @@ const ApplyLeaveForm = () => {
             value={calculateDays(
               values.fromDate,
               values.toDate,
-              values.isHalfDay
+              values.isHalfDay,
             )}
           />
           {values.fromDate === values.toDate && values.fromDate && (

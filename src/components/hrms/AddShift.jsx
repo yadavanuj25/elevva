@@ -13,6 +13,12 @@ import { useMessage } from "../../auth/MessageContext";
 import ErrorMessage from "../modals/errors/ErrorMessage";
 import { TimePicker } from "../ui/TimePicker";
 import ToggleButton from "../ui/buttons/ToggleButton";
+import {
+  swalSuccess,
+  swalError,
+  swalWarning,
+  swalInfo,
+} from "../../utils/swalHelper";
 const shiftSchema = yup.object({
   name: yup.string().required("Shift name is required"),
   timezone: yup.string().required("Timezone is required"),
@@ -173,11 +179,12 @@ const AddShift = () => {
       const res = await createShift(formData);
       console.log(res);
       const data = await res.json();
+
       if (data.success) {
-        alert("Shift created successfully");
+        swalSuccess(data.message || "Shift created successfully");
         setFormData(initialFormState);
       } else {
-        alert(data.message);
+        swalError(data.message);
       }
     } catch (err) {
       if (err.success === false) {

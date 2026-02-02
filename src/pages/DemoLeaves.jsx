@@ -10,6 +10,7 @@ import {
   BarChart3,
   Filter,
 } from "lucide-react";
+import { swalError, swalSuccess } from "../utils/swalHelper";
 
 const DemoLeaves = () => {
   const [activeTab, setActiveTab] = useState("my-leaves");
@@ -207,16 +208,16 @@ const DemoLeaves = () => {
 
       const data = await response.json();
       if (data.success) {
-        alert("Leave submitted successfully!");
+        swalSuccess("Leave submitted successfully!");
         setShowApplyModal(false);
         fetchMyLeaves();
         fetchLeaveBalance();
         resetForm();
       } else {
-        alert(data.message);
+        console.log(data.message);
       }
     } catch (error) {
-      alert("Failed to submit");
+      swalError("Failed to submit", error);
     }
   };
 
@@ -237,7 +238,7 @@ const DemoLeaves = () => {
       );
       const data = await response.json();
       if (data.success) {
-        alert("Leave approved");
+        swalSuccess("Leave approved");
         fetchPendingLeaves();
       }
     } catch (error) {
@@ -263,11 +264,11 @@ const DemoLeaves = () => {
       );
       const data = await response.json();
       if (data.success) {
-        alert("Leave rejected");
+        swalSuccess("Leave rejected");
         fetchPendingLeaves();
       }
     } catch (error) {
-      console.error("Error:", error);
+      swalError(error);
     }
   };
 
@@ -284,11 +285,11 @@ const DemoLeaves = () => {
       );
       const data = await response.json();
       if (data.success) {
-        alert("Leave cancelled");
+        swalSuccess("Leave cancelled");
         fetchMyLeaves();
       }
     } catch (error) {
-      alert("Failed to cancel");
+      swalError("Failed to cancel", error);
     }
   };
 
@@ -308,7 +309,7 @@ const DemoLeaves = () => {
       a.download = `leaves-export-${Date.now()}.csv`;
       a.click();
     } catch (error) {
-      alert("Failed to export");
+      swalError("Failed to export", error);
     }
   };
 
@@ -357,8 +358,8 @@ const DemoLeaves = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
+      <div className=" mx-auto">
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>

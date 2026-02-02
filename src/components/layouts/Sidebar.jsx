@@ -862,6 +862,23 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       ],
     },
     {
+      section: "HRMS",
+      items: [
+        {
+          resource: "customers",
+          path: "/demo-holidays",
+          label: "Holidays",
+          icon: <FaUserTie size={16} />,
+        },
+        {
+          resource: "customers",
+          path: "/demo-leaves",
+          label: "Leaves",
+          icon: <FaUserTie size={16} />,
+        },
+      ],
+    },
+    {
       section: "INTERVIEW MANAGEMENT",
       items: [
         {

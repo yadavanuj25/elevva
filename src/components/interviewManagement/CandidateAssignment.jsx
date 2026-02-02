@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 // Services
 import { getProfiles, assignCandidate } from "../../services/interviewService";
+import { swalSuccess } from "../../utils/swalHelper";
 
 const CandidateAssignment = ({ requirement, onCandidateAssigned }) => {
   const [profiles, setProfiles] = useState([]);
@@ -23,7 +24,7 @@ const CandidateAssignment = ({ requirement, onCandidateAssigned }) => {
 
   const handleSearch = () => {
     const results = profiles.filter((p) =>
-      requirement.skills.every((skill) => p.skills.includes(skill))
+      requirement.skills.every((skill) => p.skills.includes(skill)),
     );
     setSearchResults(results);
   };
@@ -32,7 +33,7 @@ const CandidateAssignment = ({ requirement, onCandidateAssigned }) => {
     await assignCandidate(requirement.id, candidate.id);
     setSelectedCandidate(candidate);
     onCandidateAssigned(candidate); // send to BDE
-    alert(`Candidate ${candidate.name} assigned to BDE`);
+    swalSuccess(`Candidate ${candidate.name} assigned to BDE`);
   };
 
   const handleAddNewCandidate = async () => {
