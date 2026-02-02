@@ -42,6 +42,7 @@ import AttendanceHistoryTable from "./AttendanceTable";
 import ToggleButton from "../ui/buttons/ToggleButton";
 import Textareafield from "../ui/formFields/Textareafield";
 import CustomSwal from "../../utils/CustomSwal";
+import BasicDatePicker from "../ui/BasicDatePicker";
 
 const AttendanceTracker = () => {
   const [todayAttendance, setTodayAttendance] = useState(null);
@@ -391,13 +392,23 @@ const AttendanceTracker = () => {
       hour12: true,
     });
   };
+  const formatMinutesToHours = (minutes) => {
+    if (!minutes || minutes <= 0) return "0 min";
+
+    const hrs = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+
+    if (hrs > 0 && mins > 0) return `${hrs}h ${mins}m`;
+    if (hrs > 0) return `${hrs}h`;
+    return `${mins}m`;
+  };
 
   const getStatusColor = (status) => {
     const colors = {
-      present: "bg-green-100 text-green-800",
-      absent: "bg-red-100 text-red-800",
-      "half-day": "bg-yellow-100 text-yellow-800",
-      late: "bg-orange-100 text-orange-800",
+      present: "bg-green-100  border border-green-200",
+      absent: "bg-red-100 border border-red-200",
+      "half-day": "bg-yellow-100 border border-yellow-200",
+      late: "bg-orange-100 border border-green-200",
       "on-leave": "bg-blue-100 text-blue-800",
       holiday: "bg-purple-100 text-purple-800",
     };
@@ -523,23 +534,26 @@ const AttendanceTracker = () => {
                     {todayAttendance?.isLate && (
                       <span className="inline-flex items-center text-xs text-orange-600 mt-1">
                         <AlertCircle className="w-3 h-3 mr-1" />
-                        Late by {todayAttendance.lateBy} mins
+                        Late by {formatMinutesToHours(
+                          todayAttendance.lateBy,
+                        )}{" "}
+                        mins
                       </span>
                     )}
                   </div>
                 </div>
                 {todayAttendance?.workMode && (
                   <div
-                    className={`flex gap-1 items-center px-5 py-1.5 text-sm text-white font-medium rounded-full transition-all duration-300 ${
+                    className={`flex gap-1 items-center px-2 py-1 text-xs text-gray-900  border  rounded capitalize transition-all duration-300 ${
                       todayAttendance?.workMode === "office"
-                        ? "bg-green-600  "
-                        : "bg-red-600  "
+                        ? "bg-green-100  border-green-200"
+                        : "bg-red-100  border-red-200"
                     }`}
                   >
                     {todayAttendance?.workMode == "office" ? (
-                      <BsBuildings size={16} />
+                      <BsBuildings size={14} />
                     ) : (
-                      <House size={16} />
+                      <House size={14} />
                     )}
                     {todayAttendance?.workMode}
                   </div>
@@ -566,11 +580,11 @@ const AttendanceTracker = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-3 ">
+              <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
                   onClick={handleShowPunchInModal}
                   disabled={isPunchingIn || todayAttendance?.punchIn?.time}
-                  className={`flex items-center justify-center mb-2 space-x-2 py-3 px-4 rounded-lg font-medium transition-colors ${
+                  className={`flex items-center justify-center  space-x-2 py-3 px-4 rounded-lg font-medium transition-colors ${
                     todayAttendance?.punchIn?.time
                       ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                       : "bg-green-600 text-white hover:bg-green-700"
@@ -586,7 +600,7 @@ const AttendanceTracker = () => {
                     !todayAttendance?.punchIn?.time ||
                     todayAttendance?.punchOut?.time
                   }
-                  className={`flex items-center justify-center space-x-2 mb-2 py-3 px-4 rounded-lg font-medium transition-colors ${
+                  className={`flex items-center justify-center space-x-2  py-3 px-4 rounded-lg font-medium transition-colors ${
                     !todayAttendance?.punchIn?.time ||
                     todayAttendance?.punchOut?.time
                       ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -632,7 +646,7 @@ const AttendanceTracker = () => {
                           Status
                         </p>
                         <span
-                          className={`inline-block px-2 py-1 rounded text-xs font-semibold capitalize ${getStatusColor(todayAttendance.status)}`}
+                          className={`inline-block px-2 py-1 rounded text-xs  capitalize ${getStatusColor(todayAttendance.status)}`}
                         >
                           {todayAttendance.status}
                         </span>
@@ -789,23 +803,26 @@ const AttendanceTracker = () => {
                 {/* Filters */}
                 <div className="mb-6 flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
-                    <Filter className="w-5 h-5 text-gray-400" />
-                    <input
-                      type="date"
+                    {/* <Filter className="w-5 h-5 text-gray-400" /> */}
+
+                    <BasicDatePicker
+                      name="dob"
+                      labelName="Date of Birth"
                       value={filters.startDate}
-                      onChange={(e) =>
+                      handleChange={(e) =>
                         setFilters({ ...filters, startDate: e.target.value })
                       }
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     />
+
                     <span className="text-gray-500">to</span>
-                    <input
-                      type="date"
+
+                    <BasicDatePicker
+                      name="dob"
+                      labelName="Date of Birth"
                       value={filters.endDate}
-                      onChange={(e) =>
+                      handleChange={(e) =>
                         setFilters({ ...filters, endDate: e.target.value })
                       }
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <button

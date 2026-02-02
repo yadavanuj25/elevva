@@ -13,17 +13,22 @@ import {
   Filter,
   Download,
   Upload,
+  ArrowRight,
+  ArrowLeft,
 } from "lucide-react";
 import SelectField from "../components/ui/SelectField";
 import { swalError, swalSuccess } from "../utils/swalHelper";
+import Close from "../components/ui/buttons/Close";
 
-const years = [
-  { label: "2021", value: "2021" },
-  { label: "2022", value: "2022" },
-  { label: "2023", value: "2023" },
-  { label: "2024", value: "2024" },
-  { label: "2025", value: "2025" },
-];
+const currentYear = new Date().getFullYear();
+
+const years = Array.from({ length: 3 }, (_, i) => {
+  const year = currentYear - i;
+  return {
+    label: String(year),
+    value: String(year),
+  };
+});
 
 const holidaysTypes = [
   {
@@ -363,6 +368,17 @@ const DemoHolidays = () => {
   const paginatedHolidays = holidays.slice(startIndex, lastIndex);
   const totalPages = Math.ceil(holidays.length / itemsPerPage);
 
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div>
       <div>
@@ -379,14 +395,14 @@ const DemoHolidays = () => {
               <div className="flex space-x-3">
                 <button
                   onClick={() => setShowBulkModal(true)}
-                  className="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-purple-50 transition-colors shadow border border-purple-200 flex items-center space-x-2"
+                  className="bg-white text-accent-dark px-4 py-2 rounded-lg font-medium hover:bg-accent-light transition-colors  border border-accent-dark flex items-center space-x-2"
                 >
                   <Upload className="w-5 h-5" />
                   <span>Bulk Add</span>
                 </button>
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-2 rounded-lg font-medium hover:from-orange-700 hover:to-red-700 transition-all shadow-lg flex items-center space-x-2"
+                  className="bg-accent-dark text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-all  flex items-center space-x-2"
                 >
                   <Plus className="w-5 h-5" />
                   <span>Add Holiday</span>
@@ -399,30 +415,33 @@ const DemoHolidays = () => {
         {/* Statistics */}
         {isAdmin && stats && (
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl  p-6 text-white">
               <p className="text-orange-100 text-sm mb-1">Total Holidays</p>
               <p className="text-4xl font-bold">{stats.totalHolidays}</p>
               <p className="text-orange-100 text-xs mt-2">Year {stats.year}</p>
             </div>
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl  p-6 text-white">
               <p className="text-blue-100 text-sm mb-1">Public</p>
               <p className="text-4xl font-bold">
-                {stats.holidaysByType[0].count}
+                {stats.holidaysByType?.find((i) => i._id === "public")?.count ||
+                  0}
               </p>
             </div>
-            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl  p-6 text-white">
               <p className="text-purple-100 text-sm mb-1">Optional</p>
               <p className="text-4xl font-bold">
-                {stats.holidaysByType[1].count}
+                {stats.holidaysByType?.find((i) => i._id === "optional")
+                  ?.count || 0}
               </p>
             </div>
-            <div className="bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl  p-6 text-white">
               <p className="text-pink-100 text-sm mb-1">Restricted</p>
               <p className="text-4xl font-bold">
-                {stats.holidaysByType[2].count}
+                {stats.holidaysByType?.find((i) => i._id === "restricted")
+                  ?.count || 0}
               </p>
             </div>
-            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl  p-6 text-white">
               <p className="text-green-100 text-sm mb-1">Upcoming</p>
               <p className="text-4xl font-bold">{stats.upcomingHolidays}</p>
             </div>
@@ -430,13 +449,13 @@ const DemoHolidays = () => {
         )}
 
         {/* Upcoming Holidays Card */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-lg p-4 mb-4">
+        <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl  p-4 mb-4">
           <h3 className="text-lg font-semibold  mb-4 flex items-center space-x-2">
             <Gift className="w-5 h-5 text-orange-600" />
             <span>Upcoming Holidays</span>
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {upcomingHolidays.map((holiday) => (
+            {upcomingHolidays?.map((holiday) => (
               <div
                 key={holiday._id}
                 className="border-2 rounded-lg p-4 hover:shadow-md transition-shadow"
@@ -468,7 +487,7 @@ const DemoHolidays = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-lg p-4 mb-6 ">
+        <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl  p-4 mb-6 ">
           <div className="flex items-center gap-2 w-1/2">
             {/* Filter Icon */}
             <Filter className="w-5 h-5 text-gray-400 shrink-0" />
@@ -519,7 +538,7 @@ const DemoHolidays = () => {
 
         {/* Holidays List */}
         {loading ? (
-          <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+          <div className="bg-white rounded-xl  p-12 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
             <p className="mt-4 text-gray-600">Loading holidays...</p>
           </div>
@@ -532,125 +551,147 @@ const DemoHolidays = () => {
             </p>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-accent-dark text-white">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold">
-                      Holiday Name
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold">
-                      Date
-                    </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold">
-                      Type
-                    </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold">
-                      Days Until
-                    </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold">
-                      Status
-                    </th>
-                    {isAdmin && (
-                      <th className="px-6 py-4 text-center text-sm font-semibold">
-                        Actions
+          <>
+            <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl  overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-accent-dark text-white">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">
+                        Holiday Name
                       </th>
-                    )}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {holidays.map((holiday) => (
-                    <tr
-                      key={holiday._id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                    >
-                      <td className="px-6 py-4">
-                        <div className="flex items-center space-x-3">
-                          {getTypeIcon(holiday.type)}
-                          <div>
-                            <p className="font-semibold ">{holiday.name}</p>
-                            {holiday.description && (
-                              <p className="text-sm text-gray-500">
-                                {holiday.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <p className="font-medium ">
-                          {formatDate(holiday.date)}
-                        </p>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <span
-                          className={`inline-block px-3 py-1 rounded text-xs font-semibold capitalize border ${getTypeColor(holiday.type)}`}
-                        >
-                          {holiday.type}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        {getDaysUntil(holiday.date) >= 0 ? (
-                          <span className="inline-block px-3 py-1 bg-green-100 text-green-800 border border-green-200 rounded text-xs font-semibold ">
-                            {getDaysUntil(holiday.date)} days
-                          </span>
-                        ) : (
-                          <span className="text-gray-400 text-sm">Past</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        {holiday.isActive ? (
-                          <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
-                        ) : (
-                          <X className="w-5 h-5 text-red-500 mx-auto" />
-                        )}
-                      </td>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">
+                        Date
+                      </th>
+                      <th className="px-6 py-4 text-center text-sm font-semibold">
+                        Type
+                      </th>
+                      <th className="px-6 py-4 text-center text-sm font-semibold">
+                        Days Until
+                      </th>
+                      <th className="px-6 py-4 text-center text-sm font-semibold">
+                        Status
+                      </th>
                       {isAdmin && (
-                        <td className="px-6 py-4">
-                          <div className="flex items-center justify-center space-x-2">
-                            <button
-                              onClick={() => openEditModal(holiday)}
-                              className="bg-blue-100 text-blue-700 p-2 rounded-lg hover:bg-blue-200 transition-colors"
-                            >
-                              <Edit className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteHoliday(holiday._id)}
-                              className="bg-red-100 text-red-700 p-2 rounded-lg hover:bg-red-200 transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
+                        <th className="px-6 py-4 text-center text-sm font-semibold">
+                          Actions
+                        </th>
                       )}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {paginatedHolidays.map((holiday) => (
+                      <tr
+                        key={holiday._id}
+                        className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        <td className="px-6 py-4">
+                          <div className="flex items-center space-x-3">
+                            {getTypeIcon(holiday.type)}
+                            <div>
+                              <p className="font-semibold ">{holiday.name}</p>
+                              {holiday.description && (
+                                <p className="text-sm text-gray-500">
+                                  {holiday.description}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <p className="font-medium ">
+                            {formatDate(holiday.date)}
+                          </p>
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <span
+                            className={`inline-block px-3 py-1 rounded text-xs font-semibold capitalize border ${getTypeColor(holiday.type)}`}
+                          >
+                            {holiday.type}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          {getDaysUntil(holiday.date) >= 0 ? (
+                            <span className="inline-block px-3 py-1 bg-green-100 text-green-800 border border-green-200 rounded text-xs font-semibold ">
+                              {getDaysUntil(holiday.date)} days
+                            </span>
+                          ) : (
+                            <span className="text-gray-400 text-sm">Past</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          {holiday.isActive ? (
+                            <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
+                          ) : (
+                            <X className="w-5 h-5 text-red-500 mx-auto" />
+                          )}
+                        </td>
+                        {isAdmin && (
+                          <td className="px-6 py-4">
+                            <div className="flex items-center justify-center space-x-2">
+                              <button
+                                onClick={() => openEditModal(holiday)}
+                                className="bg-blue-100 text-blue-700 p-2 rounded-lg hover:bg-blue-200 transition-colors"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteHoliday(holiday._id)}
+                                className="bg-red-100 text-red-700 p-2 rounded-lg hover:bg-red-200 transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+            <div className="flex items-center justify-center gap-2 mt-4">
+              {/* Previous */}
+              <button
+                onClick={handlePrevious}
+                disabled={currentPage === 1}
+                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md border transition
+      ${
+        currentPage === 1
+          ? "cursor-not-allowed text-gray-500 border-gray-200 bg-gray-200"
+          : "text-white border-gray-300 bg-accent-dark hover:opacity-90"
+      }`}
+              >
+                <ArrowLeft size={16} /> Prev
+              </button>
+
+              {/* Page Info */}
+              <span className="px-4 py-2 text-sm font-semibold  ">
+                <span className="text-accent-dark">{currentPage}</span> of{" "}
+                <span className="text-accent-dark">{totalPages}</span>
+              </span>
+
+              {/* Next */}
+              <button
+                onClick={handleNext}
+                disabled={currentPage === totalPages}
+                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md border transition
+      ${
+        currentPage === totalPages
+          ? "cursor-not-allowed text-gray-500 border-gray-200 bg-gray-200"
+          : "text-white border-gray-300 bg-accent-dark hover:opacity-90"
+      }`}
+              >
+                Next <ArrowRight size={16} />
+              </button>
+            </div>
+          </>
         )}
 
         {/* Create/Edit Modals */}
         {(showCreateModal || showEditModal) && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl  max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="sticky top-0 bg-accent-dark text-white p-6 flex justify-between items-center">
-                <h2 className="text-2xl font-bold">
-                  {showCreateModal ? "Add New Holiday" : "Edit Holiday"}
-                </h2>
-                <button
-                  onClick={() => {
-                    setShowCreateModal(false);
-                    setShowEditModal(false);
-                    resetForm();
-                  }}
-                  className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
               <div className="bg-accent-dark text-white px-5 py-3 rounded-t-lg">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-4">
@@ -668,7 +709,6 @@ const DemoHolidays = () => {
                   />
                 </div>
               </div>
-
               <div className="p-6 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -680,7 +720,7 @@ const DemoHolidays = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg "
                     placeholder="e.g., Republic Day"
                   />
                 </div>
@@ -696,7 +736,7 @@ const DemoHolidays = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, date: e.target.value })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg "
                     />
                   </div>
 
@@ -709,7 +749,7 @@ const DemoHolidays = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, type: e.target.value })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg "
                     >
                       <option value="public">Public Holiday</option>
                       <option value="optional">Optional Holiday</option>
@@ -728,7 +768,7 @@ const DemoHolidays = () => {
                       setFormData({ ...formData, description: e.target.value })
                     }
                     rows="3"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg "
                     placeholder="Optional description..."
                   ></textarea>
                 </div>
@@ -741,7 +781,7 @@ const DemoHolidays = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, isActive: e.target.checked })
                       }
-                      className="w-5 h-5 text-orange-600 rounded focus:ring-orange-500"
+                      className="w-5 h-5 text-orange-600 rounded "
                     />
                     <span className="font-medium text-gray-700">
                       Active Holiday
@@ -766,7 +806,7 @@ const DemoHolidays = () => {
                         ? handleCreateHoliday
                         : handleUpdateHoliday
                     }
-                    className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-3 rounded-lg hover:from-orange-700 hover:to-red-700 transition-all font-medium shadow-lg flex items-center justify-center space-x-2"
+                    className="flex-1 bg-accent-dark text-white px-6 py-3 rounded-lg hover:from-orange-700 hover:to-red-700 transition-all font-medium  flex items-center justify-center space-x-2"
                   >
                     <Save className="w-5 h-5" />
                     <span>
@@ -782,18 +822,24 @@ const DemoHolidays = () => {
         {/* Bulk Create Modal */}
         {showBulkModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full">
-              <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 flex justify-between items-center rounded-t-xl">
-                <h2 className="text-2xl font-bold">Bulk Add Holidays</h2>
-                <button
-                  onClick={() => {
-                    setShowBulkModal(false);
-                    setBulkHolidays("");
-                  }}
-                  className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2"
-                >
-                  <X className="w-6 h-6" />
-                </button>
+            <div className="bg-white rounded-xl  max-w-2xl w-full">
+              <div className="bg-accent-dark text-white px-5 py-3 rounded-t-lg">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-4">
+                    <h2 className="text-xl font-semibold">
+                      {showBulkModal
+                        ? "Bulk Add Holidays"
+                        : "Bulk Edit Holiday"}
+                    </h2>
+                  </div>
+
+                  <Close
+                    handleClose={() => {
+                      setShowBulkModal(false);
+                      setBulkHolidays("");
+                    }}
+                  />
+                </div>
               </div>
 
               <div className="p-6">
@@ -808,7 +854,7 @@ const DemoHolidays = () => {
                   value={bulkHolidays}
                   onChange={(e) => setBulkHolidays(e.target.value)}
                   rows="10"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 font-mono text-sm"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg  font-mono text-sm"
                   placeholder={`Independence Day, 2025-08-15, public\nRepublic Day, 2025-01-26, public\nDiwali, 2025-11-01, optional`}
                 ></textarea>
 
@@ -824,7 +870,7 @@ const DemoHolidays = () => {
                   </button>
                   <button
                     onClick={handleBulkCreate}
-                    className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all font-medium shadow-lg"
+                    className="flex-1 bg-accent-dark text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all font-medium "
                   >
                     Create Holidays
                   </button>

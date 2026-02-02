@@ -11,6 +11,7 @@ import {
   Filter,
 } from "lucide-react";
 import { swalError, swalSuccess } from "../utils/swalHelper";
+import Close from "../components/ui/buttons/Close";
 
 const DemoLeaves = () => {
   const [activeTab, setActiveTab] = useState("my-leaves");
@@ -358,7 +359,7 @@ const DemoLeaves = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
+    <div className="min-h-screen ">
       <div className=" mx-auto">
         <div className="mb-8">
           <div className="flex items-center justify-between">
@@ -374,7 +375,7 @@ const DemoLeaves = () => {
               {isAdmin && (
                 <button
                   onClick={exportLeaves}
-                  className="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-purple-50 border border-purple-200 flex items-center space-x-2"
+                  className="bg-white text-accent-dark px-4 py-2 rounded-lg font-medium hover:bg-accent-light border border-accent-dark flex items-center space-x-2"
                 >
                   <Download className="w-5 h-5" />
                   <span>Export</span>
@@ -382,7 +383,7 @@ const DemoLeaves = () => {
               )}
               <button
                 onClick={() => setShowApplyModal(true)}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 shadow-lg flex items-center space-x-2"
+                className="bg-accent-dark text-white px-6 py-3 rounded-lg font-medium hover:opacity-90  flex items-center space-x-2"
               >
                 <Send className="w-5 h-5" />
                 <span>Apply Leave</span>
@@ -393,7 +394,7 @@ const DemoLeaves = () => {
 
         {leaveBalance && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+            <div className="bg-white rounded-xl  p-6 border-l-4 border-blue-500">
               <p className="text-sm text-gray-600">Casual Leave</p>
               <p className="text-3xl font-bold text-blue-600">
                 {leaveBalance.casual?.remaining || 0}
@@ -402,7 +403,7 @@ const DemoLeaves = () => {
                 of {leaveBalance.casual?.total || 0} days
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+            <div className="bg-white rounded-xl  p-6 border-l-4 border-green-500">
               <p className="text-sm text-gray-600">Sick Leave</p>
               <p className="text-3xl font-bold text-green-600">
                 {leaveBalance.sick?.remaining || 0}
@@ -411,7 +412,7 @@ const DemoLeaves = () => {
                 of {leaveBalance.sick?.total || 0} days
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+            <div className="bg-white rounded-xl  p-6 border-l-4 border-purple-500">
               <p className="text-sm text-gray-600">Earned Leave</p>
               <p className="text-3xl font-bold text-purple-600">
                 {leaveBalance.earned?.remaining || 0}
@@ -420,7 +421,7 @@ const DemoLeaves = () => {
                 of {leaveBalance.earned?.total || 0} days
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500">
+            <div className="bg-white rounded-xl  p-6 border-l-4 border-orange-500">
               <p className="text-sm text-gray-600">Unpaid Leave</p>
               <p className="text-3xl font-bold text-orange-600">
                 {leaveBalance.unpaid?.used || 0}
@@ -431,7 +432,7 @@ const DemoLeaves = () => {
         )}
 
         {leaveStats && (
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <div className="bg-white rounded-xl  p-6 mb-6">
             <h3 className="text-lg font-semibold mb-4 flex items-center space-x-2">
               <BarChart3 className="w-5 h-5 text-purple-600" />
               <span>Your Leave Statistics</span>
@@ -480,7 +481,7 @@ const DemoLeaves = () => {
           </div>
         )}
 
-        <div className="bg-white rounded-xl shadow-lg">
+        <div className="bg-white rounded-xl ">
           <div className="border-b border-gray-200">
             <nav className="flex -mb-px overflow-x-auto">
               <button
@@ -505,7 +506,7 @@ const DemoLeaves = () => {
                   >
                     Pending
                     {pendingLeaves.length > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      <span className="absolute top-2 right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                         {pendingLeaves.length}
                       </span>
                     )}
@@ -698,14 +699,16 @@ const DemoLeaves = () => {
         {showApplyModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Apply for Leave</h2>
-                <button
-                  onClick={() => setShowApplyModal(false)}
-                  className="text-white"
-                >
-                  <X className="w-6 h-6" />
-                </button>
+              <div className="bg-accent-dark text-white px-5 py-3 rounded-t-lg">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-4">
+                    <h2 className="text-xl font-semibold">
+                      {showApplyModal ? "Apply for Leave" : "Edit for Leave"}
+                    </h2>
+                  </div>
+
+                  <Close handleClose={() => setShowApplyModal(false)} />
+                </div>
               </div>
 
               <div className="p-6 space-y-4">
@@ -832,7 +835,7 @@ const DemoLeaves = () => {
                   </button>
                   <button
                     onClick={handleSubmit}
-                    className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg"
+                    className="flex-1 bg-accent-dark text-white px-6 py-3 rounded-lg"
                   >
                     Submit
                   </button>
