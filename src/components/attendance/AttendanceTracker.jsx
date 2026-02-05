@@ -54,20 +54,20 @@ const AttendanceTracker = () => {
   const [workingTime, setWorkingTime] = useState("00:00:00");
   const [breakTime, setBreakTime] = useState("00:00:00");
   const [address, setAddress] = useState("");
-  // const [filters, setFilters] = useState({
-  //   startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-  //     .toISOString()
-  //     .split("T")[0],
-  //   endDate: new Date().toISOString().split("T")[0],
-  //   page: 1,
-  //   limit: 30,
-  // });
   const [filters, setFilters] = useState({
-    startDate: null,
-    endDate: null,
+    startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+      .toISOString()
+      .split("T")[0],
+    endDate: new Date().toISOString().split("T")[0],
     page: 1,
     limit: 30,
   });
+  // const [filters, setFilters] = useState({
+  //   startDate: null,
+  //   endDate: null,
+  //   page: 1,
+  //   limit: 30,
+  // });
 
   useEffect(() => {
     document.title = "Elevva | Attendance";
@@ -90,15 +90,15 @@ const AttendanceTracker = () => {
     return () => clearInterval(timer);
   }, [isPunchingIn]);
 
-  // useEffect(() => {
-  //   if (activeTab === "history" || activeTab === "stats") {
-  //     fetchHistory();
-  //   }
-  // }, []);
-
   useEffect(() => {
-    fetchHistory();
+    if (activeTab === "history" || activeTab === "stats") {
+      fetchHistory();
+    }
   }, []);
+
+  // useEffect(() => {
+  //   fetchHistory();
+  // }, []);
 
   // Update working time counter
   useEffect(() => {
@@ -205,43 +205,43 @@ const AttendanceTracker = () => {
     }
   };
 
-  // const fetchHistory = async () => {
-  //   try {
-  //     const res = await getAttendanceHistory({
-  //       startDate: filters.startDate,
-  //       endDate: filters.endDate,
-  //       page: filters.page,
-  //       limit: filters.limit,
-  //     });
-  //     const data = await res.data;
-  //     const statsData = await res.stats;
-  //     setHistory(data || []);
-  //     setStats(statsData || null);
-  //   } catch (error) {
-  //     console.error("Error fetching history:", error);
-  //   }
-  // };
-
   const fetchHistory = async () => {
     try {
-      const params = {
+      const res = await getAttendanceHistory({
+        startDate: filters.startDate,
+        endDate: filters.endDate,
         page: filters.page,
         limit: filters.limit,
-        ...(filters.startDate && { startDate: filters.startDate }),
-        ...(filters.endDate && { endDate: filters.endDate }),
-      };
-
-      const res = await getAttendanceHistory(params);
-
-      const data = res.data;
-      const statsData = res.stats;
-
+      });
+      const data = await res.data;
+      const statsData = await res.stats;
       setHistory(data || []);
       setStats(statsData || null);
     } catch (error) {
       console.error("Error fetching history:", error);
     }
   };
+
+  // const fetchHistory = async () => {
+  //   try {
+  //     const params = {
+  //       page: filters.page,
+  //       limit: filters.limit,
+  //       ...(filters.startDate && { startDate: filters.startDate }),
+  //       ...(filters.endDate && { endDate: filters.endDate }),
+  //     };
+
+  //     const res = await getAttendanceHistory(params);
+
+  //     const data = res.data;
+  //     const statsData = res.stats;
+
+  //     setHistory(data || []);
+  //     setStats(statsData || null);
+  //   } catch (error) {
+  //     console.error("Error fetching history:", error);
+  //   }
+  // };
 
   const handleWorkModeToggle = (mode) => {
     setFormData((p) => ({ ...p, workMode: mode }));
