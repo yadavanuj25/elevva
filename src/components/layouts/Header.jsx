@@ -18,6 +18,7 @@ import Tippy from "@tippyjs/react";
 import { useAuth } from "../../auth/AuthContext";
 import HeaderNotificationPanel from "../notifications/HeaderNotificationPanel";
 import { useHeaderNotifications } from "../../hooks/UseHeaderNotifications";
+import { swalLogoutConfirm } from "../../utils/swalHelper";
 
 const IconButton = ({ title, icon: Icon, badge, onClick }) => (
   <Tippy
@@ -104,8 +105,9 @@ const Header = ({ toggleSidebar, isOpen }) => {
       color: "#dc2626",
       confirmButtonColor: "#dc2626",
       cancelButtonColor: "#6b7280",
+      backdrop: "rgba(0, 0, 0, 0.9)",
       customClass: {
-        popup: "rounded-2xl shadow-xl p-6",
+        popup: "rounded-2xl shadow-xl p-4",
         title: "text-lg font-semibold text-[#dc2626]",
         htmlContainer: "text-sm text-gray-600",
         confirmButton:
@@ -119,6 +121,13 @@ const Header = ({ toggleSidebar, isOpen }) => {
     const success = await logout();
     if (success) navigate("/login");
   };
+
+  // const handleLogout = async () => {
+  //   const result = await swalLogoutConfirm();
+  //   if (!result.isConfirmed) return;
+  //   const success = await logout();
+  //   if (success) navigate("/login");
+  // };
 
   const menuItems = [
     { icon: FaRegUser, text: "My Profile", path: "/my-profile" },

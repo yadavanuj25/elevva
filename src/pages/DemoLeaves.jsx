@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from "react";
 import {
-  Calendar,
   Send,
   X,
   CheckCircle,
   XCircle,
-  FileText,
   Download,
   BarChart3,
   Filter,
 } from "lucide-react";
 import { swalError, swalSuccess } from "../utils/swalHelper";
 import Close from "../components/ui/buttons/Close";
+import CustomModal from "../components/modals/leaveModal/CustomModal";
+import {
+  applyLeaves,
+  approveLeaves,
+  cancelLeaves,
+  getLeavesBalance,
+  getLeaveStats,
+  getMyLeaves,
+  getPendingLeaves,
+  getTeamLeaves,
+  getUpcomingLeaves,
+  rejectLeaves,
+} from "../services/leaveService";
 
 const DemoLeaves = () => {
   const [activeTab, setActiveTab] = useState("my-leaves");
@@ -26,6 +37,13 @@ const DemoLeaves = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isManager, setIsManager] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
+
+  // Modal states for different actions
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedLeaveId, setSelectedLeaveId] = useState(null);
+  const [modalLoading, setModalLoading] = useState(false);
 
   const [filters, setFilters] = useState({
     status: "",
@@ -42,6 +60,9 @@ const DemoLeaves = () => {
     emergencyContact: { name: "", phone: "", relationship: "" },
   });
 
+  useEffect(() => {
+    document.title = "Elevva | Leaves";
+  }, []);
   useEffect(() => {
     checkUserRole();
     fetchLeaveBalance();
@@ -71,15 +92,9 @@ const DemoLeaves = () => {
 
   const fetchLeaveBalance = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/leaves/balance",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      const data = await response.json();
-      setLeaveBalance(data.data);
+      const response = await getLeavesBalance();
+      const leaveBalance = await response.data;
+      setLeaveBalance(leaveBalance);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -87,20 +102,9 @@ const DemoLeaves = () => {
 
   const fetchMyLeaves = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const queryParams = new URLSearchParams({
-        ...(filters.status && { status: filters.status }),
-        ...(filters.leaveType && { leaveType: filters.leaveType }),
-      });
-
-      const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/leaves/my-leaves?${queryParams}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      const data = await response.json();
-      setMyLeaves(data.data || []);
+      const response = await getMyLeaves(filters);
+      const myLeaves = response.data;
+      setMyLeaves(myLeaves || []);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -108,15 +112,9 @@ const DemoLeaves = () => {
 
   const fetchPendingLeaves = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/leaves/pending",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      const data = await response.json();
-      setPendingLeaves(data.data || []);
+      const response = await getPendingLeaves();
+      const pendingLeaves = await response.data;
+      setPendingLeaves(pendingLeaves || []);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -124,15 +122,9 @@ const DemoLeaves = () => {
 
   const fetchTeamLeaves = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/leaves/team",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      const data = await response.json();
-      setTeamLeaves(data.data || []);
+      const response = await getTeamLeaves();
+      const teamLeaves = await response.data;
+      setTeamLeaves(teamLeaves || []);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -162,15 +154,9 @@ const DemoLeaves = () => {
 
   const fetchUpcomingLeaves = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/leaves/upcoming",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      const data = await response.json();
-      setUpcomingLeaves(data.data || []);
+      const response = await getUpcomingLeaves();
+      const upcomingLeaves = await response.data;
+      setUpcomingLeaves(upcomingLeaves || []);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -178,15 +164,9 @@ const DemoLeaves = () => {
 
   const fetchLeaveStats = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/leaves/stats",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      const data = await response.json();
-      setLeaveStats(data.data);
+      const response = await getLeaveStats();
+      const leaveStats = await response.data;
+      setLeaveStats(leaveStats);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -194,103 +174,98 @@ const DemoLeaves = () => {
 
   const handleSubmit = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/leaves/apply",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        },
-      );
-
-      const data = await response.json();
-      if (data.success) {
+      const response = await applyLeaves(formData);
+      if (response.success) {
         swalSuccess("Leave submitted successfully!");
         setShowApplyModal(false);
         fetchMyLeaves();
         fetchLeaveBalance();
         resetForm();
       } else {
-        console.log(data.message);
+        console.log(response.message);
       }
     } catch (error) {
       swalError("Failed to submit", error);
     }
   };
 
-  const handleApprove = async (leaveId) => {
-    if (!window.confirm("Approve this leave?")) return;
+  const handleShowApproveModal = (leaveId) => {
+    setSelectedLeaveId(leaveId);
+    setShowApproveModal(true);
+  };
+
+  const handleApproveSubmit = async (comments) => {
+    setModalLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/leaves/${leaveId}/approve`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ reviewComments: "Approved" }),
-        },
-      );
-      const data = await response.json();
-      if (data.success) {
+      const payload = { reviewComments: comments };
+      const response = await approveLeaves(payload);
+
+      if (response.success) {
         swalSuccess("Leave approved");
         fetchPendingLeaves();
+        setShowApproveModal(false);
+        setSelectedLeaveId(null);
       }
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Failed to approve", error);
+    } finally {
+      setModalLoading(false);
     }
   };
 
-  const handleReject = async (leaveId) => {
-    const reason = window.prompt("Reason for rejection:");
-    if (!reason) return;
+  const handleShowRejectModal = (leaveId) => {
+    setSelectedLeaveId(leaveId);
+    setShowRejectModal(true);
+  };
+
+  const handleRejectSubmit = async (reason) => {
+    if (!reason || reason.trim() === "") {
+      swalError("Please provide a reason for rejection");
+      return;
+    }
+    setModalLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/leaves/${leaveId}/reject`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ reviewComments: reason }),
-        },
-      );
-      const data = await response.json();
-      if (data.success) {
+      const payload = {
+        reviewComments: reason,
+      };
+      const response = await rejectLeaves(payload);
+
+      if (response.success) {
         swalSuccess("Leave rejected");
         fetchPendingLeaves();
+        setShowRejectModal(false);
+        setSelectedLeaveId(null);
       }
     } catch (error) {
-      swalError(error);
+      swalError("Failed to reject", error);
+    } finally {
+      setModalLoading(false);
     }
   };
 
-  const handleCancel = async (leaveId) => {
-    if (!window.confirm("Cancel this leave request?")) return;
+  const handleShowCancelModal = (leaveId) => {
+    setSelectedLeaveId(leaveId);
+    setShowCancelModal(true);
+  };
+
+  const handleCancelSubmit = async (reason) => {
+    setModalLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/leaves/${leaveId}/cancel`,
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      const data = await response.json();
-      if (data.success) {
+      const payload = {
+        cancelReason: reason,
+      };
+      const response = await cancelLeaves(payload);
+
+      if (response.success) {
         swalSuccess("Leave cancelled");
         fetchMyLeaves();
+        setShowCancelModal(false);
+        setSelectedLeaveId(null);
       }
     } catch (error) {
       swalError("Failed to cancel", error);
+    } finally {
+      setModalLoading(false);
     }
   };
 
@@ -364,10 +339,8 @@ const DemoLeaves = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Leave Management
-              </h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold  mb-1">Leave Management</h1>
+              <p className="text-gray-500">
                 Manage leave applications and balances
               </p>
             </div>
@@ -602,10 +575,10 @@ const DemoLeaves = () => {
                     </div>
                     {leave.status === "pending" && (
                       <button
-                        onClick={() => handleCancel(leave._id)}
-                        className="mt-3 text-red-600 text-sm"
+                        onClick={() => handleShowCancelModal(leave._id)}
+                        className="mt-3 text-red-600 text-sm hover:underline"
                       >
-                        Cancel
+                        Cancel Request
                       </button>
                     )}
                   </div>
@@ -624,17 +597,26 @@ const DemoLeaves = () => {
                     <p className="text-sm capitalize">
                       {leave.leaveType} - {leave.numberOfDays} days
                     </p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      {formatDate(leave.startDate)} -{" "}
+                      {formatDate(leave.endDate)}
+                    </p>
+                    <div className="bg-white rounded p-3 mt-3">
+                      <p className="text-sm">
+                        <strong>Reason:</strong> {leave.reason}
+                      </p>
+                    </div>
                     <div className="flex space-x-3 mt-4">
                       <button
-                        onClick={() => handleApprove(leave._id)}
-                        className="flex-1 bg-green-600 text-white py-2 rounded-lg flex items-center justify-center space-x-2"
+                        onClick={() => handleShowApproveModal(leave._id)}
+                        className="flex-1 bg-green-600 text-white py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-green-700 transition-colors"
                       >
                         <CheckCircle className="w-4 h-4" />
                         <span>Approve</span>
                       </button>
                       <button
-                        onClick={() => handleReject(leave._id)}
-                        className="flex-1 bg-red-600 text-white py-2 rounded-lg flex items-center justify-center space-x-2"
+                        onClick={() => handleShowRejectModal(leave._id)}
+                        className="flex-1 bg-red-600 text-white py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-red-700 transition-colors"
                       >
                         <XCircle className="w-4 h-4" />
                         <span>Reject</span>
@@ -696,6 +678,7 @@ const DemoLeaves = () => {
           </div>
         </div>
 
+        {/* Apply Leave Modal */}
         {showApplyModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -829,13 +812,13 @@ const DemoLeaves = () => {
                 <div className="flex space-x-3">
                   <button
                     onClick={() => setShowApplyModal(false)}
-                    className="flex-1 px-6 py-3 border rounded-lg"
+                    className="flex-1 px-6 py-3 border rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSubmit}
-                    className="flex-1 bg-accent-dark text-white px-6 py-3 rounded-lg"
+                    className="flex-1 bg-accent-dark text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity"
                   >
                     Submit
                   </button>
@@ -844,6 +827,48 @@ const DemoLeaves = () => {
             </div>
           </div>
         )}
+
+        {/* Approve Leave Modal */}
+        <CustomModal
+          open={showApproveModal}
+          onClose={() => {
+            setShowApproveModal(false);
+            setSelectedLeaveId(null);
+          }}
+          onSubmit={handleApproveSubmit}
+          title="Approve Leave Request"
+          label="Comments (Optional)"
+          placeholder="Add any comments for the approval..."
+          loading={modalLoading}
+        />
+
+        {/* Reject Leave Modal */}
+        <CustomModal
+          open={showRejectModal}
+          onClose={() => {
+            setShowRejectModal(false);
+            setSelectedLeaveId(null);
+          }}
+          onSubmit={handleRejectSubmit}
+          title="Reject Leave Request"
+          label="Rejection Reason *"
+          placeholder="Please provide a reason for rejecting this leave request..."
+          loading={modalLoading}
+        />
+
+        {/* Cancel Leave Modal */}
+        <CustomModal
+          open={showCancelModal}
+          onClose={() => {
+            setShowCancelModal(false);
+            setSelectedLeaveId(null);
+          }}
+          onSubmit={handleCancelSubmit}
+          title="Cancel Leave Request"
+          label="Cancellation Reason (Optional)"
+          placeholder="Provide a reason for cancelling this leave request..."
+          loading={modalLoading}
+        />
       </div>
     </div>
   );

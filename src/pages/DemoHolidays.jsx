@@ -109,7 +109,9 @@ const DemoHolidays = () => {
       color: "text-purple-600",
     },
   ];
-
+  useEffect(() => {
+    document.title = "Elevva | Holidays";
+  }, []);
   useEffect(() => {
     checkIfAdmin();
     fetchHolidays();

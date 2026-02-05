@@ -1,3 +1,6 @@
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
 const CircularProgress = ({
   workingTime,
   shiftStartTime,
@@ -50,51 +53,139 @@ const CircularProgress = ({
     return "0:00:00";
   };
 
+  const displayTime = formatDisplayTime();
+  const [hours = "00", minutes = "00", seconds = "00"] = displayTime.split(":");
+
   const progress = calculateProgress();
-  const radius = 70;
-  const strokeWidth = 10;
-  const size = 160;
+  const radius = 75;
+  const strokeWidth = 12;
+  const outerRadius = radius + 16;
+  const outerStrokeWidth = 4.5;
+
+  const size = 200;
   const center = size / 2;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
+  // Get status color based on progress
+  const getStatusColor = () => {
+    if (progress >= 76)
+      return { main: "#16a34a", light: "#4ade80", dark: "#065f46" };
+
+    if (progress >= 51)
+      return { main: "#2563eb", light: "#93c5fd", dark: "#1e40af" };
+
+    if (progress >= 26)
+      return { main: "#f59e0b", light: "#fde68a", dark: "#b45309" };
+
+    return { main: "#ef4444", light: "#fca5a5", dark: "#b91c1c" };
+  };
+
+  const statusColor = getStatusColor();
+
   return (
     <div className="relative inline-flex items-center justify-center">
       <svg width={size} height={size} className="-rotate-90">
-        {/* Gray background circle */}
+        {/* Gradient Definitions */}
+        <defs>
+          {/* Progress gradient */}
+          <linearGradient
+            id="progressGradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor={statusColor.light} />
+            <stop offset="100%" stopColor={statusColor.main} />
+          </linearGradient>
+        </defs>
+
+        {/* Outer border circle - clean single stroke */}
+
         <circle
           cx={center}
           cy={center}
-          r={radius}
+          r={outerRadius}
           stroke="#e5e7eb"
-          strokeWidth={strokeWidth}
+          strokeWidth={outerStrokeWidth}
           fill="none"
+          className="dark:stroke-gray-700 drop-shadow-md"
         />
 
-        {/* Green progress circle */}
+        {/* Background track - solid clean color */}
         <circle
           cx={center}
           cy={center}
           r={radius}
-          stroke="#22c55e"
+          stroke="#f3f4f6"
+          strokeWidth={strokeWidth}
+          fill="none"
+          className="dark:stroke-gray-500"
+        />
+
+        {/* Animated progress circle with gradient */}
+        <circle
+          cx={center}
+          cy={center}
+          r={radius}
+          stroke="url(#progressGradient)"
           strokeWidth={strokeWidth}
           fill="none"
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
           style={{
-            transition: "stroke-dashoffset 0.5s ease",
+            transition: "stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         />
       </svg>
 
-      {/* Center text */}
+      {/* Center content - clean and minimal */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <p className="text-xs text-gray-500">Total Hours</p>
-        <p className="text-lg font-semibold ">{formatDisplayTime()}</p>
-        <p className="text-sm font-medium text-green-600">
-          {progress.toFixed(0)}%
+        {/* Label */}
+        <p className="text-xs font-medium text-gray-500 dark:text-gray-400 tracking-wide uppercase mb-1">
+          Total Hours
         </p>
+
+        {/* Time display */}
+
+        <div className="rounded-lg px-4 py-1 ">
+          <div className="flex text-lg font-bold items-center gap-1 ">
+            <span>{hours}:</span>
+            <span>{minutes}:</span>
+            {/* Animated Seconds */}
+            <div className="relative h-[1.5em] w-[2ch] overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={seconds}
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 20, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="absolute left-0"
+                >
+                  {seconds}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+
+        <motion.div
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="mt-1 px-2 py-0 rounded-full backdrop-blur-sm transition-all duration-500"
+          style={{
+            backgroundColor: statusColor.main,
+            boxShadow: `0 2px 8px ${statusColor.glow}, 0 0 0 1px ${statusColor.light}20`,
+          }}
+        >
+          <p className="text-[11px] font-bold text-white tracking-tight tabular-nums">
+            {progress.toFixed(0)}%
+          </p>
+        </motion.div>
       </div>
     </div>
   );

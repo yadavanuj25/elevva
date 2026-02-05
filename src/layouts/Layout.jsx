@@ -33,7 +33,7 @@ const Layout = () => {
         }`}
       >
         <Header toggleSidebar={toggleSidebar} isOpen={sidebarOpen} />
-        <main className="flex-1 p-4 overflow-auto ">
+        <main className="flex-1 p-3 overflow-auto ">
           <Outlet />
         </main>
 

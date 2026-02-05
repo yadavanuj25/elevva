@@ -48,11 +48,8 @@ const BasicDatePicker = ({
 }) => {
   const wrapperRef = useRef(null);
   const hasError = errors[name];
-  console.log(errors);
-
   const selectedDate =
     value && isValidDateString(value) ? new Date(value) : null;
-
   const [open, setOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date());
   const [inputValue, setInputValue] = useState(value || "");

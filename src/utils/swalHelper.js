@@ -35,3 +35,16 @@ export const swalInfo = (title = "Info", text = "") =>
     text,
     confirmButtonText: "OK",
   });
+
+export const swalLogoutConfirm = () =>
+  CustomSwal.fire({
+    title: "Log out of your account?",
+    text: "You’ll be signed out and need to log in again to continue.",
+    icon: "question",
+    iconColor: "#dc2626",
+    showCancelButton: true,
+    confirmButtonText: "Yes, log me out",
+    cancelButtonText: "Stay logged in",
+    confirmButtonColor: "#dc2626",
+    cancelButtonColor: "#6b7280",
+  });

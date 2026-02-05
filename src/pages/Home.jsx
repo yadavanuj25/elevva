@@ -43,7 +43,7 @@ export default function Home() {
           }));
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     document.querySelectorAll('[id^="section-"]').forEach((el) => {
@@ -208,6 +208,7 @@ export default function Home() {
       color: "#dc2626",
       confirmButtonColor: "#dc2626",
       cancelButtonColor: "#6b7280",
+      backdrop: "rgba(0, 0, 0, 0.9)",
       customClass: {
         popup: "rounded-2xl shadow-xl p-6",
         title: "text-lg font-semibold text-[#dc2626]",
@@ -289,7 +290,7 @@ export default function Home() {
                       user?.role?.name === "admin" ||
                         user?.role?.name === "superAdmin"
                         ? "/admin/super-dashboard"
-                        : "/dashboard"
+                        : "/dashboard",
                     )
                   }
                 >
@@ -395,10 +396,10 @@ export default function Home() {
                     idx === 0
                       ? "from-blue-500 to-cyan-500"
                       : idx === 1
-                      ? "from-purple-500 to-pink-500"
-                      : idx === 2
-                      ? "from-orange-500 to-red-500"
-                      : "from-green-500 to-emerald-500"
+                        ? "from-purple-500 to-pink-500"
+                        : idx === 2
+                          ? "from-orange-500 to-red-500"
+                          : "from-green-500 to-emerald-500"
                   } rounded-xl flex items-center justify-center mb-3 text-white group-hover:rotate-12 transition-transform`}
                 >
                   {stat.icon}
@@ -498,8 +499,8 @@ export default function Home() {
                   idx === activeTestimonial
                     ? "opacity-100 translate-x-0"
                     : idx < activeTestimonial
-                    ? "opacity-0 -translate-x-full"
-                    : "opacity-0 translate-x-full"
+                      ? "opacity-0 -translate-x-full"
+                      : "opacity-0 translate-x-full"
                 }`}
               >
                 <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-3xl p-12 shadow-2xl h-full flex flex-col justify-center">

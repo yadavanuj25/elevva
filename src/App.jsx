@@ -43,11 +43,6 @@ import InterviewDashboard from "./pages/InterviewDashboard";
 import { InterviewProvider } from "./context/InterViewContext";
 import NotFound from "./pages/NotFound";
 import Attandance from "./pages/Attendance/Attandance";
-import AttendanceHistory from "./pages/Attendance/AttendanceHistory";
-import LeaveDashboard from "./pages/Leaves/employee/LeaveDashboard";
-import ApplyLeave from "./pages/Leaves/employee/ApplyLeave";
-import AllLeaves from "./pages/Leaves/admin/AllLeaves";
-import ManagerLeaveDashboard from "./pages/Leaves/manager/ManagerLeaveDashboard";
 import Shifts from "./pages/HRMS/Shifts";
 import AddShift from "./components/hrms/AddShift";
 import EditShift from "./components/hrms/EditShift";
@@ -414,61 +409,6 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/attendance/history"
-              element={
-                <ProtectedRoute>
-                  <AttendanceHistory />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Leave Management - Employee Routes */}
-            <Route
-              path="/leaves"
-              element={
-                <ProtectedRoute>
-                  <LeaveDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/leaves/apply"
-              element={
-                <ProtectedRoute>
-                  <ApplyLeave />
-                </ProtectedRoute>
-              }
-            />
-            {/* Leave Management - Manager Routes */}
-            <Route
-              path="/leave-dashboard"
-              element={
-                <ProtectedRoute>
-                  <ManagerLeaveDashboard />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Leave Management - Admin Routes */}
-            <Route
-              path="/leaves/all"
-              element={
-                <ProtectedRoute>
-                  <AllLeaves />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Chats */}
-            {/* <Route
-              path="/chats"
-              element={
-                <ProtectedRoute>
-                  <Chat />
-                </ProtectedRoute>
-              }
-            /> */}
 
             {/* 404 Not Found */}
             <Route path="*" element={<NotFound />} />

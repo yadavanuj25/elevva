@@ -13,12 +13,12 @@ const schema = yup.object().shape({
       "fileType",
       "Allowed formats: jpeg, jpg, png",
       (value) =>
-        value && ["image/jpeg", "image/jpg", "image/png"].includes(value.type)
+        value && ["image/jpeg", "image/jpg", "image/png"].includes(value.type),
     )
     .test(
       "fileSize",
       "Max file size is 2 MB",
-      (value) => value && value.size <= 2 * 1024 * 1024
+      (value) => value && value.size <= 2 * 1024 * 1024,
     ),
   company_name: yup.string().required("Company name is required"),
   company_email: yup
@@ -106,7 +106,7 @@ const GeneralSettings = () => {
   };
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+    <div className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Logo Upload */}
         <div className="flex flex-col items-center p-5 rounded-md space-y-3">

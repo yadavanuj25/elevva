@@ -29,3 +29,19 @@ export const getAttendanceHistory = ({
 
   return fetchHandler(`/api/attendance/history?${queryParams}`, "GET");
 };
+
+export const getAllUsersAttendance = ({
+  startDate,
+  endDate,
+  department,
+  limit = 1000,
+}) => {
+  const queryParams = new URLSearchParams({
+    startDate,
+    endDate,
+    department,
+    limit,
+  }).toString();
+
+  return fetchHandler(`/api/attendance/history?${queryParams}`, "GET");
+};
