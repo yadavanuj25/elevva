@@ -4,6 +4,7 @@ import {
   MdEventBusy,
   MdKeyboardArrowDown,
   MdBeachAccess,
+  MdCelebration,
 } from "react-icons/md";
 import { FaCircleHalfStroke } from "react-icons/fa6";
 
@@ -43,11 +44,17 @@ const statusConfig = {
     borderColor: "border-orange-500",
     label: "On-Leave",
   },
-  "week-off": {
+  "Week-off": {
     icon: <MdEventBusy size={16} />,
-    color: "bg-gray-600",
-    borderColor: "border-gray-600",
+    color: "bg-zinc-500",
+    borderColor: "border-zinc-500",
     label: "week-off",
+  },
+  holiday: {
+    icon: <MdCelebration size={16} />,
+    color: "bg-indigo-500",
+    borderColor: "border-indigo-500",
+    label: "Holiday",
   },
 };
 
@@ -346,7 +353,7 @@ const StatusCircle = React.memo(
           {config.icon}
         </div>
 
-        <div className="h-4  text-[10px] font-medium">
+        <div className="h-4  text-[10px] font-medium whitespace-nowrap text-center">
           {dayData?.status === "present" && (
             <span
               className={dayData?.isLate ? "text-orange-500 " : "text-blue-500"}

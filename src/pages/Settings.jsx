@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Themes from "../components/themes/Themes";
-import GeneralSettings from "../components/userManagement/GeneralSettings";
-import EmailSettings from "../components/userManagement/EmailSettings";
+import EmailSettings from "../modules/settings/EmailSettings";
+import GeneralSettings from "../modules/settings/GeneralSettings";
 import PageTitle from "../hooks/PageTitle";
 
 const Settings = () => {

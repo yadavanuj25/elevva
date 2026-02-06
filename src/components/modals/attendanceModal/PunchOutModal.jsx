@@ -50,7 +50,13 @@ const PunchOutModal = ({
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className=" flex items-center gap-2">
+          <button
+            onClick={onClose}
+            className="w-full bg-gray-100 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
+          >
+            Cancel
+          </button>
           <button
             onClick={onConfirm}
             disabled={isPunchingOut}
@@ -58,12 +64,6 @@ const PunchOutModal = ({
           >
             <LogOut className="w-5 h-5" />
             {isPunchingOut ? "Punching Out..." : "Confirm Punch Out"}
-          </button>
-          <button
-            onClick={onClose}
-            className="w-full bg-gray-100 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
-          >
-            Cancel
           </button>
         </div>
       </div>

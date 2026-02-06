@@ -3,7 +3,7 @@ import axios from "axios";
 import DOMPurify from "dompurify";
 import { Copy } from "lucide-react";
 
-const API_URL = "https://crm-backend-qbz0.onrender.com/api";
+const API_URL = "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL: API_URL,
@@ -119,7 +119,7 @@ const MyTasksDashboard = () => {
     try {
       setLoading(true);
       const response = await api.get(
-        "https://crm-backend-qbz0.onrender.com/api/tasks/my-tasks"
+        "http://localhost:5000/api/tasks/my-tasks",
       );
       setTasks(response.data.tasks);
       setGroupedTasks(response.data.groupedTasks);
@@ -804,7 +804,7 @@ const TaskQuickViewModal = ({ task, onClose }) => {
   const jobDescRef = useRef(null);
 
   const sanitizedJobDesc = DOMPurify.sanitize(
-    task.requirement?.jobDescription || ""
+    task.requirement?.jobDescription || "",
   );
 
   const copyJobDescription = () => {
@@ -933,7 +933,7 @@ const AllTasksView = () => {
       if (filters.priority) params.append("priority", filters.priority);
 
       const response = await api.get(
-        `https://crm-backend-qbz0.onrender.com/api/tasks?${params.toString()}`
+        `http://localhost:5000/api/tasks?${params.toString()}`,
       );
 
       setTasks(response.data.tasks || []);
@@ -1027,10 +1027,10 @@ const AllTasksView = () => {
           task.status === "Completed"
             ? "bg-green-100 text-green-700 border border-green-300"
             : task.status === "In Progress"
-            ? "bg-blue-100 text-blue-700 border border-blue-300"
-            : task.status === "Assigned"
-            ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
-            : "bg-gray-100 text-gray-700 border border-gray-300"
+              ? "bg-blue-100 text-blue-700 border border-blue-300"
+              : task.status === "Assigned"
+                ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
+                : "bg-gray-100 text-gray-700 border border-gray-300"
         }
       `}
                 >
@@ -1060,8 +1060,8 @@ const AllTasksView = () => {
             task.priority === "High"
               ? "bg-red-100 text-red-700 border border-red-300"
               : task.priority === "Medium"
-              ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
-              : "bg-green-100 text-green-700 border border-green-300"
+                ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
+                : "bg-green-100 text-green-700 border border-green-300"
           }
       `}
                   >

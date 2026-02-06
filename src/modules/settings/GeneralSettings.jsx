@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as yup from "yup";
-import Input from "../ui/Input";
-import Button from "../ui/Button";
+import Input from "../../components/ui/Input";
+import Button from "../../components/ui/Button";
 import { Save, Upload, User } from "lucide-react";
 import PageTitle from "../../hooks/PageTitle";
 // Yup validation schema

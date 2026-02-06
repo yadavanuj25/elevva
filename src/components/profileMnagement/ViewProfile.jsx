@@ -130,8 +130,8 @@ const ViewProfile = () => {
                         profile.status === "Active"
                           ? "bg-green-600"
                           : profile.status === "Banned"
-                          ? "bg-red-600"
-                          : "bg-gray-500"
+                            ? "bg-red-600"
+                            : "bg-gray-500"
                       }`}
                     >
                       {profile.status}
@@ -143,7 +143,7 @@ const ViewProfile = () => {
                   <EditButton
                     onClick={() =>
                       navigate(
-                        `/admin/profilemanagement/edit-profile/${profile._id}`
+                        `/admin/profilemanagement/edit-profile/${profile._id}`,
                       )
                     }
                   />
@@ -166,7 +166,7 @@ const ViewProfile = () => {
                           {profile.resume.originalName}
                         </div>
                         <a
-                          href={`https://crm-backend-qbz0.onrender.com/${profile.resume.path}`}
+                          href={`http://localhost:5000/${profile.resume.path}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-accent-light text-sm px-1 py-0.5 bg-accent-dark  rounded-md"
@@ -237,7 +237,7 @@ const ViewProfile = () => {
                           hour: "2-digit",
                           minute: "2-digit",
                           hour12: true,
-                        }
+                        },
                       )}
                       icon={<CalendarDays size={16} />}
                     />

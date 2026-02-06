@@ -11,7 +11,6 @@ import {
   Gift,
   CheckCircle,
   Filter,
-  Download,
   Upload,
   ArrowRight,
   ArrowLeft,
@@ -19,16 +18,13 @@ import {
 import SelectField from "../components/ui/SelectField";
 import { swalError, swalSuccess } from "../utils/swalHelper";
 import Close from "../components/ui/buttons/Close";
-
-const currentYear = new Date().getFullYear();
-
-const years = Array.from({ length: 3 }, (_, i) => {
-  const year = currentYear - i;
-  return {
-    label: String(year),
-    value: String(year),
-  };
-});
+import {
+  addBulkHolidays,
+  addHolidays,
+  deleteHolidays,
+  getStats,
+  updateHolidays,
+} from "../services/holidaysServices";
 
 const holidaysTypes = [
   {
@@ -55,6 +51,37 @@ const holidaysStatus = [
     value: false,
   },
 ];
+
+const holidayTypes = [
+  {
+    value: "public",
+    label: "Public Holiday",
+    icon: Sun,
+    color: "text-orange-600",
+  },
+  {
+    value: "optional",
+    label: "Optional Holiday",
+    icon: Star,
+    color: "text-blue-600",
+  },
+  {
+    value: "restricted",
+    label: "Restricted Holiday",
+    icon: Gift,
+    color: "text-purple-600",
+  },
+];
+
+const currentYear = new Date().getFullYear();
+
+const years = Array.from({ length: 3 }, (_, i) => {
+  const year = currentYear - i;
+  return {
+    label: String(year),
+    value: String(year),
+  };
+});
 
 const DemoHolidays = () => {
   const [holidays, setHolidays] = useState([]);
@@ -89,26 +116,6 @@ const DemoHolidays = () => {
 
   const [bulkHolidays, setBulkHolidays] = useState("");
 
-  const holidayTypes = [
-    {
-      value: "public",
-      label: "Public Holiday",
-      icon: Sun,
-      color: "text-orange-600",
-    },
-    {
-      value: "optional",
-      label: "Optional Holiday",
-      icon: Star,
-      color: "text-blue-600",
-    },
-    {
-      value: "restricted",
-      label: "Restricted Holiday",
-      icon: Gift,
-      color: "text-purple-600",
-    },
-  ];
   useEffect(() => {
     document.title = "Elevva | Holidays";
   }, []);
@@ -132,7 +139,7 @@ const DemoHolidays = () => {
       if (filters.type) queryParams.append("type", filters.type);
       if (filters.isActive) queryParams.append("isActive", filters.isActive);
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/holidays?${queryParams}`,
+        `http://localhost:5000/api/holidays?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -150,7 +157,7 @@ const DemoHolidays = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/holidays/upcoming?limit=25",
+        "http://localhost:5000/api/holidays/upcoming?limit=25",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -165,16 +172,9 @@ const DemoHolidays = () => {
   const fetchStats = async () => {
     // if (!isAdmin) return;
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/holidays/admin/stats",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      const data = await response.json();
-      console.log(data);
-      setStats(data.data);
+      const response = await getStats();
+      const data = await response.data;
+      setStats(data);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -182,57 +182,32 @@ const DemoHolidays = () => {
 
   const handleCreateHoliday = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/holidays",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        },
-      );
-
-      const data = await response.json();
-      if (data.success) {
-        swalSuccess("Holiday created successfully!");
+      const response = await addHolidays(formData);
+      if (response.success) {
+        swalSuccess(response?.data?.name, response?.message);
         setShowCreateModal(false);
         fetchHolidays();
         fetchStats();
         resetForm();
       } else {
-        console.log(data.message);
+        swalError(response.message);
       }
     } catch (error) {
-      swalError("Failed to create holiday", error);
+      swalError(error.message);
     }
   };
 
   const handleUpdateHoliday = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/holidays/${selectedHoliday._id}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        },
-      );
+      const response = await updateHolidays(selectedHoliday._id, formData);
 
-      const data = await response.json();
-      if (data.success) {
-        swalSuccess("Holiday updated successfully!");
+      if (response.success) {
+        swalSuccess(response.message);
         setShowEditModal(false);
         fetchHolidays();
         resetForm();
       } else {
-        console.log(data.message);
+        swalError(response.message);
       }
     } catch (error) {
       swalError("Failed to update holiday", error);
@@ -240,29 +215,18 @@ const DemoHolidays = () => {
   };
 
   const handleDeleteHoliday = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this holiday?"))
-      return;
-
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/holidays/${id}`,
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-
-      const data = await response.json();
-      if (data.success) {
-        swalSuccess("Holiday deleted successfully!");
+      const response = await deleteHolidays(id);
+      console.log(response);
+      if (response.success) {
+        swalSuccess(response.message);
         fetchHolidays();
         fetchStats();
       } else {
-        console.log(data.message);
+        swalError(response.message);
       }
     } catch (error) {
-      swalError("Failed to delete holiday", error);
+      swalError(error.message);
     }
   };
 
@@ -278,32 +242,18 @@ const DemoHolidays = () => {
           isActive: true,
         };
       });
-
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/holidays/admin/bulk",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ holidays }),
-        },
-      );
-
-      const data = await response.json();
-      if (data.success) {
-        swalSuccess(data.message);
+      const response = await addBulkHolidays(holidays);
+      if (response.success) {
+        swalSuccess(response.message);
         setShowBulkModal(false);
         setBulkHolidays("");
         fetchHolidays();
         fetchStats();
       } else {
-        console.log(data.message);
+        swalError(response.message);
       }
     } catch (error) {
-      swalError("Failed to create holidays", error);
+      swalError(error.message);
     }
   };
 

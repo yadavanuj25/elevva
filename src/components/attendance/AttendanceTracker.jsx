@@ -362,7 +362,7 @@ const AttendanceTracker = () => {
       });
 
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/attendance/export?${queryParams}`,
+        `http://localhost:5000/api/attendance/export?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -389,10 +389,8 @@ const AttendanceTracker = () => {
   };
   const formatMinutesToHours = (minutes) => {
     if (!minutes || minutes <= 0) return "0 min";
-
     const hrs = Math.floor(minutes / 60);
     const mins = minutes % 60;
-
     if (hrs > 0 && mins > 0) return `${hrs}h ${mins}m`;
     if (hrs > 0) return `${hrs}h`;
     return `${mins}m`;
@@ -461,7 +459,7 @@ const AttendanceTracker = () => {
           />
 
           {/* 3. ATTENDANCE STATS OR EMPTY STATE */}
-          {/* 3. ATTENDANCE STATS OR EMPTY STATE */}
+
           <div className="space-y-4 h-full">
             {todayAttendance ? (
               <AttendanceStats attendance={todayAttendance} />

@@ -1,11 +1,11 @@
-// const BASE_URL = "https://crm-backend-qbz0.onrender.com";
+// const BASE_URL = "http://localhost:5000";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const fetchHandler = async (
   url,
   method = "GET",
   data = null,
-  headers = {}
+  headers = {},
 ) => {
   const token = localStorage.getItem("token");
 

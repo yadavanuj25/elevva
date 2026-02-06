@@ -33,7 +33,7 @@ const BreakTypeModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/80  flex items-center justify-center p-5 z-50 animate-fadeIn">
-      <div className="bg-white rounded-xl p-7 max-w-xl w-full shadow-2xl animate-scaleIn">
+      <div className="space-y-10 bg-white rounded-xl p-6 max-w-xl w-full shadow-2xl animate-scaleIn">
         <div className="text-xl font-semibold mb-5 text-gray-900">
           Select Break Type
         </div>
@@ -65,7 +65,13 @@ const BreakTypeModal = ({
           ))}
         </div>
 
-        <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onClose}
+            className="w-full bg-gray-100 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
+          >
+            Cancel
+          </button>
           <button
             onClick={onStartBreak}
             disabled={!selectedBreakType}
@@ -77,12 +83,6 @@ const BreakTypeModal = ({
           >
             <Coffee className="w-5 h-5" />
             Start Break
-          </button>
-          <button
-            onClick={onClose}
-            className="w-full bg-gray-100 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
-          >
-            Cancel
           </button>
         </div>
       </div>

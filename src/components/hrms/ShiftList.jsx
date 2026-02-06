@@ -19,13 +19,13 @@ import RefreshButton from "../ui/tableComponents/RefreshButton";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
 import DateDisplay from "../ui/DateDisplay";
 import TableSkeleton from "../loaders/TableSkeleton";
-import CustomSwal from "../../utils/CustomSwal";
 import { useMessage } from "../../auth/MessageContext";
 import ErrorMessage from "../modals/errors/ErrorMessage";
 import NoData from "../ui/NoData";
 import SuccessToast from "../ui/toaster/SuccessToast";
 import ErrorToast from "../ui/toaster/ErrorToast";
 import StatusDropDown from "../ui/StatusDropDown";
+import { swalSuccess } from "../../utils/swalHelper";
 
 const statusOptions = [
   {
@@ -59,14 +59,15 @@ const ShiftList = () => {
 
   useEffect(() => {
     if (successMsg) {
-      CustomSwal.fire({
-        icon: "success",
-        title: "Success",
-        text: successMsg,
-        confirmButtonText: "Great!",
-        background: "#ffffff",
-        color: "#28a745",
-      });
+      // CustomSwal.fire({
+      //   icon: "success",
+      //   title: "Success",
+      //   text: successMsg,
+      //   confirmButtonText: "Great!",
+      //   background: "#ffffff",
+      //   color: "#28a745",
+      // });
+      swalSuccess("Success", successMsg);
     }
   }, [successMsg]);
 

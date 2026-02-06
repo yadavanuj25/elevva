@@ -6,14 +6,14 @@ const useDuplicateCheck = ({ token, setErrors }) => {
   const checkDuplicate = async (field, value) => {
     try {
       const res = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/profiles/check-duplicate?${field}=${value}`,
+        `http://localhost:5000/api/profiles/check-duplicate?${field}=${value}`,
         {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
       return await res.json();
     } catch {

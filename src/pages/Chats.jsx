@@ -25,13 +25,10 @@ const chatAPI = {
       ...options.headers,
     };
 
-    const response = await fetch(
-      `https://crm-backend-qbz0.onrender.com${endpoint}`,
-      {
-        ...options,
-        headers,
-      }
-    );
+    const response = await fetch(`http://localhost:5000${endpoint}`, {
+      ...options,
+      headers,
+    });
     const data = await response.json();
     if (!response.ok) throw new Error(data.message || "Something went wrong");
     return data;
@@ -53,7 +50,7 @@ const chatAPI = {
   // Message endpoints
   getMessages: (conversationId, page = 1) =>
     chatAPI.request(
-      `/api/chat/conversations/${conversationId}/messages?page=${page}&limit=50`
+      `/api/chat/conversations/${conversationId}/messages?page=${page}&limit=50`,
     ),
   sendMessage: (conversationId, content) =>
     chatAPI.request("/api/chat/messages", {
@@ -164,15 +161,15 @@ const ConversationItem = ({
     conversation.type === "group"
       ? conversation.fullName
       : otherParticipant
-      ? `${otherParticipant.fullName}`
-      : "Unknown";
+        ? `${otherParticipant.fullName}`
+        : "Unknown";
 
   const displayInitials =
     conversation.type === "group"
       ? conversation.name?.substring(0, 2).toUpperCase()
       : otherParticipant
-      ? `${otherParticipant.fullName?.charAt(0)}`
-      : "??";
+        ? `${otherParticipant.fullName?.charAt(0)}`
+        : "??";
 
   return (
     <div
@@ -196,7 +193,7 @@ const ConversationItem = ({
           {conversation.lastMessage && (
             <span className="text-xs text-gray-500">
               {new Date(
-                conversation.lastMessage.createdAt
+                conversation.lastMessage.createdAt,
               ).toLocaleDateString()}
             </span>
           )}
@@ -259,7 +256,7 @@ const NewChatModal = ({ isOpen, onClose, onCreateChat, currentUserId }) => {
     try {
       const response = await chatAPI.createGroupConversation(
         selectedUsers,
-        groupName
+        groupName,
       );
       onCreateChat(response.conversation);
       onClose();
@@ -272,7 +269,7 @@ const NewChatModal = ({ isOpen, onClose, onCreateChat, currentUserId }) => {
     setSelectedUsers((prev) =>
       prev.includes(userId)
         ? prev.filter((id) => id !== userId)
-        : [...prev, userId]
+        : [...prev, userId],
     );
   };
 
@@ -462,7 +459,7 @@ const Chat = ({ socket }) => {
   useEffect(() => {
     const total = conversations.reduce(
       (sum, conv) => sum + (conv.unreadCount || 0),
-      0
+      0,
     );
     setUnreadCount(total);
   }, [conversations]);
@@ -493,8 +490,8 @@ const Chat = ({ socket }) => {
       // Update unread count
       setConversations((prev) =>
         prev.map((conv) =>
-          conv._id === conversationId ? { ...conv, unreadCount: 0 } : conv
-        )
+          conv._id === conversationId ? { ...conv, unreadCount: 0 } : conv,
+        ),
       );
     } catch (error) {
       console.error("Error loading messages:", error);
@@ -544,7 +541,7 @@ const Chat = ({ socket }) => {
         return conv;
       });
       return updated.sort(
-        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
       );
     });
   };
@@ -553,8 +550,8 @@ const Chat = ({ socket }) => {
     if (data.conversationId === activeConversation?._id) {
       setMessages((prev) =>
         prev.map((msg) =>
-          msg._id === data.messageId ? { ...msg, isDeleted: true } : msg
-        )
+          msg._id === data.messageId ? { ...msg, isDeleted: true } : msg,
+        ),
       );
     }
   };
@@ -573,7 +570,7 @@ const Chat = ({ socket }) => {
             };
           }
           return msg;
-        })
+        }),
       );
     }
   };
@@ -711,7 +708,7 @@ const Chat = ({ socket }) => {
                         ? activeConversation.name
                         : `${
                             activeConversation.participants.filter(
-                              (p) => p._id !== currentUser._id
+                              (p) => p._id !== currentUser._id,
                             )[0]?.fullName
                           } `}
                     </h4>

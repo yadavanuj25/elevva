@@ -28,7 +28,7 @@ const ClientsRequirementsList = () => {
     currentPage: 1,
   });
 
-  const API_BASE_URL = "https://crm-backend-qbz0.onrender.com/api";
+  const API_BASE_URL = "http://localhost:5000/api";
   const token = localStorage.getItem("token");
 
   // Fetch Settings (Dropdown Options)
@@ -80,7 +80,7 @@ const ClientsRequirementsList = () => {
         `${API_BASE_URL}/clients?${params.toString()}`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       setClients(response.data.clients);
@@ -243,7 +243,7 @@ const ClientsRequirementsList = () => {
           <div className="bar-chart">
             {stats.byCategory.slice(0, 5).map((cat, index) => {
               const maxCount = Math.max(
-                ...stats.byCategory.map((c) => c.count)
+                ...stats.byCategory.map((c) => c.count),
               );
               const percentage = (cat.count / maxCount) * 100;
               return (
