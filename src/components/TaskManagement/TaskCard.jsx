@@ -59,7 +59,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
     setSelectedOptions((prev) =>
       prev.some((o) => o._id === option._id)
         ? prev.filter((o) => o._id !== option._id)
-        : [...prev, option]
+        : [...prev, option],
     );
   };
 
@@ -137,7 +137,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
         </p>
 
         {/* Metrics */}
-        <div className="shadow rounded-md py-2 mb-3 text-xs bg-gray-100 dark:bg-[#202b3a]">
+        {/* <div className="shadow rounded-md py-2 mb-3 text-xs bg-gray-100 dark:bg-[#202b3a]">
           <div className="grid grid-cols-4 gap-2">
             {[
               { label: "Sourced", value: metrics?.profilesSourced || 0 },
@@ -159,7 +159,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Metrics Form */}
         {showMetricsForm ? (
@@ -213,7 +213,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
                   <div className="max-h-40 overflow-y-auto">
                     {options.map((option) => {
                       const isSelected = selectedOptions.some(
-                        (o) => o._id === option._id
+                        (o) => o._id === option._id,
                       );
                       return (
                         <div
@@ -235,7 +235,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
             </div>
 
             {/* Metrics Inputs */}
-            <div className="grid grid-cols-2 gap-2">
+            {/* <div className="grid grid-cols-2 gap-2">
               {[
                 { key: "profilesSourced", placeholder: "Sourced" },
                 { key: "profilesScreened", placeholder: "Screened" },
@@ -262,7 +262,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
                   />
                 </div>
               ))}
-            </div>
+            </div> */}
 
             <div className="flex gap-2">
               <button
@@ -272,16 +272,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
               >
                 {loading ? "Saving ..." : "Save"}
               </button>
-              {/* <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowMetricsForm(false);
-                }}
-                className="flex-1 bg-gray-600 text-white py-1 px-3 rounded text-sm hover:bg-gray-700"
-              >
-                Cancel
-              </button> */}
+
               <button
                 type="button"
                 onClick={(e) => {

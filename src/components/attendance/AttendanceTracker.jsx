@@ -54,20 +54,20 @@ const AttendanceTracker = () => {
   const [workingTime, setWorkingTime] = useState("00:00:00");
   const [breakTime, setBreakTime] = useState("00:00:00");
   const [address, setAddress] = useState("");
-  const [filters, setFilters] = useState({
-    startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-      .toISOString()
-      .split("T")[0],
-    endDate: new Date().toISOString().split("T")[0],
-    page: 1,
-    limit: 30,
-  });
   // const [filters, setFilters] = useState({
-  //   startDate: null,
-  //   endDate: null,
+  //   startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+  //     .toISOString()
+  //     .split("T")[0],
+  //   endDate: new Date().toISOString().split("T")[0],
   //   page: 1,
   //   limit: 30,
   // });
+  const [filters, setFilters] = useState({
+    startDate: "",
+    endDate: "",
+    page: 1,
+    limit: 30,
+  });
 
   useEffect(() => {
     document.title = "Elevva | Attendance";

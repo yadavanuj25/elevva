@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Clock } from "lucide-react";
+import { useAuth } from "../../auth/AuthContext";
 
 const LocationHeader = ({
   location,
@@ -10,6 +11,8 @@ const LocationHeader = ({
   seconds,
   ampm,
 }) => {
+  const { user } = useAuth();
+
   return (
     <div className="flex justify-between items-center border border-accent-dark bg-white rounded-xl p-2 mb-2 text-accent-dark">
       <div className="flex items-center gap-2">
@@ -31,6 +34,7 @@ const LocationHeader = ({
         <div className="flex items-center gap-2">
           <Clock size={18} />
           {currentTime.toLocaleDateString("en-US", {
+            timeZone: user?.shift?.timezone,
             weekday: "long",
             month: "long",
             day: "numeric",
@@ -42,7 +46,6 @@ const LocationHeader = ({
           <div className="flex text-lg font-semibold items-center gap-1">
             <span>{timeParts[0]}:</span>
             <span>{timeParts[1]}:</span>
-
             <div className="relative h-[1.5em] w-[2ch] overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.span
