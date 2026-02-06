@@ -98,7 +98,7 @@ const AssignModal = ({
       className={`fixed inset-0 z-50 flex items-center justify-center
     transition-opacity duration-300
     ${isVisible ? "opacity-100" : "opacity-0"}
-    bg-black/90`}
+    bg-black/80`}
     >
       <div
         className={`w-full max-w-xl rounded-2xl shadow-xl

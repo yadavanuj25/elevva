@@ -22,7 +22,7 @@ const ResumePreview = ({ previewUrl, fileName, show, onOpen, onClose }) => {
           className="w-full h-full object-cover"
         />
 
-        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
           <button
             type="button"
             onClick={onOpen}
@@ -36,7 +36,7 @@ const ResumePreview = ({ previewUrl, fileName, show, onOpen, onClose }) => {
 
       {/* Modal – ONLY when show === true */}
       {show && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-[9999]">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[9999]">
           <div className="relative bg-white w-full max-w-4xl rounded-xl overflow-hidden">
             {/* Close Button */}
             <button

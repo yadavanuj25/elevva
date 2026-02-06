@@ -7,7 +7,7 @@ const InterviewHistoryModal = ({ open, onClose, record }) => {
   if (!open || !record) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/90  z-50 flex items-center justify-center text-gray-800 p-4">
+    <div className="fixed inset-0 bg-black/80  z-50 flex items-center justify-center text-gray-800 p-4">
       <div className="bg-white  w-full max-w-xl min-h-[250px] rounded-xl shadow-lg overflow-hidden">
         <div className="flex justify-between items-center px-5 py-3 bg-accent-dark border-b dark:border-gray-700">
           <div className="flex items-center gap-2">

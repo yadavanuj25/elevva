@@ -61,7 +61,7 @@ const SelectRequirementModal = ({
       const response = await getRequirementByClientId(selectedClient);
       const allRequirements = response.requirements || [];
       const openRequirements = allRequirements.filter(
-        (req) => req.positionStatus === "Open"
+        (req) => req.positionStatus === "Open",
       );
       setRequirements(openRequirements);
     } catch (error) {
@@ -81,7 +81,7 @@ const SelectRequirementModal = ({
 
   const handleRequirementChange = (e) => {
     const selected = requirementOptions.find(
-      (opt) => opt.value === e.target.value
+      (opt) => opt.value === e.target.value,
     );
     if (!selected) return;
     const clientObj = clients.find((c) => c._id === selectedClient);
@@ -95,7 +95,7 @@ const SelectRequirementModal = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
       <div className="w-full max-w-xl  bg-white dark:bg-gray-800 rounded-2xl shadow-xl ">
         {/* Header */}
         <div className="flex justify-between items-center px-5 py-3 rounded-t-2xl bg-accent-dark border-b dark:border-gray-700">

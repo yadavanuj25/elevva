@@ -400,7 +400,7 @@ const AttendanceTracker = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-accent-light">
       <div className="mx-auto max-w-7xl px-4 py-6">
         {/* Premium Header Card with Location & Time */}
         <div className="mb-6 overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-xl">
@@ -940,7 +940,7 @@ const AttendanceTracker = () => {
 
       {/* Premium Break Modal */}
       {showBreakModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 ">
           <div className="w-full max-w-2xl animate-scaleIn rounded-2xl bg-white p-8 shadow-2xl">
             <h2 className="mb-6 text-2xl font-bold text-gray-900">
               Select Break Type
@@ -1007,7 +1007,7 @@ const AttendanceTracker = () => {
 
       {/* Premium Punch Out Modal */}
       {showPunchOutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 ">
           <div className="w-full max-w-md animate-scaleIn rounded-2xl bg-white p-8 shadow-2xl">
             <h2 className="mb-6 text-2xl font-bold text-gray-900">
               Confirm Punch Out

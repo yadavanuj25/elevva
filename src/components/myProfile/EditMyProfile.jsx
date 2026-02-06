@@ -170,7 +170,7 @@ const EditProfile = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify(payload),
-        }
+        },
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Update failed");
@@ -232,7 +232,7 @@ const EditProfile = () => {
                   )}
                 </div>
 
-                <label className="absolute inset-0 flex items-center justify-center rounded-xl cursor-pointer bg-black/40 opacity-0 hover:opacity-100 transition">
+                <label className="absolute inset-0 flex items-center justify-center rounded-xl cursor-pointer bg-black/80 opacity-0 hover:opacity-100 transition">
                   <User size={20} className="text-white" />
                   <input
                     type="file"

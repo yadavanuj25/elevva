@@ -859,7 +859,7 @@ const AttendanceTracker = () => {
 
         {/* Break Type Modal */}
         {showBreakModal && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-5 z-50 animate-fadeIn">
+          <div className="fixed inset-0 bg-black/80  flex items-center justify-center p-5 z-50 animate-fadeIn">
             <div className="bg-white rounded-xl p-7 max-w-xl w-full shadow-2xl animate-scaleIn">
               <div className="text-xl font-semibold mb-5 text-gray-900">
                 Select Break Type
@@ -927,7 +927,7 @@ const AttendanceTracker = () => {
         {/* Punch In Confirmation Modal */}
 
         {showPunchInModal && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-5 z-50 animate-fadeIn">
+          <div className="fixed inset-0 bg-black/80  flex items-center justify-center p-5 z-50 animate-fadeIn">
             <div className="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl animate-scaleIn">
               <div className="text-xl font-semibold mb-5 text-gray-900">
                 Confirm Punch In
@@ -988,7 +988,7 @@ const AttendanceTracker = () => {
 
         {/* Punch Out Confirmation Modal */}
         {showPunchOutModal && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-5 z-50 animate-fadeIn">
+          <div className="fixed inset-0 bg-black/80  flex items-center justify-center p-5 z-50 animate-fadeIn">
             <div className="bg-white rounded-2xl p-7 max-w-md w-full shadow-2xl animate-scaleIn">
               <div className="text-xl font-semibold mb-5 text-gray-900">
                 Confirm Punch Out

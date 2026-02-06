@@ -14,7 +14,7 @@ const LocationHeader = ({
   const { user } = useAuth();
 
   return (
-    <div className="flex justify-between items-center border border-accent-dark bg-white rounded-xl p-2 mb-2 text-accent-dark">
+    <div className="flex justify-between items-center border border-accent-dark bg-accent-light rounded-xl p-2 mb-2 text-accent-dark">
       <div className="flex items-center gap-2">
         <MapPin size={18} />
         {location ? (

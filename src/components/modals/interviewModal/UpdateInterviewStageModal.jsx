@@ -39,7 +39,7 @@ const UpdateInterviewStageModal = ({ open, record, onClose, onUpdate }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90  flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 bg-black/80  flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-xl rounded-xl shadow-xl overflow-hidden text-gray-800">
         {/* HEADER */}
         <div className="flex justify-between items-center px-5 py-3  bg-accent-dark border-b dark:border-gray-700">
