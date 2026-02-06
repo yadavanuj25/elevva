@@ -25,10 +25,13 @@ const chatAPI = {
       ...options.headers,
     };
 
-    const response = await fetch(`http://localhost:5000${endpoint}`, {
-      ...options,
-      headers,
-    });
+    const response = await fetch(
+      `https://crm-backend-qbz0.onrender.com${endpoint}`,
+      {
+        ...options,
+        headers,
+      },
+    );
     const data = await response.json();
     if (!response.ok) throw new Error(data.message || "Something went wrong");
     return data;

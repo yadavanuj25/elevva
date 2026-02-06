@@ -71,13 +71,16 @@ const RoleList = () => {
   const getAllRoles = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/roles", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "https://crm-backend-qbz0.onrender.com/api/roles",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       let data;
       try {
         data = await res.json();

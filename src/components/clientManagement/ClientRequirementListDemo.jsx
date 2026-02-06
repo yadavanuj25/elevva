@@ -28,7 +28,7 @@ const ClientsRequirementsList = () => {
     currentPage: 1,
   });
 
-  const API_BASE_URL = "http://localhost:5000/api";
+  const API_BASE_URL = "https://crm-backend-qbz0.onrender.com/api";
   const token = localStorage.getItem("token");
 
   // Fetch Settings (Dropdown Options)

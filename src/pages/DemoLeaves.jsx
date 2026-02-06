@@ -139,7 +139,7 @@ const DemoLeaves = () => {
       });
 
       const response = await fetch(
-        `http://localhost:5000/api/leaves/all?${queryParams}`,
+        `https://crm-backend-qbz0.onrender.com/api/leaves/all?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -272,9 +272,12 @@ const DemoLeaves = () => {
   const exportLeaves = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/leaves/export", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        "https://crm-backend-qbz0.onrender.com/api/leaves/export",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");

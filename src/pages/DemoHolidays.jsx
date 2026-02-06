@@ -139,7 +139,7 @@ const DemoHolidays = () => {
       if (filters.type) queryParams.append("type", filters.type);
       if (filters.isActive) queryParams.append("isActive", filters.isActive);
       const response = await fetch(
-        `http://localhost:5000/api/holidays?${queryParams}`,
+        `https://crm-backend-qbz0.onrender.com/api/holidays?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -157,7 +157,7 @@ const DemoHolidays = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "http://localhost:5000/api/holidays/upcoming?limit=25",
+        "https://crm-backend-qbz0.onrender.com/api/holidays/upcoming?limit=25",
         {
           headers: { Authorization: `Bearer ${token}` },
         },

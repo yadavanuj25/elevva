@@ -53,14 +53,17 @@ const CreateRole = () => {
         description: formData.description,
         permissions: formData.permissions || [],
       };
-      const res = await fetch("http://localhost:5000/api/roles", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "https://crm-backend-qbz0.onrender.com/api/roles",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      });
+      );
       if (!res.ok) {
         const errorData = await res.json();
         showError("Error response:", errorData);

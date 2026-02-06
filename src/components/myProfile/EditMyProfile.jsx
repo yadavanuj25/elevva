@@ -161,14 +161,17 @@ const EditProfile = () => {
         state: formData.state,
         zipcode: formData.zipcode,
       };
-      const res = await fetch(`http://localhost:5000/api/users/${user._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      const res = await fetch(
+        `https://crm-backend-qbz0.onrender.com/api/users/${user._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      });
+      );
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Update failed");
       navigate(-1);

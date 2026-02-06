@@ -3,7 +3,7 @@ import axios from "axios";
 import DOMPurify from "dompurify";
 import { Copy } from "lucide-react";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://crm-backend-qbz0.onrender.com/api";
 
 const api = axios.create({
   baseURL: API_URL,
@@ -119,7 +119,7 @@ const MyTasksDashboard = () => {
     try {
       setLoading(true);
       const response = await api.get(
-        "http://localhost:5000/api/tasks/my-tasks",
+        "https://crm-backend-qbz0.onrender.com/api/tasks/my-tasks",
       );
       setTasks(response.data.tasks);
       setGroupedTasks(response.data.groupedTasks);
@@ -933,7 +933,7 @@ const AllTasksView = () => {
       if (filters.priority) params.append("priority", filters.priority);
 
       const response = await api.get(
-        `http://localhost:5000/api/tasks?${params.toString()}`,
+        `https://crm-backend-qbz0.onrender.com/api/tasks?${params.toString()}`,
       );
 
       setTasks(response.data.tasks || []);

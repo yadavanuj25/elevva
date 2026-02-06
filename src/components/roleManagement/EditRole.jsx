@@ -36,9 +36,12 @@ const EditRole = () => {
   useEffect(() => {
     const fetchRole = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/roles/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `https://crm-backend-qbz0.onrender.com/api/roles/${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
         const data = await res.json();
         if (data?.role) {
           setRole(data.role);
@@ -79,7 +82,7 @@ const EditRole = () => {
     const fetchPermissions = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/api/roles/permissions/all",
+          "https://crm-backend-qbz0.onrender.com/api/roles/permissions/all",
           { headers: { Authorization: `Bearer ${token}` } },
         );
         const data = await res.json();
@@ -179,14 +182,17 @@ const EditRole = () => {
         isActive: true,
       };
 
-      const res = await fetch(`http://localhost:5000/api/roles/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const res = await fetch(
+        `https://crm-backend-qbz0.onrender.com/api/roles/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      });
+      );
 
       const data = await res.json();
 
