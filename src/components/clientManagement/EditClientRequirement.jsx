@@ -218,7 +218,7 @@ const EditClientRequirement = () => {
       const res = await updateClientsRequirement(id, finalData);
       if (res?.success) {
         showSuccess(res.message || "Requirement updated successfully!");
-        navigate("/admin/clientmanagement/clientrequirements");
+        navigate("/clients/requirements");
       } else {
         showError(res?.message || "Failed to update requirement");
       }
@@ -238,9 +238,7 @@ const EditClientRequirement = () => {
     <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
       <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
         <h2 className="text-2xl font-semibold">Update Requirement</h2>
-        <BackButton
-          onClick={() => navigate("/admin/clientManagement/ClientRequirements")}
-        />
+        <BackButton onClick={() => navigate("/clients/requirements")} />
       </div>
 
       <ErrorMessage errorMsg={errorMsg} />

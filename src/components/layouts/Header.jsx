@@ -5,11 +5,9 @@ import {
   Settings,
   LogOut,
   Bell,
-  User,
   Maximize,
   Minimize,
   LockKeyhole,
-  Lock,
 } from "lucide-react";
 import { RiMenuFold3Line, RiMenuUnfold3Line } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
@@ -18,8 +16,6 @@ import Tippy from "@tippyjs/react";
 import { useAuth } from "../../auth/AuthContext";
 import HeaderNotificationPanel from "../notifications/HeaderNotificationPanel";
 import { useHeaderNotifications } from "../../hooks/UseHeaderNotifications";
-import { swalLogoutConfirm } from "../../utils/swalHelper";
-
 const IconButton = ({ title, icon: Icon, badge, onClick }) => (
   <Tippy
     content={title}
@@ -131,8 +127,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
   const menuItems = [
     { icon: FaRegUser, text: "My Profile", path: "/my-profile" },
-
-    { icon: Settings, text: "Settings", path: "/admin/settings" },
+    { icon: Settings, text: "Settings", path: "/settings" },
   ];
 
   return (

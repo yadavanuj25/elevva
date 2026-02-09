@@ -21,13 +21,13 @@ export const getNavSections = (dashboardPath) => [
     items: [
       {
         resource: "users",
-        path: "/admin/usermanagement/users",
+        path: "/users",
         label: "Manage Users",
         icon: FaUsers,
       },
       {
         resource: "users",
-        path: "/admin/rolemanagement/roles",
+        path: "/roles",
         label: "Roles & Permission",
         icon: FaUnlockAlt,
       },
@@ -39,7 +39,7 @@ export const getNavSections = (dashboardPath) => [
     items: [
       {
         resource: "profiles",
-        path: "/admin/profilemanagement/profiles",
+        path: "/profiles",
         label: "Profiles",
         icon: ImProfile,
       },
@@ -51,13 +51,13 @@ export const getNavSections = (dashboardPath) => [
     items: [
       {
         resource: "customers",
-        path: "/admin/clientmanagement/clients",
+        path: "/clients",
         label: "Clients",
         icon: FaHandshake,
       },
       {
         resource: "customers",
-        path: "/admin/clientmanagement/clientrequirements",
+        path: "/clients/requirements",
         label: "Clients Requirement",
         icon: FaBriefcase,
       },
@@ -69,7 +69,7 @@ export const getNavSections = (dashboardPath) => [
     items: [
       {
         resource: "settings",
-        path: "/admin/settings",
+        path: "/settings",
         label: "Settings",
         icon: FaGears,
       },
@@ -80,7 +80,7 @@ export const getNavSections = (dashboardPath) => [
     items: [
       {
         resource: "attendance",
-        path: "/attendance",
+        path: "/hrms/attendance",
         label: "Attendance",
         icon: TbHandClick,
       },
@@ -92,7 +92,7 @@ export const getNavSections = (dashboardPath) => [
     items: [
       {
         resource: "interviews",
-        path: "/admin/interviewmanagement",
+        path: "/interviews",
         label: "Interviews",
         icon: FaUserTie,
       },

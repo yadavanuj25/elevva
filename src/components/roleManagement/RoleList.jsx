@@ -23,6 +23,8 @@ import PageTitle from "../../hooks/PageTitle";
 import ToolTip from "../ui/ToolTip";
 import CustomSwal from "../../utils/CustomSwal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { getRoles } from "../../services/roleServices";
+import { swalSuccess } from "../../utils/swalHelper";
 
 const checkboxSx = {
   color: "#6b7280",
@@ -57,52 +59,29 @@ const RoleList = () => {
 
   useEffect(() => {
     if (successMsg) {
-      CustomSwal.fire({
-        icon: "success",
-        title: "Success",
-        text: successMsg,
-        confirmButtonText: "Great!",
-        background: "#ffffff",
-        color: "#28a745",
-      });
+      swalSuccess(successMsg);
     }
   }, [successMsg]);
 
   const getAllRoles = async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/roles",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        },
-      );
-      let data;
-      try {
-        data = await res.json();
-      } catch {
-        showError("Invalid JSON response from server");
+      const res = await getRoles();
+      const { success, roles } = res;
+      if (!success) {
+        showError("Failed to load roles");
+        return;
       }
 
-      if (!res.ok) {
-        showError(data?.message || `Failed with status ${res.status}`);
-      }
-      const rolesArray = Array.isArray(data?.data)
-        ? data.data
-        : Array.isArray(data?.roles)
-          ? data.roles
-          : Array.isArray(data)
-            ? data
-            : [];
+      const rolesArray = Array.isArray(roles) ? roles : [];
 
-      const formatted = rolesArray.map((role, i) => ({
-        id: role._id || i,
+      const formatted = rolesArray.map((role, index) => ({
+        id: role._id || index,
         role_name: role.name || "Unnamed Role",
         role_description: role.description || "No Description",
+        permissions_count: Array.isArray(role.permissions)
+          ? role.permissions.length
+          : 0,
         created_date: role.createdAt
           ? new Date(role.createdAt).toLocaleString("en-IN", {
               day: "2-digit",
@@ -121,10 +100,14 @@ const RoleList = () => {
               minute: "2-digit",
             })
           : "-",
+        isActive: role.isActive ?? false,
       }));
+
       setRoleData(formatted);
     } catch (err) {
-      showError(err.message || "Failed to load roles");
+      showError(
+        err.response?.data?.message || err.message || "Failed to load roles",
+      );
     } finally {
       setLoading(false);
     }
@@ -233,8 +216,9 @@ const RoleList = () => {
         <TableHeader
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}
-          addLink="/admin/rolemanagement/add-roles"
+          addLink="/roles/new"
           title="Role"
+          resource="users"
         />
         <>
           {/* Pagination */}
@@ -351,11 +335,7 @@ const RoleList = () => {
                           <TableCell className="whitespace-nowrap sticky right-0 bg-[#f2f4f5] dark:bg-darkGray dark:text-white z-20">
                             <button
                               className=" text-white bg-accent-dark px-1 py-1 rounded hover:bg-[#222]"
-                              onClick={() =>
-                                navigate(
-                                  `/admin/rolemanagement/edit-roles/${row.id}`,
-                                )
-                              }
+                              onClick={() => navigate(`/roles/${row.id}/edit`)}
                             >
                               <Pencil size={16} />
                             </button>

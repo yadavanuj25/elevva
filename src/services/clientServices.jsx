@@ -78,7 +78,6 @@ export const getClientStats = ({
   companySize,
 } = {}) => {
   const params = new URLSearchParams();
-
   if (startDate) params.append("startDate", startDate);
   if (endDate) params.append("endDate", endDate);
   if (status) params.append("status", status);
@@ -87,9 +86,6 @@ export const getClientStats = ({
   if (companySize) params.append("companySize", companySize);
   return fetchHandler(`/api/clients/stats?${params.toString()}`);
 };
-
-// export const getRequirementByClientId = (id) =>
-//   fetchHandler(`/api/requirements/client/${id}`);
 
 // --------- Requirements ---------
 
@@ -117,7 +113,7 @@ export const getAllRequirements = (
   page = 1,
   limit = 5,
   tab = "All",
-  search = ""
+  search = "",
 ) => {
   let url = `/api/requirements?page=${page}&limit=${limit}`;
   if (requirementStatuses.includes(tab)) {

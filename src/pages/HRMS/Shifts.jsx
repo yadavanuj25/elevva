@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import AddShift from "../../components/hrms/AddShift";
-import ShiftList from "../../components/hrms/ShiftList";
+import ShiftList from "../../components/hrms/shifts/ShiftList";
 
 const Shifts = () => {
   useEffect(() => {

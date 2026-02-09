@@ -184,7 +184,7 @@ const EditProfile = () => {
     try {
       await EditSchema.validate(
         { ...formData, skills: formData.skills || [] },
-        { abortEarly: false }
+        { abortEarly: false },
       );
 
       // build payload  FormData WITHOUT resume
@@ -200,7 +200,7 @@ const EditProfile = () => {
 
       const res = await updateProfile(id, fd);
       showSuccess(res.message || "Profile updated successfully");
-      navigate("/admin/profilemanagement/profiles");
+      navigate("/profiles");
     } catch (err) {
       if (err.name === "ValidationError") {
         const ve = {};
@@ -220,10 +220,7 @@ const EditProfile = () => {
 
   return (
     <div className="p-4 bg-white dark:bg-gray-800 border rounded-xl">
-      <PageHeader
-        title="Update Profile"
-        onBack={() => navigate("/admin/profilemanagement/profiles")}
-      />
+      <PageHeader title="Update Profile" onBack={() => navigate("/profiles")} />
 
       {errorMsg && (
         <div className="mb-4 p-3 bg-red-600 text-white rounded">

@@ -135,7 +135,7 @@ const TableLayout = ({
                         <div className="flex flex-col items-start gap-1">
                           <Link
                             className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-accent-dark"
-                            to={`/admin/clientmanagement/edit-client/${row._id}`}
+                            to={`/clients/${row._id}/edit`}
                           >
                             <AtSign size={14} />
                             {row.clientName.charAt(0).toUpperCase() +
@@ -149,7 +149,7 @@ const TableLayout = ({
                     </TableCell>
                     <TableCell
                       className={`relative whitespace-nowrap ${getStickyClass(
-                        "status"
+                        "status",
                       )}`}
                     >
                       <StatusDropDown
@@ -204,16 +204,8 @@ const TableLayout = ({
 
                     <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                       <ActionMenu
-                        onEdit={() =>
-                          navigate(
-                            `/admin/clientmanagement/edit-client/${row._id}`
-                          )
-                        }
-                        onView={() =>
-                          navigate(
-                            `/admin/clientmanagement/view-client/${row._id}`
-                          )
-                        }
+                        onEdit={() => navigate(`/clients/${row._id}/edit`)}
+                        onView={() => navigate(`/clients/${row._id}`)}
                         onDelete={() => {
                           console.log("Delete", row._id);
                         }}

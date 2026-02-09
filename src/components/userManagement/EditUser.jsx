@@ -173,7 +173,7 @@ export default function EditUser() {
         throw new Error(res?.message || "Failed to update user");
       }
       showSuccess(res.message || "User updated successfully");
-      navigate("/admin/usermanagement/users");
+      navigate("/users");
     } catch (err) {
       if (err.name === "ValidationError" && err.inner) {
         const validationErrors = {};
@@ -193,7 +193,7 @@ export default function EditUser() {
     <div className="p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
       <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
         <h2 className="text-2xl font-semibold">Update User</h2>
-        <BackButton onClick={() => navigate("/admin/usermanagement/users")} />
+        <BackButton onClick={() => navigate("/users")} />
       </div>
       <UserTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       <ErrorMessage errorMsg={errorMsg} />

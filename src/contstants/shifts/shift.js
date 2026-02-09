@@ -1,4 +1,4 @@
-export const WORKING_SHIFTS = [
+export const workingShifts = [
   { label: "General-Shift", value: "General-Shift" },
   { label: "Morning-Shift", value: "Morning-Shift" },
   { label: "Evening-Shift", value: "Evening-Shift" },
@@ -8,7 +8,7 @@ export const WORKING_SHIFTS = [
   { label: "Split-Shift", value: "Split-Shift" },
 ];
 
-export const WEEK_DAYS = [
+export const weekDays = [
   "Monday",
   "Tuesday",
   "Wednesday",
@@ -18,7 +18,7 @@ export const WEEK_DAYS = [
   "Sunday",
 ];
 
-export const TIMEZONES = [
+export const timezones = [
   { value: "Asia/Kolkata", label: "IST (India)" },
   { value: "America/New_York", label: "EST" },
   { value: "America/Chicago", label: "CST" },
@@ -26,7 +26,7 @@ export const TIMEZONES = [
   { value: "Europe/London", label: "GMT" },
 ];
 
-export const COLORS = [
+export const colors = [
   "#3B82F6",
   "#10B981",
   "#F59E0B",
@@ -37,18 +37,18 @@ export const COLORS = [
   "#F97316",
 ];
 
-export const INITIAL_SHIFT_STATE = {
+export const initialFormState = {
   name: "",
   timezone: "",
   startTime: "",
   endTime: "",
   workingDays: [],
-  breakTime: { duration: "", isPaid: false },
-  graceTime: "",
-  halfDayHours: "",
-  fullDayHours: "",
+  breakTime: { duration: 0, isPaid: false },
+  graceTime: 0,
+  halfDayHours: 0,
+  fullDayHours: 0,
   overtimeEnabled: false,
-  overtimeRate: null,
-  color: "#3B82F6",
+  overtimeRate: "",
+  color: "#3b82f6",
   isActive: true,
 };

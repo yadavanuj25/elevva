@@ -5,6 +5,7 @@ import { Save, X } from "lucide-react";
 import Detail from "./Detail";
 import Button from "../ui/Button";
 import Close from "../ui/buttons/Close";
+import { toastError, toastSuccess } from "../../utils/toaster/toastHelpers";
 
 const TaskDetailModal = ({ task, onClose, onRefresh }) => {
   const [activeTab, setActiveTab] = useState("details");
@@ -39,11 +40,13 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
     };
     setLoadingFeedback(true);
     try {
-      await addTaskFeedback(task._id, payload);
+      const res = await addTaskFeedback(task._id, payload);
       setFeedback("");
       onRefresh();
+      handleClose();
+      toastSuccess(res.message);
     } catch (error) {
-      console.log(error);
+      toastError(error.message);
     } finally {
       setLoadingFeedback(false);
     }
@@ -61,8 +64,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
     };
     setLoadingRejection(true);
     try {
-      await addTaskRejection(task._id, payload);
-
+      const res = await addTaskRejection(task._id, payload);
       setRejection({
         candidateName: "",
         rejectedBy: "Sales",
@@ -70,8 +72,10 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
         stage: "Sales Review",
       });
       onRefresh();
+      handleClose();
+      toastSuccess(res.message);
     } catch (error) {
-      console.log(error);
+      toastError(error.message);
     } finally {
       setLoadingRejection(false);
     }
@@ -95,12 +99,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
               <h2 className="text-xl font-semibold">{task?.taskCode}</h2>-{" "}
               <p>{task?.requirement?.techStack}</p>
             </div>
-            {/* <button
-              onClick={handleClose}
-              className="bg-gray-200 text-black p-1 rounded hover:bg-gray-400"
-            >
-              <X size={20} />
-            </button> */}
+
             <Close handleClose={handleClose} />
           </div>
         </div>

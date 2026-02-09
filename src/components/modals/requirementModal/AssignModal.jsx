@@ -6,6 +6,7 @@ import Button from "../../ui/Button";
 import CustomSwal from "../../../utils/CustomSwal";
 import CancelButton from "../../ui/buttons/Cancel";
 import Close from "../../ui/buttons/Close";
+import { swalError, swalSuccess, swalWarning } from "../../../utils/swalHelper";
 
 const AssignModal = ({
   open,
@@ -48,11 +49,7 @@ const AssignModal = ({
 
   const handleAssign = async () => {
     if (!selectedOptions.length) {
-      CustomSwal.fire({
-        icon: "error",
-        text: "Please select at least one user to assign",
-        confirmButtonText: "OK",
-      });
+      swalWarning("Please select at least one user to assign");
       return;
     }
     const payload = {
@@ -62,24 +59,16 @@ const AssignModal = ({
     setLoading(true);
     try {
       const res = await assignRequirement(payload);
-      CustomSwal.fire({
-        icon: "success",
-        title: "Assigned Successfully",
-        text: res?.message || "Requirement assigned successfully",
-        confirmButtonText: "OK",
-      });
+
       setSelectedRows([]);
       handleClose();
+      swalSuccess(res?.message || "Requirement assigned successfully");
     } catch (err) {
-      CustomSwal.fire({
-        icon: "error",
-        title: "Assignment Failed",
-        text:
-          err?.response?.data?.message ||
+      swalError(
+        err?.response?.data?.message ||
           err?.message ||
           "Something went wrong while assigning",
-        confirmButtonText: "OK",
-      });
+      );
     } finally {
       setLoading(false);
     }

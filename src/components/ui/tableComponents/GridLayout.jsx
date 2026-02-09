@@ -169,11 +169,7 @@ const GridLayout = ({ data = [], loading = false }) => {
                       <button
                         title="Edit"
                         className="w-6 h-6 flex items-center justify-center rounded bg-blue-500 text-white hover:bg-blue-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        onClick={() =>
-                          navigate(
-                            `/admin/clientmanagement/edit-client/${row._id}`
-                          )
-                        }
+                        onClick={() => navigate(`/clients/${row._id}/edit`)}
                       >
                         <Pencil size={14} />
                       </button>
@@ -182,7 +178,7 @@ const GridLayout = ({ data = [], loading = false }) => {
                         className="w-6 h-6 flex items-center justify-center rounded bg-emerald-500 text-white hover:bg-emerald-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                         onClick={() =>
                           navigate(
-                            `/admin/clientmanagement/view-client/${row._id}`
+                            `/admin/clientmanagement/view-client/${row._id}`,
                           )
                         }
                       >

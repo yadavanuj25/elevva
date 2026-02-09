@@ -15,6 +15,7 @@ import {
 } from "../../services/clientServices";
 import CustomSwal from "../../utils/CustomSwal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { swalSuccess } from "../../utils/swalHelper";
 
 const schema = yup.object().shape({
   requirementId: yup.string().required("Requirement is required"),
@@ -56,14 +57,7 @@ const AssignTaskView = () => {
 
   useEffect(() => {
     if (successMsg) {
-      CustomSwal.fire({
-        icon: "success",
-        title: "Success",
-        text: successMsg,
-        confirmButtonText: "Great!",
-        background: "#ffffff",
-        color: "#28a745",
-      });
+      swalSuccess(successMsg);
     }
   }, [successMsg]);
 

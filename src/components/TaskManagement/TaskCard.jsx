@@ -3,6 +3,7 @@ import TaskQuickViewModal from "../TaskManagement/TaskQuickViewModal";
 import { updateMetrics, updateTaskStatus } from "../../services/taskServices";
 import CustomSwal from "../../utils/CustomSwal";
 import { getAllProfiles } from "../../services/profileServices";
+import { swalError, swalSuccess } from "../../utils/swalHelper";
 
 const priorityColors = {
   Critical: " text-red-800 border-red-500",
@@ -68,19 +69,11 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
     setLoading(true);
     try {
       const res = await updateMetrics(task._id, metrics);
-      CustomSwal.fire({
-        text: res?.message || "Task status updated successfully",
-        icon: "success",
-        showConfirmButton: true,
-      });
       setShowMetricsForm(false);
       onRefresh();
+      swalSuccess(res?.message || "Task status updated successfully");
     } catch (error) {
-      CustomSwal.fire({
-        text: error || "Failed to update task",
-        icon: "error",
-        showConfirmButton: true,
-      });
+      swalError(error.message || "Failed to update task");
     } finally {
       setLoading(false);
     }
@@ -89,18 +82,10 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
   const handleStatusChange = async (status) => {
     try {
       const res = await updateTaskStatus(task._id, { status });
-      CustomSwal.fire({
-        text: res?.message || "Task status updated successfully",
-        icon: "success",
-        showConfirmButton: true,
-      });
       onRefresh();
+      swalSuccess(res?.message || "Task status updated successfully");
     } catch (error) {
-      CustomSwal.fire({
-        text: error || "Failed to update task",
-        icon: "error",
-        showConfirmButton: true,
-      });
+      swalError(error.message || "Failed to update task");
     }
   };
 

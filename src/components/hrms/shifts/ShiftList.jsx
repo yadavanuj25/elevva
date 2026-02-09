@@ -12,20 +12,20 @@ import {
   TableSortLabel,
 } from "@mui/material";
 import { File, Pencil, Settings } from "lucide-react";
-import TableHeader from "../ui/tableComponents/TableHeader";
-import { getShift, updateShift } from "../../services/hrmsServices";
-import GroupButton from "../ui/buttons/GroupButton";
-import RefreshButton from "../ui/tableComponents/RefreshButton";
-import CommonPagination from "../ui/tableComponents/CommonPagination";
-import DateDisplay from "../ui/DateDisplay";
-import TableSkeleton from "../loaders/TableSkeleton";
-import { useMessage } from "../../auth/MessageContext";
-import ErrorMessage from "../modals/errors/ErrorMessage";
-import NoData from "../ui/NoData";
-import SuccessToast from "../ui/toaster/SuccessToast";
-import ErrorToast from "../ui/toaster/ErrorToast";
-import StatusDropDown from "../ui/StatusDropDown";
-import { swalSuccess } from "../../utils/swalHelper";
+import TableHeader from "../../ui/tableComponents/TableHeader";
+import { getShift, updateShift } from "../../../services/hrmsServices";
+import GroupButton from "../../ui/buttons/GroupButton";
+import RefreshButton from "../../ui/tableComponents/RefreshButton";
+import CommonPagination from "../../ui/tableComponents/CommonPagination";
+import DateDisplay from "../../ui/DateDisplay";
+import TableSkeleton from "../../loaders/TableSkeleton";
+import { useMessage } from "../../../auth/MessageContext";
+import ErrorMessage from "../../modals/errors/ErrorMessage";
+import NoData from "../../ui/NoData";
+import SuccessToast from "../../ui/toaster/SuccessToast";
+import ErrorToast from "../../ui/toaster/ErrorToast";
+import StatusDropDown from "../../ui/StatusDropDown";
+import { swalSuccess } from "../../../utils/swalHelper";
 
 const statusOptions = [
   {
@@ -59,15 +59,7 @@ const ShiftList = () => {
 
   useEffect(() => {
     if (successMsg) {
-      // CustomSwal.fire({
-      //   icon: "success",
-      //   title: "Success",
-      //   text: successMsg,
-      //   confirmButtonText: "Great!",
-      //   background: "#ffffff",
-      //   color: "#28a745",
-      // });
-      swalSuccess("Success", successMsg);
+      swalSuccess(successMsg);
     }
   }, [successMsg]);
 
@@ -157,7 +149,7 @@ const ShiftList = () => {
         <TableHeader
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}
-          addLink="/create-shift"
+          addLink="/hrms/shifts/new"
           title="Shifts"
           resource="users"
         />
@@ -354,7 +346,9 @@ const ShiftList = () => {
                       <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray">
                         <button
                           className="text-white bg-accent-dark p-1 rounded"
-                          onClick={() => navigate(`/edit-shift/${row._id}`)}
+                          onClick={() =>
+                            navigate(`/hrms/shifts/${row._id}/edit`)
+                          }
                         >
                           <Pencil size={16} />
                         </button>

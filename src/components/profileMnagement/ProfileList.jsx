@@ -44,6 +44,7 @@ import ActionMenu from "../ui/buttons/ActionMenu";
 import CustomSwal from "../../utils/CustomSwal";
 import SelectRequirementModal from "../modals/interviewModal/SelectRequirementModal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { swalInfo, swalSuccess, swalWarning } from "../../utils/swalHelper";
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
   const { user } = useAuth();
@@ -88,14 +89,7 @@ const ProfileList = () => {
 
   useEffect(() => {
     if (successMsg) {
-      CustomSwal.fire({
-        icon: "success",
-        title: "Success",
-        text: successMsg,
-        confirmButtonText: "Great!",
-        background: "#ffffff",
-        color: "#28a745",
-      });
+      swalSuccess(successMsg);
     }
   }, [successMsg]);
 
@@ -308,41 +302,27 @@ const ProfileList = () => {
       });
     });
     if (newRecords.length === 0) {
-      CustomSwal.fire({
-        icon: "warning",
-        title: "Interview Already Exists",
-        text: "This candidate already has an interview for the selected client and requirement.",
-        confirmButtonText: "Ok",
-      });
+      swalWarning(
+        "This candidate already has an interview for the selected client and requirement.",
+      );
       return;
     }
     if (duplicates.length > 0) {
-      CustomSwal.fire({
-        icon: "info",
-        title: "Some Candidates Skipped",
-        text: "One or more selected candidates already have an interview for this client and requirement.",
-        confirmButtonText: "Continue",
-      });
+      swalInfo(
+        "One or more selected candidates already have an interview for this client and requirement",
+      );
     }
     addInterviewRecords(newRecords);
     setSelectedProfiles([]);
     setOpenRequirementModal(false);
-    navigate("/admin/interviewmanagement");
-    CustomSwal.fire({
-      icon: "success",
-      title: "Success",
-      text: "Interview screening started successfully.",
-      confirmButtonText: "Great!",
-    });
+    navigate("/interviews");
+
+    swalSuccess("Interview screening started successfully");
   };
 
   const handleInterviewClick = () => {
     if (selectedProfiles.length === 0) {
-      CustomSwal.fire({
-        text: "Please select the profile",
-        icon: "error",
-        showConfirmButton: true,
-      });
+      swalWarning("Please select the profile");
       return;
     }
     setOpenRequirementModal(true);
@@ -387,7 +367,7 @@ const ProfileList = () => {
             <TableHeader
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
-              addLink="/admin/profilemanagement/add-profile"
+              addLink="/profiles/new"
               title="Profile"
               resource="profiles"
             />
@@ -404,9 +384,7 @@ const ProfileList = () => {
                 <GroupButton
                   text="Stats"
                   icon={<ChartNoAxesCombined size={16} />}
-                  onClick={() =>
-                    navigate("/admin/profilemanagement/profiles/stats")
-                  }
+                  onClick={() => navigate("/profiles/stats")}
                 />
                 <RefreshButton fetchData={fetchProfiles} />
               </div>
@@ -570,7 +548,7 @@ const ProfileList = () => {
                               <div>
                                 <Link
                                   className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-accent-dark"
-                                  to={`/admin/profilemanagement/edit-profile/${item._id}`}
+                                  to={`/profiles/${item._id}/edit`}
                                 >
                                   <AtSign size={14} />
                                   {item.fullName.charAt(0).toUpperCase() +
@@ -656,9 +634,7 @@ const ProfileList = () => {
                           <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                             <ActionMenu
                               onEdit={() =>
-                                navigate(
-                                  `/admin/profilemanagement/edit-profile/${item._id}`,
-                                )
+                                navigate(`/profiles/${item._id}/edit`)
                               }
                               onView={() =>
                                 navigate(

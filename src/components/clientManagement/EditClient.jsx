@@ -21,7 +21,7 @@ const schema = yup.object().shape({
     .test(
       "valid-date",
       "Invalid date format",
-      (val) => !!val && !isNaN(Date.parse(val))
+      (val) => !!val && !isNaN(Date.parse(val)),
     ),
 
   clientName: yup.string().required("Client name is required"),
@@ -159,7 +159,7 @@ const EditClient = () => {
         Object.entries(formData.poc2 || {}).map(([k, v]) => [
           k,
           v === "" ? undefined : v,
-        ])
+        ]),
       );
       const cleanedData = {
         ...formData,
@@ -171,7 +171,7 @@ const EditClient = () => {
       const res = await updateClient(id, cleanedData);
       if (res?.success) {
         showSuccess(res.message || "Client updated successfully");
-        navigate("/admin/clientManagement/clients");
+        navigate("/clients");
         return;
       }
       showError(res?.message || "Failed to update client");
@@ -199,9 +199,7 @@ const EditClient = () => {
     <div className="p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
       <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
         <h2 className="text-2xl font-semibold">Update Client</h2>
-        <BackButton
-          onClick={() => navigate("/admin/clientManagement/clients")}
-        />
+        <BackButton onClick={() => navigate("/clients")} />
       </div>
 
       {errorMsg && (

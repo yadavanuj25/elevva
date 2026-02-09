@@ -131,7 +131,7 @@ const ViewClient = () => {
                   </p>
                   <span
                     className={`inline-block  px-1 py-0.5 text-xs font-[500] text-white rounded-md ${getTabsColor(
-                      client.status
+                      client.status,
                     )}`}
                   >
                     {client.status.charAt(0).toUpperCase() +
@@ -142,16 +142,10 @@ const ViewClient = () => {
 
               <div className="flex items-center gap-2 mt-3 sm:mt-0">
                 <EditButton
-                  onClick={() =>
-                    navigate(
-                      `/admin/clientmanagement/edit-client/${client._id}`
-                    )
-                  }
+                  onClick={() => navigate(`/clients/${client._id}/edit`)}
                 />
 
-                <BackButton
-                  onClick={() => navigate("/admin/clientmanagement/clients")}
-                />
+                <BackButton onClick={() => navigate("/clients")} />
               </div>
             </div>
 
@@ -270,7 +264,7 @@ const ViewClient = () => {
                     <ViewInfo
                       label="Empanelment Date"
                       value={new Date(
-                        client.empanelmentDate
+                        client.empanelmentDate,
                       ).toLocaleDateString()}
                       icon={<Info size={16} />}
                     />

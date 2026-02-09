@@ -147,7 +147,7 @@ const AddProfile = () => {
       }
       showSuccess(response.message);
       setFormData(profileInitialForm);
-      navigate("/admin/profilemanagement/profiles");
+      navigate("/profiles");
     } catch (err) {
       if (err.name === "ValidationError") {
         const validationErrors = {};
@@ -165,7 +165,7 @@ const AddProfile = () => {
     <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
       <PageHeader
         title="Add New Profile"
-        onBack={() => navigate("/admin/profilemanagement/profiles")}
+        onBack={() => navigate("/profiles")}
       />
       <ErrorMessage errorMsg={errorMsg} />
       <form onSubmit={handleSubmit} className="space-y-6 ">

@@ -34,6 +34,7 @@ import GroupButton from "../ui/buttons/GroupButton";
 import CustomSwal from "../../utils/CustomSwal";
 import ActionMenu from "../ui/buttons/ActionMenu";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { swalSuccess, swalWarning } from "../../utils/swalHelper";
 
 const ClientsRequirementsList = () => {
   PageTitle("Elevva | Client Requirements");
@@ -70,14 +71,7 @@ const ClientsRequirementsList = () => {
 
   useEffect(() => {
     if (successMsg) {
-      CustomSwal.fire({
-        icon: "success",
-        title: "Success",
-        text: successMsg,
-        confirmButtonText: "Great!",
-        background: "#ffffff",
-        color: "#28a745",
-      });
+      swalSuccess(successMsg);
     }
   }, [successMsg]);
   const fetchAllOptions = async () => {
@@ -297,11 +291,7 @@ const ClientsRequirementsList = () => {
 
   const handleAssignClick = () => {
     if (selectedRows.length === 0) {
-      CustomSwal.fire({
-        text: "Please select at least one requirement",
-        icon: "error",
-        showConfirmButton: true,
-      });
+      swalWarning("Please select at least one requirement");
       return;
     }
     setOpenAssignModal(true);
@@ -348,7 +338,7 @@ const ClientsRequirementsList = () => {
         <TableHeader
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}
-          addLink="/admin/clientmanagement/add-clientRequirement"
+          addLink="/clients/requirements/new"
           title="Requirement"
           resource="customers"
         />
@@ -364,9 +354,7 @@ const ClientsRequirementsList = () => {
             <GroupButton
               text="Stats"
               icon={<ChartNoAxesCombined size={16} />}
-              onClick={() =>
-                navigate("/admin/clientmanagement/clientrequirements/stats")
-              }
+              onClick={() => navigate("/clients/requirements/stats")}
             />
             <RefreshButton fetchData={fetchRequirements} />
           </div>
@@ -492,7 +480,7 @@ const ClientsRequirementsList = () => {
                           <div>
                             <Link
                               className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-accent-dark"
-                              to={`/admin/clientmanagement/edit-requirement/${row._id}`}
+                              to={`/clients/requirements/${row._id}/edit`}
                             >
                               <AtSign size={14} />
                               {row.client.clientName.charAt(0).toUpperCase() +
@@ -644,14 +632,10 @@ const ClientsRequirementsList = () => {
                       <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
                         <ActionMenu
                           onEdit={() =>
-                            navigate(
-                              `/admin/clientmanagement/edit-requirement/${row._id}`,
-                            )
+                            navigate(`/clients/requirements/${row._id}/edit`)
                           }
                           onView={() =>
-                            navigate(
-                              `/admin/clientmanagement/view-requirement/${row._id}`,
-                            )
+                            navigate(`/clients/requirements/${row._id}`)
                           }
                           onDelete={() => {
                             console.log("Delete", row._id);

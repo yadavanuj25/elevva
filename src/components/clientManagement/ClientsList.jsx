@@ -28,6 +28,7 @@ import axios from "axios";
 import SelectField from "../ui/SelectField";
 import CustomSwal from "../../utils/CustomSwal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { swalSuccess } from "../../utils/swalHelper";
 
 const columns = [
   { id: "clientName", label: "Client Name" },
@@ -72,7 +73,7 @@ const ClientList = () => {
   });
   const [statusOptions, setStatusOptions] = useState([]);
 
-  const API_BASE_URL = "https://crm-backend-qbz0.onrender.com/api";
+  const API_BASE_URL = "http://localhost:5000/api";
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -101,14 +102,7 @@ const ClientList = () => {
 
   useEffect(() => {
     if (successMsg) {
-      CustomSwal.fire({
-        icon: "success",
-        title: "Success",
-        text: successMsg,
-        confirmButtonText: "Great!",
-        background: "#ffffff",
-        color: "#28a745",
-      });
+      swalSuccess(successMsg);
     }
   }, [successMsg]);
 
@@ -348,7 +342,7 @@ const ClientList = () => {
               target: { name: "search", value: e.target.value },
             })
           }
-          addLink="/admin/clientManagement/add-client"
+          addLink="/clients/new"
           title="Client"
           resource="customers"
         />
@@ -494,7 +488,7 @@ const ClientList = () => {
             <GroupButton
               text="Stats"
               icon={<ChartNoAxesCombined size={16} />}
-              onClick={() => navigate("/admin/clientmanagement/clients/stats")}
+              onClick={() => navigate("/clients/stats")}
             />
             <RefreshButton fetchData={fetchClients} />
           </div>

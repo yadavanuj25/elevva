@@ -15,16 +15,16 @@ import {
   ArrowRight,
   ArrowLeft,
 } from "lucide-react";
-import SelectField from "../components/ui/SelectField";
-import { swalError, swalSuccess } from "../utils/swalHelper";
-import Close from "../components/ui/buttons/Close";
+import SelectField from "../../components/ui/SelectField";
+import { swalError, swalSuccess } from "../../utils/swalHelper";
+import Close from "../../components/ui/buttons/Close";
 import {
   addBulkHolidays,
   addHolidays,
   deleteHolidays,
   getStats,
   updateHolidays,
-} from "../services/holidaysServices";
+} from "../../services/holidaysServices";
 
 const holidaysTypes = [
   {
@@ -83,7 +83,7 @@ const years = Array.from({ length: 3 }, (_, i) => {
   };
 });
 
-const DemoHolidays = () => {
+const Holidays = () => {
   const [holidays, setHolidays] = useState([]);
   const [upcomingHolidays, setUpcomingHolidays] = useState([]);
   const [stats, setStats] = useState(null);
@@ -139,7 +139,7 @@ const DemoHolidays = () => {
       if (filters.type) queryParams.append("type", filters.type);
       if (filters.isActive) queryParams.append("isActive", filters.isActive);
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/holidays?${queryParams}`,
+        `http://localhost:5000/api/holidays?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -157,7 +157,7 @@ const DemoHolidays = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/holidays/upcoming?limit=25",
+        "http://localhost:5000/api/holidays/upcoming?limit=25",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -836,4 +836,4 @@ const DemoHolidays = () => {
   );
 };
 
-export default DemoHolidays;
+export default Holidays;

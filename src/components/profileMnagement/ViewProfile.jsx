@@ -141,17 +141,9 @@ const ViewProfile = () => {
 
                 <div className="flex items-center gap-2 mt-3 sm:mt-0">
                   <EditButton
-                    onClick={() =>
-                      navigate(
-                        `/admin/profilemanagement/edit-profile/${profile._id}`,
-                      )
-                    }
+                    onClick={() => navigate(`/profiles/${profile._id}/edit`)}
                   />
-                  <BackButton
-                    onClick={() =>
-                      navigate("/admin/profilemanagement/profiles")
-                    }
-                  />
+                  <BackButton onClick={() => navigate("/profiles")} />
                 </div>
               </div>
               {/* Grid Layout */}
@@ -166,7 +158,7 @@ const ViewProfile = () => {
                           {profile.resume.originalName}
                         </div>
                         <a
-                          href={`https://crm-backend-qbz0.onrender.com/${profile.resume.path}`}
+                          href={`http://localhost:5000/${profile.resume.path}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-accent-light text-sm px-1 py-0.5 bg-accent-dark  rounded-md"

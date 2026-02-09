@@ -3,6 +3,7 @@ import * as yup from "yup";
 import { Save, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
+import { useMessage } from "../../auth/MessageContext";
 import Input from "../../components/ui/Input";
 import ReadOnlyInput from "../ui/formFields/ReadOnlyInput";
 import Button from "../ui/Button";
@@ -13,6 +14,7 @@ import {
   getStatesByCountry,
 } from "../../services/commonServices";
 import CancelButton from "../ui/buttons/Cancel";
+import { updateProfile } from "../../services/myProfileServices";
 
 const statusStyles = {
   active: "bg-green-600 text-white ",
@@ -51,6 +53,7 @@ const profileSchema = yup.object().shape({
 const EditProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { showError } = useMessage();
   const isInitialLoad = useRef(true);
   const {
     fullName,
@@ -161,19 +164,8 @@ const EditProfile = () => {
         state: formData.state,
         zipcode: formData.zipcode,
       };
-      const res = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/users/${user._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify(payload),
-        },
-      );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Update failed");
+      const res = await updateProfile(user?._id, payload);
+      if (!res.success) showError(res.message || "Update failed");
       navigate(-1);
     } catch (err) {
       if (err.inner) {

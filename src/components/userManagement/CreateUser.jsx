@@ -107,7 +107,7 @@ const UserManagement = () => {
       const res = await createUser(payload);
       if (res?.success) {
         showSuccess("User created successfully");
-        navigate("/admin/usermanagement/users");
+        navigate("/users");
       } else {
         showError(res?.message || "Something went wrong");
       }

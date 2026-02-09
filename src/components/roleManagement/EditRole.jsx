@@ -11,6 +11,12 @@ import PageTitle from "../../hooks/PageTitle";
 import Button from "../ui/Button";
 import BackButton from "../ui/buttons/BackButton";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import {
+  editRoles,
+  getAllPermissions,
+  getRoleById,
+} from "../../services/roleServices";
+import { swalError } from "../../utils/swalHelper";
 
 const schema = yup.object().shape({
   name: yup.string().trim().required("Role name is required"),
@@ -34,68 +40,59 @@ const EditRole = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchRole = async () => {
-      try {
-        const res = await fetch(
-          `https://crm-backend-qbz0.onrender.com/api/roles/${id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
-        const data = await res.json();
-        if (data?.role) {
-          setRole(data.role);
-          const selectedMap = {};
-          data.role.permissions?.forEach((perm) => {
-            if (!selectedMap[perm.resource]) {
-              selectedMap[perm.resource] = {
-                create: false,
-                read: false,
-                update: false,
-                delete: false,
-                manage: false,
-              };
-            }
-            if (perm.action === "manage") {
-              selectedMap[perm.resource] = {
-                create: true,
-                read: true,
-                update: true,
-                delete: true,
-                manage: true,
-              };
-            } else {
-              selectedMap[perm.resource][perm.action] = true;
-            }
-          });
-
-          setSelected(selectedMap);
-        }
-      } catch (err) {
-        console.error("Error fetching role:", err);
-      }
-    };
     fetchRole();
-  }, [id, token]);
-
+  }, [id]);
   useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const res = await fetch(
-          "https://crm-backend-qbz0.onrender.com/api/roles/permissions/all",
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
-        const data = await res.json();
-        if (data?.permissions) setPermissions(data.permissions);
-      } catch (err) {
-        console.error("Error fetching permissions:", err);
-      }
-    };
     fetchPermissions();
-  }, [token]);
+  }, []);
 
+  const fetchRole = async () => {
+    try {
+      const res = await getRoleById(id);
+      const role = await res.role;
+      if (role) {
+        setRole(role);
+        const selectedMap = {};
+        role.permissions?.forEach((perm) => {
+          if (!selectedMap[perm.resource]) {
+            selectedMap[perm.resource] = {
+              create: false,
+              read: false,
+              update: false,
+              delete: false,
+              manage: false,
+            };
+          }
+          if (perm.action === "manage") {
+            selectedMap[perm.resource] = {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              manage: true,
+            };
+          } else {
+            selectedMap[perm.resource][perm.action] = true;
+          }
+        });
+
+        setSelected(selectedMap);
+      }
+    } catch (err) {
+      console.log("Error fetching role:", err.message);
+    }
+  };
+
+  const fetchPermissions = async () => {
+    try {
+      const res = await getAllPermissions();
+      const permissions = await res.permissions;
+      if (permissions) setPermissions(permissions);
+    } catch (err) {
+      console.error("Error fetching permissions:", err);
+    }
+  };
   const groupedModules = [...new Set(permissions.map((p) => p.resource))];
-
   const handleToggle = (module, action) => {
     setSelected((prev) => {
       const prevModule = prev[module] || {
@@ -105,16 +102,13 @@ const EditRole = () => {
         delete: false,
         manage: false,
       };
-
       const updated = {
         ...prevModule,
         [action]: !prevModule[action],
       };
-
-      // ✅ If all CRUD are true, mark manage true
+      //  If all CRUD are true, mark manage true
       updated.manage =
         updated.create && updated.read && updated.update && updated.delete;
-
       return { ...prev, [module]: updated };
     });
   };
@@ -182,27 +176,13 @@ const EditRole = () => {
         isActive: true,
       };
 
-      const res = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/roles/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        },
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        showError(data?.message || "Failed to update role.");
+      const res = await editRoles(id, payload);
+      showSuccess(res.message || "Role updated successfully!");
+      navigate("/roles");
+      if (!res.success) {
+        showError(res?.message || "Failed to update role.");
         return;
       }
-
-      showSuccess("Role updated successfully!");
-      navigate("/admin/rolemanagement/roles");
     } catch (error) {
       if (error.inner) {
         const validationErrors = {};
@@ -219,13 +199,11 @@ const EditRole = () => {
     }
   };
 
-  // if (!role) return <p>Loading...</p>;
-
   return (
     <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
       <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
         <h2 className="text-2xl font-semibold ">Update Role</h2>
-        <BackButton onClick={() => navigate("/admin/rolemanagement/roles")} />
+        <BackButton onClick={() => navigate("/roles")} />
       </div>
       <div className="space-y-6">
         <ErrorMessage errorMsg={errorMsg} />

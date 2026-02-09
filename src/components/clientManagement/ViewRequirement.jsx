@@ -140,7 +140,7 @@ const ViewRequirement = () => {
                   </p>
                   <span
                     className={`inline-block  px-2 py-0.5 text-xs font-[500] text-white rounded-md  ${getTabsColor(
-                      requirement.positionStatus
+                      requirement.positionStatus,
                     )}`}
                   >
                     {requirement.positionStatus}
@@ -151,17 +151,11 @@ const ViewRequirement = () => {
               <div className="flex items-center gap-2 mt-3 sm:mt-0">
                 <EditButton
                   onClick={() =>
-                    navigate(
-                      `/admin/clientmanagement/edit-requirement/${requirement._id}`
-                    )
+                    navigate(`/clients/requirements/${requirement._id}/edit`)
                   }
                 />
 
-                <BackButton
-                  onClick={() =>
-                    navigate("/admin/clientmanagement/clientrequirements")
-                  }
-                />
+                <BackButton onClick={() => navigate("/clients/requirements")} />
               </div>
             </div>
             <div className="grid md:grid-cols-3 gap-6 ">
@@ -209,7 +203,7 @@ const ViewRequirement = () => {
                         hour: "2-digit",
                         minute: "2-digit",
                         hour12: true,
-                      }
+                      },
                     )}
                     icon={<CalendarDays size={16} />}
                   />

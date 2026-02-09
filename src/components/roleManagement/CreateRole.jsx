@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { ArrowLeft, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../auth/AuthContext";
+
 import * as yup from "yup";
 import Input from "../ui/Input";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import Button from "../ui/Button";
 import BackButton from "../ui/buttons/BackButton";
-import Textareafield from "../ui/formFields/Textareafield";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { addRoles } from "../../services/roleServices";
 
 // Validation Schema
 const schema = yup.object().shape({
@@ -22,8 +22,7 @@ const schema = yup.object().shape({
 
 const CreateRole = () => {
   PageTitle("Elevva | Add-Role");
-  const { token } = useAuth();
-  const { successMsg, errorMsg, showSuccess, showError } = useMessage();
+  const { errorMsg, showSuccess, showError } = useMessage();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -44,34 +43,19 @@ const CreateRole = () => {
     setLoading(true);
     try {
       await schema.validate(formData, { abortEarly: false });
-      if (!token) {
-        showError("No token found. Please log in again.");
-        return;
-      }
+
       const payload = {
         name: formData.name,
         description: formData.description,
         permissions: formData.permissions || [],
       };
-      const res = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/roles",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        },
-      );
-      if (!res.ok) {
-        const errorData = await res.json();
-        showError("Error response:", errorData);
+      const res = await addRoles(payload);
+      if (!res.success) {
+        showError("Failed to create role");
         return;
       }
-      const data = await res.json();
-      navigate(`/admin/rolemanagement/edit-roles/${data.role._id}`);
-      showSuccess(data.message);
+      navigate(`/roles/${res.role._id}/edit`);
+      showSuccess(res.message);
     } catch (error) {
       if (error.inner) {
         const validationErrors = {};
@@ -80,7 +64,11 @@ const CreateRole = () => {
         });
         setErrors(validationErrors);
       } else {
-        showError(error || "Error while creating role");
+        showError(
+          error.response?.data?.message ||
+            error.message ||
+            "Error while creating role",
+        );
       }
     } finally {
       setLoading(false);
@@ -91,7 +79,7 @@ const CreateRole = () => {
     <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
       <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
         <h2 className="text-2xl font-semibold">Add New Role</h2>
-        <BackButton onClick={() => navigate("/admin/rolemanagement/roles")} />
+        <BackButton onClick={() => navigate("/roles")} />
       </div>
       <ErrorMessage errorMsg={errorMsg} />
 
@@ -111,16 +99,6 @@ const CreateRole = () => {
             />
           </div>
 
-          {/* Description */}
-          {/* <div className="col-span-1">
-            <Textareafield
-              name="description"
-              label="Description"
-              rows={1}
-              value={formData.description}
-              handleChange={handleChange}
-            />
-          </div> */}
           <div className="relative w-full">
             <textarea
               name="description"

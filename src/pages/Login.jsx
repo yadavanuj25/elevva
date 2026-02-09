@@ -246,8 +246,8 @@ const Login = () => {
         return;
       }
 
-      const role = res.user?.role?.name?.toLowerCase() || "user";
-      navigate(role === "admin" ? "/admin/super-dashboard" : "/dashboard", {
+      // const role = res.user?.role?.name?.toLowerCase() || "user";
+      navigate("/dashboard", {
         replace: true,
       });
     } catch (err) {

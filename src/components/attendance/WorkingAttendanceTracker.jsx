@@ -305,19 +305,9 @@ const AttendanceTracker = () => {
       if (response.success) {
         setTodayAttendance(response.data);
         setShowPunchOutModal(false);
-        CustomSwal.fire({
-          icon: "success",
-          title: "Punch Out Successful",
-          html: `
-    <p>${response.message}</p>
-    <hr />
-    <p><b>Working Hours:</b> ${response.summary.workingHours} hrs</p>
-    <p><b>Overtime:</b> ${response.summary.overtimeHours} hrs</p>
-  `,
-          confirmButtonText: "Done",
-        });
+        swalSuccess(response.message);
       } else {
-        console.log(response.message);
+        swalError(response.message);
       }
     } catch (error) {
       swalWarning("Ongoing Break...", error.message);
@@ -385,7 +375,7 @@ const AttendanceTracker = () => {
       });
 
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/attendance/export?${queryParams}`,
+        `http://localhost:5000/api/attendance/export?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },

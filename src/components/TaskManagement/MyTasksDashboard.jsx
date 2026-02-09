@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { getMyTasks, updateTaskStatus } from "../../services/taskServices";
+import { getMyTasks, updateTaskStatus } from "../../services/taskServices.jsx";
 import PageTitle from "../../hooks/PageTitle.jsx";
-import SummaryCard from "../TaskManagement/SummaryCard.jsx";
-import TaskColumn from "../TaskManagement/TaskColumn.jsx";
+import SummaryCard from "./SummaryCard.jsx";
+import TaskColumn from "./TaskColumn.jsx";
 import TaskDetailModal from "./TaskDetailModal.jsx";
 import { BarLoader } from "react-spinners";
-import CustomSwal from "../../utils/CustomSwal.jsx";
+import { toastError, toastSuccess } from "../../utils/toaster/toastHelpers.js";
 
 const MyTasksDashboard = () => {
   PageTitle("Elevva | Tasks");
@@ -26,11 +26,7 @@ const MyTasksDashboard = () => {
       setGroupedTasks(res.groupedTasks);
       setSummary(res.summary);
     } catch (err) {
-      CustomSwal.fire({
-        text: err.message || "Failed fetch tasks ",
-        icon: "error",
-        showConfirmButton: true,
-      });
+      toastError(err?.message);
     } finally {
       setLoading(false);
     }
@@ -56,17 +52,11 @@ const MyTasksDashboard = () => {
       const res = await updateTaskStatus(draggedTask._id, {
         status: newStatus,
       });
-
-      CustomSwal.fire({
-        text: res?.message || "Task status updated successfully",
-        icon: "success",
-        showConfirmButton: true,
-      });
-
+      toastSuccess(res?.message);
       setGroupedTasks((prev) => {
         const updated = { ...prev };
         updated[oldKey] = updated[oldKey].filter(
-          (t) => t._id !== draggedTask._id
+          (t) => t._id !== draggedTask._id,
         );
         updated[newKey] = [
           ...(updated[newKey] || []),
@@ -81,11 +71,7 @@ const MyTasksDashboard = () => {
         [newKey]: prev[newKey] + 1,
       }));
     } catch (err) {
-      CustomSwal.fire({
-        text: err || "Failed to update task ",
-        icon: "error",
-        showConfirmButton: true,
-      });
+      toastError(err?.message);
     } finally {
       setDraggedTask(null);
     }

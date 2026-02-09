@@ -33,10 +33,9 @@ import ErrorToast from "../ui/toaster/ErrorToast";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import GroupButton from "../ui/buttons/GroupButton";
-import EditButton from "../ui/buttons/EditButton";
-import ViewButton from "../ui/buttons/ViewButton";
 import CustomSwal from "../../utils/CustomSwal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { swalSuccess } from "../../utils/swalHelper";
 
 const UserList = () => {
   PageTitle("Elevva | Users");
@@ -72,14 +71,7 @@ const UserList = () => {
 
   useEffect(() => {
     if (successMsg) {
-      CustomSwal.fire({
-        icon: "success",
-        title: "Success",
-        text: successMsg,
-        confirmButtonText: "Great!",
-        background: "#ffffff",
-        color: "#28a745",
-      });
+      swalSuccess(successMsg);
     }
   }, [successMsg]);
   const fetchUsers = async () => {
@@ -225,7 +217,7 @@ const UserList = () => {
             <TableHeader
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
-              addLink="/admin/usermanagement/add-user"
+              addLink="/users/new"
               title="User"
               resource="users"
             />
@@ -349,7 +341,7 @@ const UserList = () => {
                               <div>
                                 <Link
                                   className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-accent-dark"
-                                  to={`/admin/usermanagement/edit-user/${row._id}`}
+                                  to={`/users/${row._id}/edit`}
                                 >
                                   <AtSign size={14} />
                                   {row.fullName.charAt(0).toUpperCase() +
@@ -425,9 +417,7 @@ const UserList = () => {
                               <button
                                 className=" text-white bg-accent-dark px-1 py-1 rounded hover:bg-[#222]"
                                 onClick={() =>
-                                  navigate(
-                                    `/admin/usermanagement/edit-user/${row._id}`,
-                                  )
+                                  navigate(`/users/${row._id}/edit`)
                                 }
                               >
                                 <Pencil size={16} />

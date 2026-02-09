@@ -39,20 +39,19 @@ const LockScreen = () => {
         const updatedUser = { ...user, isLocked: false };
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
-
+        navigate("/dashboard", { replace: true });
         // Redirect based on user role
-        const role = user?.role?.name?.toLowerCase();
-
-        if (role === "admin") {
-          navigate("/admin/super-dashboard", { replace: true });
-        } else {
-          navigate("/dashboard", { replace: true });
-        }
+        // const role = user?.role?.name?.toLowerCase();
+        // if (role === "admin") {
+        //   navigate("/admin/super-dashboard", { replace: true });
+        // } else {
+        //   navigate("/dashboard", { replace: true });
+        // }
       } else {
         setErrors({ password: "Incorrect password" });
       }
     } catch (err) {
-      setErrors({ password: "Something went wrong, try again" });
+      setErrors(err);
     } finally {
       setLoading(false);
     }

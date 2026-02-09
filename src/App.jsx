@@ -5,12 +5,11 @@ import { useLocation } from "react-router-dom";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/Login";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
-import PublicRoute from "./components/auth/PublicRoute";
+import ProtectedRoute from "./routers/ProtectedRoute";
+import PublicRoute from "./routers/PublicRoute";
 import Dashboard from "./pages/Dashboard";
 import RoleManagement from "./pages/RoleManagement";
 import UserManagement from "./pages/UserManagement";
-import SuperDashboard from "./pages/SuperDashboard";
 import Layout from "./layouts/Layout";
 import Home from "./pages/Home";
 import CreateUser from "./components/userManagement/CreateUser";
@@ -42,12 +41,11 @@ import RequirementStats from "./components/stats/Requirements/RequirementStats";
 import InterviewDashboard from "./pages/InterviewDashboard";
 import { InterviewProvider } from "./context/InterViewContext";
 import NotFound from "./pages/NotFound";
-import Attandance from "./pages/Attendance/Attandance";
+import Attandance from "./pages/HRMS/Attandance";
 import Shifts from "./pages/HRMS/Shifts";
-import AddShift from "./components/hrms/AddShift";
-import EditShift from "./components/hrms/EditShift";
-import DemoHolidays from "./pages/DemoHolidays";
-import DemoLeaves from "./pages/DemoLeaves";
+import ShiftForm from "./components/hrms/shifts/ShiftForm";
+import Holidays from "./pages/HRMS/Holidays";
+import Leaves from "./pages/HRMS/Leaves";
 
 const App = () => {
   const location = useLocation();
@@ -115,8 +113,7 @@ const App = () => {
           <Route element={<Layout />}>
             {/* Unauthorized Page */}
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
-
-            {/* My Profile - Accessible to all authenticated users */}
+            {/*My Profile */}
             <Route
               path="/my-profile"
               element={
@@ -126,15 +123,8 @@ const App = () => {
               }
             />
 
-            {/* Dashboard Routes */}
-            <Route
-              path="/admin/super-dashboard"
-              element={
-                <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
-                  <SuperDashboard />
-                </ProtectedRoute>
-              }
-            />
+            {/* Dashboard */}
+
             <Route
               path="/dashboard"
               element={
@@ -146,7 +136,7 @@ const App = () => {
 
             {/* Settings - Accessible to all */}
             <Route
-              path="/admin/settings"
+              path="/settings"
               element={
                 <ProtectedRoute>
                   <Settings />
@@ -154,126 +144,9 @@ const App = () => {
               }
             />
 
-            {/* HRMS */}
+            {/* Users  */}
             <Route
-              path="/shifts"
-              element={
-                <ProtectedRoute resource="users" action="read">
-                  <Shifts />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/create-shift"
-              element={
-                <ProtectedRoute resource="users" action="create">
-                  <AddShift />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/edit-shift/:id"
-              element={
-                <ProtectedRoute resource="users" action="update">
-                  <EditShift />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Holidays */}
-            <Route
-              path="/demo-holidays"
-              element={
-                <ProtectedRoute resource="customers" action="read">
-                  <DemoHolidays />
-                </ProtectedRoute>
-              }
-            />
-            {/* Leaves */}
-            <Route
-              path="/demo-leaves"
-              element={
-                <ProtectedRoute resource="customers" action="read">
-                  <DemoLeaves />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Profile Management Routes */}
-            <Route
-              path="/admin/profilemanagement/profiles"
-              element={
-                <ProtectedRoute resource="profiles" action="read">
-                  <Profiles />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/admin/profilemanagement/add-profile"
-              element={
-                <ProtectedRoute resource="profiles" action="create">
-                  <AddProfile />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/admin/profilemanagement/edit-profile/:id"
-              element={
-                <ProtectedRoute resource="profiles" action="update">
-                  <EditProfile />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/admin/profilemanagement/view-profile/:id"
-              element={
-                <ProtectedRoute resource="profiles" action="read">
-                  <ViewProfile />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/admin/profilemanagement/profiles/stats"
-              element={
-                <ProtectedRoute resource="profiles" action="read">
-                  <ProfileStats />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Role Management Routes */}
-            <Route
-              path="/admin/rolemanagement/roles"
-              element={
-                <ProtectedRoute resource="users" action="read">
-                  <RoleManagement />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/rolemanagement/add-roles"
-              element={
-                <ProtectedRoute resource="users" action="create">
-                  <CreateRole />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/rolemanagement/edit-roles/:id"
-              element={
-                <ProtectedRoute resource="users" action="update">
-                  <EditRole />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* User Management Routes */}
-            <Route
-              path="/admin/usermanagement/users"
+              path="/users"
               element={
                 <ProtectedRoute resource="users" action="read">
                   <UserManagement />
@@ -281,7 +154,7 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/usermanagement/add-user"
+              path="/users/new"
               element={
                 <ProtectedRoute resource="users" action="create">
                   <CreateUser />
@@ -289,17 +162,82 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/usermanagement/edit-user/:id"
+              path="/users/:id/edit"
               element={
                 <ProtectedRoute resource="users" action="update">
                   <EditUser />
                 </ProtectedRoute>
               }
             />
-
-            {/* Client Management Routes */}
+            {/* Roles */}
             <Route
-              path="/admin/clientmanagement/clients"
+              path="/roles"
+              element={
+                <ProtectedRoute resource="users" action="read">
+                  <RoleManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/roles/new"
+              element={
+                <ProtectedRoute resource="users" action="create">
+                  <CreateRole />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/roles/:id/edit"
+              element={
+                <ProtectedRoute resource="users" action="update">
+                  <EditRole />
+                </ProtectedRoute>
+              }
+            />
+            {/* Profiles */}
+            <Route
+              path="/profiles"
+              element={
+                <ProtectedRoute resource="profiles" action="read">
+                  <Profiles />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profiles/:id"
+              element={
+                <ProtectedRoute resource="profiles" action="read">
+                  <ViewProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profiles/new"
+              element={
+                <ProtectedRoute resource="profiles" action="create">
+                  <AddProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profiles/:id/edit"
+              element={
+                <ProtectedRoute resource="profiles" action="update">
+                  <EditProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profiles/stats"
+              element={
+                <ProtectedRoute resource="profiles" action="read">
+                  <ProfileStats />
+                </ProtectedRoute>
+              }
+            />
+            {/* Clients  */}
+            <Route
+              path="/clients"
               element={
                 <ProtectedRoute resource="customers" action="read">
                   <ClientList />
@@ -307,7 +245,15 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/clientmanagement/clients/stats"
+              path="/clients/:id"
+              element={
+                <ProtectedRoute resource="customers" action="read">
+                  <ViewClient />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/clients/stats"
               element={
                 <ProtectedRoute resource="customers" action="read">
                   <ClientStats />
@@ -315,7 +261,7 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/clientmanagement/add-client"
+              path="/clients/new"
               element={
                 <ProtectedRoute resource="customers" action="create">
                   <AddClient />
@@ -323,25 +269,17 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/clientmanagement/edit-client/:id"
+              path="/clients/:id/edit"
               element={
                 <ProtectedRoute resource="customers" action="update">
                   <EditClient />
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/admin/clientmanagement/view-client/:id"
-              element={
-                <ProtectedRoute resource="customers" action="read">
-                  <ViewClient />
-                </ProtectedRoute>
-              }
-            />
 
-            {/* Client Requirement Routes */}
+            {/* Clients*/}
             <Route
-              path="/admin/clientmanagement/clientrequirements"
+              path="/clients/requirements"
               element={
                 <ProtectedRoute resource="customers" action="read">
                   <ClientsRequirementsList />
@@ -349,7 +287,7 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/clientmanagement/clientrequirements/stats"
+              path="/clients/requirements/stats"
               element={
                 <ProtectedRoute resource="customers" action="read">
                   <RequirementStats />
@@ -357,7 +295,7 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/clientmanagement/add-clientrequirement"
+              path="/clients/requirements/new"
               element={
                 <ProtectedRoute resource="customers" action="create">
                   <ClientRequirement />
@@ -365,7 +303,7 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/clientmanagement/edit-requirement/:id"
+              path="/clients/requirements/:id/edit"
               element={
                 <ProtectedRoute resource="customers" action="update">
                   <EditClientRequirement />
@@ -373,7 +311,7 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/clientmanagement/view-requirement/:id"
+              path="/clients/requirements/:id"
               element={
                 <ProtectedRoute resource="customers" action="read">
                   <ViewRequirement />
@@ -381,9 +319,56 @@ const App = () => {
               }
             />
 
+            {/* HRMS */}
+            <Route
+              path="/hrms/shifts"
+              element={
+                <ProtectedRoute resource="users" action="read">
+                  <Shifts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hrms/shifts/new"
+              element={
+                <ProtectedRoute resource="users" action="create">
+                  {/* <AddShift /> */}
+                  <ShiftForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hrms/shifts/:id/edit"
+              element={
+                <ProtectedRoute resource="users" action="update">
+                  {/* <EditShift /> */}
+                  <ShiftForm />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Holidays */}
+            <Route
+              path="/hrms/holidays"
+              element={
+                <ProtectedRoute resource="customers" action="read">
+                  <Holidays />
+                </ProtectedRoute>
+              }
+            />
+            {/* Leaves */}
+            <Route
+              path="/hrms/leaves"
+              element={
+                <ProtectedRoute resource="customers" action="read">
+                  <Leaves />
+                </ProtectedRoute>
+              }
+            />
+
             {/* Interview Management Routes */}
             <Route
-              path="/admin/interviewmanagement"
+              path="/interviews"
               element={
                 <ProtectedRoute>
                   <InterviewDashboard />
@@ -392,7 +377,7 @@ const App = () => {
             />
             {/* Task Management */}
             <Route
-              path="/taskboard"
+              path="/tasks"
               element={
                 <ProtectedRoute>
                   <Tasks />
@@ -402,15 +387,14 @@ const App = () => {
 
             {/* Attendance Management */}
             <Route
-              path="/attendance"
+              path="/hrms/attendance"
               element={
                 <ProtectedRoute>
                   <Attandance />
                 </ProtectedRoute>
               }
             />
-
-            {/* 404 Not Found */}
+            {/* 404 Page  Not Found */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

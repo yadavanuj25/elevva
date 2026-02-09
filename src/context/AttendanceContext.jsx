@@ -1,91 +1,3 @@
-// import React, { useEffect, createContext, useState, useContext } from "react";
-// import { attendanceData as initialData } from "../contstants/attendanceData";
-
-// const AttendanceContext = createContext();
-
-// export const useAttendance = () => useContext(AttendanceContext);
-
-// const todayStr = () => {
-//   const d = new Date();
-//   d.setHours(0, 0, 0, 0);
-//   return d.toISOString().split("T")[0];
-// };
-
-// export const AttendanceProvider = ({ children }) => {
-//   const [attendanceData, setAttendanceData] = useState(() => {
-//     const saved = localStorage.getItem("attendanceData");
-//     return saved ? JSON.parse(saved) : initialData;
-//   });
-
-//   useEffect(() => {
-//     localStorage.setItem("attendanceData", JSON.stringify(attendanceData));
-//   }, [attendanceData]);
-
-//   const punch = (userId, name, punchType, time, extra = {}) => {
-//     const today = todayStr();
-//     const newData = [...attendanceData];
-
-//     const index = newData.findIndex(
-//       (i) => i.userId === userId && i.date === today
-//     );
-
-//     let record =
-//       index !== -1
-//         ? { ...newData[index] }
-//         : {
-//             userId,
-//             name,
-//             date: today,
-//             punchIn: null,
-//             punchOut: null,
-//             lunchStart: null,
-//             lunchEnd: null,
-//             lunchDuration: 0,
-//             totalWorkMinutes: 0,
-//             totalHours: "00:00",
-//             status: "Absent",
-//           };
-
-//     if (punchType === "in") {
-//       record.punchIn = time;
-//       record.status = "Present";
-//     }
-
-//     if (punchType === "lunchStart") {
-//       record.lunchStart = time;
-//     }
-
-//     if (punchType === "lunchEnd") {
-//       record.lunchEnd = time;
-//       record.lunchDuration = extra.lunchMinutes;
-//     }
-
-//     if (punchType === "out") {
-//       record.punchOut = time;
-
-//       const start = new Date(`1970-01-01T${record.punchIn}:00`);
-//       const end = new Date(`1970-01-01T${time}:00`);
-//       const totalMinutes = (end - start) / 60000 - record.lunchDuration;
-//       record.totalWorkMinutes = Math.max(totalMinutes, 0);
-//       const h = Math.floor(record.totalWorkMinutes / 60);
-//       const m = record.totalWorkMinutes % 60;
-//       record.totalHours = `${h.toString().padStart(2, "0")}:${m
-//         .toString()
-//         .padStart(2, "0")}`;
-//       record.status = extra.status || "Completed";
-//     }
-//     if (index !== -1) newData[index] = record;
-//     else newData.push(record);
-//     setAttendanceData(newData);
-//   };
-
-//   return (
-//     <AttendanceContext.Provider value={{ attendanceData, punch }}>
-//       {children}
-//     </AttendanceContext.Provider>
-//   );
-// };
-
 import React, { useEffect, createContext, useState, useContext } from "react";
 import { attendanceData as initialData } from "../contstants/attendanceData";
 
@@ -120,7 +32,7 @@ export const AttendanceProvider = ({ children }) => {
     const today = todayStr();
     const newData = [...attendanceData];
     const index = newData.findIndex(
-      (i) => i.userId === userId && i.date === today
+      (i) => i.userId === userId && i.date === today,
     );
 
     let record =
