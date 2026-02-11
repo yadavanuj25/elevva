@@ -100,22 +100,6 @@ body {
   }
 }
 
-.sidebar-link {
-  transition: all 0.3s;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-.sidebar-link.active {
-  background-color: var(--accent-light);
-  color: var(--accent-dark);
-  border-right: 3px solid var(--accent-dark);
-  font-weight: 900;
-}
-.sidebar-link:hover {
-  background-color: var(--accent-light);
-  color: var(--accent-dark);
-}
-
 .no-margin {
   margin: 0 !important;
 }
