@@ -131,7 +131,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 flex items-center   justify-between px-3 py-2.5 border-b border-gray-300 dark:border-gray-600">
+    <header className="sticky top-0 z-40 bg-white dark:bg-darkBg shadow flex items-center   justify-between px-3 py-2.5 border-b border-gray-300 dark:border-gray-600">
       {/* Left */}
       <div className="flex gap-5 items-center text-md font-medium">
         <button
@@ -145,7 +145,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
           )}
         </button>
 
-        <div className="hidden sm:block">
+        <div className="hidden sm:block text-[16px]">
           Welcome to Elevva{" "}
           <span className=" font-semibold"> {user?.fullName}</span>
         </div>

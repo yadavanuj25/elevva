@@ -1,16 +1,11 @@
 /* Header */
 
-/* .header-icons {
-  height: 32px;
-  width: 32px;
-  border-radius: 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: white;
-  color: black;
-  border: 1px solid white;
-} */
+.dashboard-goal-img {
+  position: absolute;
+  top: 0;
+  right: -10px;
+  width: 215px;
+}
 
 .header-icons {
   height: 32px;
