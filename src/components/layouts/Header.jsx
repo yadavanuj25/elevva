@@ -131,12 +131,12 @@ const Header = ({ toggleSidebar, isOpen }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 flex items-center bg-accent-dark text-white justify-between px-3 py-2 border-b border-gray-300 dark:border-gray-600">
+    <header className="sticky top-0 z-40 flex items-center   justify-between px-3 py-2.5 border-b border-gray-300 dark:border-gray-600">
       {/* Left */}
       <div className="flex gap-5 items-center text-md font-medium">
         <button
           onClick={toggleSidebar}
-          className="p-2 rounded-full text-white hover:text-accent-dark hover:bg-accent-light  transition-all"
+          className="p-2 rounded-full text-accent-dark bg-accent-light  hover:bg-accent-dark hover:text-accent-light  transition-all"
         >
           {isOpen ? (
             <RiMenuFold3Line size={20} />
@@ -153,7 +153,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
       {/* Right */}
       <div className="flex items-center gap-3 relative" ref={popupRef}>
-        <div className="header-icons" accordion onClick={lockScreen}>
+        <div className="header-icons " accordion onClick={lockScreen}>
           <IconButton title="Lock Screen" icon={LockKeyhole} />
         </div>
         {/*  Fullscreen Button */}
@@ -187,7 +187,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
         >
           {/* w-8 h-8 rounded flex justify-center items-center */}
           <div
-            className={`w-8 h-8  flex justify-center items-center  rounded ${
+            className={`w-8 h-8  header-icons ${
               user?.profileImage ? "" : "bg-white rounded"
             }`}
           >

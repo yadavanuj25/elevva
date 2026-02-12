@@ -79,7 +79,7 @@ const Dashboard = () => {
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => navigate("/tasks")}
-                  className="px-6 py-3 bg-white text-purple-600 rounded-xl font-semibold hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center gap-2"
+                  className="px-6 py-3 bg-white text-accent-dark rounded-xl font-semibold hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center gap-2"
                 >
                   <Plus className="w-5 h-5" />
                   To Do List

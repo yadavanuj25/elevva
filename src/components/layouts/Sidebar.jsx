@@ -449,14 +449,28 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         md:translate-x-0 ${isOpen ? "md:w-60" : "md:w-16"} flex flex-col`}
       >
         {/* Header */}
-        <div className="px-4 py-2.5 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+        <div className="px-4 py-3 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div className="w-full flex items-center justify-between">
             <Link
               to="/"
-              className="text-lg flex items-center gap-2 truncate text-accent-dark dark:text-white"
+              className="text-lg flex items-center gap-2 truncate text-accent-dark font-[poppins]"
             >
-              <img src={logo} alt="" className="w-8 h-8" />
-              {isOpen && <span className="font-bold">Elevva CRM</span>}
+              {/* <img src={logo} alt="" className="w-8 h-8" /> */}
+              {/* <div className="w-8 h-8 bg-accent-dark text-white text-2xl leading-none  flex items-center justify-center font-bold rounded-md">
+                e
+              </div> */}
+              <p className="logo-text w-8 h-8 bg-accent-dark text-white grid place-items-center font-bold rounded-md leading-[0] text-[30px]">
+                E
+              </p>
+
+              {isOpen && (
+                <>
+                  <span className="font-bold text-black dark:text-white">
+                    Elevva
+                  </span>
+                  <span className="font-bold">CRM</span>
+                </>
+              )}
             </Link>
           </div>
         </div>
@@ -466,7 +480,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           {filteredSections.map((section, i) => (
             <div key={i}>
               {/* Section without collapsible (like Dashboard) */}
-              {!section.section &&
+              {isOpen &&
+                !section.section &&
                 section.items.map((item) => (
                   <li key={item.path} className="px-2">
                     <Link
@@ -481,11 +496,28 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     >
                       <div className="section-icon-wrapper">{item.icon}</div>
 
-                      {isOpen && (
-                        <span className="text-sm font-medium whitespace-nowrap">
-                          {item.label}
-                        </span>
-                      )}
+                      <span className="text-sm font-medium whitespace-nowrap">
+                        {item.label}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              {/* When sidebar is collapsed, show icon-only sections for linkd like dashboard */}
+              {!isOpen &&
+                !section.section &&
+                section.items.map((item) => (
+                  <li key={item.path} className="px-3 mt-0.5">
+                    <Link
+                      to={item.path}
+                      onClick={() =>
+                        window.innerWidth < 768 && setIsOpen(false)
+                      }
+                      className={`flex items-center justify-center gap-3 px-3 py-1 rounded-md transition-all duration-200 sidebar-link ${
+                        isActive(item.path) ? "active" : ""
+                      }`}
+                      title={item.label}
+                    >
+                      <div className="sidebar-icon-wrapper">{item.icon}</div>
                     </Link>
                   </li>
                 ))}
