@@ -60,7 +60,7 @@ const TableLayout = ({
   return (
     <>
       {/* Table */}
-      <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600">
+      <TableContainer className="rounded-xl border border-[#E8E8E9] dark:border-gray-600">
         <div className="overflow-x-auto">
           <Table className="min-w-full">
             <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-20">
@@ -92,10 +92,10 @@ const TableLayout = ({
                           },
                         }}
                       >
-                        <strong>{col.label}</strong>
+                        <span className="font-semibold">{col.label}</span>
                       </TableSortLabel>
                     ) : (
-                      <strong>{col.label}</strong>
+                      <>{col.label}</>
                     )}
                   </TableCell>
                 ))}

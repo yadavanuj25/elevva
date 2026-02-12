@@ -114,11 +114,11 @@ const GeneralSettings = () => {
             className={`border  rounded-full p-1 ${
               errors.company_logo
                 ? "border-red-500"
-                : "border-gray-300 dark:border-gray-600"
+                : "border-[#E8E8E9] dark:border-gray-600"
             }`}
           >
             <div
-              className={`w-28 h-28 bg-gray-100 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 `}
+              className={`w-28 h-28 bg-gray-100 rounded-full overflow-hidden border border-[#E8E8E9] dark:border-gray-600 flex items-center justify-center text-gray-400 `}
             >
               {logoPreview ? (
                 <img
@@ -222,7 +222,7 @@ const GeneralSettings = () => {
         ${
           errors.company_address
             ? "border-red-500"
-            : "border-gray-300 dark:border-gray-600 focus:border-black"
+            : "border-[#E8E8E9] dark:border-gray-600 focus:border-black"
         }`}
             />
             <label

@@ -322,7 +322,7 @@ const ClientsRequirementsList = () => {
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">All Requirements</h2>
+        <h2>All Requirements</h2>
       </div>
 
       <ErrorMessage errorMsg={errorMsg} />
@@ -334,7 +334,7 @@ const ClientsRequirementsList = () => {
         handleTabChange={handleTabChange}
       />
 
-      <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="p-3 bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
         <TableHeader
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}
@@ -367,7 +367,7 @@ const ClientsRequirementsList = () => {
             onLimitChange={handleChangeRowsPerPage}
           />
         </div>
-        <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 ">
+        <TableContainer className="rounded-xl border border-[#E8E8E9] dark:border-gray-600 ">
           <div className="overflow-x-auto">
             <Table className="min-w-full">
               <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-20">
@@ -424,10 +424,10 @@ const ClientsRequirementsList = () => {
                             },
                           }}
                         >
-                          <strong> {col.label}</strong>
+                          <span className="font-semibold"> {col.label}</span>
                         </TableSortLabel>
                       ) : (
-                        <strong> {col.label}</strong>
+                        <> {col.label}</>
                       )}
                     </TableCell>
                   ))}
@@ -546,7 +546,7 @@ const ClientsRequirementsList = () => {
           absolute left-0 top-9
           z-50 hidden group-hover:block
           bg-white dark:bg-darkBg
-          border border-gray-300 dark:border-gray-600
+          border border-[#E8E8E9] dark:border-gray-600
           shadow-lg rounded-md
           px-3 py-2
           min-w-[180px]

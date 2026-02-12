@@ -139,7 +139,7 @@ const Leaves = () => {
       });
 
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/leaves/all?${queryParams}`,
+        `http://localhost:5000/api/leaves/all?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -272,12 +272,9 @@ const Leaves = () => {
   const exportLeaves = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/leaves/export",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const response = await fetch("http://localhost:5000/api/leaves/export", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -412,42 +409,32 @@ const Leaves = () => {
             </h3>
             <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
               <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <p className="text-2xl font-bold text-gray-900">
-                  {leaveStats.total}
-                </p>
-                <p className="text-xs text-gray-600">Total</p>
+                <h2 className=" text-gray-900">{leaveStats.total}</h2>
+                <h2 className="text-xs text-gray-600">Total</h2>
               </div>
               <div className="text-center p-3 bg-yellow-50 rounded-lg">
-                <p className="text-2xl font-bold text-yellow-600">
-                  {leaveStats.pending}
-                </p>
+                <h2 className=" text-yellow-600">{leaveStats.pending}</h2>
                 <p className="text-xs text-gray-600">Pending</p>
               </div>
               <div className="text-center p-3 bg-green-50 rounded-lg">
-                <p className="text-2xl font-bold text-green-600">
-                  {leaveStats.approved}
-                </p>
+                <h2 className=" text-green-600">{leaveStats.approved}</h2>
                 <p className="text-xs text-gray-600">Approved</p>
               </div>
               <div className="text-center p-3 bg-red-50 rounded-lg">
-                <p className="text-2xl font-bold text-red-600">
-                  {leaveStats.rejected}
-                </p>
+                <h2 className=" text-red-600">{leaveStats.rejected}</h2>
                 <p className="text-xs text-gray-600">Rejected</p>
               </div>
               <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <p className="text-2xl font-bold text-blue-600">
-                  {leaveStats.totalDaysUsed}
-                </p>
+                <h2 className=" text-blue-600">{leaveStats.totalDaysUsed}</h2>
                 <p className="text-xs text-gray-600">Days Used</p>
               </div>
               <div className="text-center p-3 bg-purple-50 rounded-lg">
-                <p className="text-2xl font-bold text-purple-600">
+                <h2 className=" text-purple-600">
                   {Object.values(leaveStats.byType || {}).reduce(
                     (a, b) => a + b,
                     0,
                   )}
-                </p>
+                </h2>
                 <p className="text-xs text-gray-600">This Year</p>
               </div>
             </div>
@@ -758,7 +745,7 @@ const Leaves = () => {
                             : "",
                         })
                       }
-                      className="w-4 h-4 text-purple-600 border-gray-300 rounded"
+                      className="w-4 h-4 text-purple-600 border-[#E8E8E9] rounded"
                     />
                     <label htmlFor="halfDay" className="text-sm font-medium">
                       Apply as Half Day

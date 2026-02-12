@@ -25,7 +25,7 @@ const MyTaskDashboard = () => {
         <div className=" mx-auto">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <h2 className="text-2xl font-semibold">Task Management</h2>
+              <h2>Task Management</h2>
             </div>
             <div className="flex items-center space-x-4">
               <button

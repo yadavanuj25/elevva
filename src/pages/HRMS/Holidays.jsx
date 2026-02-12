@@ -139,7 +139,7 @@ const Holidays = () => {
       if (filters.type) queryParams.append("type", filters.type);
       if (filters.isActive) queryParams.append("isActive", filters.isActive);
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/holidays?${queryParams}`,
+        `http://localhost:5000/api/holidays?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -157,7 +157,7 @@ const Holidays = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/holidays/upcoming?limit=25",
+        "http://localhost:5000/api/holidays/upcoming?limit=25",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -401,7 +401,7 @@ const Holidays = () => {
         )}
 
         {/* Upcoming Holidays Card */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl  p-4 mb-4">
+        <div className="bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl  p-4 mb-4">
           <h3 className="text-lg font-semibold  mb-4 flex items-center space-x-2">
             <Gift className="w-5 h-5 text-orange-600" />
             <span>Upcoming Holidays</span>
@@ -439,7 +439,7 @@ const Holidays = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl  p-4 mb-6 ">
+        <div className="bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl  p-4 mb-6 ">
           <div className="flex items-center gap-2 w-1/2">
             {/* Filter Icon */}
             <Filter className="w-5 h-5 text-gray-400 shrink-0" />
@@ -495,7 +495,7 @@ const Holidays = () => {
             <p className="mt-4 text-gray-600">Loading holidays...</p>
           </div>
         ) : holidays.length === 0 ? (
-          <div className="border border-gray-300 dark:border-gray-600 rounded-xl  p-12 text-center">
+          <div className="border border-[#E8E8E9] dark:border-gray-600 rounded-xl  p-12 text-center">
             <Calendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
             <h3 className="text-xl font-semibold  mb-2">No Holidays Found</h3>
             <p className="text-gray-500">
@@ -504,7 +504,7 @@ const Holidays = () => {
           </div>
         ) : (
           <>
-            <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl  overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl  overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-accent-dark text-white">
@@ -611,7 +611,7 @@ const Holidays = () => {
       ${
         currentPage === 1
           ? "cursor-not-allowed text-gray-500 border-gray-200 bg-gray-200"
-          : "text-white border-gray-300 bg-accent-dark hover:opacity-90"
+          : "text-white border-[#E8E8E9] bg-accent-dark hover:opacity-90"
       }`}
               >
                 <ArrowLeft size={16} /> Prev
@@ -631,7 +631,7 @@ const Holidays = () => {
       ${
         currentPage === totalPages
           ? "cursor-not-allowed text-gray-500 border-gray-200 bg-gray-200"
-          : "text-white border-gray-300 bg-accent-dark hover:opacity-90"
+          : "text-white border-[#E8E8E9] bg-accent-dark hover:opacity-90"
       }`}
               >
                 Next <ArrowRight size={16} />
@@ -672,7 +672,7 @@ const Holidays = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg "
+                    className="w-full px-4 py-2 border border-[#E8E8E9] rounded-lg "
                     placeholder="e.g., Republic Day"
                   />
                 </div>
@@ -688,7 +688,7 @@ const Holidays = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, date: e.target.value })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg "
+                      className="w-full px-4 py-2 border border-[#E8E8E9] rounded-lg "
                     />
                   </div>
 
@@ -701,7 +701,7 @@ const Holidays = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, type: e.target.value })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg "
+                      className="w-full px-4 py-2 border border-[#E8E8E9] rounded-lg "
                     >
                       <option value="public">Public Holiday</option>
                       <option value="optional">Optional Holiday</option>
@@ -720,7 +720,7 @@ const Holidays = () => {
                       setFormData({ ...formData, description: e.target.value })
                     }
                     rows="3"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg "
+                    className="w-full px-4 py-2 border border-[#E8E8E9] rounded-lg "
                     placeholder="Optional description..."
                   ></textarea>
                 </div>
@@ -748,7 +748,7 @@ const Holidays = () => {
                       setShowEditModal(false);
                       resetForm();
                     }}
-                    className="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    className="flex-1 px-6 py-3 border border-[#E8E8E9] rounded-lg hover:bg-gray-50 transition-colors font-medium"
                   >
                     Cancel
                   </button>
@@ -806,7 +806,7 @@ const Holidays = () => {
                   value={bulkHolidays}
                   onChange={(e) => setBulkHolidays(e.target.value)}
                   rows="10"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg  font-mono text-sm"
+                  className="w-full px-4 py-2 border border-[#E8E8E9] rounded-lg  font-mono text-sm"
                   placeholder={`Independence Day, 2025-08-15, public\nRepublic Day, 2025-01-26, public\nDiwali, 2025-11-01, optional`}
                 ></textarea>
 
@@ -816,7 +816,7 @@ const Holidays = () => {
                       setShowBulkModal(false);
                       setBulkHolidays("");
                     }}
-                    className="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    className="flex-1 px-6 py-3 border border-[#E8E8E9] rounded-lg hover:bg-gray-50 transition-colors font-medium"
                   >
                     Cancel
                   </button>

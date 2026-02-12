@@ -46,10 +46,16 @@ import Shifts from "./pages/HRMS/Shifts";
 import ShiftForm from "./components/hrms/shifts/ShiftForm";
 import Holidays from "./pages/HRMS/Holidays";
 import Leaves from "./pages/HRMS/Leaves";
+// import AdminDashboard from "./pages/Dasboards/AdminDashboard";
+// import EmployeeDashboard from "./pages/Dasboards/EmployeeDashboard";
+// import DefaultDashboard from "./pages/Dasboards/DefaultDashboard";
+// import DashboardRouter from "./routers/DashboardRouter";
 
 const App = () => {
   const location = useLocation();
   const { user } = useAuth();
+
+  console.log(user);
   const isLocked = user?.isLocked === true;
   const current = location.pathname;
   // Redirect to lock screen if user is locked
@@ -133,6 +139,30 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            {/* <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/employee/dashboard"
+              element={
+                <ProtectedRoute>
+                  <EmployeeDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/demo/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DefaultDashboard />
+                </ProtectedRoute>
+              }
+            /> */}
 
             {/* Settings - Accessible to all */}
             <Route

@@ -75,7 +75,7 @@ const ViewProfile = () => {
     <>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 ">
-          <h2 className="text-2xl font-semibold ">Profile Info </h2>
+          <h2>Profile Info </h2>
           {profile?.profileCode && (
             <p className="text-accent-dark bg-accent-light dark:bg-white text-[12px] px-[2px] py-0 border-b border-accent-dark  rounded font-[500]">
               {" "}
@@ -96,7 +96,7 @@ const ViewProfile = () => {
           />
         </button>
       </div>
-      <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg  border border-gray-300 dark:border-gray-600 ">
+      <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg  border border-[#E8E8E9] dark:border-gray-600 ">
         <div>
           {loading ? (
             <div className="h-screen flex justify-center items-center text-center py-10 ">
@@ -112,16 +112,14 @@ const ViewProfile = () => {
           ) : profile ? (
             <div className="space-y-4">
               {/* Header */}
-              <div className="sticky top-0   z-10 flex flex-wrap justify-between items-center rounded-lg border border-gray-300 dark:border-gray-600 p-4">
+              <div className="sticky top-0   z-10 flex flex-wrap justify-between items-center rounded-lg border border-[#E8E8E9] dark:border-gray-600 p-4">
                 <div className="flex items-center gap-5">
                   <div className="relative w-16 h-16 flex items-center justify-center rounded-lg border-b-[3px]  border-accent-dark  bg-accent-light dark:bg-white  text-3xl font-semibold text-accent-dark shadow-inner">
                     {profile.fullName.slice(0, 2).toUpperCase()}
                     <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/10"></div>
                   </div>
                   <div>
-                    <h2 className="text-2xl font-semibold text-accent-dark ">
-                      {profile.fullName}
-                    </h2>
+                    <h2 className=" text-accent-dark ">{profile.fullName}</h2>
                     <p className="text-sm text-gray-700 dark:text-gray-400">
                       {profile.techStack}
                     </p>
@@ -149,7 +147,7 @@ const ViewProfile = () => {
               {/* Grid Layout */}
               <div className="grid md:grid-cols-3 gap-6">
                 {/* Left Column */}
-                <div className="md:col-span-1 border border-gray-300 dark:border-gray-600 rounded-lg ">
+                <div className="md:col-span-1 border border-[#E8E8E9] dark:border-gray-600 rounded-lg ">
                   {profile.resume && (
                     <ViewSection title="Resume" icon={<FileText size={18} />}>
                       <div className="flex items-center justify-between mt-4">
@@ -158,7 +156,7 @@ const ViewProfile = () => {
                           {profile.resume.originalName}
                         </div>
                         <a
-                          href={`https://crm-backend-qbz0.onrender.com/${profile.resume.path}`}
+                          href={`http://localhost:5000/${profile.resume.path}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-accent-light text-sm px-1 py-0.5 bg-accent-dark  rounded-md"
@@ -237,7 +235,7 @@ const ViewProfile = () => {
                 </div>
 
                 {/* Right Column */}
-                <div className="lg:col-span-2 border border-gray-300 dark:border-gray-600 rounded-lg ">
+                <div className="lg:col-span-2 border border-[#E8E8E9] dark:border-gray-600 rounded-lg ">
                   <ViewSection
                     title="Professional Information"
                     icon={<Briefcase size={18} />}

@@ -10,7 +10,7 @@ const Textareafield = ({ name, value, handleChange, label, rows = 2 }) => {
         onChange={handleChange}
         placeholder=" "
         className="block p-[14px] w-full text-sm bg-transparent rounded-md border  appearance-none focus:outline-none peer transition
-          border-gray-300 dark:border-gray-600 focus:border-accent-dark dark:focus:border-white "
+          border-[#E8E8E9] dark:border-gray-600 focus:border-accent-dark dark:focus:border-white "
       />
       <label
         className={`absolute pointer-events-none text-sm  text-gray-500 dark:text-gray-400

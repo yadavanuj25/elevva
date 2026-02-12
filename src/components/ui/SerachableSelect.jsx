@@ -36,7 +36,7 @@ const SearchableSelect = ({
 
       {/* Input Box */}
       <div
-        className="border border-gray-300 dark:border-gray-600 dark:bg-[#273246] text-gray-800 dark:text-gray-100 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center shadow-sm hover:shadow-md transition-shadow duration-200"
+        className="border border-[#E8E8E9] dark:border-gray-600 dark:bg-[#273246] text-gray-800 dark:text-gray-100 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center shadow-sm hover:shadow-md transition-shadow duration-200"
         onClick={() => setOpen(!open)}
       >
         <span>{options.find((o) => o.value === value)?.label || "Select"}</span>
@@ -50,7 +50,7 @@ const SearchableSelect = ({
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute mt-1 w-full bg-white dark:bg-[#1e2738] border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-60 overflow-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+        <div className="absolute mt-1 w-full bg-white dark:bg-[#1e2738] border border-[#E8E8E9] dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-60 overflow-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
           {/* Search box */}
           <div className="flex items-center bg-gray-200 px-3 py-2 border-b border-gray-200 dark:border-gray-700">
             <Search

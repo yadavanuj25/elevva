@@ -6,7 +6,7 @@ const StatsCards = ({ statsConfig = [], statsData = {} }) => {
       {statsConfig.map((card, index) => (
         <div
           key={index}
-          className="p-3 rounded-lg dark:text-white bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600"
+          className="p-3 rounded-lg dark:text-white bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600"
         >
           <div className="flex items-center justify-between">
             <div>

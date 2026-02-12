@@ -160,7 +160,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
               </label>
               <div
                 onClick={() => setOpenSelect(!openSelect)}
-                className="min-h-[30px] cursor-pointer flex flex-wrap gap-1 items-center border rounded px-2 py-1 text-sm bg-white dark:bg-[#1e2738] border-gray-300 dark:border-gray-600"
+                className="min-h-[30px] cursor-pointer flex flex-wrap gap-1 items-center border rounded px-2 py-1 text-sm bg-white dark:bg-[#1e2738] border-[#E8E8E9] dark:border-gray-600"
               >
                 {selectedOptions.length === 0 && (
                   <span className="text-gray-400">Select options</span>
@@ -185,13 +185,13 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
 
               {openSelect && (
                 <div
-                  className="absolute z-20 mt-1 w-full border rounded bg-white dark:bg-[#1e2738] border-gray-300 dark:border-gray-600"
+                  className="absolute z-20 mt-1 w-full border rounded bg-white dark:bg-[#1e2738] border-[#E8E8E9] dark:border-gray-600"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <input
                     type="search"
                     placeholder="Search by name, email or phone..."
-                    className="w-full bg-white dark:bg-darkBg p-2 border-b border-gray-300 dark:border-gray-600 rounded focus:outline-none  "
+                    className="w-full bg-white dark:bg-darkBg p-2 border-b border-[#E8E8E9] dark:border-gray-600 rounded focus:outline-none  "
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
@@ -243,7 +243,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
                       })
                     }
                     min="0"
-                    className="w-full border rounded py-1 px-2 text-sm bg-white dark:bg-[#1e2738] text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+                    className="w-full border rounded py-1 px-2 text-sm bg-white dark:bg-[#1e2738] text-gray-900 dark:text-white border-[#E8E8E9] dark:border-gray-600"
                   />
                 </div>
               ))}
@@ -282,7 +282,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
                 e.stopPropagation();
                 handleStatusChange(e.target.value);
               }}
-              className="w-full border rounded py-1 px-2 text-sm bg-white dark:bg-[#1e2738] text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+              className="w-full border rounded py-1 px-2 text-sm bg-white dark:bg-[#1e2738] text-gray-900 dark:text-white border-[#E8E8E9] dark:border-gray-600"
             >
               <option value="Assigned">Assigned</option>
               <option value="In Progress">In Progress</option>

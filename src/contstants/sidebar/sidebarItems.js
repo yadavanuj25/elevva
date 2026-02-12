@@ -1,17 +1,23 @@
-import { MdDashboard } from "react-icons/md";
-import { FaUsers, FaUnlockAlt, FaHandshake, FaUserTie } from "react-icons/fa";
-import { FaBriefcase, FaGears } from "react-icons/fa6";
-import { TbHandClick } from "react-icons/tb";
+import {
+  FaBriefcase,
+  FaHandshake,
+  FaUnlockAlt,
+  FaUsers,
+  FaUserTie,
+} from "react-icons/fa";
+import { FaGears } from "react-icons/fa6";
 import { ImProfile } from "react-icons/im";
+import { MdDashboard, MdTimerOff } from "react-icons/md";
+import { TbHandClick } from "react-icons/tb";
 
-export const getNavSections = (dashboardPath) => [
+export const sidebarItems = [
   {
     items: [
       {
         resource: "dashboard",
-        path: dashboardPath,
+        path: "/dashboard",
         label: "Dashboard",
-        icon: MdDashboard,
+        icon: <MdDashboard size={16} />,
       },
     ],
   },
@@ -23,17 +29,16 @@ export const getNavSections = (dashboardPath) => [
         resource: "users",
         path: "/users",
         label: "Manage Users",
-        icon: FaUsers,
+        icon: <FaUsers size={16} />,
       },
       {
         resource: "users",
         path: "/roles",
         label: "Roles & Permission",
-        icon: FaUnlockAlt,
+        icon: <FaUnlockAlt size={16} />,
       },
     ],
   },
-
   {
     section: "PROFILE MANAGEMENT",
     items: [
@@ -41,11 +46,10 @@ export const getNavSections = (dashboardPath) => [
         resource: "profiles",
         path: "/profiles",
         label: "Profiles",
-        icon: ImProfile,
+        icon: <ImProfile size={16} />,
       },
     ],
   },
-
   {
     section: "CLIENT MANAGEMENT",
     items: [
@@ -53,17 +57,45 @@ export const getNavSections = (dashboardPath) => [
         resource: "customers",
         path: "/clients",
         label: "Clients",
-        icon: FaHandshake,
+        icon: <FaHandshake size={16} />,
       },
       {
         resource: "customers",
         path: "/clients/requirements",
         label: "Clients Requirement",
-        icon: FaBriefcase,
+        icon: <FaBriefcase size={16} />,
       },
     ],
   },
-
+  {
+    section: "HRMS",
+    items: [
+      {
+        resource: "users",
+        path: "/hrms/shifts",
+        label: "Shifts",
+        icon: <MdTimerOff size={16} />,
+      },
+      {
+        resource: "attendance",
+        path: "/hrms/attendance",
+        label: "Attendance",
+        icon: <TbHandClick size={16} />,
+      },
+      {
+        resource: "customers",
+        path: "/hrms/holidays",
+        label: "Holidays",
+        icon: <FaUserTie size={16} />,
+      },
+      {
+        resource: "customers",
+        path: "/hrms/leaves",
+        label: "Leaves",
+        icon: <FaUserTie size={16} />,
+      },
+    ],
+  },
   {
     section: "SETTINGS",
     items: [
@@ -71,30 +103,18 @@ export const getNavSections = (dashboardPath) => [
         resource: "settings",
         path: "/settings",
         label: "Settings",
-        icon: FaGears,
+        icon: <FaGears size={16} />,
       },
     ],
   },
-
-  {
-    items: [
-      {
-        resource: "attendance",
-        path: "/hrms/attendance",
-        label: "Attendance",
-        icon: TbHandClick,
-      },
-    ],
-  },
-
   {
     section: "INTERVIEW MANAGEMENT",
     items: [
       {
-        resource: "interviews",
+        resource: "settings",
         path: "/interviews",
         label: "Interviews",
-        icon: FaUserTie,
+        icon: <FaUserTie size={16} />,
       },
     ],
   },

@@ -349,7 +349,7 @@ const AttendanceTracker = () => {
       });
 
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/attendance/export?${queryParams}`,
+        `http://localhost:5000/api/attendance/export?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -426,7 +426,7 @@ const AttendanceTracker = () => {
         timezone={user?.shift?.timezone}
       />
 
-      <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl p-4">
+      <div className="bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl p-4">
         <div className="grid grid-cols-1 md:grid-cols-[minmax(0,40%)_minmax(0,70%)] gap-6 mb-6">
           {/* 2. ATTENDANCE CARD - Main punch in/out card */}
           <AttendanceCard
@@ -460,7 +460,7 @@ const AttendanceTracker = () => {
         </div>
 
         {/* 4. TABS SECTION */}
-        <div className="border border-gray-300 dark:border-gray-600 rounded-xl">
+        <div className="border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
           {/* TAB NAVIGATION */}
           <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 

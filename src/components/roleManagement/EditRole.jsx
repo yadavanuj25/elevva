@@ -200,9 +200,9 @@ const EditRole = () => {
   };
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
-      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
-        <h2 className="text-2xl font-semibold ">Update Role</h2>
+    <div className="p-4 bg-white dark:bg-gray-800  border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
+      <div className="mb-4 pb-2 flex justify-between items-center border-b border-[#E8E8E9] dark:border-gray-600">
+        <h2>Update Role</h2>
         <BackButton onClick={() => navigate("/roles")} />
       </div>
       <div className="space-y-6">
@@ -213,7 +213,7 @@ const EditRole = () => {
             <FormSkeleton rows={4} />
           ) : (
             <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-2 p-6 bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-lg">
+              <div className="col-span-2 p-6 bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-lg">
                 <div className="grid grid-cols-1 gap-4">
                   {/* Role Name */}
                   <Input
@@ -238,7 +238,7 @@ const EditRole = () => {
         ${
           errors.description
             ? "border-red-500 focus:border-red-500 "
-            : "border-gray-300 dark:border-gray-600 focus:border-accent-dark dark:focus:border-white"
+            : "border-[#E8E8E9] dark:border-gray-600 focus:border-accent-dark dark:focus:border-white"
         }`}
                     />
                     <label
@@ -263,7 +263,7 @@ const EditRole = () => {
                 </div>
               </div>
 
-              <div className="p-2 bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-lg">
+              <div className="p-2 bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-lg">
                 <img
                   src={roleBg}
                   alt="image"

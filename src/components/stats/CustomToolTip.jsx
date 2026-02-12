@@ -5,7 +5,7 @@ const CustomTooltip = ({ active, payload }) => {
   const color = payload[0].color || "#3b82f6";
 
   return (
-    <div className="rounded-md bg-white shadow-lg border border-gray-300 dark:border-gray-300 px-3 py-1 text-sm">
+    <div className="rounded-md bg-white shadow-lg border border-[#E8E8E9] dark:border-[#E8E8E9] px-3 py-1 text-sm">
       <p className="font-semibold text-gray-800">{data.name}</p>
       <div className="flex items-center gap-1">
         <span

@@ -70,8 +70,8 @@ const ViewTabs = () => {
 
   return (
     <div>
-      <div className="border-t border-gray-300 dark:border-gray-700 mt-5">
-        <div className="flex gap-2 px-3 pt-4 border-b border-gray-300 dark:border-gray-700">
+      <div className="border-t border-[#E8E8E9] dark:border-gray-700 mt-5">
+        <div className="flex gap-2 px-3 pt-4 border-b border-[#E8E8E9] dark:border-gray-700">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -185,7 +185,7 @@ const ViewTabs = () => {
               <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                 Notes
               </h2>
-              <div className="p-5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-darkBg shadow-sm">
+              <div className="p-5 rounded-xl border border-[#E8E8E9] dark:border-gray-700 bg-white dark:bg-darkBg shadow-sm">
                 <label
                   htmlFor="noteText"
                   className="text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -201,7 +201,7 @@ const ViewTabs = () => {
           w-full mt-2 p-3 rounded-xl border 
           bg-gray-50 dark:bg-gray-800
           text-gray-700 dark:text-gray-200
-          border-gray-300 dark:border-gray-600
+          border-[#E8E8E9] dark:border-gray-600
           focus:ring-2 focus:ring-blue-500 focus:border-blue-500
           transition-all
         "
@@ -215,7 +215,7 @@ const ViewTabs = () => {
                   Previous Notes
                 </h3>
 
-                <div className="p-4 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-darkBg shadow-sm">
+                <div className="p-4 rounded-xl border border-[#E8E8E9] dark:border-gray-700 bg-white dark:bg-darkBg shadow-sm">
                   <p className="text-sm text-gray-700 dark:text-gray-300">
                     No notes yet. Add a new note above.
                   </p>
@@ -225,7 +225,7 @@ const ViewTabs = () => {
           )}
           {activeTab === "requirements" && (
             <div className="space-y-4">
-              <div className="overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-darkBg shadow-sm">
+              <div className="overflow-x-auto rounded-xl border border-[#E8E8E9] dark:border-gray-700 bg-white dark:bg-darkBg shadow-sm">
                 <table className="w-full text-sm text-left">
                   <thead className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
                     <tr>

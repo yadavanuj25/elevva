@@ -196,9 +196,9 @@ const EditClient = () => {
   };
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
-      <div className="mb-4 pb-2 flex justify-between items-center border-b border-gray-300 dark:border-gray-600">
-        <h2 className="text-2xl font-semibold">Update Client</h2>
+    <div className="p-4 bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
+      <div className="mb-4 pb-2 flex justify-between items-center border-b border-[#E8E8E9] dark:border-gray-600">
+        <h2>Update Client</h2>
         <BackButton onClick={() => navigate("/clients")} />
       </div>
 

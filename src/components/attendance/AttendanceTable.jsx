@@ -317,7 +317,7 @@ const StatusCircle = React.memo(
     if (!status) {
       return (
         <div className="flex flex-col items-center justify-center gap-1">
-          <div className="w-6 h-6 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-600"></div>
+          <div className="w-6 h-6 rounded-full border-2 border-dashed border-[#E8E8E9] dark:border-gray-600"></div>
           <span className="text-[10px] text-gray-400 dark:text-gray-500">
             N/A
           </span>
@@ -493,7 +493,7 @@ const AttendanceHistoryTable = ({ history = [], exportAttendance }) => {
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-1 focus:ring-accent-dark focus:border-transparent "
+                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white pl-10 pr-4 py-2 rounded-lg border border-[#E8E8E9] dark:border-gray-600 focus:outline-none focus:ring-1 focus:ring-accent-dark focus:border-transparent "
               />
             </div>
 
@@ -502,7 +502,7 @@ const AttendanceHistoryTable = ({ history = [], exportAttendance }) => {
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 pr-10 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-1 focus:ring-accent-dark  focus:border-transparent appearance-none cursor-pointer"
+                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 pr-10 rounded-lg border border-[#E8E8E9] dark:border-gray-600 focus:outline-none focus:ring-1 focus:ring-accent-dark  focus:border-transparent appearance-none cursor-pointer"
               >
                 {years.map((year) => (
                   <option key={year} value={year}>
@@ -521,7 +521,7 @@ const AttendanceHistoryTable = ({ history = [], exportAttendance }) => {
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(e.target.value)}
-                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 pr-10 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-1 focus:ring-accent-dark focus:border-transparent appearance-none cursor-pointer"
+                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 pr-10 rounded-lg border border-[#E8E8E9] dark:border-gray-600 focus:outline-none focus:ring-1 focus:ring-accent-dark focus:border-transparent appearance-none cursor-pointer"
               >
                 {months.map((month) => (
                   <option key={month} value={month}>
@@ -548,7 +548,7 @@ const AttendanceHistoryTable = ({ history = [], exportAttendance }) => {
       </div>
 
       {/* Calendar Table */}
-      <div className="rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800">
+      <div className="rounded-lg overflow-hidden border border-[#E8E8E9] dark:border-gray-600 bg-white dark:bg-gray-800">
         <div className="overflow-x-auto">
           <table className="w-full min-w-max">
             {/* Table Header */}
@@ -640,7 +640,7 @@ const AttendanceHistoryTable = ({ history = [], exportAttendance }) => {
 
       {/* Legend */}
 
-      <div className="mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-4">
+      <div className="mt-2 bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-lg p-4">
         <div className="flex items-center gap-6 flex-wrap">
           <span className="text-gray-900 dark:text-gray-300 font-medium">
             Legend:

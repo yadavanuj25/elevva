@@ -24,7 +24,7 @@ const VerifyPage = ({ email }) => {
       </div>
 
       {/* Title */}
-      <h1 className="text-2xl font-semibold text-gray-900">Check Your Email</h1>
+      <h2 className=" text-gray-900">Check Your Email</h2>
 
       <p className="text-gray-600 mt-3 leading-relaxed">
         We've sent a reset link to your email{" "}

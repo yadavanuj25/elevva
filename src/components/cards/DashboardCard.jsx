@@ -39,7 +39,7 @@ const DashboardCard = ({
   const c = colorClasses[color] || colorClasses.red;
 
   return (
-    <div className="relative bg-white dark:bg-darkBg font-golos rounded-lg shadow-sm border border-gray-300 dark:border-gray-600 p-5 flex justify-between items-center transition hover:shadow-md duration-300">
+    <div className="relative bg-white dark:bg-darkBg font-golos rounded-lg shadow-sm border border-[#E8E8E9] dark:border-gray-600 p-5 flex justify-between items-center transition hover:shadow-md duration-300">
       <div
         className={`absolute top-0 left-0 w-5 h-5 ${c.accent} rounded-br-[12px] rounded-tl-lg`}
       ></div>

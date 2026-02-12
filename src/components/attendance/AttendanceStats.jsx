@@ -328,7 +328,7 @@ const AttendanceStats = ({ attendance }) => {
       <div className="col-span-12 lg:col-span-4 flex flex-col gap-4">
         <div className="flex-1">
           <div className="space-y-2 h-full flex flex-col justify-between">
-            <div className="p-4 rounded-xl border border-gray-300 dark:border-gray-600  shadow-[0_0_10px_rgba(0,0,0,0.12)] dark:shadow-[0_0_10px_rgba(255,255,255,0.06)]">
+            <div className="p-4 rounded-xl border border-[#E8E8E9] dark:border-gray-600  shadow-[0_0_10px_rgba(0,0,0,0.12)] dark:shadow-[0_0_10px_rgba(255,255,255,0.06)]">
               {/* Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
                 <TimelineStat
@@ -454,7 +454,7 @@ const AttendanceStats = ({ attendance }) => {
               {/* Detailed Break List - Only showing breaks */}
               {timelineSegments.length > 0 && (
                 <div
-                  className={`min-h-[190px] ${breakSegments.length > 0 ? "" : "flex justify-center items-center"}  p-4 rounded-xl border border-gray-300 dark:border-gray-600  shadow-[0_0_10px_rgba(0,0,0,0.12)] dark:shadow-[0_0_10px_rgba(255,255,255,0.06)]`}
+                  className={`min-h-[190px] ${breakSegments.length > 0 ? "" : "flex justify-center items-center"}  p-4 rounded-xl border border-[#E8E8E9] dark:border-gray-600  shadow-[0_0_10px_rgba(0,0,0,0.12)] dark:shadow-[0_0_10px_rgba(255,255,255,0.06)]`}
                 >
                   {breakSegments.length > 0 ? (
                     <>
@@ -466,7 +466,7 @@ const AttendanceStats = ({ attendance }) => {
                         {breakSegments.map((segment, index) => (
                           <div
                             key={index}
-                            className="flex items-center justify-between p-2  text-xs border-b border-gray-300 dark:border-gray-600"
+                            className="flex items-center justify-between p-2  text-xs border-b border-[#E8E8E9] dark:border-gray-600"
                           >
                             <div className="flex items-center gap-2">
                               <div>
@@ -514,7 +514,7 @@ const AttendanceStats = ({ attendance }) => {
               )}
             </div>
             <div>
-              <div className="min-h-[90px] p-4 rounded-xl border border-gray-300 dark:border-gray-600  shadow-[0_0_10px_rgba(0,0,0,0.12)] dark:shadow-[0_0_10px_rgba(255,255,255,0.06)]">
+              <div className="min-h-[90px] p-4 rounded-xl border border-[#E8E8E9] dark:border-gray-600  shadow-[0_0_10px_rgba(0,0,0,0.12)] dark:shadow-[0_0_10px_rgba(255,255,255,0.06)]">
                 {attendance?.punchIn?.location ? (
                   <div>
                     <p className="text-sm text-gray-600 mb-1">

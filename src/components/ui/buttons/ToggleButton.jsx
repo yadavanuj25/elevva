@@ -21,7 +21,7 @@ const ToggleButton = ({
       )}
 
       <div className="flex justify-start">
-        <div className="flex items-center bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-full p-0.5">
+        <div className="flex items-center bg-gray-100 dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-700 rounded-full p-0.5">
           <button
             type="button"
             onClick={() => onChange(activeValue)}

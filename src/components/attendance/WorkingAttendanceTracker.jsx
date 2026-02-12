@@ -375,7 +375,7 @@ const AttendanceTracker = () => {
       });
 
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/attendance/export?${queryParams}`,
+        `http://localhost:5000/api/attendance/export?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -496,7 +496,7 @@ const AttendanceTracker = () => {
         </div>
       </div>
 
-      <div className=" bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl p-4 ">
+      <div className=" bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl p-4 ">
         <div>
           <div className="grid grid-cols-1 md:grid-cols-[minmax(0,40%)_minmax(0,70%)] gap-6 mb-6">
             {/* Punch Card */}
@@ -653,7 +653,7 @@ const AttendanceTracker = () => {
           </div>
 
           {/* Tabs */}
-          <div className="border border-gray-300 dark:border-gray-600 rounded-xl ">
+          <div className="border border-[#E8E8E9] dark:border-gray-600 rounded-xl ">
             <div className="border-b border-gray-200">
               <nav className="flex -mb-px">
                 <button
@@ -680,61 +680,6 @@ const AttendanceTracker = () => {
             </div>
 
             <div className="p-4">
-              {/* {activeTab === "today" &&
-                (todayAttendance ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className=" rounded-lg p-4">
-                        <p className="text-sm text-gray-600 mb-1">
-                          Working Hours
-                        </p>
-                        <p className="text-2xl font-bold text-blue-600">
-                          {formatHoursToHM(todayAttendance?.workingHours)}
-                        </p>
-                      </div>
-                      <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4">
-                        <p className="text-sm text-gray-600 mb-1">Status</p>
-                        <span
-                          className={`text-gray-900  inline-block px-2 py-1 rounded text-xs  capitalize ${getStatusColor(todayAttendance.status)}`}
-                        >
-                          {todayAttendance.status}
-                        </span>
-                      </div>
-                    </div>
-
-                    {todayAttendance.punchIn?.location && (
-                      <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4">
-                        <p className="text-sm text-gray-600 mb-2">
-                          Punch In Location
-                        </p>
-                        <div className="flex items-start space-x-2">
-                          <MapPin className="w-4 h-4 text-gray-400 mt-1" />
-                          <div>
-                            <p className="text-sm">
-                              {todayAttendance.punchIn.location.address ||
-                                "Location captured"}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {todayAttendance.punchIn.device?.os} -{" "}
-                              {todayAttendance.punchIn.device?.browser}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <Calendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                    <p className="text-gray-500">
-                      No attendance record for today
-                    </p>
-                    <p className="text-sm text-gray-400 mt-2">
-                      Punch in to start tracking
-                    </p>
-                  </div>
-                ))} */}
-
               {activeTab === "history" &&
                 (history && history.length > 0 ? (
                   <div>

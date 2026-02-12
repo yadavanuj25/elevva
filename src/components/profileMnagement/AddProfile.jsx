@@ -162,7 +162,7 @@ const AddProfile = () => {
   };
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-600 rounded-xl">
+    <div className="p-4 bg-white dark:bg-gray-800  border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
       <PageHeader
         title="Add New Profile"
         onBack={() => navigate("/profiles")}

@@ -28,8 +28,8 @@ const SkillsInput = ({
             error
               ? "border-red-500"
               : isFocused
-              ? "border-accent-dark dark:border-white"
-              : "border-gray-300 dark:border-gray-600"
+                ? "border-accent-dark dark:border-white"
+                : "border-[#E8E8E9] dark:border-gray-600"
           }`}
       >
         {skills.map((skill, i) => (

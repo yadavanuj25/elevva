@@ -16,9 +16,9 @@ const LightDarkMode = () => {
     >
       <button
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        className="w-8 h-8 flex justify-center items-center rounded-full transition-all hover:scale-125"
+        className="w-8 h-8 flex justify-center text-[#303335] items-center rounded-full transition-all hover:scale-125"
       >
-        {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
+        {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
       </button>
     </Tippy>
   );

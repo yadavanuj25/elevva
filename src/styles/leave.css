@@ -61,15 +61,15 @@
 }
 
 .leave-input {
-  @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500;
+  @apply w-full border border-[#E8E8E9] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
 
 .leave-select {
-  @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500;
+  @apply w-full border border-[#E8E8E9] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
 
 .leave-textarea {
-  @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500;
+  @apply w-full border border-[#E8E8E9] rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
 
 .leave-error {
@@ -77,13 +77,13 @@
 }
 
 .leave-btn-secondary {
-  @apply border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-100 transition;
+  @apply border border-[#E8E8E9] text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-100 transition;
 }
 
 /* core.css */
 .filter-input {
   @apply w-full px-3 py-2 border rounded-md text-sm bg-transparent 
-  border-gray-300 dark:border-gray-600 
+  border-[#E8E8E9] dark:border-gray-600 
   focus:outline-none;
 }
 

@@ -12,7 +12,7 @@ const ReadOnlyInput = ({ value, labelName, className = "", icon = null }) => {
           className={`block w-full text-sm  bg-transparent rounded-md appearance-none 
             peer transition border p-[14px] cursor-not-allowed
             ${icon ? "pr-10" : ""}
-            border-gray-300 dark:border-gray-600
+            border-[#E8E8E9] dark:border-gray-600
             text-gray-800 dark:text-white
              appearance-none focus:outline-none `}
         />

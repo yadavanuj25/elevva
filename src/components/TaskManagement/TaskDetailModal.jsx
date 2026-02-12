@@ -196,14 +196,14 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
                   placeholder="Enter your feedback..."
-                  className="w-full text-black border border-gray-300 rounded p-3 h-32"
+                  className="w-full text-black border border-[#E8E8E9] rounded p-3 h-32"
                 />
                 <div className=" w-full flex items-center justify-between">
                   <div className="w-1/2">
                     <select
                       value={feedbackType}
                       onChange={(e) => setFeedbackType(e.target.value)}
-                      className="text-black border border-gray-300  rounded px-3 py-2"
+                      className="text-black border border-[#E8E8E9]  rounded px-3 py-2"
                     >
                       <option value="General">General</option>
                       <option value="Sales">Sales</option>

@@ -73,7 +73,7 @@ const ClientList = () => {
   });
   const [statusOptions, setStatusOptions] = useState([]);
 
-  const API_BASE_URL = "https://crm-backend-qbz0.onrender.com/api";
+  const API_BASE_URL = "http://localhost:5000/api";
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -301,7 +301,7 @@ const ClientList = () => {
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">All Clients</h2>
+        <h2>All Clients</h2>
       </div>
       <ErrorMessage errorMsg={errorMsg} />
 
@@ -311,7 +311,7 @@ const ClientList = () => {
         handleTabChange={handleTabChange}
       />
 
-      <div className="flex justify-end gap-2 mb-3">
+      {/* <div className="flex justify-end gap-2 mb-3">
         <button
           onClick={() => setViewMode("list")}
           className={`p-1 rounded border ${
@@ -333,8 +333,8 @@ const ClientList = () => {
         >
           <LayoutGrid size={20} />
         </button>
-      </div>
-      <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+      </div> */}
+      <div className="p-3 bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
         <TableHeader
           searchQuery={filters.search}
           onSearchChange={(e) =>
@@ -344,6 +344,8 @@ const ClientList = () => {
           }
           addLink="/clients/new"
           title="Client"
+          setViewMode={setViewMode}
+          viewMode={viewMode}
           resource="customers"
         />
 
@@ -393,7 +395,7 @@ const ClientList = () => {
               />
             </form>
 
-            <div className="flex items-center justify-between border-b border-gray-300 dark:border-gray-600 pb-2">
+            <div className="flex items-center justify-between border-b border-[#E8E8E9] dark:border-gray-600 pb-2">
               <div className="active-filters">
                 {filters.search && (
                   <span className="filter-tag ">
@@ -502,7 +504,6 @@ const ClientList = () => {
             onLimitChange={handleChangeRowsPerPage}
           />
         </div>
-
         {viewMode === "grid" ? (
           <>
             <GridLayout data={sortedData} loading={loading} />

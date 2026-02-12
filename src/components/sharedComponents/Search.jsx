@@ -4,12 +4,12 @@ import { Plus } from "lucide-react";
 
 const Search = ({ searchQuery, handleSearchChange, addLink, title }) => {
   return (
-    <div className="py-4 border-b border-gray-300 dark:border-gray-600 flex justify-between items-center">
+    <div className="py-4 border-b border-[#E8E8E9] dark:border-gray-600 flex justify-between items-center">
       <div className="w-1/2">
         <input
           type="text"
           placeholder="Search by name, email or phone..."
-          className="w-full bg-white dark:bg-darkBg p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:border-gray-500 transition"
+          className="w-full bg-white dark:bg-darkBg p-2 border border-[#E8E8E9] dark:border-gray-600 rounded-md focus:outline-none focus:border-gray-500 transition"
           value={searchQuery}
           onChange={handleSearchChange}
         />

@@ -5,7 +5,7 @@ const EditButton = ({ onClick }) => {
   return (
     <>
       <button
-        className="flex items-center gap-2 text-white bg-accent-dark px-2 py-0.5 rounded hover:bg-[#222] hover:dark:text-black hover:dark:bg-white transition"
+        className="px-4 py-2 bg-accent-dark backdrop-blur-sm text-white  rounded-lg font-semibold hover:bg-accent-light hover:text-accent-dark shadow-md  transition duration-300 ease-in-out flex items-center gap-2"
         onClick={onClick}
       >
         <Pencil size={16} /> Edit
@@ -13,5 +13,4 @@ const EditButton = ({ onClick }) => {
     </>
   );
 };
-
 export default EditButton;

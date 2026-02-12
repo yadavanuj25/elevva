@@ -31,12 +31,12 @@ const SelectField = ({
   const normalizedOptions = [
     { label: "-- Select --", value: "" },
     ...options.map((opt) =>
-      typeof opt === "string" ? { label: opt, value: opt } : opt
+      typeof opt === "string" ? { label: opt, value: opt } : opt,
     ),
   ];
 
   const filteredOptions = normalizedOptions.filter((opt) =>
-    opt.label.toLowerCase().includes(search.toLowerCase())
+    opt.label.toLowerCase().includes(search.toLowerCase()),
   );
 
   const selectedLabel =
@@ -52,7 +52,7 @@ const SelectField = ({
             ${
               error
                 ? "border-red-500 focus:border-red-500 "
-                : "border-gray-300 dark:border-gray-600 focus:border-accent-dark dark:focus:border-white"
+                : "border-[#E8E8E9] dark:border-gray-600 focus:border-accent-dark dark:focus:border-white"
             } dark:text-white`}
         >
           {selectedLabel || "-- Select option --"}
@@ -72,7 +72,7 @@ const SelectField = ({
 
         {/* Dropdown */}
         {open && (
-          <div className="absolute z-50 mt-1 w-full bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-md shadow-md">
+          <div className="absolute z-50 mt-1 w-full bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-md shadow-md">
             <div className="flex items-center gap-2 px-3 py-2 border-b dark:border-gray-600 bg-gray-100 dark:bg-gray-800">
               <FiSearch className="text-gray-400" />
               <input

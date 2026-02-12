@@ -20,9 +20,9 @@ const LoginCard = () => {
             <img src={loginbg} alt="" className="object-contain" />
           </div>
 
-          <h4 className="text-white text-2xl font-semibold text-center">
+          <h2 className="text-white  text-center">
             Everything You Need to Succeed.
-          </h4>
+          </h2>
         </div>
       </div>
     </div>

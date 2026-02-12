@@ -197,14 +197,12 @@ const EditProfile = () => {
 
   return (
     <>
-      <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-        My Profile
-      </h2>
+      <h2 className=" text-gray-900 dark:text-white mb-4">My Profile</h2>
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 p-6 rounded-xl"
+        className="space-y-6 bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 p-6 rounded-xl"
       >
-        <div className="relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 p-6">
+        <div className="relative overflow-hidden rounded-xl border border-[#E8E8E9] dark:border-gray-600 p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
             <div className="flex items-center gap-6">
               <div className="relative">
@@ -256,13 +254,13 @@ const EditProfile = () => {
               </div>
             </div>
 
-            <div className="space-y-3 md:border-l md:border-gray-300 md:dark:border-gray-600 md:pl-8">
+            <div className="space-y-3 md:border-l md:border-[#E8E8E9] md:dark:border-gray-600 md:pl-8">
               <InfoRow label="Email" value={email} />
               <InfoRow label="Phone" value={phone} />
               <InfoRow label="Role" value={role?.name} />
               <InfoRow label="Status" value={status} />
             </div>
-            <div className="space-y-3 md:border-l md:border-gray-300 md:dark:border-gray-600 md:pl-8">
+            <div className="space-y-3 md:border-l md:border-[#E8E8E9] md:dark:border-gray-600 md:pl-8">
               <InfoRow label="Country" value={country} />
               <InfoRow label="State" value={state} />
               <InfoRow label="Zip Code" value={zipcode} />
@@ -350,8 +348,8 @@ const EditProfile = () => {
 };
 
 const Section = ({ title, children }) => (
-  <div className="bg-white dark:bg-darkBg rounded-xl border border-gray-300 dark:border-gray-600 shadow-sm">
-    <div className="px-6 py-4 border-b border-gray-300 dark:border-gray-600">
+  <div className="bg-white dark:bg-darkBg rounded-xl border border-[#E8E8E9] dark:border-gray-600 shadow-sm">
+    <div className="px-6 py-4 border-b border-[#E8E8E9] dark:border-gray-600">
       <h3 className="font-semibold text-gray-800 dark:text-white">{title}</h3>
     </div>
     <div className="p-6">{children}</div>

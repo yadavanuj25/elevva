@@ -17,7 +17,7 @@ const ProfileForm = ({
     <>
       {/*Personal Information */}
       <section>
-        <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
+        <h3 className="form-section-subtitle border-b border-[#E8E8E9] dark:border-gray-600">
           Personal Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -67,7 +67,7 @@ const ProfileForm = ({
       </section>
       {/* Professional Information */}
       <section>
-        <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
+        <h3 className="form-section-subtitle border-b border-[#E8E8E9] dark:border-gray-600">
           Professional Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -164,7 +164,7 @@ const ProfileForm = ({
       </section>
       {/* Additional Information */}
       <section>
-        <h3 className="form-section-subtitle border-b border-gray-300 dark:border-gray-600">
+        <h3 className="form-section-subtitle border-b border-[#E8E8E9] dark:border-gray-600">
           Additional Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

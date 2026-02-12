@@ -55,7 +55,7 @@ const Filter = ({ clients }) => {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md flex items-center gap-2"
+        className="px-2 py-1 border border-[#E8E8E9] dark:border-gray-600 rounded-md flex items-center gap-2"
       >
         <Funnel size={16} />
         <span>Filter</span>
@@ -65,7 +65,7 @@ const Filter = ({ clients }) => {
       {open && (
         <div className="absolute left-0 mt-2 w-80 bg-white  rounded-md border p-4 z-50">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-300 dark:border-gray-600 pb-3 mb-3">
+          <div className="flex items-center justify-between border-b border-[#E8E8E9] dark:border-gray-600 pb-3 mb-3">
             <div className="flex gap-2 items-center">
               <Funnel size={16} />
               <h2 className="font-semibold text-lg">Filter</h2>
@@ -82,7 +82,7 @@ const Filter = ({ clients }) => {
           {/* Filter Sections */}
           {filterConfig.map((menu) => {
             const filteredList = menu.list.filter((item) =>
-              item.toLowerCase().includes(search[menu.key].toLowerCase())
+              item.toLowerCase().includes(search[menu.key].toLowerCase()),
             );
 
             return (
@@ -133,7 +133,7 @@ const Filter = ({ clients }) => {
           <div className="grid grid-cols-2 gap-2 mt-4">
             <button
               onClick={resetFilters}
-              className="border border-gray-300 dark:border-gray-600 px-4 py-1 rounded-md"
+              className="border border-[#E8E8E9] dark:border-gray-600 px-4 py-1 rounded-md"
             >
               Reset
             </button>

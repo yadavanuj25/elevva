@@ -1,7 +1,7 @@
 // import { ArrowUp, ArrowDown } from "lucide-react";
 
 // const StatCard = ({ iconBg, value, total, label, trend, up }) => (
-//   <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm px-3 py-2 w-full group">
+//   <div className="bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-lg shadow-sm px-3 py-2 w-full group">
 //     {iconBg && (
 //       <div
 //         className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300
@@ -51,7 +51,7 @@ const StatCard = ({
   up,
 }) => (
   <div
-    className={`${bgColor}  border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm px-3 py-2 w-full group`}
+    className={`${bgColor}  border border-[#E8E8E9] dark:border-gray-600 rounded-lg shadow-sm px-3 py-2 w-full group`}
   >
     {iconBg && (
       <div

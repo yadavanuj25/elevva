@@ -81,7 +81,7 @@ const ViewClient = () => {
       {/* HEADER */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <h2 className="text-2xl font-semibold">Client Info</h2>
+          <h2>Client Info</h2>
           {client?.clientName && (
             <p className="text-accent-dark bg-accent-light dark:bg-white text-[12px] px-[2px] py-0 border-b border-accent-dark rounded font-[500]">
               # {client.clientName}
@@ -102,7 +102,7 @@ const ViewClient = () => {
       </div>
 
       {/* MAIN CARD */}
-      <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600">
+      <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg border border-[#E8E8E9] dark:border-gray-600">
         {loading ? (
           <div className="h-screen flex justify-center items-center text-center py-10">
             <div className="w-[200px] text-black dark:text-white bg-gray-300 dark:bg-gray-700 rounded-full">
@@ -117,15 +117,13 @@ const ViewClient = () => {
         ) : client ? (
           <div className="space-y-4">
             {/* TOP CLIENT HEADER */}
-            <div className="p-4 rounded-lg border border-gray-300 dark:border-gray-600 flex justify-between items-center">
+            <div className="p-4 rounded-lg border border-[#E8E8E9] dark:border-gray-600 flex justify-between items-center">
               <div className="flex items-center gap-5">
                 <div className="w-16 h-16 flex items-center justify-center rounded-lg border-b-[3px] border-accent-dark bg-accent-light dark:bg-white text-3xl font-semibold text-accent-dark">
                   {client.clientName.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold text-accent-dark">
-                    {client.clientName}
-                  </h2>
+                  <h2 className=" text-accent-dark">{client.clientName}</h2>
                   <p className="text-sm text-gray-700 dark:text-gray-400">
                     {client.clientCategory}
                   </p>
@@ -152,7 +150,7 @@ const ViewClient = () => {
             {/* GRID LAYOUT */}
             <div className="grid md:grid-cols-3 gap-6 ">
               {/* LEFT COLUMN */}
-              <div className="md:col-span-1 border border-gray-300 dark:border-gray-600 rounded-lg ">
+              <div className="md:col-span-1 border border-[#E8E8E9] dark:border-gray-600 rounded-lg ">
                 {/* POC 1 */}
                 {client.poc1 && (
                   <ViewSection
@@ -255,7 +253,7 @@ const ViewClient = () => {
               </div>
 
               {/* RIGHT COLUMN */}
-              <div className="lg:col-span-2 border border-gray-300 dark:border-gray-600 rounded-lg ">
+              <div className="lg:col-span-2 border border-[#E8E8E9] dark:border-gray-600 rounded-lg ">
                 <ViewSection
                   title="Company Information"
                   icon={<Building size={18} />}

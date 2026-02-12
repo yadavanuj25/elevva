@@ -33,9 +33,7 @@ const TaskReportView = () => {
     <div className="text-gray-900 dark:text-gray-100">
       {/* Filters Card */}
       <div className="bg-white dark:bg-[#1e2533] rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-2xl font-bold mb-4">
-          Task Report - Complete Visibility
-        </h2>
+        <h2 className=" mb-4">Task Report - Complete Visibility</h2>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
           {/* Start Date */}
@@ -49,7 +47,7 @@ const TaskReportView = () => {
               onChange={(e) =>
                 setFilters({ ...filters, startDate: e.target.value })
               }
-              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 
+              className="w-full border border-[#E8E8E9] dark:border-gray-600 rounded-lg px-4 py-2 
               bg-white dark:bg-[#2a3142] text-gray-900 dark:text-gray-100"
             />
           </div>
@@ -65,7 +63,7 @@ const TaskReportView = () => {
               onChange={(e) =>
                 setFilters({ ...filters, endDate: e.target.value })
               }
-              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 
+              className="w-full border border-[#E8E8E9] dark:border-gray-600 rounded-lg px-4 py-2 
               bg-white dark:bg-[#2a3142] text-gray-900 dark:text-gray-100"
             />
           </div>
@@ -166,8 +164,8 @@ const TaskReportView = () => {
                         parseInt(row.successRate) >= 70
                           ? "text-green-600 dark:text-green-400"
                           : parseInt(row.successRate) >= 40
-                          ? "text-yellow-600 dark:text-yellow-400"
-                          : "text-red-600 dark:text-red-400"
+                            ? "text-yellow-600 dark:text-yellow-400"
+                            : "text-red-600 dark:text-red-400"
                       }`}
                     >
                       {row.successRate}
@@ -184,7 +182,7 @@ const TaskReportView = () => {
           </table>
         </div>
       ) : (
-        <div className="  border border-gray-300 dark:border-gray-600 rounded-xl">
+        <div className="  border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
           <NoData title="No Data Found" />
         </div>
       )}

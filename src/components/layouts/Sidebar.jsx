@@ -166,13 +166,13 @@
 //       )}
 //       <aside
 //         id="app-sidebar"
-//         className={`fixed top-0 left-0 h-screen bg-white dark:bg-darkBg border-r-none sm:border-r border-gray-300 dark:border-gray-600 shadow-sm z-50 transition-all duration-300 transform
+//         className={`fixed top-0 left-0 h-screen bg-white dark:bg-darkBg border-r-none sm:border-r border-[#E8E8E9] dark:border-gray-600 shadow-sm z-50 transition-all duration-300 transform
 //         ${isOpen ? "translate-x-0 w-60" : "-translate-x-full w-60"}
 //         md:translate-x-0 ${isOpen ? "md:w-60" : "md:w-16"} flex flex-col`}
 //       >
 //         {/* Header */}
 
-//         <div className="px-4 py-2.5 flex items-center justify-between border-b border-gray-300 dark:border-gray-600 flex-shrink-0">
+//         <div className="px-4 py-2.5 flex items-center justify-between border-b border-[#E8E8E9] dark:border-gray-600 flex-shrink-0">
 //           <div className="w-full flex items-center justify-between p-0 sm:p-0.5">
 //             <Link
 //               to="/"
@@ -258,6 +258,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const { permissions = {}, role } = useAuth();
   const location = useLocation();
   const [activeSection, setActiveSection] = useState(null);
+
+  const dashboardRoutes = [
+    "/dashboard",
+    "/admin/dashboard",
+    "/employee/dashboard",
+    "/demo/dashboard",
+  ];
 
   const canRead = (resource) => {
     if (role === "superadmin") return true;
@@ -399,6 +406,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   const isActive = (path) => {
     const current = location.pathname;
+    if (path === "/dashboard") {
+      return dashboardRoutes.includes(current);
+    }
     if (current === path) return true;
     if (current.startsWith(path + "/")) {
       return !navSections
@@ -444,16 +454,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       )}
       <aside
         id="app-sidebar"
-        className={`fixed top-0 left-0 h-screen bg-white dark:bg-darkBg border-r border-gray-200 dark:border-gray-700 z-50 transition-all duration-300 transform
+        className={`fixed top-0 left-0 h-screen bg-white dark:bg-darkBg  z-50 transition-all duration-300 transform
         ${isOpen ? "translate-x-0 w-60" : "-translate-x-full w-60"}
         md:translate-x-0 ${isOpen ? "md:w-60" : "md:w-16"} flex flex-col`}
       >
         {/* Header */}
-        <div className="px-4 py-3 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+        <div className="px-4 py-3 flex items-center justify-between shadow flex-shrink-0">
           <div className="w-full flex items-center justify-between">
             <Link
               to="/"
-              className="text-lg flex items-center gap-2 truncate text-accent-dark font-[poppins]"
+              className="text-xl flex items-center gap-2 truncate text-accent-dark font-[poppins]"
             >
               {/* <img src={logo} alt="" className="w-8 h-8" /> */}
               {/* <div className="w-8 h-8 bg-accent-dark text-white text-2xl leading-none  flex items-center justify-center font-bold rounded-md">
@@ -464,12 +474,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </p>
 
               {isOpen && (
-                <>
+                <div>
                   <span className="font-bold text-black dark:text-white">
                     Elevva
                   </span>
-                  <span className="font-bold">CRM</span>
-                </>
+                  <span className="font-bold"> CRM</span>
+                </div>
               )}
             </Link>
           </div>

@@ -351,7 +351,7 @@ const ProfileList = () => {
     <>
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-semibold ">All Profiles</h2>
+          <h2>All Profiles</h2>
         </div>
         <ErrorMessage errorMsg={errorMsg} />
 
@@ -362,7 +362,7 @@ const ProfileList = () => {
             activeTab={activeTab}
             handleTabChange={handleTabChange}
           />
-          <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+          <div className="p-3 bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
             {/* Search Box */}
             <TableHeader
               searchQuery={searchQuery}
@@ -401,7 +401,7 @@ const ProfileList = () => {
             {/* Pgination */}
 
             {/* Table */}
-            <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 ">
+            <TableContainer className="rounded-xl border border-[#E8E8E9] dark:border-gray-600 ">
               <div
                 className={` ${
                   sortedData.length > 10 ? "overflow-y-auto max-h-[700px]" : ""
@@ -466,10 +466,12 @@ const ProfileList = () => {
                                 },
                               }}
                             >
-                              <strong>{column.label}</strong>
+                              <span className="font-semibold">
+                                {column.label}
+                              </span>
                             </TableSortLabel>
                           ) : (
-                            <strong>{column.label}</strong>
+                            <>{column.label}</>
                           )}
                         </TableCell>
                       ))}
@@ -636,11 +638,7 @@ const ProfileList = () => {
                               onEdit={() =>
                                 navigate(`/profiles/${item._id}/edit`)
                               }
-                              onView={() =>
-                                navigate(
-                                  `/admin/profilemanagement/view-profile/${item._id}`,
-                                )
-                              }
+                              onView={() => navigate(`/profiles/${item._id}`)}
                               onDelete={() => {
                                 console.log("Delete", item._id);
                               }}

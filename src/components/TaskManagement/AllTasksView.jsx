@@ -66,13 +66,13 @@ const AllTasksView = () => {
 
   return (
     <>
-      <div className="bg-white dark:bg-[#1e2738] border border-gray-300 dark:border-gray-600 rounded-xl p-4 mb-6 ">
+      <div className="bg-white dark:bg-[#1e2738] border border-[#E8E8E9] dark:border-gray-600 rounded-xl p-4 mb-6 ">
         <div className="flex justify-between items-center flex-wrap gap-4">
-          <h2 className="text-2xl font-bold">All Tasks</h2>
+          <h2>All Tasks</h2>
           <div className="flex gap-2">
             <button
               onClick={() => setViewType("table")}
-              className={`px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 ${
+              className={`px-4 py-2 rounded-md border border-[#E8E8E9] dark:border-gray-600 ${
                 viewType === "table"
                   ? "bg-accent-dark text-white"
                   : "bg-white text-gray-700"
@@ -83,7 +83,7 @@ const AllTasksView = () => {
 
             <button
               onClick={() => setViewType("card")}
-              className={`px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 ${
+              className={`px-4 py-2 rounded-md border border-[#E8E8E9] dark:border-gray-600 ${
                 viewType === "card"
                   ? "bg-accent-dark text-white"
                   : "bg-white text-gray-700"
@@ -133,7 +133,7 @@ const AllTasksView = () => {
           </div>
         </div>
       ) : !loading && tasks.length === 0 ? (
-        <div className="  border border-gray-300 dark:border-gray-600 rounded-xl">
+        <div className="  border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
           <NoData title="No Data Found" />
         </div>
       ) : (
@@ -143,7 +143,7 @@ const AllTasksView = () => {
               {Object.keys(groupedTasks).map((user) => (
                 <div
                   key={user}
-                  className="bg-white dark:bg-transparent rounded-xl shadow-md border border-gray-300 dark:border-gray-600 p-3 hover:shadow-lg transition"
+                  className="bg-white dark:bg-transparent rounded-xl shadow-md border border-[#E8E8E9] dark:border-gray-600 p-3 hover:shadow-lg transition"
                 >
                   <h2 className="flex items-center gap-2 text-lg font-semibold  mb-2">
                     {" "}
@@ -154,7 +154,7 @@ const AllTasksView = () => {
                     {groupedTasks[user].map((task) => (
                       <div
                         key={task._id}
-                        className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-200 dark:bg-[#31415f] "
+                        className="border border-[#E8E8E9] dark:border-gray-600 rounded-lg p-4 bg-gray-200 dark:bg-[#31415f] "
                       >
                         <div className="text-sm font-medium ">
                           Client Name: {task.requirement.client.clientName}
@@ -170,8 +170,8 @@ const AllTasksView = () => {
                               task.status === "Completed"
                                 ? "bg-green-100 text-green-800"
                                 : task.status === "In Progress"
-                                ? "bg-blue-100 text-blue-800"
-                                : "bg-yellow-100 text-yellow-800"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : "bg-yellow-100 text-yellow-800"
                             }`}
                           >
                             {task.status}
@@ -182,10 +182,10 @@ const AllTasksView = () => {
                               task.priority === "Critical"
                                 ? "bg-red-100 text-red-800"
                                 : task.priority === "High"
-                                ? "bg-orange-100 text-orange-800"
-                                : task.priority === "Medium"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-green-100 text-green-800"
+                                  ? "bg-orange-100 text-orange-800"
+                                  : task.priority === "Medium"
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : "bg-green-100 text-green-800"
                             }`}
                           >
                             {task.priority}
@@ -215,7 +215,7 @@ const AllTasksView = () => {
               {Object.keys(groupedTasks).map((user) => (
                 <div
                   key={user}
-                  className="bg-white dark:bg-[#1f2937] border border-gray-300 dark:border-gray-600 rounded-xl shadow-md p-6"
+                  className="bg-white dark:bg-[#1f2937] border border-[#E8E8E9] dark:border-gray-600 rounded-xl shadow-md p-6"
                 >
                   {/* User Title */}
                   <div className="flex items-center gap-2 mb-5">
@@ -224,7 +224,7 @@ const AllTasksView = () => {
                   </div>
 
                   {/* Table Wrapper */}
-                  <div className="rounded-xl overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
+                  <div className="rounded-xl overflow-hidden border border-[#E8E8E9] dark:border-gray-600 shadow-sm">
                     <table className="min-w-full">
                       <thead className="bg-gray-100 dark:bg-[#31415f]">
                         <tr>
@@ -269,8 +269,8 @@ const AllTasksView = () => {
                                   task.status === "Completed"
                                     ? "bg-green-100 text-green-800"
                                     : task.status === "In Progress"
-                                    ? "bg-blue-100 text-blue-800"
-                                    : "bg-yellow-100 text-yellow-800"
+                                      ? "bg-blue-100 text-blue-800"
+                                      : "bg-yellow-100 text-yellow-800"
                                 }`}
                               >
                                 {task.status}
@@ -284,10 +284,10 @@ const AllTasksView = () => {
                                   task.priority === "Critical"
                                     ? "bg-red-100 text-red-700"
                                     : task.priority === "High"
-                                    ? "bg-orange-100 text-orange-800"
-                                    : task.priority === "Medium"
-                                    ? "bg-yellow-100 text-yellow-700"
-                                    : "bg-green-100 text-green-700"
+                                      ? "bg-orange-100 text-orange-800"
+                                      : task.priority === "Medium"
+                                        ? "bg-yellow-100 text-yellow-700"
+                                        : "bg-green-100 text-green-700"
                                 }`}
                               >
                                 {task.priority}

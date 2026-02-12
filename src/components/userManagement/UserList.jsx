@@ -204,7 +204,7 @@ const UserList = () => {
     <>
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-semibold ">All Users</h2>
+          <h2>All Users</h2>
         </div>
         <div>
           <ErrorMessage errorMsg={errorMsg} />
@@ -213,7 +213,7 @@ const UserList = () => {
             activeTab={activeTab}
             handleTabChange={handleTabChange}
           />
-          <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+          <div className="p-3 bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
             <TableHeader
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
@@ -243,7 +243,7 @@ const UserList = () => {
               />
             </div>
 
-            <TableContainer className="rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600">
+            <TableContainer className="rounded-xl bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600">
               <div
                 className={`overflow-x-auto ${
                   sortedData.length > 10 ? "overflow-y-auto max-h-[700px]" : ""
@@ -289,10 +289,12 @@ const UserList = () => {
                                 },
                               }}
                             >
-                              <strong>{column.label}</strong>
+                              <span className="font-semibold">
+                                {column.label}
+                              </span>
                             </TableSortLabel>
                           ) : (
-                            <strong>{column.label}</strong>
+                            <>{column.label}</>
                           )}
                         </TableCell>
                       ))}

@@ -58,7 +58,7 @@ const GridLayout = ({ data = [], loading = false }) => {
                 key={row._id}
                 className="group relative rounded-2xl p-[0.5px] transition-all duration-300"
               >
-                <div className="p-3.5 bg-white dark:bg-gray-800 rounded-xl transition-all duration-300 border border-gray-300 dark:border-gray-600">
+                <div className="p-3.5 bg-white dark:bg-gray-800 rounded-xl transition-all duration-300 border border-[#E8E8E9] dark:border-gray-600">
                   <div className="flex items-center gap-3">
                     {row.profileImage ? (
                       <div className="relative">
@@ -198,7 +198,7 @@ const GridLayout = ({ data = [], loading = false }) => {
           })}
         </div>
       ) : (
-        <div className="bg-white border border-gray-300 dark:border-gray-600 rounded-xl">
+        <div className="bg-white border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
           <NoData title="No Data Found" />
         </div>
       )}

@@ -19,10 +19,11 @@ const Button = ({
       // className={`
       //   w-max flex items-center gap-2 py-1.5 px-3 font-medium rounded transition-all duration-200 ease-in-out
       //   bg-accent-dark text-white  hover:bg-[#222]
-      //   ${loading || disabled ? "opacity-60 cursor-not-allowed" : ""}
-      //   ${className}
+      // ${loading || disabled ? "opacity-60 cursor-not-allowed" : ""}
+      // ${className}
       // `}
-      className="px-4 py-2 bg-accent-dark backdrop-blur-sm text-white  rounded-lg font-semibold hover:bg-accent-light hover:text-accent-dark transition-all flex items-center gap-2"
+      className={`px-4 py-2 bg-accent-dark backdrop-blur-sm text-white  rounded-lg font-semibold hover:bg-accent-light hover:text-accent-dark shadow-md  transition duration-300 ease-in-out flex items-center gap-2 ${loading || disabled ? "opacity-60 cursor-not-allowed" : ""}
+        ${className}`}
     >
       {loading ? (
         <p className=" text-center">

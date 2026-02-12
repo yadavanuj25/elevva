@@ -90,11 +90,11 @@
 //             <img src={logo} alt="Elevva CRM Logo" className="w-10 h-10" />
 //             <h1 className="text-3xl font-semibold">Elevva CRM</h1>
 //           </div>
-//           <div className="w-full rounded-xl p-3 sm:p-8 border border-gray-300">
+//           <div className="w-full rounded-xl p-3 sm:p-8 border border-[#E8E8E9]">
 //             <ErrorMessage errorMsg={errorMsg} />
 //             <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
 //               <div>
-//                 <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+//                 <h2 className=" text-gray-800 dark:text-white mb-2">
 //                   Login
 //                 </h2>
 //                 <p className="text-gray-500">Login to access Elevva CRM</p>
@@ -277,13 +277,11 @@ const Login = () => {
             <img src={logo} alt="Elevva CRM Logo" className="w-10 h-10" />
             <h1 className="text-3xl font-semibold">Elevva CRM</h1>
           </div>
-          <div className="w-full rounded-xl p-3 sm:p-8 border border-gray-300">
+          <div className="w-full rounded-xl p-3 sm:p-8 border border-[#E8E8E9]">
             <ErrorMessage errorMsg={errorMsg} />
             <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-                  Login
-                </h2>
+                <h2 className=" text-gray-800 dark:text-white mb-2">Login</h2>
                 <p className="text-gray-500">Login to access Elevva CRM</p>
               </div>
             </div>

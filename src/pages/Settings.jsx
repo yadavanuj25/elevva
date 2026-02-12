@@ -11,9 +11,9 @@ const Settings = () => {
 
   return (
     <div className=" ">
-      <h2 className="text-2xl font-semibold mb-4">Settings</h2>
+      <h2 className=" mb-4">Settings</h2>
       {/* Tabs */}
-      <div className="mb-6 border-b border-gray-300 dark:border-gray-600 flex gap-4 overflow-x-auto">
+      <div className="mb-6 border-b border-[#E8E8E9] dark:border-gray-600 flex gap-4 overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab}

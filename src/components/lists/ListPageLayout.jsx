@@ -14,7 +14,7 @@ const ListPageLayout = ({
 }) => {
   return (
     <>
-      <h2 className="text-2xl font-semibold mb-4">{title}</h2>
+      <h2 className=" mb-4">{title}</h2>
 
       <Tabs
         statusTabs={tabs}

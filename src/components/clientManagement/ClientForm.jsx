@@ -151,8 +151,8 @@ const ClientForm = ({
       {/* POCs */}
       {["poc1", "poc2"].map((poc, idx) => (
         <div key={poc} className="md:col-span-2 ">
-          <div className="flex items-center gap-1 mb-1  ">
-            <h3 className="text-lg font-semibold ">{`POC-${idx + 1}`}</h3>
+          <div className="flex items-center gap-1 mb-4  ">
+            <h3 className="text-lg font-semibold">{`POC-${idx + 1}`}</h3>
             <span className="text-sm text-gray-500 ">{`(Point of Contact-${
               idx + 1
             })`}</span>

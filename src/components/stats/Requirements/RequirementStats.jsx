@@ -69,7 +69,7 @@ const RequirementStats = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">Requirement Stats</h2>
+        <h2>Requirement Stats</h2>
       </div>
       <RequirementStatsFilters
         filters={filters}
@@ -117,7 +117,7 @@ const RequirementStats = () => {
           />
         </div>
       ) : (
-        <div className=" bg-white dark:bg-[#31415f] border border-gray-300 dark:border-600 rounded-xl">
+        <div className=" bg-white dark:bg-[#31415f] border border-[#E8E8E9] dark:border-600 rounded-xl">
           <NoData title="No Data Found" />
         </div>
       )}

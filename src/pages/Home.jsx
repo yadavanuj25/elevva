@@ -257,9 +257,9 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h2 className=" bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Elevva CRM
-            </div>
+            </h2>
 
             <div className="hidden md:flex items-center gap-8">
               <Link
@@ -372,7 +372,7 @@ export default function Home() {
               Start Free Trial
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="px-8 py-4 bg-white/80 backdrop-blur-sm border-2 border-gray-300 text-gray-700 rounded-full text-lg font-semibold hover:bg-white hover:border-blue-600 transition-all duration-300">
+            <button className="px-8 py-4 bg-white/80 backdrop-blur-sm border-2 border-[#E8E8E9] text-gray-700 rounded-full text-lg font-semibold hover:bg-white hover:border-blue-600 transition-all duration-300">
               Watch Demo
             </button>
           </div>
@@ -451,9 +451,7 @@ export default function Home() {
                 >
                   {feature.icon}
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-gray-900">
-                  {feature.title}
-                </h3>
+                <h2 className=" mb-4 text-gray-900">{feature.title}</h2>
                 <p className="text-gray-600 leading-relaxed">
                   {feature.description}
                 </p>
@@ -585,9 +583,7 @@ export default function Home() {
                   </div>
                 )}
 
-                <h3 className="text-2xl font-bold mb-2 text-gray-900">
-                  {plan.name}
-                </h3>
+                <h2 className=" mb-2 text-gray-900">{plan.name}</h2>
                 <div className="flex items-baseline mb-6">
                   <span
                     className={`text-5xl font-bold bg-gradient-to-r ${plan.gradient} bg-clip-text text-transparent`}
@@ -667,9 +663,9 @@ export default function Home() {
       <footer className="py-12 px-6 border-t border-gray-200 bg-white/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h2 className=" bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Elevva CRM
-            </div>
+            </h2>
             <div className="flex gap-8 text-gray-600">
               <Link to="#" className="hover:text-blue-600 transition-colors">
                 Privacy

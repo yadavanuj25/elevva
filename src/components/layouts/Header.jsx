@@ -32,8 +32,8 @@ const IconButton = ({ title, icon: Icon, badge, onClick }) => (
       }`}
     >
       <Icon
-        size={15}
-        className="transition-transform duration-200 ease-in-out group-hover:scale-125"
+        size={18}
+        className="transition-transform duration-200 ease-in-out group-hover:scale-125 text-[#303335]"
       />
 
       {badge !== null && badge !== undefined && (
@@ -131,7 +131,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white dark:bg-darkBg shadow flex items-center   justify-between px-3 py-2.5 border-b border-gray-300 dark:border-gray-600">
+    <header className="sticky top-0 z-40 bg-white dark:bg-darkBg shadow flex items-center   justify-between px-3 py-2.5 ">
       {/* Left */}
       <div className="flex gap-5 items-center text-md font-medium">
         <button
@@ -205,9 +205,9 @@ const Header = ({ toggleSidebar, isOpen }) => {
 
         {/* Popup */}
         {popupOpen && (
-          <div className="absolute right-0 top-full mt-3 w-72 px-6 py-6 font-semibold text-black dark:text-white bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow z-50">
+          <div className="absolute right-0 top-full mt-3 w-72 px-6 py-6 font-semibold text-black dark:text-white bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-lg shadow z-50">
             <div className="flex items-center gap-5">
-              <div className="w-10 h-10 shrink-0 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center bg-accent-dark">
+              <div className="w-10 h-10 shrink-0 rounded-lg overflow-hidden border border-[#E8E8E9] dark:border-gray-600 flex items-center justify-center bg-accent-dark">
                 {user?.profileImage ? (
                   <img
                     src={user.profileImage}
@@ -234,7 +234,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
               </div>
             </div>
 
-            <hr className="my-4 border-gray-300 dark:border-gray-600" />
+            <hr className="my-4 border-[#E8E8E9] dark:border-gray-600" />
 
             <ul className="flex flex-col ">
               {menuItems.map((item, i) => (

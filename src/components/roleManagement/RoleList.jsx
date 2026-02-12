@@ -193,9 +193,7 @@ const RoleList = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold ">
-          Role & Permission Management
-        </h2>
+        <h2>Role & Permission Management</h2>
         {/* <RefreshButton fetchData={getAllRoles} /> */}
         <button
           className="flex items-center gap-2 "
@@ -211,7 +209,7 @@ const RoleList = () => {
       </div>
       <ErrorMessage errorMsg={errorMsg} />
 
-      <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+      <div className="p-3 bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
         {/* Search and Add */}
         <TableHeader
           searchQuery={searchQuery}
@@ -236,7 +234,7 @@ const RoleList = () => {
             rowsPerPageOptions={[25, 50, 100]}
           />
           {/* Table */}
-          <TableContainer className="rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600">
+          <TableContainer className="rounded-xl bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600">
             <div className="overflow-x-auto">
               <Table className="min-w-full">
                 <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-30">
@@ -283,10 +281,12 @@ const RoleList = () => {
                               },
                             }}
                           >
-                            <strong>{column.label}</strong>
+                            <span className="font-semibold">
+                              {column.label}
+                            </span>
                           </TableSortLabel>
                         ) : (
-                          <strong>{column.label}</strong>
+                          <>{column.label}</>
                         )}
                       </TableCell>
                     ))}

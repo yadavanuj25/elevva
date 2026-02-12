@@ -114,7 +114,7 @@ const ProfileStats = ({ userId: defaultuserId }) => {
         name: s._id,
         value: s.count,
       })) || [],
-    [stats]
+    [stats],
   );
 
   const userBarData = useMemo(
@@ -123,7 +123,7 @@ const ProfileStats = ({ userId: defaultuserId }) => {
         name: u.fullName,
         total: u.total,
       })) || [],
-    [stats]
+    [stats],
   );
 
   if (error)
@@ -155,9 +155,9 @@ const ProfileStats = ({ userId: defaultuserId }) => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold"> Profile Stats</h2>
+        <h2> Profile Stats</h2>
       </div>
-      <div className="bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-lg p-4">
+      <div className="bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-lg p-4">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
           {/* Filters – take all available space */}
           <div className="md:col-span-4">
@@ -229,7 +229,7 @@ const ProfileStats = ({ userId: defaultuserId }) => {
           {stats && stats?.total > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {stats?.byStatus && stats.byStatus.length > 0 && (
-                <div className="bg-white dark:bg-darkBg  border border-gray-300 dark:border-gray-600 rounded-lg p-4">
+                <div className="bg-white dark:bg-darkBg  border border-[#E8E8E9] dark:border-gray-600 rounded-lg p-4">
                   <h3 className="font-semibold text-center mb-4">
                     Profiles by Status
                   </h3>
@@ -257,7 +257,7 @@ const ProfileStats = ({ userId: defaultuserId }) => {
                           const y = cy + radius * Math.sin(-midAngle * RADIAN);
                           const total = statusPieData.reduce(
                             (acc, item) => acc + item.value,
-                            0
+                            0,
                           );
                           const percent = ((value / total) * 100).toFixed(0);
 
@@ -292,7 +292,7 @@ const ProfileStats = ({ userId: defaultuserId }) => {
               )}
 
               {stats?.byUser && stats.byUser.length > 0 && (
-                <div className="bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-lg p-4">
+                <div className="bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-lg p-4">
                   <h3 className="font-semibold mb-4 text-center">
                     HR Performance
                   </h3>

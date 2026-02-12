@@ -90,7 +90,7 @@ const ClientStats = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">Client Stats</h2>
+        <h2>Client Stats</h2>
       </div>
       {stats && (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">

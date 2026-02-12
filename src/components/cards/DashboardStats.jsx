@@ -51,8 +51,8 @@ const DashboardStats = () => {
   ];
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-golos">
-      <div className="bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm p-4">
-        <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-300 dark:border-gray-600">
+      <div className="bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-xl shadow-sm p-4">
+        <div className="flex justify-between items-center mb-6 pb-4 border-b border-[#E8E8E9] dark:border-gray-600">
           <h2 className="font-semibold text-lg">Companies</h2>
           <button className="flex items-center text-sm border rounded-md px-2 py-1 text-gray-600 dark:text-white">
             <Calendar className="w-4 h-4 mr-1" />
@@ -75,8 +75,8 @@ const DashboardStats = () => {
       </div>
 
       {/* Revenue div */}
-      <div className="cols-span-2 bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm p-4">
-        <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-300 dark:border-gray-600">
+      <div className="cols-span-2 bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-xl shadow-sm p-4">
+        <div className="flex justify-between items-center mb-6 pb-4 border-b border-[#E8E8E9] dark:border-gray-600">
           <h2 className="font-semibold text-lg">Revenue</h2>
           <button className="flex items-center text-sm border rounded-md px-2 py-1 text-gray-600 dark:text-white">
             <Calendar className="w-4 h-4 mr-1" />
@@ -115,8 +115,8 @@ const DashboardStats = () => {
       </div>
 
       {/* Top Plans div */}
-      <div className="bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm p-4">
-        <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-300 dark:border-gray-600">
+      <div className="bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-xl shadow-sm p-4">
+        <div className="flex justify-between items-center mb-6 pb-4 border-b border-[#E8E8E9] dark:border-gray-600">
           <h2 className="font-semibold text-lg">Top Plans</h2>
           <button className="flex items-center text-sm border rounded-md px-2 py-1 text-gray-600 dark:text-white">
             <Calendar className="w-4 h-4 mr-1" />

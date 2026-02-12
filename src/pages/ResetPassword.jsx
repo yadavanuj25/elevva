@@ -97,8 +97,8 @@ const ResetPassword = () => {
             <h1 className="text-3xl font-semibold">Elevva CRM</h1>
           </div>
 
-          <div className="w-full rounded-xl p-3 sm:p-12 border border-gray-300">
-            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2">
+          <div className="w-full rounded-xl p-3 sm:p-12 border border-[#E8E8E9]">
+            <h2 className=" text-gray-800 dark:text-white mb-2">
               Set New Password
             </h2>
             <p className="text-sm text-gray-500 mb-6">

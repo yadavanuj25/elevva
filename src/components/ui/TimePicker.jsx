@@ -45,7 +45,7 @@ export const TimePicker = ({ label, name, value, handleChange, error }) => {
           ${
             error
               ? "border-red-500 focus:border-red-500"
-              : "border-gray-300 dark:border-gray-600 focus:border-accent-dark dark:focus:border-white"
+              : "border-[#E8E8E9] dark:border-gray-600 focus:border-accent-dark dark:focus:border-white"
           } dark:text-white`}
         >
           <span className={value ? "" : "text-gray-400"}>
@@ -71,7 +71,7 @@ export const TimePicker = ({ label, name, value, handleChange, error }) => {
 
         {/* Dropdown */}
         {open && (
-          <div className="absolute z-50 mt-1 w-full bg-white dark:bg-darkBg border border-gray-300 dark:border-gray-600 rounded-md shadow-md">
+          <div className="absolute z-50 mt-1 w-full bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-md shadow-md">
             <div className="max-h-56 overflow-auto">
               {times.map((t) => (
                 <div

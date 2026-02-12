@@ -21,7 +21,7 @@ const ToolTip = ({
     theme="custom-dark"
   >
     <div
-      className={`relative flex justify-center items-center px-2 py-2 border border-gray-300 dark:border-gray-600 text-sm  ${
+      className={`relative flex justify-center items-center px-2 py-2 border border-[#E8E8E9] dark:border-gray-600 text-sm  ${
         isViewRefresh ? "rounded-md" : "rounded-r-md"
       } cursor-pointer hover:bg-[#222] hover:text-white hover:dark:text-black hover:dark:bg-white`}
     >

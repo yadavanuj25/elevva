@@ -153,9 +153,9 @@ const InterviewList = () => {
     <>
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-semibold ">All Interview</h2>
+          <h2>All Interview</h2>
         </div>
-        <div className="p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl">
+        <div className="p-3 bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
           <Tabs
             statusTabs={statusTabs}
             activeTab={activeTab}
@@ -167,7 +167,7 @@ const InterviewList = () => {
             title="Interview"
             resource="interview"
           />
-          <TableContainer className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 mt-4">
+          <TableContainer className="rounded-xl border border-[#E8E8E9] dark:border-gray-600 bg-white dark:bg-gray-900 mt-4">
             <div className="overflow-x-auto">
               <Table className="min-w-full">
                 <TableHead className="sticky top-0 bg-[#f2f4f5] dark:bg-darkGray z-20">
@@ -202,7 +202,7 @@ const InterviewList = () => {
                           active={orderBy === col.id}
                           direction={orderBy === col.id ? order : "asc"}
                           onClick={() => handleRequestSort(col.id)}
-                          className="font-bold text-gray-700 dark:text-gray-200"
+                          className="font-semibold text-gray-700 dark:text-gray-200"
                         >
                           {col.label}
                         </TableSortLabel>

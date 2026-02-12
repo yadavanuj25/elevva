@@ -10,6 +10,7 @@ export default {
         fredoka: ['"Fredoka One"', "sans-serif"],
         nunito: ["Nunito", "sans-serif"],
         golos: ["Golos Text", "sans-serif"],
+        greatVibes: ["Great Vibes", "cursive"],
       },
       colors: {
         accent: "var(--accent-color)",

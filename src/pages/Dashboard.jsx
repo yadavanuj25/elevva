@@ -72,7 +72,7 @@ const Dashboard = () => {
         <div className="relative z-10">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-2xl font-bold mb-2">
+              <h2 className=" mb-2">
                 {getGreeting()} , {user?.fullName.split(" ")[0]}! 👋
               </h2>
               <p className="text-purple-100 mb-6">{quoteToShow}</p>
@@ -97,7 +97,7 @@ const Dashboard = () => {
               {/* <div className="bg-white/20 monthly-goal backdrop-blur-sm rounded-xl p-4">
                 <FaBullseye className="w-12 h-12 text-white/80 mb-2" />
                 <p className="text-sm font-semibold">Monthly Goal</p>
-                <p className="text-2xl font-bold">$50K</p>
+                <p >$50K</p>
               </div> */}
             </div>
           </div>

@@ -120,7 +120,7 @@ const BasicDatePicker = ({
             ${
               hasError || localError
                 ? "border-red-500 text-red-500"
-                : "border-gray-300 dark:border-gray-600 focus:border-accent-dark dark:focus:border-white"
+                : "border-[#E8E8E9] dark:border-gray-600 focus:border-accent-dark dark:focus:border-white"
             }
             dark:text-white`}
         />

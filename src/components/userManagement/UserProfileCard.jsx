@@ -10,17 +10,17 @@ const UserProfileCard = ({
   onStatusChange,
 }) => {
   return (
-    <div className="p-6 flex flex-col items-center gap-4 border border-gray-300 dark:border-gray-600 rounded-xl">
+    <div className="p-6 flex flex-col items-center gap-4 border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
       {/* Profile Image */}
       <div className="flex flex-col items-center space-y-2">
         <div
           className={`border rounded-full p-1 ${
             errors.profileImage
               ? "border-red-500"
-              : "border-gray-300 dark:border-gray-600"
+              : "border-[#E8E8E9] dark:border-gray-600"
           }`}
         >
-          <div className="w-28 h-28 bg-gray-100 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400">
+          <div className="w-28 h-28 bg-gray-100 rounded-full overflow-hidden border border-[#E8E8E9] dark:border-gray-600 flex items-center justify-center text-gray-400">
             {profilePreview ? (
               <img
                 src={profilePreview}
@@ -63,7 +63,7 @@ const UserProfileCard = ({
 
       {/* Status Toggle */}
       {/* <div className="flex justify-center">
-        <div className="flex items-center bg-gray-100 border border-gray-300 rounded-full p-1">
+        <div className="flex items-center bg-gray-100 border border-[#E8E8E9] rounded-full p-1">
           <button
             type="button"
             onClick={() => onStatusChange("active")}

@@ -81,7 +81,7 @@ const UpdateInterviewStageModal = ({ open, record, onClose, onUpdate }) => {
             <select
               value={nextStage}
               onChange={(e) => setNextStage(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+              className="w-full rounded-md border border-[#E8E8E9] px-3 py-2 text-sm
                      focus:outline-none "
             >
               {INTERVIEW_LEVELS.map((lvl, index) => {
@@ -108,7 +108,7 @@ const UpdateInterviewStageModal = ({ open, record, onClose, onUpdate }) => {
               value={remark}
               onChange={(e) => setRemark(e.target.value)}
               placeholder="Add any notes or feedback..."
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+              className="w-full rounded-md border border-[#E8E8E9] px-3 py-2 text-sm
                      focus:outline-none resize-none"
             />
           </div>
