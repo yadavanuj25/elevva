@@ -4,12 +4,12 @@ import { useAuth } from "../auth/AuthContext";
 import PageTitle from "../hooks/PageTitle";
 import DashboardCard from "../components/cards/DashboardCard";
 import DashboardStats from "../components/cards/DashboardStats";
+import announcementImg from "../assets/images/accouncemet.png";
 import img1 from "../assets/images/d1.png";
 import img2 from "../assets/images/d2.png";
 import img3 from "../assets/images/d3.png";
 import img4 from "../assets/images/d4.png";
 import { Calendar, Plus } from "lucide-react";
-import { FaBullseye } from "react-icons/fa";
 
 const quotes = [
   "Today is going to be awesome! 🚀",
@@ -67,8 +67,8 @@ const Dashboard = () => {
       </div> */}
       {/* <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl shadow-lg shadow-purple-500/30 p-8 mb-8 text-white relative overflow-hidden"> */}
       <div className="bg-accent-dark rounded-2xl shadow-lg  px-8 py-4  text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-28 -mt-32"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -ml-20 -mb-24"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full -mr-28 -mt-32"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/20 rounded-full -ml-20 -mb-24"></div>
         <div className="relative z-10">
           <div className="flex items-start justify-between">
             <div>
@@ -79,23 +79,26 @@ const Dashboard = () => {
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => navigate("/tasks")}
-                  className="px-6 py-3 bg-white text-accent-dark rounded-xl font-semibold hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center gap-2"
+                  className="px-4 py-2 bg-white text-accent-dark rounded-lg font-semibold hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center gap-2"
                 >
                   <Plus className="w-5 h-5" />
                   To Do List
                 </button>
-                <button className="px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-xl font-semibold hover:bg-white/30 transition-all flex items-center gap-2">
+                <button className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg font-semibold hover:bg-white/30 transition-all flex items-center gap-2">
                   <Calendar className="w-5 h-5" />
                   Schedule Meeting
                 </button>
               </div>
             </div>
-            <div className="hidden lg:block">
-              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4">
+
+            <div className="hidden lg:block dashboard-goal-img">
+              <img src={announcementImg} alt="Welcome" />
+
+              {/* <div className="bg-white/20 monthly-goal backdrop-blur-sm rounded-xl p-4">
                 <FaBullseye className="w-12 h-12 text-white/80 mb-2" />
                 <p className="text-sm font-semibold">Monthly Goal</p>
                 <p className="text-2xl font-bold">$50K</p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
