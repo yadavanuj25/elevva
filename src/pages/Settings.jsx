@@ -7,7 +7,7 @@ import PageTitle from "../hooks/PageTitle";
 const Settings = () => {
   PageTitle("Elevva | Settings-General");
   const [activeTab, setActiveTab] = useState("Themes");
-  const tabs = ["General", "Themes", "Email"];
+  const tabs = ["Themes", "General", "Email"];
 
   return (
     <div className=" ">

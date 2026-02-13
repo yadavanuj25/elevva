@@ -73,7 +73,7 @@ const ClientList = () => {
   });
   const [statusOptions, setStatusOptions] = useState([]);
 
-  const API_BASE_URL = "https://crm-backend-qbz0.onrender.com/api";
+  const API_BASE_URL = "http://localhost:5000/api";
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -311,29 +311,6 @@ const ClientList = () => {
         handleTabChange={handleTabChange}
       />
 
-      {/* <div className="flex justify-end gap-2 mb-3">
-        <button
-          onClick={() => setViewMode("list")}
-          className={`p-1 rounded border ${
-            viewMode === "list"
-              ? "bg-accent-dark text-white"
-              : "bg-gray-300 dark:bg-white dark:text-black"
-          }`}
-        >
-          <List size={20} />
-        </button>
-
-        <button
-          onClick={() => setViewMode("grid")}
-          className={`p-1 rounded border ${
-            viewMode === "grid"
-              ? "bg-accent-dark text-white"
-              : "bg-gray-300 dark:bg-white dark:text-black"
-          }`}
-        >
-          <LayoutGrid size={20} />
-        </button>
-      </div> */}
       <div className="p-3 bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600 rounded-xl">
         <TableHeader
           searchQuery={filters.search}
