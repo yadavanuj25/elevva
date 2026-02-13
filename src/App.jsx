@@ -46,10 +46,10 @@ import Shifts from "./pages/HRMS/Shifts";
 import ShiftForm from "./components/hrms/shifts/ShiftForm";
 import Holidays from "./pages/HRMS/Holidays";
 import Leaves from "./pages/HRMS/Leaves";
-import AdminDashboard from "./pages/Dasboards/AdminDashboard";
-import EmployeeDashboard from "./pages/Dasboards/EmployeeDashboard";
-import DefaultDashboard from "./pages/Dasboards/DefaultDashboard";
-import DashboardRouter from "./routers/DashboardRouter";
+// import AdminDashboard from "./pages/Dasboards/AdminDashboard";
+// import EmployeeDashboard from "./pages/Dasboards/EmployeeDashboard";
+// import DefaultDashboard from "./pages/Dasboards/DefaultDashboard";
+// import DashboardRouter from "./routers/DashboardRouter";
 import DemoDashboard from "./pages/Dasboards/DemoDashboard";
 
 const App = () => {
