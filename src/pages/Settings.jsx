@@ -5,7 +5,7 @@ import GeneralSettings from "../modules/settings/GeneralSettings";
 import PageTitle from "../hooks/PageTitle";
 
 const Settings = () => {
-  PageTitle("Elevva | Settings-General");
+  PageTitle("Elevva | Settings");
   const [activeTab, setActiveTab] = useState("Themes");
   const tabs = ["Themes", "General", "Email"];
 

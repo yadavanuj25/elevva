@@ -2,7 +2,7 @@ import { colorThemes } from "../../contstants/ColorThemes";
 import { useTheme } from "../../context/ThemeContext";
 
 const ColorPicker = () => {
-  const { color, setColor, theme } = useTheme();
+  const { color, setColor } = useTheme();
 
   return (
     <div className="flex gap-3 flex-wrap">

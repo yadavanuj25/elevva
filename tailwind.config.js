@@ -11,6 +11,7 @@ export default {
         nunito: ["Nunito", "sans-serif"],
         golos: ["Golos Text", "sans-serif"],
         greatVibes: ["Great Vibes", "cursive"],
+        outfit: ["Outfit", "sans-serif"],
       },
       colors: {
         accent: "var(--accent-color)",

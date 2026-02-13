@@ -463,7 +463,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <div className="w-full flex items-center justify-between">
             <Link
               to="/"
-              className="text-xl flex items-center gap-2 truncate text-accent-dark font-[poppins]"
+              className="text-xl flex items-center gap-2 truncate text-accent-dark "
             >
               {/* <img src={logo} alt="" className="w-8 h-8" /> */}
               {/* <div className="w-8 h-8 bg-accent-dark text-white text-2xl leading-none  flex items-center justify-center font-bold rounded-md">
@@ -493,7 +493,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               {isOpen &&
                 !section.section &&
                 section.items.map((item) => (
-                  <li key={item.path} className="px-2">
+                  <li key={item.path} className="px-2 ">
                     <Link
                       to={item.path}
                       onClick={() =>

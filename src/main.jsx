@@ -9,20 +9,23 @@ import { MessageProvider } from "./auth/MessageContext.jsx";
 import ScrollToTop from "./utils/ScrollToTop.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { AttendanceProvider } from "./context/AttendanceContext.jsx";
+import { FontProvider } from "./context/FontContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <ThemeProvider>
-        <AttendanceProvider>
-          <AuthProvider>
-            <MessageProvider>
-              <ScrollToTop />
+        <FontProvider>
+          <AttendanceProvider>
+            <AuthProvider>
+              <MessageProvider>
+                <ScrollToTop />
 
-              <App />
-            </MessageProvider>
-          </AuthProvider>
-        </AttendanceProvider>
+                <App />
+              </MessageProvider>
+            </AuthProvider>
+          </AttendanceProvider>
+        </FontProvider>
       </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,

@@ -11,7 +11,7 @@ const CommonPagination = ({
   return (
     <TablePagination
       component="div"
-      className="text-black dark:text-white"
+      className="text-black dark:text-white "
       count={total}
       page={page - 1}
       onPageChange={onPageChange}

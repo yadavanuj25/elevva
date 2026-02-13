@@ -5,50 +5,58 @@ const DashboardCard = ({
   value,
   ratio,
   ratioText,
-  img,
+  icon: Icon,
   color = "red",
   isPositive = true,
 }) => {
   const colorClasses = {
-    red: {
-      border: "border-red-500",
-      bg: "bg-red-50",
-      accent: "bg-red-600",
-      text: "text-red-600",
+    indigo: {
+      accent: "bg-[#10adc4]",
+      iconBg: "bg-indigo-50",
+      iconColor: "text-indigo-600",
     },
     green: {
-      border: "border-green-500",
-      bg: "bg-[#28a745]",
-      accent: "bg-green-600",
-      text: "text-green-600",
+      accent: "bg-[#16a34a]",
+      iconBg: "bg-green-50",
+      iconColor: "text-green-600",
     },
     blue: {
-      border: "border-blue-500",
-      bg: "bg-blue-50",
-      accent: "bg-blue-600",
-      text: "text-blue-600",
+      accent: "bg-[#2563eb]",
+      iconBg: "bg-blue-50",
+      iconColor: "text-blue-600",
     },
     purple: {
-      border: "border-purple-500",
-      bg: "bg-purple-50",
-      accent: "bg-purple-600",
-      text: "text-purple-600",
+      accent: "bg-[#9333ea]",
+      iconBg: "bg-purple-50",
+      iconColor: "text-purple-600",
+    },
+    orange: {
+      accent: "bg-[#ea580c]",
+      iconBg: "bg-orange-50",
+      iconColor: "text-orange-600",
+    },
+    red: {
+      accent: "bg-[#f32e2e]",
+      iconBg: "bg-red-50",
+      iconColor: "text-red-600",
     },
   };
 
   const c = colorClasses[color] || colorClasses.red;
 
   return (
-    <div className="relative bg-white dark:bg-darkBg font-golos rounded-lg shadow-sm border border-[#E8E8E9] dark:border-gray-600 p-5 flex justify-between items-center transition hover:shadow-md duration-300">
+    <div className="relative bg-white dark:bg-darkBg rounded-lg shadow-md border border-[#E8E8E9] dark:border-gray-600 p-5 flex justify-between items-center transition hover:shadow-lg duration-300">
+      {/* top corner accent */}
       <div
         className={`absolute top-0 left-0 w-5 h-5 ${c.accent} rounded-br-[12px] rounded-tl-lg`}
-      ></div>
+      />
+
       <div className="flex flex-col justify-between h-full">
         <div>
-          <h2 className="text-sm font-medium text-gray-700 dark:text-gray-500">
+          <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {title}
           </h2>
-          <h2 className="text-lg font-extrabold  mt-1 text-black dark:text-white">
+          <h2 className="text-lg font-extrabold mt-1 text-black dark:text-white">
             {value}
           </h2>
         </div>
@@ -74,13 +82,12 @@ const DashboardCard = ({
         )}
       </div>
 
-      {img && (
-        <div
-          className={`flex items-center justify-center w-10 h-10 rounded-full border ${c.border} text-${color}-600`}
-        >
-          <img src={img} alt="icon" className="w-9 h-9 object-contain" />
-        </div>
-      )}
+      {/* icon */}
+      <div
+        className={`w-12 h-12 ${c.iconBg} rounded-lg flex items-center justify-center`}
+      >
+        <Icon className={c.iconColor} size={24} />
+      </div>
     </div>
   );
 };

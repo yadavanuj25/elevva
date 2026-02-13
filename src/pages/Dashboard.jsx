@@ -1,7 +1,6 @@
 import React from "react";
 
 import PageTitle from "../hooks/PageTitle";
-import DashboardCard from "../components/cards/DashboardCard";
 
 import img1 from "../assets/images/d1.png";
 import img2 from "../assets/images/d2.png";
