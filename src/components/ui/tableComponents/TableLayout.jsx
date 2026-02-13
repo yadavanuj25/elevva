@@ -125,7 +125,7 @@ const TableLayout = ({
                           <img
                             src={row.logo}
                             alt={row.clientName}
-                            className="w-10 h-10 rounded-md object-cover border border-accent-dark"
+                            className="w-10 h-10 rounded-md object-container "
                           />
                         ) : (
                           <div className="w-10 h-10 rounded-md flex items-center justify-center bg-gray-200 text-accent-dark font-semibold">
