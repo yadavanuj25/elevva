@@ -156,7 +156,7 @@ const ViewProfile = () => {
                           {profile.resume.originalName}
                         </div>
                         <a
-                          href={`http://localhost:5000/${profile.resume.path}`}
+                          href={`https://crm-backend-qbz0.onrender.com/${profile.resume.path}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-accent-light text-sm px-1 py-0.5 bg-accent-dark  rounded-md"

@@ -39,7 +39,7 @@ import EmployeeDashboard from "../../components/dashboard/EmployeeDashboard";
 import { useAuth } from "../../auth/AuthContext";
 
 // API Configuration
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://crm-backend-qbz0.onrender.com/api";
 
 const api = {
   setToken: (token) => localStorage.setItem("token", token),

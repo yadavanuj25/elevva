@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
-// Convert backend permissions → { users: ["read","create"] }
+
 const normalizePermissions = (permissions = []) => {
   return permissions.reduce((acc, { resource, action }) => {
     if (!acc[resource]) acc[resource] = [];
