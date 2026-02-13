@@ -121,9 +121,9 @@ const TableLayout = ({
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        {row.profileImage ? (
+                        {row.logo ? (
                           <img
-                            src={row.profileImage}
+                            src={row.logo}
                             alt={row.clientName}
                             className="w-10 h-10 rounded-md object-cover border border-accent-dark"
                           />
