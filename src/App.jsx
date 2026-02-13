@@ -133,18 +133,10 @@ const App = () => {
             {/* Dashboard */}
 
             <Route
-              path="/demo"
-              element={
-                <ProtectedRoute>
-                  <DemoDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <DemoDashboard />
                 </ProtectedRoute>
               }
             />

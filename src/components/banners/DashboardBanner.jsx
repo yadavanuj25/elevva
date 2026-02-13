@@ -45,7 +45,7 @@ const DashboardBanner = () => {
             <h2 className=" mb-2">
               {getGreeting()} , {user?.fullName.split(" ")[0]}! 👋
             </h2>
-            <p className="text-purple-100 mb-6">{quoteToShow}</p>
+            <p className="text-purple-100 mb-3">{quoteToShow}</p>
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate("/tasks")}

@@ -70,18 +70,6 @@ const QuickActions = () => {
           <ArrowUpRight className="w-5 h-5" />
         </button>
       </div>
-
-      <div className="mt-6 pt-6 border-t border-white/20">
-        <div className="flex items-center gap-3 text-sm">
-          <Zap className="w-5 h-5 text-yellow-300" />
-          <div>
-            <p className="font-semibold">Pro Tip</p>
-            <p className="text-xs text-blue-100 mt-0.5">
-              Use keyboard shortcuts to navigate faster
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

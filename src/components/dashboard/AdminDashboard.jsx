@@ -74,6 +74,12 @@ const AdminDashboard = ({ data }) => {
         />
       </div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <TopClients topClients={data?.topClients} />
+        <TopRequirements topRequirements={data?.topRequirements} />
+        <QuickActions />
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className=" rounded-xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
           <h3 className="text-lg font-bold  mb-4">Revenue Overview</h3>
@@ -129,13 +135,6 @@ const AdminDashboard = ({ data }) => {
             ))}
           </div>
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <TopClients topClients={data?.topClients} />
-        <TopRequirements topRequirements={data?.topRequirements} />
-
-        <QuickActions />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-2">

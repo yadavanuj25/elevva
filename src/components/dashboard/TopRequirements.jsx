@@ -29,7 +29,7 @@ const TopRequirements = ({ topRequirements }) => {
               <div
                 key={client._id}
                 onClick={() => navigate(`/clients/requirements/${client?._id}`)}
-                className="flex items-center gap-4 p-3 rounded-xl hover:bg-accent-light  transition-colors ease-in-out duration-300 group cursor-pointer"
+                className="flex items-center gap-4 p-3 border-b last:border-b-0 transition-colors ease-in-out duration-300 group cursor-pointer"
               >
                 <div className="p-2 rounded-lg bg-accent-light text-accent-dark group-hover:text-accent-light group-hover:scale-110  group-hover:bg-accent-dark  transition-transform">
                   <User className="w-5 h-5 " />

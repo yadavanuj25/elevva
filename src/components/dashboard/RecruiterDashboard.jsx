@@ -1,35 +1,12 @@
 import React from "react";
 import {
   Users,
-  UserPlus,
-  BarChart3,
-  Briefcase,
-  UserCheck,
   TrendingUp,
-  Calendar,
   FileText,
-  Building2,
-  Target,
-  PieChart,
-  Activity,
-  Clock,
   CheckCircle,
-  XCircle,
-  AlertCircle,
-  ArrowUp,
-  ArrowDown,
-  LogOut,
-  Menu,
   X as CloseIcon,
-  Shield,
-  Settings,
-  User,
-  Zap,
-  ArrowUpRight,
-  MoreVertical,
-  DollarSign,
-  Award,
 } from "lucide-react";
+import StatCard from "../cards/dashboard/StatCard";
 
 const RecruiterDashboard = ({ data }) => {
   return (
