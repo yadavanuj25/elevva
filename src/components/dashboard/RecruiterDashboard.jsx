@@ -7,6 +7,7 @@ import {
   X as CloseIcon,
 } from "lucide-react";
 import StatCard from "../cards/dashboard/StatCard";
+import BirthdayCalendar from "./BirthdayCalendar";
 
 const RecruiterDashboard = ({ data }) => {
   return (
@@ -96,6 +97,7 @@ const RecruiterDashboard = ({ data }) => {
           </div>
         </div>
       </div>
+      <BirthdayCalendar />
     </div>
   );
 };

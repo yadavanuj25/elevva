@@ -6,6 +6,7 @@ import {
   X as CloseIcon,
   DollarSign,
 } from "lucide-react";
+import BirthdayCalendar from "./BirthdayCalendar";
 
 const SalesDashboard = ({ data }) => {
   return (
@@ -102,6 +103,7 @@ const SalesDashboard = ({ data }) => {
           </div>
         </div>
       </div>
+      <BirthdayCalendar />
     </div>
   );
 };

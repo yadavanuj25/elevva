@@ -13,7 +13,7 @@ import DashboardCard from "../cards/dashboard/DashboardCard";
 import TopClients from "../dashboard/TopClients";
 import QuickActions from "../dashboard/QuickActions";
 import TopRequirements from "./TopRequirements";
-import { BirthdayCalendar } from "./demo";
+import BirthdayCalendar from "./BirthdayCalendar";
 
 const AdminDashboard = ({ data }) => {
   return (

@@ -1,6 +1,7 @@
 import React from "react";
 import { Calendar, Clock, CheckCircle, X as CloseIcon } from "lucide-react";
 import StatCard from "../cards/dashboard/StatCard";
+import BirthdayCalendar from "./BirthdayCalendar";
 
 const EmployeeDashboard = ({ data }) => {
   return (
@@ -98,6 +99,8 @@ const EmployeeDashboard = ({ data }) => {
           </div>
         </div>
       </div>
+
+      <BirthdayCalendar />
     </div>
   );
 };
