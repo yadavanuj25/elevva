@@ -230,7 +230,6 @@ const Leaves = () => {
         reviewComments: reason,
       };
       const response = await rejectLeaves(selectedLeaveId, payload);
-
       if (response.success) {
         swalSuccess("Leave rejected");
         fetchPendingLeaves();
@@ -243,12 +242,10 @@ const Leaves = () => {
       setModalLoading(false);
     }
   };
-
   const handleShowCancelModal = (leaveId) => {
     setSelectedLeaveId(leaveId);
     setShowCancelModal(true);
   };
-
   const handleCancelSubmit = async (reason) => {
     setModalLoading(true);
     try {
