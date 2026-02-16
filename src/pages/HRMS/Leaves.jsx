@@ -23,6 +23,7 @@ import {
   getUpcomingLeaves,
   rejectLeaves,
 } from "../../services/leaveService";
+import { BASE_URL } from "../../config/api";
 
 const Leaves = () => {
   const [activeTab, setActiveTab] = useState("my-leaves");
@@ -96,7 +97,7 @@ const Leaves = () => {
       const leaveBalance = await response.data;
       setLeaveBalance(leaveBalance);
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -106,7 +107,7 @@ const Leaves = () => {
       const myLeaves = response.data;
       setMyLeaves(myLeaves || []);
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -116,7 +117,7 @@ const Leaves = () => {
       const pendingLeaves = await response.data;
       setPendingLeaves(pendingLeaves || []);
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -126,7 +127,7 @@ const Leaves = () => {
       const teamLeaves = await response.data;
       setTeamLeaves(teamLeaves || []);
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -139,7 +140,7 @@ const Leaves = () => {
       });
 
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/leaves/all?${queryParams}`,
+        `${BASE_URL}/api/leaves/all?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -148,7 +149,7 @@ const Leaves = () => {
       setAllLeaves(data.data || []);
       setAllStats(data.stats);
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -158,7 +159,7 @@ const Leaves = () => {
       const upcomingLeaves = await response.data;
       setUpcomingLeaves(upcomingLeaves || []);
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -168,7 +169,7 @@ const Leaves = () => {
       const leaveStats = await response.data;
       setLeaveStats(leaveStats);
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -182,7 +183,7 @@ const Leaves = () => {
         fetchLeaveBalance();
         resetForm();
       } else {
-        console.log(response.message);
+        swalError(response.message);
       }
     } catch (error) {
       swalError("Failed to submit", error);
@@ -198,7 +199,7 @@ const Leaves = () => {
     setModalLoading(true);
     try {
       const payload = { reviewComments: comments };
-      const response = await approveLeaves(payload);
+      const response = await approveLeaves(selectedLeaveId, payload);
 
       if (response.success) {
         swalSuccess("Leave approved");
@@ -228,7 +229,7 @@ const Leaves = () => {
       const payload = {
         reviewComments: reason,
       };
-      const response = await rejectLeaves(payload);
+      const response = await rejectLeaves(selectedLeaveId, payload);
 
       if (response.success) {
         swalSuccess("Leave rejected");
@@ -272,12 +273,9 @@ const Leaves = () => {
   const exportLeaves = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/leaves/export",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const response = await fetch(`${BASE_URL}/api/leaves/export`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -299,7 +297,7 @@ const Leaves = () => {
 
   const resetForm = () => {
     setFormData({
-      leaveType: "casual",
+      leaveType: "",
       startDate: "",
       endDate: "",
       halfDay: false,
@@ -534,7 +532,10 @@ const Leaves = () => {
                   }
                   className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
                 >
-                  <option value="">All Types</option>
+                  <option value="" disabled>
+                    Select Leave Type
+                  </option>
+
                   <option value="casual">Casual</option>
                   <option value="sick">Sick</option>
                   <option value="earned">Earned</option>
@@ -598,7 +599,10 @@ const Leaves = () => {
                     </div>
                     <div className="flex space-x-3 mt-4">
                       <button
-                        onClick={() => handleShowApproveModal(leave._id)}
+                        onClick={() => {
+                          handleShowApproveModal(leave._id);
+                          console.log(leave._id);
+                        }}
                         className="flex-1 bg-green-600 text-white py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-green-700 transition-colors"
                       >
                         <CheckCircle className="w-4 h-4" />
@@ -696,6 +700,9 @@ const Leaves = () => {
                     }
                     className="w-full px-4 py-2 border rounded-lg"
                   >
+                    <option value="" disabled>
+                      Select Leave Type
+                    </option>
                     <option value="casual">Casual</option>
                     <option value="sick">Sick</option>
                     <option value="earned">Earned</option>
