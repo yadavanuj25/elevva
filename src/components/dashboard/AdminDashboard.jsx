@@ -13,6 +13,7 @@ import DashboardCard from "../cards/dashboard/DashboardCard";
 import TopClients from "../dashboard/TopClients";
 import QuickActions from "../dashboard/QuickActions";
 import TopRequirements from "./TopRequirements";
+import { BirthdayCalendar } from "./demo";
 
 const AdminDashboard = ({ data }) => {
   return (
@@ -172,6 +173,8 @@ const AdminDashboard = ({ data }) => {
             </div>
           ))}
         </div>
+
+        <BirthdayCalendar />
       </div>
     </div>
   );
