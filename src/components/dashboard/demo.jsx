@@ -2,14 +2,11 @@ import { Cake, ChevronLeft, ChevronRight, Trophy } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getBirthday } from "../../services/birthDayServices";
 
-export const BirthdayCalendar = ({
-  birthdays,
-  currentMonth,
-  currentYear,
-  onMonthChange,
-}) => {
+export const BirthdayCalendar = () => {
+  const today = new Date();
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [birthdayData, setBirthdayData] = useState([]);
-
   const monthNames = [
     "January",
     "February",
@@ -27,7 +24,27 @@ export const BirthdayCalendar = ({
 
   useEffect(() => {
     fetchBirthDays();
-  }, []);
+  }, [currentMonth, currentYear]);
+
+  const changeMonth = (direction) => {
+    if (direction === "prev") {
+      if (currentMonth === 0) {
+        setCurrentMonth(11);
+        setCurrentYear((prev) => prev - 1);
+      } else {
+        setCurrentMonth((prev) => prev - 1);
+      }
+    }
+
+    if (direction === "next") {
+      if (currentMonth === 11) {
+        setCurrentMonth(0);
+        setCurrentYear((prev) => prev + 1);
+      } else {
+        setCurrentMonth((prev) => prev + 1);
+      }
+    }
+  };
 
   const getDaysInMonth = (month, year) => {
     return new Date(year, month + 1, 0).getDate();
@@ -74,7 +91,7 @@ export const BirthdayCalendar = ({
         year: currentYear,
         month: currentMonth + 1,
       });
-
+      console.log(res);
       setBirthdayData(res?.birthdays || []);
     } catch (error) {
       console.log(error);
@@ -90,7 +107,7 @@ export const BirthdayCalendar = ({
           </h3>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => onMonthChange("prev")}
+              onClick={() => changeMonth("prev")}
               className="p-2 hover:bg-gray-100 rounded-lg transition"
             >
               <ChevronLeft size={20} />
@@ -99,7 +116,7 @@ export const BirthdayCalendar = ({
               {monthNames[currentMonth]} {currentYear}
             </span>
             <button
-              onClick={() => onMonthChange("next")}
+              onClick={() => changeMonth("next")}
               className="p-2 hover:bg-gray-100 rounded-lg transition"
             >
               <ChevronRight size={20} />
