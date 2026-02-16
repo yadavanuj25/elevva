@@ -25,7 +25,7 @@ import NoData from "../../ui/NoData";
 import SuccessToast from "../../ui/toaster/SuccessToast";
 import ErrorToast from "../../ui/toaster/ErrorToast";
 import StatusDropDown from "../../ui/StatusDropDown";
-import { swalSuccess } from "../../../utils/swalHelper";
+import { swalError, swalSuccess } from "../../../utils/swalHelper";
 
 const statusOptions = [
   {
@@ -73,7 +73,7 @@ const ShiftList = () => {
       const res = await getShift();
       setShift(res.data);
     } catch (error) {
-      console.log(error);
+      swalError(error.message);
     } finally {
       setLoading(false);
     }

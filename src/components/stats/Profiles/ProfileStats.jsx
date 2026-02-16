@@ -30,6 +30,7 @@ import NoData from "../../ui/NoData";
 import StatsCards from "./StatsCrads";
 import UserBarChart from "./UserBarChart";
 import SelectField from "../../ui/SelectField";
+import { swalError } from "../../../utils/swalHelper";
 
 const STATUS_COLORS = {
   Active: "#22c55e",
@@ -58,7 +59,7 @@ const ProfileStats = ({ userId: defaultuserId }) => {
       const res = await getAllUsers(1, 50);
       setUsers(res.users || []);
     } catch (err) {
-      console.error("Failed to load users", err);
+      swalError("Failed to load users", err);
     }
   };
 

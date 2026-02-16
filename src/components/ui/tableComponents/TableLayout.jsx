@@ -18,6 +18,7 @@ import DateDisplay from "../DateDisplay";
 import TableSkeleton from "../../loaders/TableSkeleton";
 import ActionMenu from "../buttons/ActionMenu";
 import FormatDate from "../dateFormat.jsx/FormatDate";
+import { swalError } from "../../../utils/swalHelper";
 
 const getStickyClass = (columnId) => {
   switch (columnId) {
@@ -207,7 +208,7 @@ const TableLayout = ({
                         onEdit={() => navigate(`/clients/${row._id}/edit`)}
                         onView={() => navigate(`/clients/${row._id}`)}
                         onDelete={() => {
-                          console.log("Delete", row._id);
+                          swalError("Delete", row._id);
                         }}
                       />
                     </TableCell>

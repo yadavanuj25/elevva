@@ -6,6 +6,7 @@ import { getRequirementByClientId } from "../../../services/clientServices";
 import { useParams } from "react-router-dom";
 import { BarLoader } from "react-spinners";
 import NoData from "../NoData";
+import { swalError } from "../../../utils/swalHelper";
 
 const tabs = [
   {
@@ -43,7 +44,7 @@ const ViewTabs = () => {
       setRequirements(res?.requirements || []);
       setPagination(res?.pagination || {});
     } catch (error) {
-      console.error("API ERROR:", error);
+      swalError("API ERROR:", error.message);
     } finally {
       setLoading(false);
     }

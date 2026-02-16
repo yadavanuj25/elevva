@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { swalError } from "../utils/swalHelper";
 
 const InterviewContext = createContext();
 export const useInterviews = () => useContext(InterviewContext);
@@ -39,7 +40,7 @@ export const InterviewProvider = ({ children }) => {
       const stored = localStorage.getItem(STORAGE_KEY);
       return stored ? JSON.parse(stored) : STATIC_INTERVIEWS;
     } catch (err) {
-      console.error("Failed to load interview records", err);
+      swalError("Failed to load interview records", err.message);
       return STATIC_INTERVIEWS;
     }
   });
@@ -69,7 +70,7 @@ export const InterviewProvider = ({ children }) => {
           status: updates.status,
           history: [...(rec.history || []), historyEntry],
         };
-      })
+      }),
     );
   };
 

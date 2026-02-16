@@ -12,6 +12,7 @@ import {
   getClientsWithFilters,
   getClientStats,
 } from "../../../services/clientServices";
+import { swalError } from "../../../utils/swalHelper";
 
 const ClientStats = () => {
   const [clients, setClients] = useState([]);
@@ -46,7 +47,7 @@ const ClientStats = () => {
       const res = await getClientSettings();
       setSettings(res.options);
     } catch (err) {
-      console.error("Error fetching settings:", err);
+      swalError("Error fetching settings:", err.message);
     }
   };
 
@@ -73,7 +74,7 @@ const ClientStats = () => {
       });
       setStats(res.stats);
     } catch (err) {
-      console.error("Error fetching stats:", err);
+      swalError("Error fetching stats:", err.message);
     }
   };
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { getTasksReport } from "../../services/taskServices";
 import NoData from "../ui/NoData";
 import { BarLoader } from "react-spinners";
+import { swalError } from "../../utils/swalHelper";
 
 const TaskReportView = () => {
   const [report, setReport] = useState([]);
@@ -23,7 +24,7 @@ const TaskReportView = () => {
       const response = await getTasksReport(params.toString());
       setReport(response.report);
     } catch (error) {
-      console.log(error);
+      swalError(error.message);
     } finally {
       setLoading(false);
     }

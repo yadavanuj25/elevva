@@ -25,6 +25,7 @@ import {
   getStats,
   updateHolidays,
 } from "../../services/holidaysServices";
+import { BASE_URL } from "../../config/api";
 
 const holidaysTypes = [
   {
@@ -138,17 +139,14 @@ const Holidays = () => {
       if (filters.year) queryParams.append("year", filters.year);
       if (filters.type) queryParams.append("type", filters.type);
       if (filters.isActive) queryParams.append("isActive", filters.isActive);
-      const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/holidays?${queryParams}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const response = await fetch(`${BASE_URL}/api/holidays?${queryParams}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await response.json();
       setHolidays(data.data || []);
       setLoading(false);
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
       setLoading(false);
     }
   };
@@ -157,7 +155,7 @@ const Holidays = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "https://crm-backend-qbz0.onrender.com/api/holidays/upcoming?limit=25",
+        `${BASE_URL}/api/holidays/upcoming?limit=50`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -165,7 +163,7 @@ const Holidays = () => {
       const data = await response.json();
       setUpcomingHolidays(data.data || []);
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -176,7 +174,7 @@ const Holidays = () => {
       const data = await response.data;
       setStats(data);
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -217,7 +215,7 @@ const Holidays = () => {
   const handleDeleteHoliday = async (id) => {
     try {
       const response = await deleteHolidays(id);
-      console.log(response);
+
       if (response.success) {
         swalSuccess(response.message);
         fetchHolidays();

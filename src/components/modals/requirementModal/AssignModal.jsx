@@ -39,7 +39,7 @@ const AssignModal = ({
       const res = await getAllUsers(1, 50, "active");
       setOptions(res?.users);
     } catch (err) {
-      console.error(err);
+      swalError(err.message);
     }
   };
 

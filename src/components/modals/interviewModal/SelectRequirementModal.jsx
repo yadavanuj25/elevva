@@ -6,6 +6,7 @@ import {
   getRequirementByClientId,
 } from "../../../services/clientServices";
 import Close from "../../ui/buttons/Close";
+import { swalError } from "../../../utils/swalHelper";
 
 const SelectRequirementModal = ({
   open,
@@ -43,7 +44,7 @@ const SelectRequirementModal = ({
       const res = await getAllClients();
       setClients(res.clients || []);
     } catch (error) {
-      console.error("Failed to fetch clients", error);
+      swalError("Failed to fetch clients", error);
     } finally {
       setLoadingClient(false);
     }
@@ -65,7 +66,7 @@ const SelectRequirementModal = ({
       );
       setRequirements(openRequirements);
     } catch (error) {
-      console.error("Requirement fetch error", error);
+      swalError("Requirement fetch error", error);
     } finally {
       setLoadingReq(false);
     }

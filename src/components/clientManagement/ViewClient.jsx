@@ -21,6 +21,7 @@ import { BarLoader } from "react-spinners";
 import BackButton from "../ui/buttons/BackButton";
 import EditButton from "../ui/buttons/EditButton";
 import ToolTip from "../ui/ToolTip";
+import { swalError } from "../../utils/swalHelper";
 
 const ViewClient = () => {
   const { id } = useParams();
@@ -39,7 +40,7 @@ const ViewClient = () => {
       const res = await getClientById(id);
       if (res.success && res.client) setClient(res.client);
     } catch (error) {
-      console.error("Error fetching client:", error);
+      swalError("Error fetching client:", error);
     } finally {
       setLoading(false);
     }

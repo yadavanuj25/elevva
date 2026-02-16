@@ -6,65 +6,73 @@ import {
   CheckCircle,
   X as CloseIcon,
 } from "lucide-react";
-import StatCard from "../cards/dashboard/StatCard";
 import BirthdayCalendar from "./BirthdayCalendar";
+import DashboardCard from "../cards/dashboard/DashboardCard";
 
 const RecruiterDashboard = ({ data }) => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
+        <DashboardCard
           title="Total Submissions"
           value={data?.metrics?.totalSubmissions || 0}
           icon={FileText}
           color="indigo"
+          ratio="5.62%"
+          ratioText="from last month"
+          isPositive={true}
         />
-        <StatCard
+        <DashboardCard
           title="Total Placements"
           value={data?.metrics?.totalPlacements || 0}
           icon={CheckCircle}
           color="green"
+          ratio="5.62%"
+          ratioText="from last month"
+          isPositive={true}
         />
-        <StatCard
+        <DashboardCard
           title="Success Rate"
           value="45%"
           icon={TrendingUp}
           color="purple"
-          trend={8}
+          ratio="5.62%"
+          ratioText="from last month"
+          isPositive={true}
         />
-        <StatCard
+
+        <DashboardCard
           title="Active Candidates"
           value={
             data?.candidateStats?.find((s) => s._id === "Active")?.count || 0
           }
           icon={Users}
           color="blue"
+          ratio="5.62%"
+          ratioText="from last month"
+          isPositive={true}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">
-            Candidate Status
-          </h3>
+        <div className="rounded-2xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
+          <h3 className="text-lg font-bold mb-4">Candidate Status</h3>
           <div className="space-y-3">
             {data?.candidateStats?.map((stat, idx) => (
               <div key={idx} className="p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-700">{stat._id}</span>
-                  <span className="text-lg font-bold text-gray-800">
-                    {stat.count}
+                  <span className="font-medium text-gray-700 dark:text-gray-300">
+                    {stat._id}
                   </span>
+                  <span className="text-lg font-bold ">{stat.count}</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">
-            Recent Placements
-          </h3>
+        <div className="rounded-2xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
+          <h3 className="text-lg font-bold  mb-4">Recent Placements</h3>
           <div className="space-y-3">
             {data?.myPlacements?.slice(0, 5).map((placement) => (
               <div
@@ -73,10 +81,10 @@ const RecruiterDashboard = ({ data }) => {
               >
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <h4 className="font-semibold text-gray-800">
+                    <h4 className="font-semibold ">
                       {placement.candidate?.fullName}
                     </h4>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
                       {placement.client?.companyName}
                     </p>
                   </div>

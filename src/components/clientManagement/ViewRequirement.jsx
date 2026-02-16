@@ -24,6 +24,7 @@ import PageTitle from "../../hooks/PageTitle";
 import { BarLoader } from "react-spinners";
 import BackButton from "../ui/buttons/BackButton";
 import EditButton from "../ui/buttons/EditButton";
+import { swalError } from "../../utils/swalHelper";
 
 const ViewRequirement = () => {
   const { id } = useParams();
@@ -47,7 +48,7 @@ const ViewRequirement = () => {
         setClient(res.requirement.client);
       }
     } catch (error) {
-      console.error("Error fetching requirement:", error);
+      swalError("Error fetching requirement:", error);
     } finally {
       setLoading(false);
     }

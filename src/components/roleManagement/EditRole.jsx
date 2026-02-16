@@ -79,7 +79,7 @@ const EditRole = () => {
         setSelected(selectedMap);
       }
     } catch (err) {
-      console.log("Error fetching role:", err.message);
+      swalError("Error fetching role:", err.message);
     }
   };
 
@@ -89,7 +89,7 @@ const EditRole = () => {
       const permissions = await res.permissions;
       if (permissions) setPermissions(permissions);
     } catch (err) {
-      console.error("Error fetching permissions:", err);
+      swalError("Error fetching permissions:", err);
     }
   };
   const groupedModules = [...new Set(permissions.map((p) => p.resource))];
@@ -191,7 +191,7 @@ const EditRole = () => {
         });
         setErrors(validationErrors);
       } else {
-        console.error("Error updating role:", error);
+        swalError("Error updating role:", error);
       }
       return;
     } finally {

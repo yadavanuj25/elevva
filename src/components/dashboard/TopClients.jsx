@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Activity, MoreVertical, ArrowUpRight, Eye } from "lucide-react";
+import { User, ArrowUpRight } from "lucide-react";
 
 const TopClients = ({ topClients }) => {
   const navigate = useNavigate();
   return (
     <>
-      <div className="  rounded-2xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
+      <div className="rounded-2xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
         <div>
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold ">Top Clients</h3>

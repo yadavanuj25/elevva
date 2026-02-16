@@ -32,6 +32,8 @@ import PageTitle from "../../hooks/PageTitle";
 import { BarLoader } from "react-spinners";
 import BackButton from "../ui/buttons/BackButton";
 import EditButton from "../ui/buttons/EditButton";
+import { BASE_URL } from "../../config/api";
+import { swalError } from "../../utils/swalHelper";
 
 const IconButton = ({ title, icon }) => (
   <Tippy
@@ -65,7 +67,7 @@ const ViewProfile = () => {
       const res = await getProfileById(id);
       if (res.success && res.profile) setProfile(res.profile);
     } catch (err) {
-      console.error("Error fetching profile:", err);
+      swalError("Error fetching profile:", err.message);
     } finally {
       setLoading(false);
     }
@@ -156,7 +158,7 @@ const ViewProfile = () => {
                           {profile.resume.originalName}
                         </div>
                         <a
-                          href={`https://crm-backend-qbz0.onrender.com/${profile.resume.path}`}
+                          href={`${BASE_URL}/${profile.resume.path}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-accent-light text-sm px-1 py-0.5 bg-accent-dark  rounded-md"

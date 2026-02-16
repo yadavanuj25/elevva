@@ -14,6 +14,7 @@ import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
 import RequirementForm from "../requirementManagement/RequirementForm";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { swalError } from "../../utils/swalHelper";
 
 const schema = yup.object().shape({
   client: yup.string().required("Client is required"),
@@ -82,7 +83,7 @@ const EditClientRequirement = () => {
       const res = await getRequirementById(id);
       if (res?.success && res?.requirement) {
         const r = res.requirement;
-        console.log(r.client.clientName);
+
         jobDescriptionRef.current = r.jobDescription;
         setFormData({
           clientId: r.client._id,
@@ -104,8 +105,7 @@ const EditClientRequirement = () => {
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
-      showError("Failed to load existing requirement");
+      showError("Failed to load existing requirement", error.message);
     } finally {
       setLoading(false);
     }
@@ -127,7 +127,7 @@ const EditClientRequirement = () => {
         res.clients?.filter((c) => c.status === "active") || [];
       setActiveClients(activeList);
     } catch (error) {
-      console.log(error);
+      swalError(error.message);
     }
   };
   // Quill Image Handler
@@ -219,7 +219,7 @@ const EditClientRequirement = () => {
       err.inner?.forEach((e) => {
         validationErrors[e.path] = e.message;
       });
-      console.log(err);
+
       setErrors(validationErrors);
     } finally {
       setUpdating(false);

@@ -9,24 +9,15 @@ const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (!user || !token) return;
-
     // Connect socket after login
     socket.auth = { token };
     socket.connect();
+    socket.on("connect_error", (err) => {});
 
-    console.log("🔌 Socket connected");
-
-    socket.on("connect_error", (err) => {
-      console.error("Socket connection error:", err.message);
-    });
-
-    socket.on("disconnect", (reason) => {
-      console.log("Socket disconnected:", reason);
-    });
+    socket.on("disconnect", (reason) => {});
 
     return () => {
       socket.disconnect();
-      console.log("Socket disconnected (cleanup)");
     };
   }, [user, token]);
 

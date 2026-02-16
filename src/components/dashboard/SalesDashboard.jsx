@@ -7,53 +7,66 @@ import {
   DollarSign,
 } from "lucide-react";
 import BirthdayCalendar from "./BirthdayCalendar";
+import DashboardCard from "../cards/dashboard/DashboardCard";
 
 const SalesDashboard = ({ data }) => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
+        <DashboardCard
           title="Total Deals"
           value={data?.metrics?.totalDeals || 0}
           icon={Target}
           color="indigo"
+          ratio="5.62%"
+          ratioText="from last month"
+          isPositive={true}
         />
-        <StatCard
+        <DashboardCard
           title="Pipeline Value"
           value={`$${(data?.metrics?.totalValue || 0).toLocaleString()}`}
           icon={DollarSign}
           color="green"
+          ratio="5.62%"
+          ratioText="from last month"
+          isPositive={true}
         />
-        <StatCard
+        <DashboardCard
           title="My Clients"
           value={data?.totalClients || 0}
           icon={Building2}
           color="blue"
+          ratio="5.62%"
+          ratioText="from last month"
+          isPositive={true}
         />
-        <StatCard
+        <DashboardCard
           title="Win Rate"
           value="65%"
           icon={TrendingUp}
           color="purple"
           trend={12}
+          ratio="5.62%"
+          ratioText="from last month"
+          isPositive={true}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">
-            Pipeline by Stage
-          </h3>
+        <div className="rounded-2xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
+          <h3 className="text-lg font-bold  mb-4">Pipeline by Stage</h3>
           <div className="space-y-3">
             {data?.pipelineStats?.map((stage, idx) => (
               <div key={idx} className="p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-gray-700">{stage._id}</span>
-                  <span className="text-sm font-bold text-gray-800">
+                  <span className="font-medium text-gray-700 dark:text-gray-300">
+                    {stage._id}
+                  </span>
+                  <span className="text-sm font-bold ">
                     {stage.count} deals
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-sm text-gray-600">
+                <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300">
                   <span>Value: ${stage.totalValue.toLocaleString()}</span>
                 </div>
               </div>
@@ -61,8 +74,8 @@ const SalesDashboard = ({ data }) => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">Recent Deals</h3>
+        <div className="rounded-2xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
+          <h3 className="text-lg font-bold  mb-4">Recent Deals</h3>
           <div className="space-y-3">
             {data?.myDeals?.slice(0, 5).map((deal) => (
               <div
@@ -71,10 +84,8 @@ const SalesDashboard = ({ data }) => {
               >
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <h4 className="font-semibold text-gray-800">
-                      {deal.dealName}
-                    </h4>
-                    <p className="text-sm text-gray-600">
+                    <h4 className="font-semibold">{deal.dealName}</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
                       {deal.client?.companyName}
                     </p>
                   </div>
@@ -91,10 +102,10 @@ const SalesDashboard = ({ data }) => {
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">
+                  <span className="text-gray-600 dark:text-gray-300">
                     ${deal.value.toLocaleString()}
                   </span>
-                  <span className="text-gray-500">
+                  <span className="text-gray-4">
                     {new Date(deal.createdAt).toLocaleDateString()}
                   </span>
                 </div>

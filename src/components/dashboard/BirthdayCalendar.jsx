@@ -36,7 +36,7 @@ const BirthdayCalendar = () => {
       });
       setBirthdayData(res?.birthdays || []);
     } catch (error) {
-      swalError(error);
+      console.error(error.message);
     }
   };
 
@@ -96,10 +96,10 @@ const BirthdayCalendar = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6">
+    <div className="rounded-2xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4 ">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold text-gray-800">Birthday Calendar</h3>
+        <h3 className="text-2xl font-bold ">Birthday Calendar</h3>
 
         <div className="flex items-center gap-4">
           <button

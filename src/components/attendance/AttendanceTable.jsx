@@ -386,7 +386,6 @@ const StatusCircle = React.memo(
 StatusCircle.displayName = "StatusCircle";
 
 const AttendanceHistoryTable = ({ history = [], exportAttendance }) => {
-  console.log(history);
   const [selectedYear, setSelectedYear] = useState(
     new Date().getFullYear().toString(),
   );

@@ -3,7 +3,6 @@ import { X } from "lucide-react";
 import Close from "../../ui/buttons/Close";
 
 const InterviewHistoryModal = ({ open, onClose, record }) => {
-  console.log(record);
   if (!open || !record) return null;
 
   return (

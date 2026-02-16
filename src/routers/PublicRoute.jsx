@@ -7,9 +7,6 @@ const PublicRoute = ({ children }) => {
 
   // If user is authenticated and not locked, redirect to dashboard
   if (token && user && !user?.isLocked) {
-    // const role = user?.role?.name;
-    // const dashboardPath =
-    //   role === "admin" ? "/admin/super-dashboard" : "/dashboard";
     const dashboardPath = "/dashboard";
     return <Navigate to={dashboardPath} replace />;
   }
@@ -22,3 +19,23 @@ const PublicRoute = ({ children }) => {
 };
 
 export default PublicRoute;
+
+// import { Navigate, useLocation } from "react-router-dom";
+// import { useAuth } from "../auth/AuthContext";
+
+// const PublicRoute = ({ children }) => {
+//   const { isAuthenticated, user } = useAuth();
+//   const location = useLocation();
+//   if (user?.isLocked) {
+//     return children;
+//   }
+
+//   if (isAuthenticated) {
+//     const destination = location.state?.from?.pathname ?? "/dashboard";
+//     return <Navigate to={destination} replace />;
+//   }
+
+//   return children;
+// };
+
+// export default PublicRoute;

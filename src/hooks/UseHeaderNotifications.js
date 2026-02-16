@@ -9,6 +9,7 @@ import {
   deleteNotification,
 } from "../services/notificationServices.jsx";
 import { NotificationSwal } from "../utils/NotifictaionSwal.jsx";
+import { swalError } from "../utils/swalHelper.js";
 
 const isToday = (date) => {
   const d = new Date(date);
@@ -81,18 +82,14 @@ export const useHeaderNotifications = (token) => {
       const res = await getAllNotifications();
       setNotifications(res?.notifications || []);
       setUnreadCount(res?.unreadCount || 0);
-    } catch (err) {
-      console.error("Error fetching notifications", err);
-    }
+    } catch (err) {}
   };
 
   const fetchUnreadCount = async () => {
     try {
       const res = await getUnreadNotificationCount();
       setUnreadCount(res?.count || 0);
-    } catch (err) {
-      console.error("Error fetching unread count", err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -127,13 +124,9 @@ export const useHeaderNotifications = (token) => {
       }
     });
 
-    socketRef.current.on("connect_error", (err) => {
-      console.error("Socket connection error:", err.message);
-    });
+    socketRef.current.on("connect_error", (err) => {});
 
-    socketRef.current.on("disconnect", (reason) => {
-      console.log("Socket disconnected:", reason);
-    });
+    socketRef.current.on("disconnect", (reason) => {});
 
     return () => {
       socketRef.current?.disconnect();
@@ -146,12 +139,12 @@ export const useHeaderNotifications = (token) => {
       await markNotificationAsRead(id);
       setNotifications((prev) =>
         prev.map((n) =>
-          n._id === id ? { ...n, read: true, readAt: new Date() } : n
-        )
+          n._id === id ? { ...n, read: true, readAt: new Date() } : n,
+        ),
       );
       setUnreadCount((prev) => Math.max(prev - 1, 0));
     } catch (err) {
-      console.error("Error marking notification as read", err);
+      swalError("Error marking notification as read", err);
     }
   };
 
@@ -159,11 +152,11 @@ export const useHeaderNotifications = (token) => {
     try {
       await markAllNotificationsAsRead();
       setNotifications((prev) =>
-        prev.map((n) => ({ ...n, read: true, readAt: new Date() }))
+        prev.map((n) => ({ ...n, read: true, readAt: new Date() })),
       );
       setUnreadCount(0);
     } catch (err) {
-      console.error("Error marking all as read", err);
+      swalError("Error marking all as read", err);
     }
   };
 
@@ -172,7 +165,7 @@ export const useHeaderNotifications = (token) => {
       await deleteNotification(id);
       setNotifications((prev) => prev.filter((n) => n._id !== id));
     } catch (err) {
-      console.error("Error deleting notification", err);
+      swalError("Error deleting notification", err);
     }
   };
 
@@ -181,7 +174,7 @@ export const useHeaderNotifications = (token) => {
       today: notifications.filter((n) => isToday(n.createdAt)),
       yesterday: notifications.filter((n) => isYesterday(n.createdAt)),
       older: notifications.filter(
-        (n) => !isToday(n.createdAt) && !isYesterday(n.createdAt)
+        (n) => !isToday(n.createdAt) && !isYesterday(n.createdAt),
       ),
     };
   }, [notifications]);

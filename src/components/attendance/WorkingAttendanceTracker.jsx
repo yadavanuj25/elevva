@@ -44,6 +44,7 @@ import Textareafield from "../ui/formFields/Textareafield";
 import CustomSwal from "../../utils/CustomSwal";
 import { useAuth } from "../../auth/AuthContext";
 import LocationHeader from "./LocationHeader";
+import { BASE_URL } from "../../config/api";
 
 const AttendanceTracker = () => {
   const { user } = useAuth();
@@ -214,7 +215,7 @@ const AttendanceTracker = () => {
           });
         },
         (error) => {
-          console.error("Location error:", error);
+          swalError("Location error:", error);
         },
       );
     }
@@ -230,7 +231,7 @@ const AttendanceTracker = () => {
         setActiveBreak(ongoingBreak);
       }
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -245,7 +246,7 @@ const AttendanceTracker = () => {
       setHistory(res.data || []);
       setStats(res.stats || null);
     } catch (error) {
-      console.error("Error fetching history:", error);
+      swalError("Error fetching history:", error.message);
     }
   };
 
@@ -279,7 +280,7 @@ const AttendanceTracker = () => {
         setShowPunchInModal(false);
         swalSuccess("Punch In Successful", data.message);
       } else {
-        console.log(data.message);
+        swalError(data.message);
       }
     } catch (error) {
       swalError(
@@ -344,7 +345,7 @@ const AttendanceTracker = () => {
         fetchTodayAttendance();
         swalSuccess("Break Started");
       } else {
-        console.log(response.message);
+        swalError(response.message);
       }
     } catch (error) {
       swalError("Failed to start break", error);
@@ -359,7 +360,7 @@ const AttendanceTracker = () => {
         fetchTodayAttendance();
         swalInfo("Break Ended", response.message);
       } else {
-        console.log(response.message);
+        swalError(response.message);
       }
     } catch (error) {
       swalError("Failed to end break", error);
@@ -375,7 +376,7 @@ const AttendanceTracker = () => {
       });
 
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/attendance/export?${queryParams}`,
+        `${BASE_URL}/api/attendance/export?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -419,7 +420,7 @@ const AttendanceTracker = () => {
       const data = await res.json();
       return data.display_name;
     } catch (err) {
-      console.error("Failed to fetch address", err);
+      swalError("Failed to fetch address", err.message);
       return "";
     }
   };

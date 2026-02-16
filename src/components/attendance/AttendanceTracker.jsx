@@ -16,7 +16,6 @@ import {
   startBreak,
 } from "../../services/attendanceServices";
 import AttendanceStats from "./AttendanceStats";
-import CustomSwal from "../../utils/CustomSwal";
 import { useAuth } from "../../auth/AuthContext";
 import AttendanceHistoryTable from "./AttendanceTable";
 import LocationHeader from "./LocationHeader";
@@ -27,6 +26,7 @@ import TabNavigation from "./TabNavigation";
 import BreakTypeModal from "../modals/attendanceModal/BreakTypeModal";
 import AttendanceCard from "./cards/AttendanceCard";
 import StatsGrid from "./cards/StatsGrid";
+import { BASE_URL } from "../../config/api";
 
 const AttendanceTracker = () => {
   const { user } = useAuth();
@@ -40,7 +40,6 @@ const AttendanceTracker = () => {
   const [stats, setStats] = useState(null);
   const [activeBreak, setActiveBreak] = useState(null);
   const [isBreakActive, setIsBreakActive] = useState(false);
-
   const [formData, setFormData] = useState({
     workMode: "office",
     notes: "",
@@ -185,7 +184,7 @@ const AttendanceTracker = () => {
           });
         },
         (error) => {
-          console.error("Location error:", error);
+          swalError("Location error:", error.message);
         },
       );
     }
@@ -201,7 +200,7 @@ const AttendanceTracker = () => {
         setActiveBreak(ongoingBreak);
       }
     } catch (error) {
-      console.error("Error:", error);
+      swalError("Error:", error.message);
     }
   };
 
@@ -218,7 +217,7 @@ const AttendanceTracker = () => {
       setHistory(data || []);
       setStats(statsData || null);
     } catch (error) {
-      console.error("Error fetching history:", error);
+      swalError("Error fetching history:", error);
     }
   };
 
@@ -239,7 +238,7 @@ const AttendanceTracker = () => {
   //     setHistory(data || []);
   //     setStats(statsData || null);
   //   } catch (error) {
-  //     console.error("Error fetching history:", error);
+  //   swalError("Error fetching history:", error);
   //   }
   // };
 
@@ -273,7 +272,7 @@ const AttendanceTracker = () => {
         setShowPunchInModal(false);
         swalSuccess("Punch In Successful", data.message);
       } else {
-        console.log(data.message);
+        swalError(data.message);
       }
     } catch (error) {
       swalError(error.message || "Punch In Failed");
@@ -318,7 +317,7 @@ const AttendanceTracker = () => {
         fetchTodayAttendance();
         swalSuccess("Break Started");
       } else {
-        console.log(response.message);
+        swalError(response.message);
       }
     } catch (error) {
       swalError("Failed to start break", error);
@@ -333,7 +332,7 @@ const AttendanceTracker = () => {
         fetchTodayAttendance();
         swalInfo("Break Ended", response.message);
       } else {
-        console.log(response.message);
+        swalError(response.message);
       }
     } catch (error) {
       swalError("Failed to end break", error);
@@ -349,7 +348,7 @@ const AttendanceTracker = () => {
       });
 
       const response = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/attendance/export?${queryParams}`,
+        `${BASE_URL}/api/attendance/export?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -391,7 +390,7 @@ const AttendanceTracker = () => {
       const data = await res.json();
       return data.display_name;
     } catch (err) {
-      console.error("Failed to fetch address", err);
+      swalError("Failed to fetch address", err);
       return "";
     }
   };

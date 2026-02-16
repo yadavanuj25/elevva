@@ -93,7 +93,6 @@ const GeneralSettings = () => {
     try {
       await schema.validate(formData, { abortEarly: false });
       setErrors({});
-      console.log("Form Data:", formData);
     } catch (err) {
       if (err.inner) {
         const formErrors = {};

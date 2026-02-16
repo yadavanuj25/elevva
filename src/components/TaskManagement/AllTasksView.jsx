@@ -6,6 +6,7 @@ import { User } from "lucide-react";
 import NoData from "../ui/NoData";
 import SelectField from "../ui/SelectField";
 import { getRequirementOptions } from "../../services/clientServices";
+import { swalError } from "../../utils/swalHelper";
 
 const AllTasksView = () => {
   PageTitle("Elevva | All Tasks");
@@ -33,7 +34,7 @@ const AllTasksView = () => {
         setTasks(response.tasks);
       }
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      swalError("Error fetching tasks:", error);
     } finally {
       setLoading(false);
     }
@@ -44,7 +45,7 @@ const AllTasksView = () => {
       const res = await getRequirementOptions();
       setOptions(res.options);
     } catch (error) {
-      console.log(error);
+      swalError(error.message);
     }
   };
 

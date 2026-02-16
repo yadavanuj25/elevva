@@ -34,7 +34,7 @@ import GroupButton from "../ui/buttons/GroupButton";
 import CustomSwal from "../../utils/CustomSwal";
 import ActionMenu from "../ui/buttons/ActionMenu";
 import ErrorMessage from "../modals/errors/ErrorMessage";
-import { swalSuccess, swalWarning } from "../../utils/swalHelper";
+import { swalError, swalSuccess, swalWarning } from "../../utils/swalHelper";
 
 const ClientsRequirementsList = () => {
   PageTitle("Elevva | Client Requirements");
@@ -78,14 +78,12 @@ const ClientsRequirementsList = () => {
     try {
       const data = await getRequirementsOptions();
       if (!data || typeof data !== "object") {
-        console.error("Invalid options response");
+        swalError("Invalid options response");
         return;
       }
       setStatusOptions(data.options.statuses);
-      console.log(data.options.statuses);
     } catch (error) {
-      console.error("Error fetching options:", error);
-      showError("Failed to load dropdown options");
+      swalError("Error fetching options:", error.message);
     }
   };
 
@@ -638,7 +636,7 @@ const ClientsRequirementsList = () => {
                             navigate(`/clients/requirements/${row._id}`)
                           }
                           onDelete={() => {
-                            console.log("Delete", row._id);
+                            swalWarning("Delete", row._id);
                           }}
                         />
                       </TableCell>

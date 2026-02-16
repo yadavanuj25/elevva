@@ -7,6 +7,7 @@ import BackButton from "../ui/buttons/BackButton";
 import { addClients, getAllOptions } from "../../services/clientServices";
 import { useMessage } from "../../auth/MessageContext";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { swalError } from "../../utils/swalHelper";
 
 const schema = yup.object().shape({
   empanelmentDate: yup
@@ -93,7 +94,7 @@ const AddClient = () => {
       const res = await getAllOptions();
       setOptions(res?.options || {});
     } catch (err) {
-      console.log(err);
+      swalError(err);
     }
   };
 

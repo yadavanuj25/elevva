@@ -628,3 +628,384 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 };
 
 export default Sidebar;
+
+// import { Link, useLocation } from "react-router-dom";
+// import { useAuth } from "../../auth/AuthContext";
+// import "../../styles/sidebar.css";
+// import { FaChevronDown, FaChevronRight } from "react-icons/fa";
+// import { TbHandClick } from "react-icons/tb";
+// import { useState, useEffect } from "react";
+// import {
+//   Repeat,
+//   CalendarDays,
+//   Cannabis,
+//   Handshake,
+//   Users,
+//   LockKeyholeOpen,
+//   FileText,
+//   BriefcaseBusiness,
+//   Settings,
+//   ContactRound,
+//   LayoutDashboard,
+// } from "lucide-react";
+
+// const ALWAYS_VISIBLE = ["dashboard", "settings", "attendance", "interview"];
+
+// const Sidebar = ({ isOpen, setIsOpen }) => {
+//   // ── Pull `can` from context — it already handles superadmin + Set.has() ──
+//   const { can, role } = useAuth();
+//   const location = useLocation();
+//   const [activeSection, setActiveSection] = useState(null);
+
+//   const dashboardRoutes = [
+//     "/dashboard",
+//     "/admin/dashboard",
+//     "/employee/dashboard",
+//     "/demo/dashboard",
+//   ];
+
+//   // canRead: always-visible resources bypass the permission check entirely
+//   const canRead = (resource) => {
+//     if (ALWAYS_VISIBLE.includes(resource)) return true;
+//     return can(resource, "read"); // ✅ uses Set.has() internally
+//   };
+
+//   const navSections = [
+//     {
+//       items: [
+//         {
+//           resource: "dashboard",
+//           path: "/dashboard",
+//           label: "Dashboard",
+//           icon: <LayoutDashboard size={18} />,
+//         },
+//       ],
+//     },
+//     {
+//       section: "Users",
+//       sectionKey: "user_management",
+//       sectionIcon: <Users size={18} />,
+//       items: [
+//         {
+//           resource: "users",
+//           path: "/users",
+//           label: "Manage Users",
+//           icon: <Users size={18} />,
+//         },
+//         {
+//           resource: "users",
+//           path: "/roles",
+//           label: "Roles & Permission",
+//           icon: <LockKeyholeOpen size={18} />,
+//         },
+//       ],
+//     },
+//     {
+//       section: "Profiles",
+//       sectionKey: "profile_management",
+//       sectionIcon: <FileText size={18} />,
+//       items: [
+//         {
+//           resource: "profiles",
+//           path: "/profiles",
+//           label: "Profiles",
+//           icon: <FileText size={18} />,
+//         },
+//       ],
+//     },
+//     {
+//       section: "Clients",
+//       sectionKey: "client_management",
+//       sectionIcon: <Handshake size={18} />,
+//       items: [
+//         {
+//           resource: "customers",
+//           path: "/clients",
+//           label: "Clients",
+//           icon: <Handshake size={18} />,
+//         },
+//         {
+//           resource: "customers",
+//           path: "/clients/requirements",
+//           label: "Clients Requirement",
+//           icon: <BriefcaseBusiness size={18} />,
+//         },
+//       ],
+//     },
+//     {
+//       section: "HRMS",
+//       sectionKey: "hrms",
+//       sectionIcon: <CalendarDays size={18} />,
+//       items: [
+//         {
+//           resource: "users",
+//           path: "/hrms/shifts",
+//           label: "Shifts",
+//           icon: <Repeat size={18} />,
+//         },
+//         {
+//           resource: "attendance",
+//           path: "/hrms/attendance",
+//           label: "Attendance",
+//           icon: <TbHandClick size={18} />,
+//         },
+//         {
+//           resource: "customers",
+//           path: "/hrms/holidays",
+//           label: "Holidays",
+//           icon: <CalendarDays size={18} />,
+//         },
+//         {
+//           resource: "customers",
+//           path: "/hrms/leaves",
+//           label: "Leaves",
+//           icon: <Cannabis size={18} />,
+//         },
+//       ],
+//     },
+//     {
+//       section: "Settings",
+//       sectionKey: "settings",
+//       sectionIcon: <Settings size={18} />,
+//       items: [
+//         {
+//           resource: "settings",
+//           path: "/settings",
+//           label: "Settings",
+//           icon: <Settings size={18} />,
+//         },
+//       ],
+//     },
+//     {
+//       section: "Interviews",
+//       sectionKey: "interview_management",
+//       sectionIcon: <ContactRound size={18} />,
+//       items: [
+//         {
+//           resource: "interview",
+//           path: "/interviews",
+//           label: "Interviews",
+//           icon: <ContactRound size={18} />,
+//         },
+//       ],
+//     },
+//   ];
+
+//   const filteredSections = navSections
+//     .map((section) => {
+//       const allowedItems = section.items.filter((item) =>
+//         canRead(item.resource),
+//       );
+//       return allowedItems.length ? { ...section, items: allowedItems } : null;
+//     })
+//     .filter(Boolean);
+
+//   const isActive = (path) => {
+//     const current = location.pathname;
+//     if (path === "/dashboard") return dashboardRoutes.includes(current);
+//     if (current === path) return true;
+//     if (current.startsWith(path + "/")) {
+//       return !navSections
+//         .flatMap((s) => s.items)
+//         .some(
+//           (item) =>
+//             item.path !== path &&
+//             item.path.startsWith(path + "/") &&
+//             current.startsWith(item.path),
+//         );
+//     }
+//     return false;
+//   };
+
+//   const toggleSection = (sectionKey) => {
+//     setActiveSection((prev) => (prev === sectionKey ? null : sectionKey));
+//   };
+
+//   const isSectionActive = (section) =>
+//     section.items.some((item) => isActive(item.path));
+
+//   // Auto-expand active section on route change
+//   useEffect(() => {
+//     const activeSectionKey = filteredSections.find(
+//       (section) => section.section && isSectionActive(section),
+//     )?.sectionKey;
+//     if (activeSectionKey) setActiveSection(activeSectionKey);
+//   }, [location.pathname]);
+
+//   return (
+//     <>
+//       {isOpen && (
+//         <div
+//           className="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden"
+//           onClick={() => setIsOpen(false)}
+//         />
+//       )}
+//       <aside
+//         id="app-sidebar"
+//         className={`fixed top-0 left-0 h-screen bg-white dark:bg-darkBg z-50 transition-all duration-300 transform
+//         ${isOpen ? "translate-x-0 w-60" : "-translate-x-full w-60"}
+//         md:translate-x-0 ${isOpen ? "md:w-60" : "md:w-16"} flex flex-col`}
+//       >
+//         {/* Header */}
+//         <div className="px-4 py-3 flex items-center justify-between shadow flex-shrink-0">
+//           <div className="w-full flex items-center justify-between">
+//             <Link
+//               to="/"
+//               className="text-xl flex items-center gap-2 truncate text-accent-dark"
+//             >
+//               <p className="logo-text w-8 h-8 bg-accent-dark text-white grid place-items-center font-bold rounded-md leading-[0] text-[30px]">
+//                 E
+//               </p>
+//               {isOpen && (
+//                 <div>
+//                   <span className="font-bold text-black dark:text-white">
+//                     Elevva
+//                   </span>
+//                   <span className="font-bold"> CRM</span>
+//                 </div>
+//               )}
+//             </Link>
+//           </div>
+//         </div>
+
+//         {/* Navigation */}
+//         <ul className="flex-1 overflow-y-auto py-2 space-y-0.5 sidebar-scroll">
+//           {filteredSections.map((section, i) => (
+//             <div key={i}>
+//               {/* Standalone items (Dashboard) — expanded */}
+//               {isOpen &&
+//                 !section.section &&
+//                 section.items.map((item) => (
+//                   <li key={item.path} className="px-2">
+//                     <Link
+//                       to={item.path}
+//                       onClick={() =>
+//                         window.innerWidth < 768 && setIsOpen(false)
+//                       }
+//                       title={!isOpen ? item.label : undefined}
+//                       className={`group flex items-center p-1 rounded-md transition-all duration-200 sidebar-link ${
+//                         !isOpen ? "justify-center" : "gap-3"
+//                       } ${isActive(item.path) ? "active" : ""}`}
+//                     >
+//                       <div className="section-icon-wrapper">{item.icon}</div>
+//                       <span className="text-sm font-medium whitespace-nowrap">
+//                         {item.label}
+//                       </span>
+//                     </Link>
+//                   </li>
+//                 ))}
+
+//               {/* Standalone items (Dashboard) — collapsed (icon only) */}
+//               {!isOpen &&
+//                 !section.section &&
+//                 section.items.map((item) => (
+//                   <li key={item.path} className="px-3 mt-0.5">
+//                     <Link
+//                       to={item.path}
+//                       onClick={() =>
+//                         window.innerWidth < 768 && setIsOpen(false)
+//                       }
+//                       className={`flex items-center justify-center gap-3 px-3 py-1 rounded-md transition-all duration-200 sidebar-link ${
+//                         isActive(item.path) ? "active" : ""
+//                       }`}
+//                       title={item.label}
+//                     >
+//                       <div className="sidebar-icon-wrapper">{item.icon}</div>
+//                     </Link>
+//                   </li>
+//                 ))}
+
+//               {/* Collapsible section — expanded */}
+//               {isOpen && section.section && (
+//                 <div className="px-2 mt-0.5">
+//                   <button
+//                     onClick={() => toggleSection(section.sectionKey)}
+//                     className={`w-full flex items-center justify-between p-1 rounded-md transition-all duration-200 section-header ${
+//                       isSectionActive(section) ? "active" : ""
+//                     }`}
+//                   >
+//                     <div className="flex gap-2.5 items-center">
+//                       <div className="section-icon-wrapper">
+//                         {section.sectionIcon}
+//                       </div>
+//                       <h4 className="section-title">{section.section}</h4>
+//                     </div>
+//                     <span className="chevron-icon">
+//                       {activeSection === section.sectionKey ? (
+//                         <FaChevronDown size={10} />
+//                       ) : (
+//                         <FaChevronRight size={10} />
+//                       )}
+//                     </span>
+//                   </button>
+
+//                   <div
+//                     className={`collapsible-section ${
+//                       activeSection === section.sectionKey
+//                         ? "expanded"
+//                         : "collapsed"
+//                     }`}
+//                   >
+//                     <div className="collapsible-content">
+//                       <div className="mt-1 space-y-0.5 pl-1">
+//                         {section.items.map((item) => (
+//                           <Link
+//                             key={item.path}
+//                             to={item.path}
+//                             onClick={() =>
+//                               window.innerWidth < 768 && setIsOpen(false)
+//                             }
+//                             className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200 nested-link ${
+//                               isActive(item.path) ? "active" : ""
+//                             }`}
+//                           >
+//                             <div className="nested-bullet">
+//                               <div className="bullet-dot"></div>
+//                             </div>
+//                             <span className="text-sm">{item.label}</span>
+//                           </Link>
+//                         ))}
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//               )}
+
+//               {/* Collapsible section — collapsed (icon only) */}
+//               {!isOpen &&
+//                 section.section &&
+//                 section.items.map((item) => (
+//                   <li key={item.path} className="px-3 mt-0.5">
+//                     <Link
+//                       to={item.path}
+//                       onClick={() =>
+//                         window.innerWidth < 768 && setIsOpen(false)
+//                       }
+//                       className={`flex items-center justify-center gap-3 px-3 py-1 rounded-md transition-all duration-200 sidebar-link ${
+//                         isActive(item.path) ? "active" : ""
+//                       }`}
+//                       title={item.label}
+//                     >
+//                       <div className="sidebar-icon-wrapper">{item.icon}</div>
+//                     </Link>
+//                   </li>
+//                 ))}
+//             </div>
+//           ))}
+//         </ul>
+
+//         {/* Footer */}
+//         {isOpen && (
+//           <div className="p-2.5 text-center text-xs border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
+//             <strong className="text-gray-700 dark:text-gray-300">ELEVVA</strong>
+//             <p className="text-gray-500 dark:text-gray-400">
+//               © {new Date().getFullYear()} Ecodedash
+//             </p>
+//           </div>
+//         )}
+//       </aside>
+//     </>
+//   );
+// };
+
+// export default Sidebar;

@@ -6,7 +6,7 @@ import FormatDate from "../ui/dateFormat.jsx/FormatDate";
 const EmployeeProfileCard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  console.log(user);
+
   return (
     <div className="h-full bg-white dark:bg-gray-800  rounded-lg border border-[#E8E8E9] dark:border-gray-600 shadow-sm overflow-hidden">
       {/* Header */}

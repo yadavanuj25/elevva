@@ -13,6 +13,7 @@ import useSkillHandlers from "../../hooks/profiles/useSkills";
 import profileInitialForm from "../../contstants/profileInitialForm";
 import ResumePreview from "./ResumePreview";
 import ResumeUpload from "./ResumeUpload";
+import { swalError } from "../../utils/swalHelper";
 
 /** Temporary – remove when backend starts sending resume */
 const HARDCODED_RESUME = {
@@ -113,7 +114,7 @@ const EditProfile = () => {
         setRemoteResume(HARDCODED_RESUME);
       }
     } catch (err) {
-      console.error(err);
+      swalError(err.message);
       showError("Failed to fetch profile");
     } finally {
       setLoading(false);

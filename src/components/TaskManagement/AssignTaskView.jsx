@@ -15,7 +15,7 @@ import {
 } from "../../services/clientServices";
 import CustomSwal from "../../utils/CustomSwal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
-import { swalSuccess } from "../../utils/swalHelper";
+import { swalError, swalSuccess } from "../../utils/swalHelper";
 
 const schema = yup.object().shape({
   requirementId: yup.string().required("Requirement is required"),
@@ -66,7 +66,7 @@ const AssignTaskView = () => {
       const response = await getAllRequirements(1, 50, "Open");
       setRequirements(response.requirements);
     } catch (error) {
-      console.error("Error fetching requirements:", error);
+      swalError("Error fetching requirements:", error);
     }
   };
 
@@ -75,7 +75,7 @@ const AssignTaskView = () => {
       const response = await getAllUsers(1, 50, "active");
       setUsers(response.users);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      swalError("Error fetching users:", error);
     }
   };
 
@@ -84,7 +84,7 @@ const AssignTaskView = () => {
       const res = await getRequirementOptions();
       setOptions(res?.options);
     } catch (error) {
-      console.log(error);
+      swalError(error.message);
     }
   };
 

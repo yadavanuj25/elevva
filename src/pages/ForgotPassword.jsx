@@ -51,7 +51,6 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       const res = await forgotPassword(email);
-      console.log(res);
 
       if (res?.success) {
         setTab("VerifyEmail");

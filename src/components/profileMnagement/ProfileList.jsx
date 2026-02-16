@@ -640,7 +640,7 @@ const ProfileList = () => {
                               }
                               onView={() => navigate(`/profiles/${item._id}`)}
                               onDelete={() => {
-                                console.log("Delete", item._id);
+                                swalWarning("Delete", item._id);
                               }}
                             />
                           </TableCell>

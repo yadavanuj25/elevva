@@ -17,6 +17,7 @@ import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
 import RequirementForm from "../requirementManagement/RequirementForm";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import { swalError } from "../../utils/swalHelper";
 
 const schema = yup.object().shape({
   client: yup.string().required("Client is required"),
@@ -84,7 +85,7 @@ const ClientRequirement = () => {
     try {
       const data = await getRequirementsOptions();
       if (!data || typeof data !== "object") {
-        console.error("Invalid options response");
+        swalError("Invalid options response");
         return;
       }
       setOptions(data.options);
@@ -98,7 +99,7 @@ const ClientRequirement = () => {
       const res = await getAllClients(undefined, undefined, "active");
       setActiveClients(res.clients);
     } catch (error) {
-      console.log(error);
+      swalError(error);
     }
   };
 

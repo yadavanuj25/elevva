@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { BASE_URL } from "../../config/api";
 
 const useDuplicateCheck = ({ token, setErrors }) => {
   const debounceTimer = useRef(null);
@@ -6,7 +7,7 @@ const useDuplicateCheck = ({ token, setErrors }) => {
   const checkDuplicate = async (field, value) => {
     try {
       const res = await fetch(
-        `https://crm-backend-qbz0.onrender.com/api/profiles/check-duplicate?${field}=${value}`,
+        `${BASE_URL}/api/profiles/check-duplicate?${field}=${value}`,
         {
           method: "GET",
           headers: {

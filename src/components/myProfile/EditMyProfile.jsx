@@ -15,6 +15,7 @@ import {
 } from "../../services/commonServices";
 import CancelButton from "../ui/buttons/Cancel";
 import { updateProfile } from "../../services/myProfileServices";
+import { swalError } from "../../utils/swalHelper";
 
 const statusStyles = {
   active: "bg-green-600 text-white ",
@@ -106,7 +107,7 @@ const EditProfile = () => {
         setCountries(res.data.map((c) => c.country));
       }
     } catch (err) {
-      console.error("Error fetching countries:", err);
+      swalError("Error fetching countries:", err);
     } finally {
       setLoadingCountries(false);
     }
@@ -130,7 +131,7 @@ const EditProfile = () => {
         setStates([]);
       }
     } catch (err) {
-      console.error("Error fetching states:", err);
+      swalError("Error fetching states:", err);
       setStates([]);
     } finally {
       setLoadingStates(false);
@@ -174,7 +175,7 @@ const EditProfile = () => {
         setErrors(validationErrors);
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
-        console.error(err.message);
+        swalError(err.message);
       }
     } finally {
       setLoading(false);

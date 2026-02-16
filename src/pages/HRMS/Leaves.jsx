@@ -186,7 +186,7 @@ const Leaves = () => {
         swalError(response.message);
       }
     } catch (error) {
-      swalError("Failed to submit", error);
+      swalError("Failed to submit", error.message);
     }
   };
 
@@ -208,7 +208,7 @@ const Leaves = () => {
         setSelectedLeaveId(null);
       }
     } catch (error) {
-      swalError("Failed to approve", error);
+      swalError("Failed to approve", error.message);
     } finally {
       setModalLoading(false);
     }
@@ -237,7 +237,7 @@ const Leaves = () => {
         setSelectedLeaveId(null);
       }
     } catch (error) {
-      swalError("Failed to reject", error);
+      swalError("Failed to reject", error.message);
     } finally {
       setModalLoading(false);
     }
@@ -252,7 +252,7 @@ const Leaves = () => {
       const payload = {
         cancelReason: reason,
       };
-      const response = await cancelLeaves(payload);
+      const response = await cancelLeaves(selectedLeaveId, payload);
 
       if (response.success) {
         swalSuccess("Leave cancelled");
@@ -261,7 +261,7 @@ const Leaves = () => {
         setSelectedLeaveId(null);
       }
     } catch (error) {
-      swalError("Failed to cancel", error);
+      swalError("Failed to cancel", error.message);
     } finally {
       setModalLoading(false);
     }
@@ -280,7 +280,7 @@ const Leaves = () => {
       a.download = `leaves-export-${Date.now()}.csv`;
       a.click();
     } catch (error) {
-      swalError("Failed to export", error);
+      swalError("Failed to export", error.message);
     }
   };
 

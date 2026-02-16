@@ -55,8 +55,6 @@ import DemoDashboard from "./pages/Dasboards/DemoDashboard";
 const App = () => {
   const location = useLocation();
   const { user } = useAuth();
-
-  console.log(user);
   const isLocked = user?.isLocked === true;
   const current = location.pathname;
   // Redirect to lock screen if user is locked
@@ -140,30 +138,6 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            {/* <Route
-              path="/admin/dashboard"
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/employee/dashboard"
-              element={
-                <ProtectedRoute>
-                  <EmployeeDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/demo/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DefaultDashboard />
-                </ProtectedRoute>
-              }
-            /> */}
 
             {/* Settings - Accessible to all */}
             <Route

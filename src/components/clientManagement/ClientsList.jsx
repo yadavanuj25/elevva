@@ -28,7 +28,9 @@ import axios from "axios";
 import SelectField from "../ui/SelectField";
 import CustomSwal from "../../utils/CustomSwal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
-import { swalSuccess } from "../../utils/swalHelper";
+import { swalError, swalSuccess } from "../../utils/swalHelper";
+import { BASE_URL } from "../../config/api";
+import { useAuth } from "../../auth/AuthContext";
 
 const columns = [
   { id: "clientName", label: "Client Name" },
@@ -46,6 +48,7 @@ const columns = [
 const ClientList = () => {
   PageTitle("Elevva | Clients");
   const navigate = useNavigate();
+  const { token } = useAuth();
   const { successMsg, errorMsg, showError } = useMessage();
   const [clients, setClients] = useState([]);
   const [activeTab, setActiveTab] = useState("All");
@@ -72,9 +75,6 @@ const ClientList = () => {
     status: "",
   });
   const [statusOptions, setStatusOptions] = useState([]);
-
-  const API_BASE_URL = "https://crm-backend-qbz0.onrender.com/api";
-  const token = localStorage.getItem("token");
 
   useEffect(() => {
     fetchSettings();
@@ -110,13 +110,12 @@ const ClientList = () => {
     try {
       const data = await getAllOptions();
       if (!data || typeof data !== "object") {
-        console.error("Invalid options response");
+        swalError("Invalid options response");
         return;
       }
       setStatusOptions(data.options.statuses);
     } catch (error) {
-      console.error("Error fetching options:", error);
-      showError("Failed to load dropdown options");
+      swalError("Error fetching options:", error.message);
     }
   };
 
@@ -125,7 +124,7 @@ const ClientList = () => {
       const response = await getAllOptions();
       setSettings(response.options);
     } catch (err) {
-      console.error("Error fetching settings:", err);
+      swalError("Error fetching settings:", err);
     }
   };
 
@@ -182,13 +181,13 @@ const ClientList = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/clients/stats`, {
+      const response = await axios.get(`${BASE_URL}/api/clients/stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(response.data);
+
       setStats(response.data.stats);
     } catch (err) {
-      console.error("Error fetching stats:", err);
+      swalError(err.message);
     }
   };
 

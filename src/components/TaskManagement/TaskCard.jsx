@@ -52,7 +52,7 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
       const data = await getAllProfiles(1, 10, "All", searchTerm);
       setOptions(data.profiles || []);
     } catch (error) {
-      console.error("Dropdown profile fetch failed", error);
+      swalError("Dropdown profile fetch failed", error);
     }
   };
 
