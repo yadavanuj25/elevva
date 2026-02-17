@@ -40,7 +40,7 @@ const Themes = () => {
                   style={{ backgroundColor: preview }}
                 />
 
-                <span className="font-semibold">{c.name}</span>
+                <span className="">{c.name}</span>
 
                 {color === c.value && (
                   <span className="absolute right-3 p-1 rounded-full text-accent-dark border border-accent-dark bg-accent-light">
@@ -84,13 +84,13 @@ const Themes = () => {
                     }`}
                   >
                     <span
-                      className="block text-2xl font-semibold  leading-tight"
+                      className="block text-2xl leading-tight"
                       style={{ fontFamily: f.fontFamily }}
                     >
                       Ag
                     </span>
                     <span
-                      className="block text-[11px] text-gray-400 dark:text-gray-500 mt-1 truncate"
+                      className="block text-xs  mt-1 truncate"
                       style={{ fontFamily: f.fontFamily }}
                     >
                       {f.preview}
