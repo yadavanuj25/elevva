@@ -139,30 +139,9 @@ const AdminDashboard = ({ data }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-2">
-        {/* TOP CLIENTS */}
-        <div className=" rounded-xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
-          <h3 className="font-bold mb-4">Recent Clients</h3>
-          {data?.topClients?.map((c) => (
-            <div key={c._id} className="py-2 border-b">
-              <p className="font-medium">{c.clientName}</p>
-              <p className="text-sm text-gray-500">{c.email}</p>
-            </div>
-          ))}
+        <div className="col-span-2">
+          <BirthdayCalendar />
         </div>
-
-        {/* TOP REQUIREMENTS */}
-        <div className=" rounded-xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
-          <h3 className="font-bold mb-4">Recent Requirements</h3>
-          {data?.topRequirements?.map((r) => (
-            <div key={r._id} className="py-2 border-b">
-              <p className="font-medium">{r.title}</p>
-              <p className="text-sm text-gray-500">
-                {r.client?.companyName} • {r.experience} yrs
-              </p>
-            </div>
-          ))}
-        </div>
-
         {/* TOP ATTENDANCE */}
         <div className=" rounded-xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
           <h3 className="font-bold mb-4">Top Employees by Attendance</h3>
@@ -173,8 +152,6 @@ const AdminDashboard = ({ data }) => {
             </div>
           ))}
         </div>
-
-        <BirthdayCalendar />
       </div>
     </div>
   );

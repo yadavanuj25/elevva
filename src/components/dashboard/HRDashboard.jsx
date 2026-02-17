@@ -2,11 +2,10 @@ import React from "react";
 import {
   Users,
   UserCheck,
-  Calendar,
+  Leaf,
   CheckCircle,
   X as CloseIcon,
 } from "lucide-react";
-import StatCard from "../cards/dashboard/StatCard";
 import BirthdayCalendar from "./BirthdayCalendar";
 import DashboardCard from "../cards/dashboard/DashboardCard";
 
@@ -26,7 +25,7 @@ const HRDashboard = ({ data }) => {
         <DashboardCard
           title="Present Today"
           value={
-            data?.todayAttendance?.find((a) => a._id === "Present")?.count || 0
+            data?.todayAttendance?.find((a) => a._id === "present")?.count || 0
           }
           icon={CheckCircle}
           color="green"
@@ -35,12 +34,10 @@ const HRDashboard = ({ data }) => {
           isPositive={true}
         />
         <DashboardCard
-          title="Present Today"
-          value={
-            data?.todayAttendance?.find((a) => a._id === "Present")?.count || 0
-          }
-          icon={CheckCircle}
-          color="green"
+          title="Pending Leaves"
+          value={data?.pendingLeaves.length || 0}
+          icon={Leaf}
+          color="orange"
           ratio="5.62%"
           ratioText="from last month"
           isPositive={true}
@@ -63,7 +60,7 @@ const HRDashboard = ({ data }) => {
             {data?.employeeStats?.map((stat, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700  rounded-lg"
               >
                 <span className="font-medium text-gray-700 dark:text-gray-300 capitalize">
                   {stat._id}
@@ -80,7 +77,7 @@ const HRDashboard = ({ data }) => {
             {data?.pendingLeaves?.map((leave) => (
               <div
                 key={leave._id}
-                className="p-4 border border-gray-200 rounded-lg"
+                className="p-4 border border-[#E8E8E9] dark:border-gray-600 rounded-lg"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div>

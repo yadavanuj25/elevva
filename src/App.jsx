@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/Login";
 import ProtectedRoute from "./routers/ProtectedRoute";
 import PublicRoute from "./routers/PublicRoute";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/Dasboards/Dashboard";
 import RoleManagement from "./pages/RoleManagement";
 import UserManagement from "./pages/UserManagement";
 import Layout from "./layouts/Layout";
@@ -46,18 +46,12 @@ import Shifts from "./pages/HRMS/Shifts";
 import ShiftForm from "./components/hrms/shifts/ShiftForm";
 import Holidays from "./pages/HRMS/Holidays";
 import Leaves from "./pages/HRMS/Leaves";
-// import AdminDashboard from "./pages/Dasboards/AdminDashboard";
-// import EmployeeDashboard from "./pages/Dasboards/EmployeeDashboard";
-// import DefaultDashboard from "./pages/Dasboards/DefaultDashboard";
-// import DashboardRouter from "./routers/DashboardRouter";
-import DemoDashboard from "./pages/Dasboards/DemoDashboard";
 
 const App = () => {
   const location = useLocation();
   const { user } = useAuth();
   const isLocked = user?.isLocked === true;
   const current = location.pathname;
-  // Redirect to lock screen if user is locked
   if (isLocked && current !== "/lock-screen") {
     return <Navigate to="/lock-screen" replace />;
   }
@@ -129,12 +123,11 @@ const App = () => {
             />
 
             {/* Dashboard */}
-
             <Route
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <DemoDashboard />
+                  <Dashboard />
                 </ProtectedRoute>
               }
             />

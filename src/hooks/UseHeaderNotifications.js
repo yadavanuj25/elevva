@@ -74,7 +74,7 @@ export const useHeaderNotifications = (token) => {
 
   useEffect(() => {
     fetchNotifications();
-    fetchUnreadCount();
+    // fetchUnreadCount();
   }, []);
 
   const fetchNotifications = async () => {
@@ -85,12 +85,12 @@ export const useHeaderNotifications = (token) => {
     } catch (err) {}
   };
 
-  const fetchUnreadCount = async () => {
-    try {
-      const res = await getUnreadNotificationCount();
-      setUnreadCount(res?.count || 0);
-    } catch (err) {}
-  };
+  // const fetchUnreadCount = async () => {
+  //   try {
+  //     const res = await getUnreadNotificationCount();
+  //     setUnreadCount(res?.count || 0);
+  //   } catch (err) {}
+  // };
 
   useEffect(() => {
     if (!token) return;
@@ -144,7 +144,7 @@ export const useHeaderNotifications = (token) => {
       );
       setUnreadCount((prev) => Math.max(prev - 1, 0));
     } catch (err) {
-      swalError("Error marking notification as read", err);
+      swalError("Error marking notification as read", err.message);
     }
   };
 
@@ -156,16 +156,20 @@ export const useHeaderNotifications = (token) => {
       );
       setUnreadCount(0);
     } catch (err) {
-      swalError("Error marking all as read", err);
+      swalError("Error marking all as read", err.message);
     }
   };
 
   const removeNotification = async (id) => {
     try {
+      const notificationToDelete = notifications.find((n) => n._id === id);
       await deleteNotification(id);
       setNotifications((prev) => prev.filter((n) => n._id !== id));
+      if (notificationToDelete && notificationToDelete.read === false) {
+        setUnreadCount((prev) => Math.max(prev - 1, 0));
+      }
     } catch (err) {
-      swalError("Error deleting notification", err);
+      swalError("Error deleting notification", err.message);
     }
   };
 

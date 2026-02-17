@@ -10,6 +10,8 @@ import BirthdayCalendar from "./BirthdayCalendar";
 import DashboardCard from "../cards/dashboard/DashboardCard";
 
 const SalesDashboard = ({ data }) => {
+  console.log(data);
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -33,7 +35,7 @@ const SalesDashboard = ({ data }) => {
         />
         <DashboardCard
           title="My Clients"
-          value={data?.totalClients || 0}
+          value={data?.metrics?.totalClients || 0}
           icon={Building2}
           color="blue"
           ratio="5.62%"
@@ -57,7 +59,10 @@ const SalesDashboard = ({ data }) => {
           <h3 className="text-lg font-bold  mb-4">Pipeline by Stage</h3>
           <div className="space-y-3">
             {data?.pipelineStats?.map((stage, idx) => (
-              <div key={idx} className="p-4 bg-gray-50 rounded-lg">
+              <div
+                key={idx}
+                className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium text-gray-700 dark:text-gray-300">
                     {stage._id}
