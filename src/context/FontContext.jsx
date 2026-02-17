@@ -5,7 +5,7 @@ const FontContext = createContext();
 
 export const FontProvider = ({ children }) => {
   const [font, setFontState] = useState(
-    () => localStorage.getItem("elevva-font") || "outfit",
+    () => localStorage.getItem("elevva-font") || "golos",
   );
 
   const setFont = (value) => {

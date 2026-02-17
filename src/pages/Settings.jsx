@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import Themes from "../components/themes/Themes";
-import EmailSettings from "../modules/settings/EmailSettings";
 import GeneralSettings from "../modules/settings/GeneralSettings";
 import PageTitle from "../hooks/PageTitle";
 
 const Settings = () => {
   PageTitle("Elevva | Settings");
   const [activeTab, setActiveTab] = useState("Themes");
-  const tabs = ["Themes", "General", "Email"];
+  const tabs = ["Themes", "General"];
 
   return (
     <div className=" ">
@@ -33,8 +32,6 @@ const Settings = () => {
         {activeTab === "General" && <GeneralSettings />}
 
         {activeTab === "Themes" && <Themes />}
-
-        {activeTab === "Email" && <EmailSettings />}
       </div>
     </div>
   );
