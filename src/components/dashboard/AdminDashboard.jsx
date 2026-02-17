@@ -85,7 +85,7 @@ const AdminDashboard = ({ data }) => {
         <div className=" rounded-xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4">
           <h3 className="text-lg font-bold  mb-4">Revenue Overview</h3>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-green-100 rounded-lg">
+            <div className="flex items-center justify-between px-4 py-2 bg-green-100 rounded-lg">
               <div>
                 <p className="text-sm text-gray-600">Total Revenue</p>
                 <p className="text-2xl font-bold text-gray-800">
@@ -120,9 +120,9 @@ const AdminDashboard = ({ data }) => {
                   {dept._id}
                 </span>
                 <div className="flex items-center gap-3">
-                  <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="w-32 h-2 bg-accent-light rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-indigo-600 rounded-full"
+                      className="h-full bg-accent-dark rounded-full"
                       style={{
                         width: `${(dept.count / data.overview.activeEmployees) * 100}%`,
                       }}

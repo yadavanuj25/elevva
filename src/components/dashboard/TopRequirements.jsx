@@ -22,24 +22,20 @@ const TopRequirements = ({ topRequirements }) => {
             Our success is powered by our top client's trust
           </p>
         </div>
-
         <div className="space-y-3">
           {topRequirements.map((client) => {
             return (
               <div
                 key={client._id}
                 onClick={() => navigate(`/clients/requirements/${client?._id}`)}
-                className="flex items-center gap-4 p-3 border-b last:border-b-0 transition-colors ease-in-out duration-300 group cursor-pointer"
+                className="flex items-center gap-4 p-3 border-b border-gray-300 dark:border-gray-600 last:border-b-0 transition-colors ease-in-out duration-300 group cursor-pointer rounded-lg hover:bg-accent-light"
               >
                 <div className="p-2 rounded-lg bg-accent-light text-accent-dark group-hover:text-accent-light group-hover:scale-110  group-hover:bg-accent-dark  transition-transform">
                   <User className="w-5 h-5 " />
                 </div>
 
                 <div className="flex-1 min-w-0 group-hover:text-accent-dark">
-                  <p className="text-sm ">
-                    <span className="font-semibold">{client.title}</span> (
-                    {client.experience})
-                  </p>
+                  <p className="text-sm ">{client.experience}</p>
 
                   <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
                     <Activity className="w-3 h-3" />

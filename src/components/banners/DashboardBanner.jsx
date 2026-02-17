@@ -37,8 +37,10 @@ const DashboardBanner = () => {
 
   return (
     <div className="bg-accent-dark rounded-2xl shadow-lg  px-8 py-4  text-white relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full -mr-28 -mt-32"></div>
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/20 rounded-full -ml-20 -mb-24"></div>
+      <div className="absolute top-0 right-0 w-64 h-64 bg-white/40 rounded-full -mr-28 -mt-32"></div>
+      <div className="absolute top-0 right-0 w-64 h-64 bg-white/40 rounded-full mr-0 -mb-2"></div>
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/40 rounded-full -ml-20 -mb-24"></div>
+      {/* <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/40 rounded-full -ml-20 -mt-24"></div> */}
       <div className="relative z-10">
         <div className="flex items-start justify-between">
           <div>

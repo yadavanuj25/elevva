@@ -103,7 +103,7 @@ const BirthdayCalendar = () => {
         <div className="flex items-center gap-4">
           <button
             onClick={() => changeMonth("prev")}
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition"
           >
             <ChevronLeft size={20} />
           </button>
@@ -114,7 +114,7 @@ const BirthdayCalendar = () => {
 
           <button
             onClick={() => changeMonth("next")}
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition"
           >
             <ChevronRight size={20} />
           </button>
@@ -126,7 +126,7 @@ const BirthdayCalendar = () => {
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
           <div
             key={day}
-            className="text-center font-semibold text-gray-600 py-2"
+            className="text-center font-semibold text-gray-600 dark:text-gray-300 py-2"
           >
             {day}
           </div>
@@ -147,15 +147,17 @@ const BirthdayCalendar = () => {
                   : todayFlag
                     ? "bg-blue-50 border-blue-500 border-2"
                     : hasBirthday
-                      ? "bg-pink-50 border-pink-300"
-                      : "hover:bg-gray-50"
+                      ? "bg-pink-400 border-2 border-pink-700"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
             >
               {day && (
                 <>
                   <div
                     className={`text-sm font-semibold ${
-                      todayFlag ? "text-blue-600" : "text-gray-700"
+                      todayFlag
+                        ? "text-blue-600"
+                        : "text-gray-700 dark:text-gray-300"
                     }`}
                   >
                     {day}
@@ -164,10 +166,7 @@ const BirthdayCalendar = () => {
                   {hasBirthday && (
                     <div className="absolute bottom-1 right-1">
                       <div className="relative group">
-                        <Cake
-                          size={16}
-                          className="text-pink-500 animate-bounce"
-                        />
+                        <Cake size={24} className="text-white animate-bounce" />
 
                         {/* TOOLTIP */}
                         <div className="absolute bottom-6 right-0 hidden group-hover:block bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-10">

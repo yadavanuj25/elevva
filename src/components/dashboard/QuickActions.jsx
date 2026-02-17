@@ -7,14 +7,13 @@ import { useNavigate } from "react-router-dom";
 const QuickActions = () => {
   const navigate = useNavigate();
   return (
-    <div className="bg-accent-dark rounded-2xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4 text-white">
+    <div className="relative bg-accent-dark rounded-2xl border border-[#E8E8E9] dark:border-gray-600 shadow-md hover:shadow-lg p-4 text-white">
       <div className="mb-6">
         <h3 className="text-lg font-bold">Quick Actions</h3>
         <p className="text-sm text-blue-100 mt-1">Manage your workspace</p>
       </div>
 
       <div className="space-y-3">
-        {/* {canAccess("view_users") && ( */}
         <button
           onClick={() => navigate("/users")}
           className="w-full flex items-center gap-3 p-4 bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 hover:scale-105 backdrop-blur-sm"

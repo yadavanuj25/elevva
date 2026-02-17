@@ -29,7 +29,7 @@ const TopClients = ({ topClients }) => {
               <div
                 key={client._id}
                 onClick={() => navigate(`/clients/${client?._id}`)}
-                className="flex items-center gap-4 p-3  border-b last:border-b-0 transition-colors ease-in-out duration-300 group cursor-pointer"
+                className="flex items-center gap-4 p-3  border-b border-gray-300 dark:border-gray-600 last:border-b-0 transition-colors ease-in-out duration-300 group cursor-pointer rounded-lg hover:bg-accent-light"
               >
                 <div className="p-2 rounded-lg bg-accent-light text-accent-dark group-hover:text-accent-light group-hover:scale-110  group-hover:bg-accent-dark  transition-transform">
                   <User className="w-5 h-5 " />
