@@ -53,14 +53,7 @@ const AttendanceTracker = () => {
   const [workingTime, setWorkingTime] = useState("00:00:00");
   const [breakTime, setBreakTime] = useState("00:00:00");
   const [address, setAddress] = useState("");
-  // const [filters, setFilters] = useState({
-  //   startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-  //     .toISOString()
-  //     .split("T")[0],
-  //   endDate: new Date().toISOString().split("T")[0],
-  //   page: 1,
-  //   limit: 30,
-  // });
+
   const [filters, setFilters] = useState({
     startDate: "",
     endDate: "",
@@ -220,27 +213,6 @@ const AttendanceTracker = () => {
       swalError("Error fetching history:", error);
     }
   };
-
-  // const fetchHistory = async () => {
-  //   try {
-  //     const params = {
-  //       page: filters.page,
-  //       limit: filters.limit,
-  //       ...(filters.startDate && { startDate: filters.startDate }),
-  //       ...(filters.endDate && { endDate: filters.endDate }),
-  //     };
-
-  //     const res = await getAttendanceHistory(params);
-
-  //     const data = res.data;
-  //     const statsData = res.stats;
-
-  //     setHistory(data || []);
-  //     setStats(statsData || null);
-  //   } catch (error) {
-  //   swalError("Error fetching history:", error);
-  //   }
-  // };
 
   const handleWorkModeToggle = (mode) => {
     setFormData((p) => ({ ...p, workMode: mode }));

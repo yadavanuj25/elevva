@@ -1,7 +1,6 @@
 import { Cake, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getBirthday } from "../../services/birthDayServices";
-import { swalError } from "../../utils/swalHelper";
 
 const BirthdayCalendar = () => {
   const today = new Date();

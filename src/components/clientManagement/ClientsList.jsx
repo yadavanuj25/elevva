@@ -118,7 +118,6 @@ const ClientList = () => {
       swalError("Error fetching options:", error.message);
     }
   };
-
   const fetchSettings = async () => {
     try {
       const response = await getAllOptions();

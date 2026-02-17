@@ -95,7 +95,7 @@ const Holidays = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const lastIndex = currentPage * itemsPerPage;
   const startIndex = lastIndex - itemsPerPage;
 
