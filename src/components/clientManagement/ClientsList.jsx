@@ -12,7 +12,7 @@ import {
   getAllClients,
   getAllOptions,
   updateClientStatus,
-} from "../../services/clientServices";
+} from "../../services/clientServices.js";
 import TableHeader from "../ui/tableComponents/TableHeader";
 import CommonPagination from "../ui/tableComponents/CommonPagination";
 import Tabs from "../ui/tableComponents/Tabs";

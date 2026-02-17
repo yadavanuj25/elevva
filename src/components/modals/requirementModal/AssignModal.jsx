@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FileText, Hash, Save, X } from "lucide-react";
+import { Hash, Save, X } from "lucide-react";
 import { getAllUsers } from "../../../services/userServices";
 import { assignRequirement } from "../../../services/clientServices";
 import Button from "../../ui/Button";
-import CustomSwal from "../../../utils/CustomSwal";
 import CancelButton from "../../ui/buttons/Cancel";
 import Close from "../../ui/buttons/Close";
 import { swalError, swalSuccess, swalWarning } from "../../../utils/swalHelper";

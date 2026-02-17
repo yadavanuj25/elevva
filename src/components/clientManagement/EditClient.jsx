@@ -10,7 +10,7 @@ import {
   updateClient,
   getAllOptions,
   getClientById,
-} from "../../services/clientServices";
+} from "../../services/clientServices.js";
 
 import { useMessage } from "../../auth/MessageContext";
 

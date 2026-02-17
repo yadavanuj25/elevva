@@ -18,7 +18,7 @@ import {
   getAllRequirements,
   getRequirementsOptions,
   updateRequirementStatus,
-} from "../../services/clientServices";
+} from "../../services/clientServices.js";
 import StatusDropDown from "../ui/StatusDropDown";
 import Tabs from "../ui/tableComponents/Tabs";
 import RefreshButton from "../ui/tableComponents/RefreshButton";

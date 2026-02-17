@@ -13,7 +13,6 @@ import {
   getAllRequirements,
   getRequirementOptions,
 } from "../../services/clientServices";
-import CustomSwal from "../../utils/CustomSwal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
 import { swalError, swalSuccess } from "../../utils/swalHelper";
 

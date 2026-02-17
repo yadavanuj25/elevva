@@ -7,7 +7,7 @@ import {
   getRequirementsOptions,
   getRequirementById,
   updateClientsRequirement,
-} from "../../services/clientServices";
+} from "../../services/clientServices.js";
 import FormSkeleton from "../loaders/FormSkeleton";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
