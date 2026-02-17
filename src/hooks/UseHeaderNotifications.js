@@ -7,7 +7,7 @@ import {
   markNotificationAsRead,
   markAllNotificationsAsRead,
   deleteNotification,
-} from "../services/notificationServices.jsx";
+} from "../services/notificationServices.js";
 import { NotificationSwal } from "../utils/NotifictaionSwal.jsx";
 import { swalError } from "../utils/swalHelper.js";
 

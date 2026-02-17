@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getMyTasks, updateTaskStatus } from "../../services/taskServices.jsx";
+import { getMyTasks, updateTaskStatus } from "../../services/taskServices";
 import PageTitle from "../../hooks/PageTitle.jsx";
 import SummaryCard from "./SummaryCard.jsx";
 import TaskColumn from "./TaskColumn.jsx";

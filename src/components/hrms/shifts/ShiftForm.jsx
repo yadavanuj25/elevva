@@ -17,7 +17,7 @@ import {
   getShiftById,
   updateShift,
   createShift,
-} from "../../../services/hrmsServices";
+} from "../../../services/shiftServices";
 import { useMessage } from "../../../auth/MessageContext";
 import { swalSuccess, swalError } from "../../../utils/swalHelper";
 import {

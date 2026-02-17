@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { File, Pencil, Settings } from "lucide-react";
 import TableHeader from "../../ui/tableComponents/TableHeader";
-import { getShift, updateShift } from "../../../services/hrmsServices";
+import { getShift, updateShift } from "../../../services/shiftServices";
 import GroupButton from "../../ui/buttons/GroupButton";
 import RefreshButton from "../../ui/tableComponents/RefreshButton";
 import CommonPagination from "../../ui/tableComponents/CommonPagination";

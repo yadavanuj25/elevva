@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import TaskQuickViewModal from "../TaskManagement/TaskQuickViewModal";
 import { updateMetrics, updateTaskStatus } from "../../services/taskServices";
-import CustomSwal from "../../utils/CustomSwal";
 import { getAllProfiles } from "../../services/profileServices";
 import { swalError, swalSuccess } from "../../utils/swalHelper";
 

@@ -14,7 +14,7 @@ import Textareafield from "../ui/formFields/Textareafield";
 import Button from "../ui/Button";
 import ToggleButton from "../ui/buttons/ToggleButton";
 import { getAllUsers } from "../../services/userServices";
-import { getShift } from "../../services/hrmsServices";
+import { getShift } from "../../services/shiftServices";
 
 const department = [
   {

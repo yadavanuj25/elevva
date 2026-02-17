@@ -1,17 +1,12 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import Input from "../ui/Input";
-import SelectField from "../ui/SelectField";
-import Button from "../ui/Button";
-import { Save } from "lucide-react";
-import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import {
   addClientsRequirement,
   getAllClients,
   getRequirementsOptions,
-} from "../../services/clientServices";
+} from "../../services/clientServices.js";
 import { useMessage } from "../../auth/MessageContext";
 import PageTitle from "../../hooks/PageTitle";
 import BackButton from "../ui/buttons/BackButton";
