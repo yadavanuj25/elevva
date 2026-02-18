@@ -72,7 +72,7 @@ const SelectField = ({
 
         {/* Dropdown */}
         {open && (
-          <div className="absolute z-50 mt-1 w-full bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-md shadow-md">
+          <div className="absolute z-30 mt-1 w-full bg-white dark:bg-darkBg border border-[#E8E8E9] dark:border-gray-600 rounded-md shadow-md">
             <div className="flex items-center gap-2 px-3 py-2 border-b dark:border-gray-600 bg-gray-100 dark:bg-gray-800">
               <FiSearch className="text-gray-400" />
               <input

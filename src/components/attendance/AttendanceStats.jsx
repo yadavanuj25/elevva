@@ -1,14 +1,6 @@
 import React, { useMemo } from "react";
-import StatCard from "./StatCard";
-import {
-  BedDouble,
-  Calendar,
-  Coffee,
-  MapPin,
-  Soup,
-  UsbIcon,
-  Utensils,
-} from "lucide-react";
+
+import { BedDouble, Coffee, MapPin, Soup, Utensils } from "lucide-react";
 
 const AttendanceStats = ({ attendance }) => {
   const minutesToHM = (mins) => {
@@ -57,10 +49,8 @@ const AttendanceStats = ({ attendance }) => {
     const segments = [];
     const punchInTime = new Date(attendance.punchIn.time);
     let currentTime = new Date(punchInTime);
-
     // Get shift duration in hours
     const shiftDurationHours = attendance.shift?.fullDayHours || 8;
-
     // If no breaks, calculate work segments
     if (!attendance.breaks || attendance.breaks.length === 0) {
       const endTime = attendance.punchOut?.time
@@ -99,7 +89,6 @@ const AttendanceStats = ({ attendance }) => {
           isOngoing: !attendance.punchOut?.time,
         });
       }
-
       return segments;
     }
     const sortedBreaks = [...attendance.breaks].sort(
@@ -363,7 +352,6 @@ const AttendanceStats = ({ attendance }) => {
                     {timelineSegments.map((segment, index) => {
                       const widthPercentage =
                         (segment.duration / totalDuration) * 100;
-
                       let bgColor = getSegmentColor(segment);
                       if (segment.isOngoing) {
                         bgColor += " animate-pulse";
@@ -391,62 +379,6 @@ const AttendanceStats = ({ attendance }) => {
                       );
                     })}
                   </div>
-
-                  {/* {breakSegments.length > 0 && (
-                    <>
-                      <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mt-4">
-                        Break Details
-                      </p>
-
-                      <div className="mt-2 space-y-2 max-h-36 overflow-y-auto">
-                        {breakSegments.map((segment, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg text-xs border border-yellow-200 dark:border-yellow-800"
-                          >
-                            <div className="flex items-center gap-2">
-                            
-                              <div>
-                                {segment.breakType == "Tea-Break" ? (
-                                  <Coffee size={14} />
-                                ) : segment.breakType == "Lunch-Break" ? (
-                                  <Utensils size={14} />
-                                ) : segment.breakType == "Personal-Break" ? (
-                                  <BedDouble size={14} />
-                                ) : (
-                                  <Soup size={14} />
-                                )}
-                              </div>
-
-                              <span className="font-medium capitalize">
-                                {segment.breakType} Break
-                                {segment.isOngoing && (
-                                  <span className="ml-1 text-blue-600 dark:text-blue-400">
-                                    (Ongoing)
-                                  </span>
-                                )}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
-                              <span>
-                                {formatTime(segment.startTime)} -{" "}
-                                {formatTime(segment.endTime)}
-                              </span>
-                              <span className="font-semibold text-gray-900 dark:text-white">
-                                {minutesToHM(segment.duration)}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
-
-                  {breakSegments.length === 0 && (
-                    <div className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                      No breaks taken yet
-                    </div>
-                  )} */}
                 </div>
               )}
             </div>
@@ -557,7 +489,8 @@ const TimelineStat = ({ label, value, dot }) => (
         {label}
       </p>
     </div>
-    <h3 className="ml-4 font-semibold text-lg text-gray-900 dark:text-white ">
+
+    <h3 className="ml-4 font-semibold text-lg text-gray-900 dark:text-white">
       {value}
     </h3>
   </div>

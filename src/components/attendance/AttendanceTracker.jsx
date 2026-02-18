@@ -380,7 +380,6 @@ const AttendanceTracker = () => {
     if (isBreakActive && activeBreak?.breakStart) {
       totalBreakTime += new Date() - new Date(activeBreak.breakStart);
     }
-
     return totalBreakTime;
   };
 
@@ -417,7 +416,6 @@ const AttendanceTracker = () => {
           />
 
           {/* 3. ATTENDANCE STATS OR EMPTY STATE */}
-
           <div className="space-y-4 h-full">
             {todayAttendance ? (
               <AttendanceStats attendance={todayAttendance} />
