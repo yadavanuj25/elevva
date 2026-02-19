@@ -29,7 +29,7 @@ const ViewTabs = () => {
     total: 0,
     page: 1,
     pages: 1,
-    limit: 5,
+    limit: 10,
   });
   const [loading, setLoading] = useState(false);
 

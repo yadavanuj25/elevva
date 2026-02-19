@@ -56,7 +56,7 @@ const ClientList = () => {
     total: 0,
     page: 1,
     pages: 1,
-    limit: 5,
+    limit: 25,
   });
   const [statusTabs, setStatusTabs] = useState([]);
   const [order, setOrder] = useState("asc");
