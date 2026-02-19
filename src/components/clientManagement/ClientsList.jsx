@@ -65,7 +65,6 @@ const ClientList = () => {
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [statusLoading, setStatusLoading] = useState(null);
   const [viewMode, setViewMode] = useState("list");
-  const [stats, setStats] = useState(null);
   const [settings, setSettings] = useState({});
   const [filters, setFilters] = useState({
     search: "",
@@ -74,30 +73,16 @@ const ClientList = () => {
     companySize: "",
     status: "",
   });
-  const [statusOptions, setStatusOptions] = useState([]);
-
-  useEffect(() => {
-    fetchSettings();
-  }, []);
 
   useEffect(() => {
     const delay = setTimeout(() => {
       fetchClients();
     }, 500);
     return () => clearTimeout(delay);
-  }, [
-    filters.search,
-    filters.clientCategory,
-    filters.clientSource,
-    filters.companySize,
-    filters.status,
-    pagination.page,
-    pagination.limit,
-  ]);
+  }, [filters, pagination.page, pagination.limit]);
 
   useEffect(() => {
     fetchAllOptions();
-    fetchStats();
   }, []);
 
   useEffect(() => {
@@ -108,23 +93,9 @@ const ClientList = () => {
 
   const fetchAllOptions = async () => {
     try {
-      const data = await getAllOptions();
-      if (!data || typeof data !== "object") {
-        swalError("Invalid options response");
-        return;
-      }
-      setStatusOptions(data.options.statuses);
-    } catch (error) {
-      swalError("Error fetching options:", error.message);
-    }
-  };
-  const fetchSettings = async () => {
-    try {
       const response = await getAllOptions();
       setSettings(response.options);
-    } catch (err) {
-      swalError("Error fetching settings:", err);
-    }
+    } catch (err) {}
   };
 
   const formatStatus = (status = "") =>
@@ -178,18 +149,6 @@ const ClientList = () => {
     }
   };
 
-  const fetchStats = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/clients/stats`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setStats(response.data.stats);
-    } catch (err) {
-      swalError(err.message);
-    }
-  };
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
@@ -232,6 +191,7 @@ const ClientList = () => {
   const handleChangePage = (e, newPage) => {
     setPagination((prev) => ({ ...prev, page: newPage + 1 }));
   };
+
   const handleChangeRowsPerPage = (e) => {
     setPagination((prev) => ({
       ...prev,
@@ -493,7 +453,7 @@ const ClientList = () => {
             sortedData={sortedData}
             openStatusRow={openStatusRow}
             setOpenStatusRow={setOpenStatusRow}
-            statusOptions={statusOptions}
+            statusOptions={settings.statuses}
             handleStatusUpdate={handleStatusUpdate}
             statusLoading={statusLoading}
           />
