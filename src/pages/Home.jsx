@@ -17,10 +17,11 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
-import Swal from "sweetalert2";
+import LogoutModal from "../components/modals/logoutModal/LogoutModal";
 
 export default function Home() {
-  const { token, user, logout } = useAuth();
+  const { token } = useAuth();
+  const logout = LogoutModal();
   const navigate = useNavigate();
   const [scrollY, setScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -195,40 +196,6 @@ export default function Home() {
     },
   ];
 
-  const handleLogout = async () => {
-    const result = await Swal.fire({
-      title: "Log out of your account?",
-      text: "You’ll be signed out and need to log in again to continue.",
-      icon: "question",
-      iconColor: "#dc2626",
-      showCancelButton: true,
-      confirmButtonText: "Yes, log me out",
-      cancelButtonText: "Stay logged in",
-      background: "#f9fafb",
-      color: "#dc2626",
-      confirmButtonColor: "#dc2626",
-      cancelButtonColor: "#6b7280",
-      backdrop: "rgba(0, 0, 0, 0.9)",
-      customClass: {
-        popup: "rounded-2xl shadow-xl p-6",
-        title: "text-lg font-semibold text-[#dc2626]",
-        htmlContainer: "text-sm text-gray-600",
-        confirmButton:
-          "px-5 py-2 rounded-lg font-medium bg-[#dc2626] hover:opacity-90 transition-all",
-        cancelButton:
-          "px-5 py-2 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all",
-      },
-    });
-
-    if (!result.isConfirmed) return;
-
-    const success = await logout();
-
-    if (success) {
-      navigate("/login");
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 text-gray-900 overflow-hidden">
       {/* Animated background shapes */}
@@ -302,7 +269,7 @@ export default function Home() {
 
               <button
                 className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 font-medium"
-                onClick={() => (token ? handleLogout() : navigate("/login"))}
+                onClick={() => (token ? logout() : navigate("/login"))}
               >
                 {token ? "Sign out" : "GetStarted"}
               </button>

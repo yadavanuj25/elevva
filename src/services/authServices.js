@@ -5,7 +5,7 @@ export const loginUser = (formData) => {
 };
 
 export const logoutUser = () => {
-  return fetchHandler("/api/auth/logout");
+  return fetchHandler("/api/auth/logout", "POST");
 };
 
 export const getMe = () => {

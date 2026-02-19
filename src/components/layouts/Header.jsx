@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import {
   Settings,
   LogOut,
@@ -16,6 +15,7 @@ import Tippy from "@tippyjs/react";
 import { useAuth } from "../../auth/AuthContext";
 import HeaderNotificationPanel from "../notifications/HeaderNotificationPanel";
 import { useHeaderNotifications } from "../../hooks/UseHeaderNotifications";
+import LogoutModal from "../modals/logoutModal/LogoutModal";
 const IconButton = ({ title, icon: Icon, badge, onClick }) => (
   <Tippy
     content={title}
@@ -50,10 +50,11 @@ const IconButton = ({ title, icon: Icon, badge, onClick }) => (
 );
 
 const Header = ({ toggleSidebar, isOpen }) => {
+  const logout = LogoutModal();
   const navigate = useNavigate();
   const popupRef = useRef(null);
   const [popupOpen, setPopupOpen] = useState(false);
-  const { user, token, logout, lockScreen } = useAuth();
+  const { user, token, lockScreen } = useAuth();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const {
@@ -87,43 +88,6 @@ const Header = ({ toggleSidebar, isOpen }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const handleLogout = async () => {
-    const result = await Swal.fire({
-      title: "Log out of your account?",
-      text: "You’ll be signed out and need to log in again to continue.",
-      icon: "question",
-      iconColor: "#dc2626",
-      showCancelButton: true,
-      confirmButtonText: "Yes, log me out",
-      cancelButtonText: "Stay logged in",
-      background: "#f9fafb",
-      color: "#dc2626",
-      confirmButtonColor: "#dc2626",
-      cancelButtonColor: "#6b7280",
-      backdrop: "rgba(0, 0, 0, 0.9)",
-      customClass: {
-        popup: "rounded-2xl shadow-xl p-4",
-        title: "text-lg font-semibold text-[#dc2626]",
-        htmlContainer: "text-sm text-gray-600",
-        confirmButton:
-          "px-5 py-2 rounded-lg font-medium bg-[#dc2626] hover:opacity-90 transition-all",
-        cancelButton:
-          "px-5 py-2 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all",
-      },
-    });
-
-    if (!result.isConfirmed) return;
-    const success = await logout();
-    if (success) navigate("/login");
-  };
-
-  // const handleLogout = async () => {
-  //   const result = await swalLogoutConfirm();
-  //   if (!result.isConfirmed) return;
-  //   const success = await logout();
-  //   if (success) navigate("/login");
-  // };
 
   const menuItems = [
     { icon: FaRegUser, text: "My Profile", path: "/my-profile" },
@@ -264,7 +228,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
               <hr className="my-2 border-gray-200 dark:border-gray-700" />
               <li>
                 <button
-                  onClick={handleLogout}
+                  onClick={logout}
                   className="w-full font-bold flex gap-3 items-center px-3 py-2 text-left text-red-500 hover:bg-red-200  transition rounded-md"
                 >
                   <LogOut size={18} />

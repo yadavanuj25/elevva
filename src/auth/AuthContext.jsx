@@ -1,6 +1,8 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../config/api";
+import { logoutUser } from "../services/authServices";
+import { swalError } from "../utils/swalHelper";
 
 const AuthContext = createContext();
 
@@ -38,12 +40,27 @@ export const AuthProvider = ({ children }) => {
     navigate("/dashboard");
   };
 
-  const logout = () => {
-    setToken(null);
-    setUser(null);
-    setPermissions({});
-    localStorage.clear();
-    navigate("/login");
+  // const logout = () => {
+  //   setToken(null);
+  //   setUser(null);
+  //   setPermissions({});
+  //   localStorage.clear();
+  //   navigate("/login");
+  // };
+
+  const logout = async () => {
+    try {
+      await logoutUser();
+    } catch (error) {
+      swalError(error.message);
+    } finally {
+      setToken(null);
+      setUser(null);
+      setPermissions({});
+      setIsLocked(false);
+      localStorage.clear();
+      navigate("/login");
+    }
   };
 
   const lockScreen = async () => {
