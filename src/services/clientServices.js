@@ -23,8 +23,7 @@ export const getAllClients = ({
   params.append("page", page);
   params.append("limit", limit);
   if (search.trim()) params.append("search", search);
-  if (status.includes(status?.toLowerCase()))
-    params.append("status", status.toLowerCase());
+  if (status) params.append("status", status);
   if (clientCategory) params.append("clientCategory", clientCategory);
   if (clientSource) params.append("clientSource", clientSource);
   if (companySize) params.append("companySize", companySize);
@@ -109,7 +108,7 @@ export const updateRequirementStatus = (id, status) => {
 
 export const getAllRequirements = (
   page = 1,
-  limit = 5,
+  limit = 25,
   tab = "All",
   search = "",
 ) => {

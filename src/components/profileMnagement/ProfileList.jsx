@@ -83,52 +83,6 @@ const ProfileList = () => {
     }
   }, [location, navigate]);
 
-  // useEffect(() => {
-  //   fetchProfiles();
-  // }, [pagination.page, pagination.limit, searchQuery, activeTab]);
-
-  // useEffect(() => {
-  //   if (successMsg) {
-  //     swalSuccess(successMsg);
-  //   }
-  // }, [successMsg]);
-
-  // const fetchProfiles = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const data = await getAllProfiles(
-  //       pagination.page,
-  //       pagination.limit,
-  //       activeTab,
-  //       searchQuery,
-  //     );
-  //     const profilesData = data.profiles || [];
-  //     setAllProfiles(data.profiles || []);
-  //     const statusesFromAPI = profilesData.map(
-  //       (item) => item.status || "Unknown",
-  //     );
-  //     statusesFromAPI.sort((a, b) => a.localeCompare(b));
-  //     const uniqueStatuses = ["All", ...new Set(statusesFromAPI)];
-  //     const tabsWithCounts = uniqueStatuses.map((status) => ({
-  //       name: status,
-  //       count:
-  //         status === "All"
-  //           ? profilesData.length
-  //           : profilesData.filter((c) => c.status === status).length,
-  //     }));
-  //     setStatusTabs(tabsWithCounts);
-  //     setPagination((prev) => ({
-  //       ...prev,
-  //       total: data.pagination?.total || 0,
-  //       pages: data.pagination?.pages || 1,
-  //     }));
-  //   } catch (error) {
-  //     showError(`"Errors  when fetching clients" || ${error}`);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     fetchProfiles();
   }, [pagination.page, pagination.limit, activeTab]);

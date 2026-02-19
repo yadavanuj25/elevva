@@ -63,7 +63,14 @@ const ClientsRequirementsList = () => {
   useEffect(() => {
     fetchRequirements();
     fetchClients();
-  }, [pagination.page, pagination.limit, searchQuery]);
+  }, [pagination.page, pagination.limit, activeTab]);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchRequirements();
+    }, 500);
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery]);
 
   useEffect(() => {
     fetchAllOptions();
