@@ -15,6 +15,7 @@ export const getMyLeaves = (filters = {}) => {
     `/api/leaves/my-leaves${queryParams ? `?${queryParams}` : ""}`,
   );
 };
+
 export const applyLeaves = (formData) =>
   fetchHandler("/api/leaves/apply", "POST", formData);
 export const approveLeaves = (id, comment) =>

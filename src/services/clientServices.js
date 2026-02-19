@@ -20,10 +20,8 @@ export const getAllClients = ({
   status = "",
 } = {}) => {
   const params = new URLSearchParams();
-
   params.append("page", page);
   params.append("limit", limit);
-
   if (search.trim()) params.append("search", search);
   if (status.includes(status?.toLowerCase()))
     params.append("status", status.toLowerCase());
