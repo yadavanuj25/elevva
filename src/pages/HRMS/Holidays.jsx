@@ -640,7 +640,7 @@ const Holidays = () => {
 
         {/* Create/Edit Modals */}
         {(showCreateModal || showEditModal) && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 text-black bg-black/80 bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl  max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="bg-accent-dark text-white px-5 py-3 rounded-t-lg">
                 <div className="flex justify-between items-center">
@@ -771,15 +771,15 @@ const Holidays = () => {
 
         {/* Bulk Create Modal */}
         {showBulkModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/80 bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl  max-w-2xl w-full">
               <div className="bg-accent-dark text-white px-5 py-3 rounded-t-lg">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-4">
                     <h2 className="text-xl font-semibold">
                       {showBulkModal
-                        ? "Bulk Add Holidays"
-                        : "Bulk Edit Holiday"}
+                        ? " Add Bulk Holidays"
+                        : " Edit Bulk Holiday"}
                     </h2>
                   </div>
 
@@ -804,7 +804,7 @@ const Holidays = () => {
                   value={bulkHolidays}
                   onChange={(e) => setBulkHolidays(e.target.value)}
                   rows="10"
-                  className="w-full px-4 py-2 border border-[#E8E8E9] rounded-lg  font-mono text-sm"
+                  className="w-full px-4 py-2 text-black border border-[#E8E8E9] rounded-lg  font-mono text-sm"
                   placeholder={`Independence Day, 2025-08-15, public\nRepublic Day, 2025-01-26, public\nDiwali, 2025-11-01, optional`}
                 ></textarea>
 

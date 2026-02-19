@@ -6,13 +6,12 @@ export const getAllProfiles = (
   page = 1,
   limit = 5,
   tab = "All",
-  search = ""
+  search = "",
 ) => {
   let url = `/api/profiles?page=${page}&limit=${limit}`;
 
-  const tabLower = tab.toLowerCase();
-  if (profileStatuses.includes(tabLower)) {
-    url += `&status=${tabLower}`;
+  if (profileStatuses.includes(tab)) {
+    url += `&status=${tab}`;
   }
   if (search.trim() !== "") {
     url += `&search=${encodeURIComponent(search)}`;

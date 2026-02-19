@@ -108,7 +108,7 @@ const HeaderNotificationPanel = ({
 
   return (
     <div
-      className={`fixed inset-0 z-[60] overflow-hidden transition-all duration-300 ${
+      className={`fixed inset-0 z-[60]  overflow-hidden transition-all duration-300 ${
         open ? "pointer-events-auto" : "pointer-events-none"
       }`}
     >

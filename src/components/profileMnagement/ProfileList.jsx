@@ -83,9 +83,62 @@ const ProfileList = () => {
     }
   }, [location, navigate]);
 
+  // useEffect(() => {
+  //   fetchProfiles();
+  // }, [pagination.page, pagination.limit, searchQuery, activeTab]);
+
+  // useEffect(() => {
+  //   if (successMsg) {
+  //     swalSuccess(successMsg);
+  //   }
+  // }, [successMsg]);
+
+  // const fetchProfiles = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const data = await getAllProfiles(
+  //       pagination.page,
+  //       pagination.limit,
+  //       activeTab,
+  //       searchQuery,
+  //     );
+  //     const profilesData = data.profiles || [];
+  //     setAllProfiles(data.profiles || []);
+  //     const statusesFromAPI = profilesData.map(
+  //       (item) => item.status || "Unknown",
+  //     );
+  //     statusesFromAPI.sort((a, b) => a.localeCompare(b));
+  //     const uniqueStatuses = ["All", ...new Set(statusesFromAPI)];
+  //     const tabsWithCounts = uniqueStatuses.map((status) => ({
+  //       name: status,
+  //       count:
+  //         status === "All"
+  //           ? profilesData.length
+  //           : profilesData.filter((c) => c.status === status).length,
+  //     }));
+  //     setStatusTabs(tabsWithCounts);
+  //     setPagination((prev) => ({
+  //       ...prev,
+  //       total: data.pagination?.total || 0,
+  //       pages: data.pagination?.pages || 1,
+  //     }));
+  //   } catch (error) {
+  //     showError(`"Errors  when fetching clients" || ${error}`);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   useEffect(() => {
     fetchProfiles();
-  }, [pagination.page, pagination.limit, searchQuery, activeTab]);
+  }, [pagination.page, pagination.limit, activeTab]);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchProfiles();
+    }, 500);
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery]);
 
   useEffect(() => {
     if (successMsg) {
@@ -93,37 +146,53 @@ const ProfileList = () => {
     }
   }, [successMsg]);
 
+  const normalizeStatus = (s) =>
+    (s || "unknown").toLowerCase().replace("-", "").trim();
+
   const fetchProfiles = async () => {
     try {
       setLoading(true);
+
       const data = await getAllProfiles(
         pagination.page,
         pagination.limit,
         activeTab,
         searchQuery,
       );
-      const profilesData = data.profiles || [];
-      setAllProfiles(data.profiles || []);
-      const statusesFromAPI = profilesData.map(
-        (item) => item.status || "Unknown",
+
+      const profilesData = data?.profiles || [];
+      setAllProfiles(profilesData);
+
+      /* ---------- BUILD TABS ---------- */
+
+      const statusesFromAPI = profilesData.map((item) =>
+        normalizeStatus(item.status),
       );
-      statusesFromAPI.sort((a, b) => a.localeCompare(b));
-      const uniqueStatuses = ["All", ...new Set(statusesFromAPI)];
+
+      const uniqueStatuses = ["all", ...new Set(statusesFromAPI)];
+
       const tabsWithCounts = uniqueStatuses.map((status) => ({
-        name: status,
+        name:
+          status === "all"
+            ? "All"
+            : status.charAt(0).toUpperCase() + status.slice(1),
+
         count:
-          status === "All"
+          status === "all"
             ? profilesData.length
-            : profilesData.filter((c) => c.status === status).length,
+            : profilesData.filter((c) => normalizeStatus(c.status) === status)
+                .length,
       }));
+
       setStatusTabs(tabsWithCounts);
+
       setPagination((prev) => ({
         ...prev,
         total: data.pagination?.total || 0,
         pages: data.pagination?.pages || 1,
       }));
     } catch (error) {
-      showError(`"Errors  when fetching clients" || ${error}`);
+      showError(error?.message || "Error fetching profiles");
     } finally {
       setLoading(false);
     }
@@ -601,21 +670,6 @@ const ProfileList = () => {
                             })()}
                           </TableCell>
 
-                          {/* <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                            {item.currentCompany}
-                          </TableCell>
-                          <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                            {item.totalExp}
-                          </TableCell>
-                          <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                            {item.expectedCTC}
-                          </TableCell>
-                          <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                            {item.workMode}
-                          </TableCell>
-                          <TableCell className="whitespace-nowrap  dark:text-gray-300">
-                            {item.noticePeriod}
-                          </TableCell> */}
                           <TableCell className="whitespace-nowrap  dark:text-gray-300">
                             {item.submittedBy.fullName}
                           </TableCell>

@@ -86,7 +86,7 @@ const TaskDetailModal = ({ task, onClose, onRefresh }) => {
       className={`fixed inset-0 z-50 flex items-center justify-center p-4
         transition-opacity duration-200
         ${visible ? "opacity-100" : "opacity-0"}
-        bg-black bg-opacity-90`}
+        bg-black/80 bg-opacity-90`}
     >
       <div
         className={`bg-white   rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto
