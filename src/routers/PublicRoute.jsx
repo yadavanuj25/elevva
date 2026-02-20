@@ -19,23 +19,3 @@ const PublicRoute = ({ children }) => {
 };
 
 export default PublicRoute;
-
-// import { Navigate, useLocation } from "react-router-dom";
-// import { useAuth } from "../auth/AuthContext";
-
-// const PublicRoute = ({ children }) => {
-//   const { isAuthenticated, user } = useAuth();
-//   const location = useLocation();
-//   if (user?.isLocked) {
-//     return children;
-//   }
-
-//   if (isAuthenticated) {
-//     const destination = location.state?.from?.pathname ?? "/dashboard";
-//     return <Navigate to={destination} replace />;
-//   }
-
-//   return children;
-// };
-
-// export default PublicRoute;

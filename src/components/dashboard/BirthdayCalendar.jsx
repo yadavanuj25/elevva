@@ -34,9 +34,7 @@ const BirthdayCalendar = () => {
         month: currentMonth + 1,
       });
       setBirthdayData(res?.birthdays || []);
-    } catch (error) {
-      console.error(error.message);
-    }
+    } catch (error) {}
   };
 
   const changeMonth = (direction) => {

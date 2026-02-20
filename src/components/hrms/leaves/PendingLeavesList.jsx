@@ -32,7 +32,6 @@ const PendingLeavesList = ({
             <button
               onClick={() => {
                 onApprove(leave._id);
-                console.log(leave._id);
               }}
               className="flex-1 bg-green-600 text-white py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-green-700 transition-colors"
             >
