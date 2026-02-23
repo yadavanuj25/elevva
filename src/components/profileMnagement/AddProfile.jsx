@@ -78,19 +78,34 @@ const AddProfile = () => {
     const { name, value } = e.target;
     let newValue = value;
     let errorMsg = "";
+    // if (name === "phone" || name === "alternatePhone") {
+    //   const digits = value.replace(/\D/g, "");
+    //   if (value !== digits) {
+    //     errorMsg = "Only numbers are allowed";
+    //   } else if (digits.length && digits.length < 10) {
+    //     errorMsg = "Must be at least 10 digits";
+    //   } else if (digits.length > 15) {
+    //     errorMsg = "Must not exceed 15 digits";
+    //   }
+    //   newValue = digits;
+    // }
+
     if (name === "phone" || name === "alternatePhone") {
       const digits = value.replace(/\D/g, "");
-      if (value !== digits) {
-        errorMsg = "Only numbers are allowed";
-      } else if (digits.length && digits.length < 10) {
-        errorMsg = "Must be at least 10 digits";
-      } else if (digits.length > 15) {
-        errorMsg = "Must not exceed 15 digits";
-      }
       newValue = digits;
+      const shouldValidate =
+        name === "phone" || (name === "alternatePhone" && digits.length > 0);
+      if (shouldValidate) {
+        if (value !== digits) {
+          errorMsg = "Only numbers are allowed";
+        } else if (digits.length < 10) {
+          errorMsg = "Must be at least 10 digits";
+        } else if (digits.length > 15) {
+          errorMsg = "Must not exceed 15 digits";
+        }
+      }
     } else if (name === "currentCTC" || name === "expectedCTC") {
       const cleanValue = value.replace(/,/g, "");
-
       if (cleanValue && !/^\d+$/.test(cleanValue)) {
         errorMsg = "Only numbers are allowed";
         newValue = "";
@@ -102,7 +117,6 @@ const AddProfile = () => {
     } else {
       newValue = value;
     }
-
     setFormData((prev) => ({
       ...prev,
       [name]: newValue,
