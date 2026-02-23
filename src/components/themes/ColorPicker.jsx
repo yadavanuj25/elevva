@@ -1,5 +1,5 @@
-import { colorThemes } from "../../contstants/ColorThemes";
 import { useTheme } from "../../context/ThemeContext";
+import { colorThemes } from "../../contstants/theme/ColorThemes";
 
 const ColorPicker = () => {
   const { color, setColor } = useTheme();

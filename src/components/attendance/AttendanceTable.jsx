@@ -409,7 +409,7 @@ const AttendanceHistoryTable = ({ history = [], exportAttendance }) => {
   }, []);
 
   // Process history data and filter by selected month/year
-  const { attendanceMap, employee } = useMemo(() => {
+  const { employee } = useMemo(() => {
     const monthIndex = months.indexOf(selectedMonth);
     const selectedDate = new Date(selectedYear, monthIndex);
 

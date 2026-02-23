@@ -85,6 +85,7 @@ const UserList = () => {
       swalSuccess(successMsg);
     }
   }, [successMsg]);
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -188,7 +189,6 @@ const UserList = () => {
         updateStatusTabs(updatedUsers);
         return updatedUsers;
       });
-
       SuccessToast(res?.message || "Status updated successfully");
     } catch (error) {
       ErrorToast(error.message || "Failed to update status");
