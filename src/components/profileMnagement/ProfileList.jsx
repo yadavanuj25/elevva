@@ -436,7 +436,7 @@ const ProfileList = () => {
                     <TableRow>
                       <TableCell
                         padding="checkbox"
-                        className="bg-[#f2f4f5] dark:bg-darkGray "
+                        className="bg-[#f2f4f5] dark:bg-darkGray"
                       >
                         <Checkbox
                           checked={isAllSelected}
