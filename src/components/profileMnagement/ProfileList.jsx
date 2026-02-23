@@ -63,7 +63,6 @@ const ProfileList = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [favourites, setFavourites] = useState([]);
   const [statusLoading, setStatusLoading] = useState(null);
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [selectedProfiles, setSelectedProfiles] = useState([]);
@@ -97,46 +96,31 @@ const ProfileList = () => {
     }
   }, [successMsg]);
 
-  const normalizeStatus = (s) =>
-    (s || "unknown").toLowerCase().replace("-", "").trim();
-
   const fetchProfiles = async () => {
     try {
       setLoading(true);
-
       const data = await getAllProfiles(
         pagination.page,
         pagination.limit,
         activeTab,
         searchQuery,
       );
-
       const profilesData = data?.profiles || [];
       setAllProfiles(profilesData);
-
       /* ---------- BUILD TABS ---------- */
-
-      const statusesFromAPI = profilesData.map((item) =>
-        normalizeStatus(item.status),
-      );
-
+      const statusesFromAPI = profilesData.map((item) => item.status);
       const uniqueStatuses = ["all", ...new Set(statusesFromAPI)];
-
       const tabsWithCounts = uniqueStatuses.map((status) => ({
         name:
           status === "all"
             ? "All"
             : status.charAt(0).toUpperCase() + status.slice(1),
-
         count:
           status === "all"
             ? profilesData.length
-            : profilesData.filter((c) => normalizeStatus(c.status) === status)
-                .length,
+            : profilesData.filter((c) => c.status === status).length,
       }));
-
       setStatusTabs(tabsWithCounts);
-
       setPagination((prev) => ({
         ...prev,
         total: data.pagination?.total || 0,
@@ -228,14 +212,6 @@ const ProfileList = () => {
     }
 
     return [];
-  };
-
-  const handleFavourite = (profileId) => {
-    setFavourites((prev) =>
-      prev.includes(profileId)
-        ? prev.filter((id) => id !== profileId)
-        : [...prev, profileId],
-    );
   };
 
   const handleStatusUpdate = async (id, newStatus) => {
@@ -452,16 +428,13 @@ const ProfileList = () => {
                       </TableCell>
 
                       {[
-                        { id: "favourite", label: "" },
                         { id: "fullName", label: "Name" },
                         { id: "techStack", label: "Tech Stack" },
                         { id: "status", label: "Status" },
                         { id: "skills", label: "Skills" },
-
                         { id: "submittedBy", label: "SubmittedBy" },
                         { id: "createdAt", label: "Created Dtm" },
                         { id: "updatedAt", label: "Modified Dtm" },
-
                         { id: "action", label: "Action", sticky: true },
                       ].map((column) => (
                         <TableCell
@@ -541,7 +514,7 @@ const ProfileList = () => {
                               )}
                             </div>
                           </TableCell>
-                          <TableCell className="whitespace-nowrap ">
+                          {/* <TableCell className="whitespace-nowrap ">
                             <button
                               onClick={() => handleFavourite(item._id)}
                               className={`transition-colors duration-200 ${
@@ -552,7 +525,7 @@ const ProfileList = () => {
                             >
                               <Star size={18} />
                             </button>
-                          </TableCell>
+                          </TableCell> */}
                           <TableCell className="whitespace-nowrap ">
                             <div className="flex items-center gap-2">
                               {item.profileImage ? (
