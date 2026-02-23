@@ -8,7 +8,6 @@ import { useMessage } from "../auth/MessageContext";
 import logo from "../assets/logo/logo.png";
 import PageTitle from "../hooks/PageTitle";
 import LoginCard from "../components/cards/LoginCard";
-import { loginUser } from "../services/authServices";
 import ErrorMessage from "../components/modals/errors/ErrorMessage";
 
 const schema = yup.object().shape({
@@ -48,22 +47,11 @@ const Login = () => {
     setLoading(true);
     try {
       await schema.validate(formdata, { abortEarly: false });
-      const res = await loginUser(formdata);
+      const res = await login(formdata);
       if (!res.success) {
         showError(res.message);
         return;
       }
-
-      // Pass rememberMe to login function
-      await login({ ...res, rememberMe: formdata.rememberMe });
-
-      if (res.user?.isLocked) {
-        navigate("/lock-screen", { replace: true });
-        return;
-      }
-      navigate("/dashboard", {
-        replace: true,
-      });
     } catch (err) {
       if (err.name === "ValidationError") {
         const fieldErrors = {};
@@ -73,16 +61,11 @@ const Login = () => {
         setErrors(fieldErrors);
         return;
       }
-      if (err.message) {
-        showError(err?.message || "Login failed");
-        return;
-      }
-      showError("Something went wrong. Please try again.");
+      showError(err?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-[45%_55%] min-h-screen bg-white dark:bg-gray-900">
       <div className="order-2 flex items-center justify-center">

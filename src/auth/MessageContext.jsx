@@ -5,11 +5,11 @@ export const MessageProvider = ({ children }) => {
   const [errorMsg, setErrorMsg] = useState("");
   const showSuccess = (msg) => {
     setSuccessMsg(msg);
-    setTimeout(() => setSuccessMsg(""), 5000);
+    setTimeout(() => setSuccessMsg(""), 4000);
   };
   const showError = (msg) => {
     setErrorMsg(msg);
-    setTimeout(() => setErrorMsg(""), 5000);
+    setTimeout(() => setErrorMsg(""), 4000);
   };
 
   return (

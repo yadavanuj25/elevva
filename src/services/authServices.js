@@ -24,3 +24,12 @@ export const resetPassword = (token, password, confirmPassword) => {
     confirmPassword,
   });
 };
+
+export const lock = () => {
+  return fetchHandler(`/api/auth/lock-screen`, "POST");
+};
+export const unlock = (password) => {
+  return fetchHandler(`/api/auth/unlock-screen`, "POST", {
+    password,
+  });
+};

@@ -133,9 +133,7 @@ const HeaderNotificationPanel = ({
               <p className="text-xs">{unreadCount} unread</p>
             </div>
           </div>
-          {/* <button onClick={onClose}>
-            <X />
-          </button> */}
+
           <Close handleClose={onClose} />
         </div>
 
