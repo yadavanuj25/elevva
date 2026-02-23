@@ -2,6 +2,13 @@ import Input from "../ui/Input";
 import SelectField from "../ui/SelectField";
 import SkillsInput from "../ui/formFields/SkillsInput";
 import Textareafield from "../ui/formFields/Textareafield";
+import {
+  totalExperienceOptions,
+  workModeOptions,
+  noticePeriodOptions,
+  candidateSourceOptions,
+  candidateStatusOptions,
+} from "../../contstants/profile/profileFormOptions";
 
 const ProfileForm = ({
   formData,
@@ -83,15 +90,7 @@ const ProfileForm = ({
             label="Total Experience"
             value={formData.totalExp}
             handleChange={handleChange}
-            options={[
-              "0-1 Year",
-              "1-2 Years",
-              "2-3 Years",
-              "3-5 Years",
-              "5-7 Years",
-              "7-10 Years",
-              "10+ Years",
-            ]}
+            options={totalExperienceOptions}
             error={errors.totalExp}
           />
           <Input
@@ -113,15 +112,7 @@ const ProfileForm = ({
             label="Work Mode"
             value={formData.workMode}
             handleChange={handleChange}
-            options={[
-              "Remote",
-              "Hybrid",
-              "On-site",
-              "Permanent",
-              "C2H",
-              "Freelancer-8hrs",
-              "Freelancer-4hrs",
-            ]}
+            options={workModeOptions}
             error={errors.workMode}
           />
           <SelectField
@@ -129,7 +120,7 @@ const ProfileForm = ({
             label="Notice Period"
             value={formData.noticePeriod}
             handleChange={handleChange}
-            options={["Immediate", "15 Days", "30 Days", "60 Days", "90 Days"]}
+            options={noticePeriodOptions}
             error={errors.noticePeriod}
           />
           <SelectField
@@ -137,7 +128,7 @@ const ProfileForm = ({
             label="Candidate Status"
             value={formData.status}
             handleChange={handleChange}
-            options={["Active", "Inactive", "Banned"]}
+            options={candidateStatusOptions}
             error={errors.status}
           />
           <Input
@@ -173,18 +164,7 @@ const ProfileForm = ({
             label="Candidate Source"
             value={formData.candidateSource}
             handleChange={handleChange}
-            options={[
-              "ECD-Career",
-              "ECD-Naukri-Db",
-              "Email-Marketing",
-              "LinkedIn-Corporate",
-              "LinkedIn-Free",
-              "LinkedIn-Recruiter-Lite",
-              "Naukri",
-              "Reference",
-              "WhatsApp",
-              "Others",
-            ]}
+            options={candidateSourceOptions}
             error={errors.candidateSource}
           />
           <div className="col-span-2">

@@ -40,13 +40,6 @@ const LockScreen = () => {
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
         navigate("/dashboard", { replace: true });
-        // Redirect based on user role
-        // const role = user?.role?.name?.toLowerCase();
-        // if (role === "admin") {
-        //   navigate("/admin/super-dashboard", { replace: true });
-        // } else {
-        //   navigate("/dashboard", { replace: true });
-        // }
       } else {
         setErrors({ password: "Incorrect password" });
       }
@@ -59,8 +52,8 @@ const LockScreen = () => {
 
   return (
     <div className="min-h-screen flex justify-center items-center  px-4">
-      <div className="bg-white w-full max-w-md p-8 rounded-xl shadow border border-gray-200">
-        <h3 className="text-center text-gray-600 text-lg mb-4">
+      <div className=" w-full max-w-md p-8 rounded-xl shadow-lg border border-gray-300 dark:border-gray-600">
+        <h3 className="text-center text-gray-600 dark:text-white font-bold  text-lg mb-4">
           Welcome back!
         </h3>
 
@@ -78,9 +71,7 @@ const LockScreen = () => {
           </div>
         </div>
 
-        <h2 className="text-center  text-gray-800 mb-6">
-          {user?.fullName || "User"}
-        </h2>
+        <h2 className="text-center   mb-6">{user?.fullName || "User"}</h2>
 
         {/* Unlock Form */}
         <form onSubmit={handleUnlock}>

@@ -28,13 +28,11 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const { showError, showSuccess, errorMsg } = useMessage();
   const fileInputRef = useRef(null);
-
   const [formData, setFormData] = useState(profileInitialForm);
   const [skillInput, setSkillInput] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
-
   const [remoteResume, setRemoteResume] = useState(null);
   const [selectedResume, setSelectedResume] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -82,7 +80,6 @@ const EditProfile = () => {
         return;
       }
       const p = res.profile;
-
       setFormData({
         ...profileInitialForm,
         fullName: p.fullName || "",
@@ -181,13 +178,11 @@ const EditProfile = () => {
     setErrors({});
     showSuccess("");
     showError("");
-
     try {
       await EditSchema.validate(
         { ...formData, skills: formData.skills || [] },
         { abortEarly: false },
       );
-
       // build payload  FormData WITHOUT resume
       const fd = new FormData();
       Object.entries(formData).forEach(([k, v]) => {
@@ -198,7 +193,6 @@ const EditProfile = () => {
           if (v !== null && v !== undefined) fd.append(k, v);
         }
       });
-
       const res = await updateProfile(id, fd);
       showSuccess(res.message || "Profile updated successfully");
       navigate("/profiles");
@@ -214,7 +208,6 @@ const EditProfile = () => {
       setUpdating(false);
     }
   };
-
   const effectivePreviewUrl = previewUrl || remoteResume?.url || null;
   const effectiveFileName =
     selectedResume?.name || remoteResume?.name || "Resume.pdf";

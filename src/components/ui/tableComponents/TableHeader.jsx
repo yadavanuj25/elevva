@@ -26,7 +26,7 @@ const TableHeader = ({
   };
 
   return (
-    <div className="py-4 border-b border-[#E8E8E9] dark:border-gray-600 flex justify-between items-center">
+    <div className="pb-4 border-b border-[#E8E8E9] dark:border-gray-600 flex justify-between items-center">
       <div className="w-1/2">
         <input
           type="search"

@@ -216,9 +216,6 @@ const normalizeStatusOptions = (options = []) =>
     })
     .filter(Boolean);
 
-/* -------------------------------------------
-   MAIN COMPONENT
--------------------------------------------- */
 const StatusDropDown = ({
   rowId,
   status,
@@ -320,7 +317,7 @@ const StatusDropDown = ({
               <div
                 key={String(option.value)}
                 onClick={() => handleStatusUpdate(rowId, option.value)}
-                className={`px-2 py-1.5 text-sm cursor-pointer 
+                className={`mb-1 px-2 py-1.5 text-sm cursor-pointer 
                 flex items-center justify-between rounded
                 transition-all duration-200
                 ${
