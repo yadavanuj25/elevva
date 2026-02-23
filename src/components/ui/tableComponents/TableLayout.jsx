@@ -126,10 +126,10 @@ const TableLayout = ({
                           <img
                             src={row.logo}
                             alt={row.clientName}
-                            className="w-14 h-14 p-0.5 rounded-md object-container shadow"
+                            className="w-10 h-10 p-0.5 rounded-md object-container shadow"
                           />
                         ) : (
-                          <div className="w-14 h-14 p-0.5 shadow rounded-md flex items-center justify-center bg-gray-200 text-accent-dark font-semibold">
+                          <div className="w-10 h-10 p-0.5 shadow rounded-md flex items-center justify-center bg-gray-200 text-accent-dark font-semibold">
                             {row.clientName?.slice(0, 2).toUpperCase()}
                           </div>
                         )}
