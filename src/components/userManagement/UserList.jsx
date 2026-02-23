@@ -37,6 +37,17 @@ import CustomSwal from "../../utils/CustomSwal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
 import { swalSuccess } from "../../utils/swalHelper";
 
+const userHeader = [
+  { id: "fullName", label: "Name" },
+  { id: "status", label: "Status" },
+  { id: "role", label: "Role" },
+  { id: "shift", label: "Shift" },
+  { id: "dob", label: "DOB" },
+  { id: "createdAt", label: "Created Dtm" },
+  { id: "updatedAt", label: "Modified Dtm" },
+  { id: "action", label: "Action", sticky: true },
+];
+
 const UserList = () => {
   PageTitle("Elevva | Users");
   const navigate = useNavigate();
@@ -186,7 +197,6 @@ const UserList = () => {
       setOpenStatusRow(null);
     }
   };
-
   const updateStatusTabs = (updatedUsers) => {
     let statuses = [...new Set(updatedUsers.map((u) => u.status || "unknown"))];
     statuses.sort((a, b) => a.localeCompare(b));
@@ -260,16 +270,7 @@ const UserList = () => {
                           <Checkbox color=" dark:text-white" />
                         </div>
                       </TableCell>
-                      {[
-                        { id: "fullName", label: "Name" },
-                        { id: "status", label: "Status" },
-                        { id: "role", label: "Role" },
-                        { id: "shift", label: "Shift" },
-                        { id: "dob", label: "DOB" },
-                        { id: "createdAt", label: "Created Dtm" },
-                        { id: "updatedAt", label: "Modified Dtm" },
-                        { id: "action", label: "Action", sticky: true },
-                      ].map((column) => (
+                      {userHeader?.map((column) => (
                         <TableCell
                           key={column.id}
                           className={`whitespace-nowrap font-bold text-accent-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray ${

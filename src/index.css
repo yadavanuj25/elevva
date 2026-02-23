@@ -131,7 +131,7 @@ html.dark .css-h7cjts-MuiButtonBase-root-MuiIconButton-root.Mui-disabled {
 .MuiTableCell-root {
   font-family: var(--font-family), sans-serif !important;
   letter-spacing: 0 !important;
-  /* padding:11px !important; */
+  padding: 10px !important;
 }
 html.dark .tippy-box[data-theme~="custom"] {
   background-color: var(--tooltip-bg-dark);

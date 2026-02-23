@@ -192,9 +192,6 @@ const Header = ({ toggleSidebar, isOpen }) => {
                 <span className="text-xs font-thin text-accent-dark dark:text-gray-300 truncate">
                   {user?.role?.name}
                 </span>
-                {/* <p className="text-xs text-accent-darkGray dark:text-accent-lightGray break-all">
-                  {user?.email}
-                </p> */}
               </div>
             </div>
 
