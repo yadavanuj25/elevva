@@ -30,7 +30,7 @@ export const noticePeriodOptions = [
 ];
 
 // Candidate status
-export const candidateStatusOptions = ["Active", "Inactive", "Banned"];
+export const candidateStatusOptions = ["Active", "In-active", "Banned"];
 
 // Candidate source
 export const candidateSourceOptions = [

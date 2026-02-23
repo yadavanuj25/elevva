@@ -27,6 +27,7 @@ import {
   getAllProfiles,
   updateProfileStatus,
 } from "../../services/profileServices";
+import { candidateStatusOptions } from "../../contstants/profile/profileFormOptions";
 import StatusDropDown from "../ui/StatusDropDown";
 import Tabs from "../ui/tableComponents/Tabs";
 import RefreshButton from "../ui/tableComponents/RefreshButton";
@@ -68,7 +69,6 @@ const ProfileList = () => {
   const [selectedProfiles, setSelectedProfiles] = useState([]);
   const [openRequirementModal, setOpenRequirementModal] = useState(false);
 
-  const statusOptions = ["Active", "In-active", "Banned"];
   useEffect(() => {
     if (location.state?.successMsg) {
       showSuccess(location.state.successMsg);
@@ -217,7 +217,6 @@ const ProfileList = () => {
           .map((s) => s.trim())
           .filter(Boolean);
       }
-
       return skills.map((s) => (typeof s === "string" ? s.trim() : s));
     }
 
@@ -598,7 +597,7 @@ const ProfileList = () => {
                               status={item.status}
                               openStatusRow={openStatusRow}
                               setOpenStatusRow={setOpenStatusRow}
-                              statusOptions={statusOptions}
+                              statusOptions={candidateStatusOptions}
                               handleStatusUpdate={handleStatusUpdate}
                               statusLoading={statusLoading}
                             />
