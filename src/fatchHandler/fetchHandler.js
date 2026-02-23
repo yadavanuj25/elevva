@@ -30,16 +30,24 @@ export const fetchHandler = async (
 
     //  TOKEN EXPIRED / UNAUTHORIZED
 
-    if (response.status === 401) {
-      swalWarning("Session expired. Redirecting to login...");
-      localStorage.clear();
-      // redirect globally (works outside React)
-      window.location.replace("/login");
-      return Promise.reject({
-        success: false,
-        message: "Session expired. Please login again.",
-      });
+    const isAuthRequest = !!token; // only logout if already logged in
+
+    if (response.status === 401 && isAuthRequest) {
+      swalWarning(responseData?.message || "Session expired");
+      // triggerGlobalLogout("Session expired");
+      return Promise.reject(responseData);
     }
+
+    // if (response.status === 401) {
+    //   swalWarning(response?.message);
+    //   localStorage.clear();
+    //   // redirect globally (works outside React)
+    //   window.location.replace("/login");
+    //   return Promise.reject({
+    //     success: false,
+    //     message: "Session expired. Please login again.",
+    //   });
+    // }
 
     if (!response.ok) {
       throw responseData; //  THROW FULL API RESPONSE

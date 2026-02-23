@@ -11,32 +11,32 @@ import {
 } from "@mui/material";
 import { AtSign, Trash, File, Send, ChartNoAxesCombined } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import NoData from "../ui/NoData";
-import DateDisplay from "../ui/DateDisplay";
+import NoData from "../ui/NoData.jsx";
+import DateDisplay from "../ui/DateDisplay.jsx";
 import {
   getAllClients,
   getAllRequirements,
   getRequirementsOptions,
   updateRequirementStatus,
 } from "../../services/clientServices.js";
-import StatusDropDown from "../ui/StatusDropDown";
-import Tabs from "../ui/tableComponents/Tabs";
-import RefreshButton from "../ui/tableComponents/RefreshButton";
-import TableHeader from "../ui/tableComponents/TableHeader";
-import CommonPagination from "../ui/tableComponents/CommonPagination";
-import TableSkeleton from "../loaders/TableSkeleton";
-import ErrorToast from "../ui/toaster/ErrorToast";
-import SuccessToast from "../ui/toaster/SuccessToast";
-import { useMessage } from "../../auth/MessageContext";
-import PageTitle from "../../hooks/PageTitle";
-import AssignModal from "../modals/requirementModal/AssignModal";
-import GroupButton from "../ui/buttons/GroupButton";
-import CustomSwal from "../../utils/CustomSwal";
-import ActionMenu from "../ui/buttons/ActionMenu";
-import ErrorMessage from "../modals/errors/ErrorMessage";
-import { swalError, swalSuccess, swalWarning } from "../../utils/swalHelper";
+import StatusDropDown from "../ui/StatusDropDown.jsx";
+import Tabs from "../ui/tableComponents/Tabs.jsx";
+import RefreshButton from "../ui/tableComponents/RefreshButton.jsx";
+import TableHeader from "../ui/tableComponents/TableHeader.jsx";
+import CommonPagination from "../ui/tableComponents/CommonPagination.jsx";
+import TableSkeleton from "../loaders/TableSkeleton.jsx";
+import ErrorToast from "../ui/toaster/ErrorToast.jsx";
+import SuccessToast from "../ui/toaster/SuccessToast.jsx";
+import { useMessage } from "../../auth/MessageContext.jsx";
+import PageTitle from "../../hooks/PageTitle.jsx";
+import AssignModal from "../modals/requirementModal/AssignModal.jsx";
+import GroupButton from "../ui/buttons/GroupButton.jsx";
+import CustomSwal from "../../utils/CustomSwal.jsx";
+import ActionMenu from "../ui/buttons/ActionMenu.jsx";
+import ErrorMessage from "../modals/errors/ErrorMessage.jsx";
+import { swalError, swalSuccess, swalWarning } from "../../utils/swalHelper.js";
 
-const ClientsRequirementsList = () => {
+const RequirementsList = () => {
   PageTitle("Elevva | Client Requirements");
   const { successMsg, errorMsg, showError } = useMessage();
   const navigate = useNavigate();
@@ -400,14 +400,14 @@ const ClientsRequirementsList = () => {
                     { id: "positionStatus", label: "Status" },
                     { id: "experience", label: "Experience" },
                     { id: "budget", label: "Budget" },
-                    { id: "addedBy", label: "Added By" },
-                    { id: "createdAt", label: "Created Dtm" },
-                    { id: "updatedAt", label: "Modified Dtm" },
                     {
                       id: "requirementPriority",
                       label: "Priority",
-                      sticky: true,
+                      // sticky: true,
                     },
+                    { id: "addedBy", label: "Added By" },
+                    { id: "createdAt", label: "Created Dtm" },
+                    { id: "updatedAt", label: "Modified Dtm" },
                     { id: "action", label: "Action", sticky: true },
                   ].map((col) => (
                     <TableCell
@@ -600,6 +600,21 @@ const ClientsRequirementsList = () => {
                           </div>
                         </div>
                       </TableCell>
+                      <TableCell
+                        // className={`whitespace-nowrap bg-[#f2f4f5] dark:bg-darkGray ${getStickyClass(
+                        //   "requirementPriority",
+                        // )}`}
+                        // style={{ overflow: "visible", zIndex: 20 }}
+                        className="whitespace-nowrap  dark:text-gray-200"
+                      >
+                        <div
+                          className={`w-max px-2 py-1 text-xs text-center font-[500] text-white rounded-md capitalize ${getPriorityColor(
+                            row.requirementPriority,
+                          )}`}
+                        >
+                          {row.requirementPriority}
+                        </div>
+                      </TableCell>
                       <TableCell className="whitespace-nowrap dark:text-gray-300">
                         {row.createdBy?.fullName || "-"}
                       </TableCell>
@@ -615,23 +630,6 @@ const ClientsRequirementsList = () => {
                       </TableCell>
                       <TableCell className="whitespace-nowrap  dark:text-gray-200">
                         <DateDisplay date={row.updatedAt} />
-                      </TableCell>
-                      <TableCell
-                        className={`whitespace-nowrap bg-[#f2f4f5] dark:bg-darkGray ${getStickyClass(
-                          "requirementPriority",
-                        )}`}
-                        style={{ overflow: "visible", zIndex: 20 }}
-                      >
-                        <div
-                          className={`w-max px-2 py-1 text-xs text-center font-[500] text-white rounded-md ${getPriorityColor(
-                            row.requirementPriority,
-                          )}`}
-                        >
-                          {row.requirementPriority
-                            ? row.requirementPriority.charAt(0).toUpperCase() +
-                              row.requirementPriority.slice(1)
-                            : "-"}
-                        </div>
                       </TableCell>
 
                       <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
@@ -679,4 +677,4 @@ const ClientsRequirementsList = () => {
   );
 };
 
-export default ClientsRequirementsList;
+export default RequirementsList;

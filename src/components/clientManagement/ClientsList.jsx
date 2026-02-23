@@ -136,7 +136,6 @@ const ClientList = () => {
       }));
 
       setStatusTabs(tabsWithCounts);
-
       setPagination((prev) => ({
         ...prev,
         total: data.pagination?.total || 0,
@@ -178,9 +177,25 @@ const ClientList = () => {
     });
   };
 
+  // const handleTabChange = (tab) => {
+  //   setActiveTab(tab);
+  //   setPagination((prev) => ({ ...prev, page: 1 }));
+  // };
+  const normalizeStatus = (status = "") =>
+    status.toLowerCase().replace(/\s+/g, "_");
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    setPagination((prev) => ({ ...prev, page: 1 }));
+
+    setFilters((prev) => ({
+      ...prev,
+      status: tab === "All" ? "" : normalizeStatus(tab),
+    }));
+
+    setPagination((prev) => ({
+      ...prev,
+      page: 1,
+    }));
   };
 
   const handleSort = (property) => {
@@ -200,13 +215,14 @@ const ClientList = () => {
     }));
   };
 
-  const filteredData = useMemo(() => {
-    let data = [...clients];
-    if (activeTab !== "All") {
-      data = data.filter((c) => c.status === activeTab);
-    }
-    return data;
-  }, [clients, activeTab]);
+  // const filteredData = useMemo(() => {
+  //   let data = [...clients];
+  //   if (activeTab !== "All") {
+  //     data = data.filter((c) => c.status === activeTab);
+  //   }
+  //   return data;
+  // }, [clients, activeTab]);
+  const filteredData = clients;
 
   const sortedData = useMemo(() => {
     return [...filteredData].sort((a, b) => {

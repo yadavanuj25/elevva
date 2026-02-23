@@ -26,7 +26,7 @@ import ClientList from "./components/clientManagement/ClientsList";
 import EditClient from "./components/clientManagement/EditClient";
 import ViewClient from "./components/clientManagement/ViewClient";
 import ClientRequirement from "./components/clientManagement/ClientRequirement";
-import ClientsRequirementsList from "./components/clientManagement/ClientsRequirementList";
+
 import ViewRequirement from "./components/clientManagement/ViewRequirement";
 import EditClientRequirement from "./components/clientManagement/EditClientRequirement";
 import ClientStats from "./components/stats/Clients/ClientStats";
@@ -46,6 +46,7 @@ import Shifts from "./pages/HRMS/Shifts";
 import ShiftForm from "./components/hrms/shifts/ShiftForm";
 import Holidays from "./pages/HRMS/Holidays";
 import Leaves from "./pages/HRMS/Leaves";
+import RequirementsList from "./components/clientManagement/RequirementList";
 
 const App = () => {
   const location = useLocation();
@@ -280,7 +281,7 @@ const App = () => {
               path="/clients/requirements"
               element={
                 <ProtectedRoute resource="customers" action="read">
-                  <ClientsRequirementsList />
+                  <RequirementsList />
                 </ProtectedRoute>
               }
             />
