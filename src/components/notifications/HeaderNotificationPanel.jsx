@@ -125,7 +125,7 @@ const HeaderNotificationPanel = ({
           ${open ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Header */}
-        <div className="bg-[#000] text-white px-4 py-1 flex justify-between items-center">
+        <div className="bg-accent-dark text-white px-4 py-1 flex justify-between items-center">
           <div className="flex gap-3 items-center">
             <Bell />
             <div>

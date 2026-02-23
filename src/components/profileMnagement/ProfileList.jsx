@@ -8,7 +8,6 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  TablePagination,
   Checkbox,
 } from "@mui/material";
 import {
@@ -16,7 +15,6 @@ import {
   AtSign,
   Mail,
   Phone,
-  Trash,
   File,
   Settings,
   ChartNoAxesCombined,
@@ -41,7 +39,6 @@ import PageTitle from "../../hooks/PageTitle";
 import { useMessage } from "../../auth/MessageContext";
 import GroupButton from "../ui/buttons/GroupButton";
 import ActionMenu from "../ui/buttons/ActionMenu";
-import CustomSwal from "../../utils/CustomSwal";
 import SelectRequirementModal from "../modals/interviewModal/SelectRequirementModal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
 import { swalInfo, swalSuccess, swalWarning } from "../../utils/swalHelper";
@@ -435,7 +432,7 @@ const ProfileList = () => {
                 }`}
               >
                 <Table className="min-w-full">
-                  <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-30">
+                  <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-40">
                     <TableRow>
                       <TableCell
                         padding="checkbox"
