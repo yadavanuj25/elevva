@@ -95,7 +95,7 @@ const Header = ({ toggleSidebar, isOpen }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-90 bg-white dark:bg-darkBg shadow flex items-center   justify-between px-3 py-2.5 ">
+    <header className="sticky top-0 z-50 bg-white dark:bg-darkBg shadow flex items-center   justify-between px-3 py-2.5 ">
       {/* Left */}
       <div className="flex gap-5 items-center text-md font-medium">
         <button
