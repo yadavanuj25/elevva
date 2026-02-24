@@ -125,8 +125,13 @@ input[type="search"]::-webkit-search-cancel-button {
   cursor: pointer;
 }
 /* MUI Style */
-html.dark .css-h7cjts-MuiButtonBase-root-MuiIconButton-root.Mui-disabled {
+html.dark .css-h7cjts-MuiButtonBase-root-MuiIconButton-root {
   color: white;
+}
+.Mui-disabled {
+  background-color: transparent;
+  color: #a7a7a7;
+  cursor: pointer !important;
 }
 .MuiTableCell-root {
   font-family: var(--font-family), sans-serif !important;
