@@ -299,6 +299,10 @@ const RequirementsList = () => {
       swalWarning("Please select at least one requirement");
       return;
     }
+    if (selectedRows.length > 1) {
+      swalWarning("Please select only one requirement");
+      return;
+    }
     setOpenAssignModal(true);
   };
 
@@ -403,7 +407,6 @@ const RequirementsList = () => {
                     {
                       id: "requirementPriority",
                       label: "Priority",
-                      // sticky: true,
                     },
                     { id: "addedBy", label: "Added By" },
                     { id: "createdAt", label: "Created Dtm" },
@@ -600,13 +603,7 @@ const RequirementsList = () => {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell
-                        // className={`whitespace-nowrap bg-[#f2f4f5] dark:bg-darkGray ${getStickyClass(
-                        //   "requirementPriority",
-                        // )}`}
-                        // style={{ overflow: "visible", zIndex: 20 }}
-                        className="whitespace-nowrap  dark:text-gray-200"
-                      >
+                      <TableCell className="whitespace-nowrap  dark:text-gray-200">
                         <div
                           className={`w-max px-2 py-1 text-xs text-center font-[500] text-white rounded-md capitalize ${getPriorityColor(
                             row.requirementPriority,
