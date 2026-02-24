@@ -176,11 +176,7 @@ const GridLayout = ({ data = [], loading = false }) => {
                       <button
                         title="View"
                         className="w-6 h-6 flex items-center justify-center rounded bg-emerald-500 text-white hover:bg-emerald-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                        onClick={() =>
-                          navigate(
-                            `/admin/clientmanagement/view-client/${row._id}`,
-                          )
-                        }
+                        onClick={() => navigate(`/clients/${row._id}`)}
                       >
                         <Eye size={14} />
                       </button>
