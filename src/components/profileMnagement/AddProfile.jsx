@@ -11,9 +11,9 @@ import PageHeader from "./PageHeader";
 import { AddSchema } from "./validation/AddSchema";
 import useSkillHandlers from "../../hooks/profiles/useSkills";
 import useDuplicateCheck from "../../hooks/profiles/useDuplicateCheck";
-import profileInitialForm from "../../contstants/profileInitialForm";
 import ResumeUpload from "./ResumeUpload";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import profileInitialForm from "../../contstants/profile/profileInitialForm";
 
 const AddProfile = () => {
   PageTitle("Elevva | Add-Profile");

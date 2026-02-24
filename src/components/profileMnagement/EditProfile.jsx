@@ -10,7 +10,7 @@ import ProfileForm from "./ProfileForm";
 import PageHeader from "./PageHeader";
 import { EditSchema } from "./validation/EditSchema";
 import useSkillHandlers from "../../hooks/profiles/useSkills";
-import profileInitialForm from "../../contstants/profileInitialForm";
+import profileInitialForm from "../../contstants/profile/profileInitialForm";
 import ResumePreview from "./ResumePreview";
 import ResumeUpload from "./ResumeUpload";
 import { swalError } from "../../utils/swalHelper";

@@ -1,7 +1,7 @@
 import { Check } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { colorThemes } from "../../contstants/theme/ColorThemes";
-import { fontFamilies } from "../../contstants/fonts";
+import { fontFamilies } from "../../contstants/fonts/fonts";
 import PageTitle from "../../hooks/PageTitle";
 import { useFont } from "../../context/FontContext";
 

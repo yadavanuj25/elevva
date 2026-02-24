@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { fontFamilies } from "../contstants/fonts";
+import { fontFamilies } from "../contstants/fonts/fonts";
 
 const FontContext = createContext();
 
