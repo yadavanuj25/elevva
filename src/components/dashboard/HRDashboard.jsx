@@ -81,11 +81,9 @@ const HRDashboard = ({ data }) => {
               >
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <h4 className="font-semibold">
-                      {leave.employee?.fullName}
-                    </h4>
+                    <h4 className="font-semibold">{leave.user?.fullName}</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      {leave.employee?.department}
+                      {leave.user?.department}
                     </p>
                   </div>
                   <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">
