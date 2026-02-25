@@ -376,10 +376,16 @@ const RequirementsList = () => {
             onLimitChange={handleChangeRowsPerPage}
           />
         </div>
-        <TableContainer className="rounded-xl border border-[#E8E8E9] dark:border-gray-600 ">
-          <div className="overflow-x-auto">
+        {/* <TableContainer className="rounded-xl border border-[#E8E8E9] dark:border-gray-600 ">
+          <div className="overflow-x-auto"> */}
+        <TableContainer className="rounded-xl bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600">
+          <div
+            className={`overflow-x-auto ${
+              sortedData.length > 10 ? "overflow-y-auto max-h-[700px]" : ""
+            }`}
+          >
             <Table className="min-w-full">
-              <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-20">
+              <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-30">
                 <TableRow>
                   <TableCell
                     className="whitespace-nowrap bg-[#f2f4f5] dark:bg-darkGray"
