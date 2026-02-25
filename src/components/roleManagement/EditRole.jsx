@@ -32,7 +32,6 @@ const EditRole = () => {
   const { id } = useParams();
   const { errorMsg, showSuccess, showError } = useMessage();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
   const [role, setRole] = useState({ name: "", description: "" });
   const [errors, setErrors] = useState({});
   const [permissions, setPermissions] = useState([]);

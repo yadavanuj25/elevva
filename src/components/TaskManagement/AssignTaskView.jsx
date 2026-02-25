@@ -125,7 +125,7 @@ const AssignTaskView = () => {
 
   return (
     <div className="mx-auto">
-      <div className="bg-white dark:bg-[#1e2738] rounded-2xl  border border-[#E8E8E9] dark:border-gray-600 p-8 transition-all">
+      <div className="bg-white dark:bg-[#1e2738] rounded-2xl  border border-[#E8E8E9] dark:border-gray-600 p-4 transition-all">
         <div className="flex items-center gap-3 mb-6">
           <h2 className=" text-gray-800 dark:text-gray-100">
             Assign Task to HR

@@ -33,9 +33,8 @@ const TaskReportView = () => {
   return (
     <div className="text-gray-900 dark:text-gray-100">
       {/* Filters Card */}
-      <div className="bg-white dark:bg-[#1e2533] rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
-        <h2 className=" mb-4">Task Report - Complete Visibility</h2>
-
+      <div className="bg-white dark:bg-[#1e2533] rounded-lg shadow-md p-4 mb-6 border border-gray-200 dark:border-gray-700">
+        <h2 className="mb-2">Task Report - Complete Visibility</h2>
         <div className="grid grid-cols-3 gap-4 mb-4">
           {/* Start Date */}
           <div>
