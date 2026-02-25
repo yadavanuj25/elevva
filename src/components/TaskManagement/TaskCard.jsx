@@ -3,6 +3,7 @@ import TaskQuickViewModal from "../TaskManagement/TaskQuickViewModal";
 import { updateMetrics, updateTaskStatus } from "../../services/taskServices";
 import { getAllProfiles } from "../../services/profileServices";
 import { swalError, swalSuccess } from "../../utils/swalHelper";
+import { toastError, toastSuccess } from "../../utils/toaster/toastHelpers";
 
 const priorityColors = {
   Critical: " text-red-800 border-red-500",
@@ -82,9 +83,9 @@ const TaskCard = ({ task, onClick, onRefresh, onDragStart }) => {
     try {
       const res = await updateTaskStatus(task._id, { status });
       onRefresh();
-      swalSuccess(res?.message || "Task status updated successfully");
+      toastSuccess(res?.message || "Task status updated successfully");
     } catch (error) {
-      swalError(error.message || "Failed to update task");
+      toastError(error.message || "Failed to update task");
     }
   };
 
