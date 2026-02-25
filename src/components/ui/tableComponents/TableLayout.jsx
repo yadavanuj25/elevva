@@ -209,7 +209,7 @@ const TableLayout = ({
                       <DateDisplay date={row.updatedAt} />
                     </TableCell>
 
-                    <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-30">
+                    <TableCell className="sticky right-0 bg-[#f2f4f5] dark:bg-darkGray z-20">
                       <ActionMenu
                         onEdit={() => navigate(`/clients/${row._id}/edit`)}
                         onView={() => navigate(`/clients/${row._id}`)}
