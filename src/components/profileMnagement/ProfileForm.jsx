@@ -22,10 +22,10 @@ const ProfileForm = ({
 }) => {
   return (
     <>
-      {/*Personal Information */}
+      {/* Basic Info */}
       <section>
-        <h3 className="form-section-subtitle border-b border-[#E8E8E9] dark:border-gray-600">
-          Personal Information
+        <h3 className="form-section-subtitle border-b border-[#E8E8E9] dark:border-gray-600 pb-2 mb-4 font-semibold text-lg">
+          Basic Info
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
@@ -72,10 +72,10 @@ const ProfileForm = ({
           />
         </div>
       </section>
-      {/* Professional Information */}
+      {/* Experience */}
       <section>
-        <h3 className="form-section-subtitle border-b border-[#E8E8E9] dark:border-gray-600">
-          Professional Information
+        <h3 className="form-section-subtitle border-b border-[#E8E8E9] dark:border-gray-600 pb-2 mb-4 font-semibold text-lg">
+          Experience
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
@@ -131,6 +131,14 @@ const ProfileForm = ({
             options={candidateStatusOptions}
             error={errors.status}
           />
+        </div>
+      </section>
+      {/* Skills */}
+      <section>
+        <h3 className="form-section-subtitle border-b border-[#E8E8E9] dark:border-gray-600 pb-2 mb-4 font-semibold text-lg">
+          Skills
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
             name="techStack"
             labelName="Tech Stack"
@@ -153,10 +161,10 @@ const ProfileForm = ({
           />
         </div>
       </section>
-      {/* Additional Information */}
+      {/* Interview Status */}
       <section>
-        <h3 className="form-section-subtitle border-b border-[#E8E8E9] dark:border-gray-600">
-          Additional Information
+        <h3 className="form-section-subtitle border-b border-[#E8E8E9] dark:border-gray-600 pb-2 mb-4 font-semibold text-lg">
+          Interview Status
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SelectField

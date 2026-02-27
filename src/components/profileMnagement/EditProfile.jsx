@@ -60,14 +60,15 @@ const EditProfile = () => {
     if (!raw) return [];
     if (Array.isArray(raw)) {
       return raw
-        .flatMap((s) => (typeof s === "string" ? s.split(",") : s))
+        .flatMap((s) => {
+          if (typeof s === "string") return s.split(",");
+          if (s && typeof s === "object" && s.name) return [s.name]; // skill objects
+          return [];
+        })
         .map((s) => s.trim())
         .filter(Boolean);
     }
-    return raw
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
+    return raw.split(",").map((s) => s.trim()).filter(Boolean);
   };
 
   const fetchProfileById = async (userId) => {
@@ -120,10 +121,15 @@ const EditProfile = () => {
   // Resume select
   const handleResumeSelect = (file) => {
     if (!file) return false;
-    if (file.type !== "application/pdf") {
+    const validTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/msword"
+    ];
+    if (!validTypes.includes(file.type) && !file.name.endsWith(".docx") && !file.name.endsWith(".doc")) {
       setErrors((prev) => ({
         ...prev,
-        resume: "Only PDF files allowed",
+        resume: "Only PDF/DOCX files allowed",
       }));
       return false;
     }
@@ -140,7 +146,6 @@ const EditProfile = () => {
     const blobUrl = URL.createObjectURL(file);
     setSelectedResume(file);
     setPreviewUrl(blobUrl);
-    setFormData((prev) => ({ ...prev, resume: file }));
     setErrors((prev) => ({ ...prev, resume: "" }));
     return true;
   };
@@ -226,26 +231,33 @@ const EditProfile = () => {
         <FormSkeleton rows={6} />
       ) : (
         <form onSubmit={handleUpdateProfile} className="space-y-6 ">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 ">
-            <ResumeUpload
-              fileInputRef={fileInputRef}
-              resume={selectedResume}
-              fallback={remoteResume}
-              errors={errors}
-              isDragging={isDragging}
-              setIsDragging={setIsDragging}
-              onFileSelect={handleResumeSelect}
-              fullWidth={false}
-            />
+          <section>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 border-b border-[#E8E8E9] dark:border-gray-600 pb-2">
+              <h3 className="form-section-subtitle font-semibold text-lg border-none mb-0 pb-0">
+                Documents
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 ">
+              <ResumeUpload
+                fileInputRef={fileInputRef}
+                resume={selectedResume}
+                fallback={remoteResume}
+                errors={errors}
+                isDragging={isDragging}
+                setIsDragging={setIsDragging}
+                onFileSelect={handleResumeSelect}
+                fullWidth={false}
+              />
 
-            <ResumePreview
-              previewUrl={effectivePreviewUrl}
-              fileName={effectiveFileName}
-              show={showResumePopup}
-              onOpen={() => effectivePreviewUrl && setShowResumePopup(true)}
-              onClose={() => setShowResumePopup(false)}
-            />
-          </div>
+              <ResumePreview
+                previewUrl={effectivePreviewUrl}
+                fileName={effectiveFileName}
+                show={showResumePopup}
+                onOpen={() => effectivePreviewUrl && setShowResumePopup(true)}
+                onClose={() => setShowResumePopup(false)}
+              />
+            </div>
+          </section>
 
           <ProfileForm
             formData={formData}

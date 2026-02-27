@@ -26,7 +26,7 @@ export const assignTask = (formData) =>
   fetchHandler(`/api/tasks/assign`, "POST", formData);
 
 export const getOpenRequirements = () => {
-  return fetchHandler("/api/requirements?status=Open");
+  return fetchHandler("/api/requirements?positionStatus=Open");
 };
 
 export const getUsers = () => {

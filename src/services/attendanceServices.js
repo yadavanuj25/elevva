@@ -42,5 +42,5 @@ export const getAllUsersAttendance = ({
     department,
     limit,
   }).toString();
-  return fetchHandler(`/api/attendance/history?${queryParams}`, "GET");
+  return fetchHandler(`/api/attendance/attendance-all?${queryParams}`, "GET");
 };

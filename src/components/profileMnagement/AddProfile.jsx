@@ -56,8 +56,13 @@ const AddProfile = () => {
   // };
 
   const handleResumeSelect = (file) => {
-    if (file.type !== "application/pdf") {
-      setErrors((prev) => ({ ...prev, resume: "Only PDF allowed" }));
+    const validTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/msword"
+    ];
+    if (!validTypes.includes(file.type) && !file.name.endsWith(".docx") && !file.name.endsWith(".doc")) {
+      setErrors((prev) => ({ ...prev, resume: "Only PDF/DOCX allowed" }));
       return false;
     }
 
@@ -183,15 +188,22 @@ const AddProfile = () => {
       />
       <ErrorMessage errorMsg={errorMsg} />
       <form onSubmit={handleSubmit} className="space-y-6 ">
-        <ResumeUpload
-          fileInputRef={fileInputRef}
-          resume={formData.resume}
-          errors={errors}
-          isDragging={isDragging}
-          setIsDragging={setIsDragging}
-          onFileSelect={handleResumeSelect}
-          fullWidth
-        />
+        <section>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 border-b border-[#E8E8E9] dark:border-gray-600 pb-2">
+            <h3 className="form-section-subtitle font-semibold text-lg border-none mb-0 pb-0">
+              Documents
+            </h3>
+          </div>
+          <ResumeUpload
+            fileInputRef={fileInputRef}
+            resume={formData.resume}
+            errors={errors}
+            isDragging={isDragging}
+            setIsDragging={setIsDragging}
+            onFileSelect={handleResumeSelect}
+            fullWidth
+          />
+        </section>
 
         <ProfileForm
           formData={formData}

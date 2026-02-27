@@ -77,10 +77,9 @@ const ResumeUpload = ({
           h-[250px] border-2 border-dashed rounded-xl p-6
           cursor-pointer transition-all duration-300 group
           bg-white dark:bg-gray-800 flex items-center justify-center
-          ${
-            isDragging
-              ? "border-accent-dark scale-[1.02]"
-              : errors?.resume
+          ${isDragging
+            ? "border-accent-dark scale-[1.02]"
+            : errors?.resume
               ? "border-red-500"
               : "border-accent-dark"
           }
@@ -89,7 +88,7 @@ const ResumeUpload = ({
         <input
           ref={fileInputRef}
           type="file"
-          accept=".pdf"
+          accept=".pdf,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           hidden
           onChange={handleChange}
         />
@@ -111,9 +110,8 @@ const ResumeUpload = ({
           </div>
         ) : (
           <div
-            className={`flex flex-col items-center gap-3 transition-colors ${
-              errors.resume ? "text-red-600" : "text-gray-700"
-            }`}
+            className={`flex flex-col items-center gap-3 transition-colors ${errors.resume ? "text-red-600" : "text-gray-700"
+              }`}
           >
             <div
               className={`
@@ -121,24 +119,22 @@ const ResumeUpload = ({
       transition-all duration-300 ease-out
       group-hover:animate-tada
       
-      ${
-        errors.resume
-          ? "bg-red-100 text-red-600"
-          : "bg-accent-light text-accent-dark"
-      }
+      ${errors.resume
+                  ? "bg-red-100 text-red-600"
+                  : "bg-accent-light text-accent-dark"
+                }
     `}
             >
               <CloudUpload size={30} />
             </div>
             <p
-              className={`font-semibold transition-colors ${
-                errors.resume ? "text-red-600" : "text-accent-dark"
-              }`}
+              className={`font-semibold transition-colors ${errors.resume ? "text-red-600" : "text-accent-dark"
+                }`}
             >
               {isDragging ? "Drop your resume here" : "Upload Your Resume"}
             </p>
             <p className="text-sm text-gray-500">
-              PDF format only • Maximum size 20 MB
+              PDF or DOCX format only • Maximum size 20 MB
             </p>
             {errors.resume ? (
               <p className="text-xs text-red-600 font-medium">

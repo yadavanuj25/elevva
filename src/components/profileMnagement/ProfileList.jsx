@@ -42,6 +42,7 @@ import GroupButton from "../ui/buttons/GroupButton";
 import ActionMenu from "../ui/buttons/ActionMenu";
 import SelectRequirementModal from "../modals/interviewModal/SelectRequirementModal";
 import ErrorMessage from "../modals/errors/ErrorMessage";
+import UploadResumeModal from "./UploadResumeModal";
 import { swalInfo, swalSuccess, swalWarning } from "../../utils/swalHelper";
 const ProfileList = () => {
   PageTitle("Elevva | Profiles");
@@ -67,6 +68,7 @@ const ProfileList = () => {
   const [openStatusRow, setOpenStatusRow] = useState(null);
   const [selectedProfiles, setSelectedProfiles] = useState([]);
   const [openRequirementModal, setOpenRequirementModal] = useState(false);
+  const [openUploadModal, setOpenUploadModal] = useState(false);
 
   useEffect(() => {
     if (location.state?.successMsg) {
@@ -195,24 +197,22 @@ const ProfileList = () => {
     if (!skills) return [];
 
     if (Array.isArray(skills)) {
-      if (skills.length === 1 && typeof skills[0] === "string") {
-        return skills[0]
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
-      }
-      return skills.map((s) => (typeof s === "string" ? s.trim() : s));
+      return skills
+        .map((s) => {
+          if (typeof s === "string") return s.trim();
+          if (s && typeof s === "object" && s.name) return s.name;  // skill objects
+          return null;
+        })
+        .filter(Boolean);
     }
 
     if (typeof skills === "string") {
-      return skills
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean);
+      return skills.split(",").map((s) => s.trim()).filter(Boolean);
     }
 
     return [];
   };
+
 
   const handleStatusUpdate = async (id, newStatus) => {
     setStatusLoading(id);
@@ -363,6 +363,7 @@ const ProfileList = () => {
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
               addLink="/profiles/new"
+              onAddAction={() => setOpenUploadModal(true)}
               title="Profile"
               resource="profiles"
             />
@@ -408,9 +409,8 @@ const ProfileList = () => {
               > */}
             <TableContainer className="rounded-xl bg-white dark:bg-gray-800 border border-[#E8E8E9] dark:border-gray-600">
               <div
-                className={`overflow-x-auto ${
-                  sortedData.length > 10 ? "overflow-y-auto max-h-[700px]" : ""
-                }`}
+                className={`overflow-x-auto ${sortedData.length > 10 ? "overflow-y-auto max-h-[700px]" : ""
+                  }`}
               >
                 <Table className="min-w-full">
                   <TableHead className="sticky top-0 bg-lightGray dark:bg-darkGray z-30">
@@ -445,13 +445,12 @@ const ProfileList = () => {
                       ].map((column) => (
                         <TableCell
                           key={column.id}
-                          className={`whitespace-nowrap font-bold text-accent-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray ${
-                            column.sticky ? getStickyClass(column.id) : ""
-                          }`}
+                          className={`whitespace-nowrap font-bold text-accent-darkBg dark:text-white bg-[#f2f4f5] dark:bg-darkGray ${column.sticky ? getStickyClass(column.id) : ""
+                            }`}
                         >
                           {column.id !== "action" &&
-                          column.id !== "_id" &&
-                          column.id !== "favourite" ? (
+                            column.id !== "_id" &&
+                            column.id !== "favourite" ? (
                             <TableSortLabel
                               active={orderBy === column.id}
                               direction={orderBy === column.id ? order : "asc"}
@@ -548,7 +547,7 @@ const ProfileList = () => {
                               <div>
                                 <Link
                                   className="flex items-center gap-1  dark:text-gray-300 font-semibold hover:text-accent-dark"
-                                  to={`/profiles/${item._id}/edit`}
+                                  to={`/profiles/${item._id}`}
                                 >
                                   <AtSign size={14} />
                                   {item.fullName.charAt(0).toUpperCase() +
@@ -655,6 +654,10 @@ const ProfileList = () => {
               onClose={() => setOpenRequirementModal(false)}
               handleScreening={handleStartScreening}
               candidate={selectedProfiles[0]}
+            />
+            <UploadResumeModal
+              open={openUploadModal}
+              onClose={() => setOpenUploadModal(false)}
             />
           </div>
         </div>

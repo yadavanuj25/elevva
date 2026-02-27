@@ -95,7 +95,7 @@ const ClientList = () => {
     try {
       const response = await getAllOptions();
       setSettings(response.options);
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const formatStatus = (status = "") =>
@@ -132,7 +132,7 @@ const ClientList = () => {
           status === "All"
             ? allClients.length
             : allClients.filter((c) => formatStatus(c.status) === status)
-                .length,
+              .length,
       }));
 
       setStatusTabs(tabsWithCounts);
@@ -469,7 +469,7 @@ const ClientList = () => {
             sortedData={sortedData}
             openStatusRow={openStatusRow}
             setOpenStatusRow={setOpenStatusRow}
-            statusOptions={settings.statuses}
+            statusOptions={settings?.statuses || []}
             handleStatusUpdate={handleStatusUpdate}
             statusLoading={statusLoading}
           />

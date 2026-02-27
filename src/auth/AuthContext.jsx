@@ -221,7 +221,8 @@ export const AuthProvider = ({ children }) => {
         swalError(res.message || "Login failed");
         return { success: false, message: res.message };
       }
-      const { token: newToken, user: newUser } = res;
+      const newToken = res.token || res.data?.token;
+      const newUser = res.user || res.data?.user;
 
       if (!newToken || !newUser) {
         return { success: false, message: "Invalid server response" };
@@ -268,7 +269,8 @@ export const AuthProvider = ({ children }) => {
         setIsLocked(true);
         localStorage.setItem("isLocked", "true");
         // FIX: Merge updated fields rather than overwriting entire user with partial data
-        const updatedUser = { ...user, ...response.user, isLocked: true };
+        const returnUser = response.user || response.data?.user || {};
+        const updatedUser = { ...user, ...returnUser, isLocked: true };
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
         navigate("/lock-screen", { replace: true });
@@ -285,7 +287,8 @@ export const AuthProvider = ({ children }) => {
       const response = await unlock(password);
       if (response.success) {
         // FIX: Safely merge user state rather than replacing with potentially partial data
-        const updatedUser = { ...user, ...response.user, isLocked: false };
+        const returnUser = response.user || response.data?.user || {};
+        const updatedUser = { ...user, ...returnUser, isLocked: false };
         setUser(updatedUser);
         setIsLocked(false);
         localStorage.setItem("user", JSON.stringify(updatedUser));

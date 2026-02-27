@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { Mail, Eye, EyeOff } from "lucide-react";
+import { Mail, Eye, EyeOff, Lock } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
 import Input from "../components/ui/Input";
 import { useMessage } from "../auth/MessageContext";
@@ -10,11 +10,10 @@ import PageTitle from "../hooks/PageTitle";
 import LoginCard from "../components/cards/LoginCard";
 import ErrorMessage from "../components/modals/errors/ErrorMessage";
 
+const REMEMBER_KEY = "elevva_remember";
+
 const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email("Invalid email format")
-    .required("Email is required"),
+  email: yup.string().email("Invalid email format").required("Email is required"),
   password: yup.string().required("Password is required"),
 });
 
@@ -33,6 +32,19 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  // ── Load saved credentials on mount ──
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(REMEMBER_KEY);
+      if (saved) {
+        const { email, password } = JSON.parse(saved);
+        setFormdata((prev) => ({ ...prev, email: email || "", password: password || "", rememberMe: true }));
+      }
+    } catch {
+      // ignore corrupt data
+    }
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormdata({ ...formdata, [name]: value });
@@ -47,6 +59,17 @@ const Login = () => {
     setLoading(true);
     try {
       await schema.validate(formdata, { abortEarly: false });
+
+      // ── Save or clear credentials based on Remember Me ──
+      if (formdata.rememberMe) {
+        localStorage.setItem(
+          REMEMBER_KEY,
+          JSON.stringify({ email: formdata.email, password: formdata.password })
+        );
+      } else {
+        localStorage.removeItem(REMEMBER_KEY);
+      }
+
       const res = await login(formdata);
       if (!res.success) {
         showError(res.message);
@@ -55,9 +78,7 @@ const Login = () => {
     } catch (err) {
       if (err.name === "ValidationError") {
         const fieldErrors = {};
-        err.inner.forEach((e) => {
-          fieldErrors[e.path] = e.message;
-        });
+        err.inner.forEach((e) => { fieldErrors[e.path] = e.message; });
         setErrors(fieldErrors);
         return;
       }
@@ -66,6 +87,7 @@ const Login = () => {
       setLoading(false);
     }
   };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[45%_55%] min-h-screen bg-white dark:bg-gray-900">
       <div className="order-2 flex items-center justify-center">
@@ -122,7 +144,7 @@ const Login = () => {
                 />
               </div>
               <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 cursor-pointer">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     name="rememberMe"
@@ -133,6 +155,11 @@ const Login = () => {
                     className="w-4 h-4 accent-[#3282ff]"
                   />
                   Remember me
+                  {formdata.rememberMe && (
+                    <span className="text-[10px] text-emerald-600 font-medium">
+                      ✓ Credentials saved
+                    </span>
+                  )}
                 </label>
                 <p
                   className="text-[#3282ff] font-medium hover:underline cursor-pointer"
@@ -144,9 +171,8 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading || errorMsg}
-                className={`w-full mt-8 bg-accent-dark hover:opacity-90 text-white font-semibold py-3 rounded-lg ${
-                  loading || errorMsg ? "opacity-70 cursor-not-allowed" : ""
-                }`}
+                className={`w-full mt-8 bg-accent-dark hover:opacity-90 text-white font-semibold py-3 rounded-lg ${loading || errorMsg ? "opacity-70 cursor-not-allowed" : ""
+                  }`}
               >
                 {loading ? "Signing in..." : "Sign In"}
               </button>

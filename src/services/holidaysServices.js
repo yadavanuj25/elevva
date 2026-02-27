@@ -14,34 +14,4 @@ export const deleteHolidays = (id) =>
 
 export const getStats = () => fetchHandler("/api/holidays/admin/stats");
 
-export const getAttendanceHistory = ({
-  startDate,
-  endDate,
-  page = 1,
-  limit = 30,
-}) => {
-  const queryParams = new URLSearchParams({
-    startDate,
-    endDate,
-    page,
-    limit,
-  }).toString();
 
-  return fetchHandler(`/api/attendance/history?${queryParams}`, "GET");
-};
-
-export const getAllUsersAttendance = ({
-  startDate,
-  endDate,
-  department,
-  limit = 1000,
-}) => {
-  const queryParams = new URLSearchParams({
-    startDate,
-    endDate,
-    department,
-    limit,
-  }).toString();
-
-  return fetchHandler(`/api/attendance/history?${queryParams}`, "GET");
-};

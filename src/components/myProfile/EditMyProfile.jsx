@@ -157,14 +157,16 @@ const EditProfile = () => {
     setLoading(true);
     try {
       await profileSchema.validate(formData, { abortEarly: false });
-      const payload = {
-        fullName: formData.fullName,
-        dob: formData.dob,
-        address: formData.address,
-        country: formData.country,
-        state: formData.state,
-        zipcode: formData.zipcode,
-      };
+      const payload = new FormData();
+      payload.append("fullName", formData.fullName);
+      payload.append("dob", formData.dob);
+      payload.append("address", formData.address);
+      payload.append("country", formData.country);
+      payload.append("state", formData.state);
+      payload.append("zipcode", formData.zipcode);
+      if (profileFile) {
+        payload.append("profileImage", profileFile);
+      }
       const res = await updateProfile(user?._id, payload);
       if (!res.success) showError(res.message || "Update failed");
       navigate(-1);
@@ -241,10 +243,9 @@ const EditProfile = () => {
 
                 <span
                   className={`inline-block mt-1 px-3 py-1 rounded-md text-xs font-semibold capitalize 
-                 ${
-                   statusStyles[status?.toLowerCase()] ||
-                   "bg-gray-100 text-gray-600"
-                 }`}
+                 ${statusStyles[status?.toLowerCase()] ||
+                    "bg-gray-100 text-gray-600"
+                    }`}
                 >
                   {status}
                 </span>

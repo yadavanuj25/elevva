@@ -13,15 +13,20 @@ const TableHeader = ({
   viewMode,
   setViewMode,
   resource,
+  onAddAction,
 }) => {
   const { permissions } = useAuth();
   const navigate = useNavigate();
   const canAdd = hasPermission(permissions, resource, "create");
   const handleAddClick = () => {
-    if (canAdd) {
-      navigate(addLink);
-    } else {
+    if (!canAdd) {
       navigate("/unauthorized");
+      return;
+    }
+    if (onAddAction) {
+      onAddAction();
+    } else {
+      navigate(addLink);
     }
   };
 
@@ -42,21 +47,19 @@ const TableHeader = ({
         <div className="inline-flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
           <button
             onClick={() => setViewMode("list")}
-            className={`p-2 transition-colors ${
-              viewMode === "list"
-                ? "bg-accent-dark text-white"
-                : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-            }`}
+            className={`p-2 transition-colors ${viewMode === "list"
+              ? "bg-accent-dark text-white"
+              : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              }`}
           >
             <List size={20} />
           </button>
           <button
             onClick={() => setViewMode("grid")}
-            className={`p-2 border-l  transition-colors ${
-              viewMode === "grid"
-                ? "bg-accent-dark text-white border-accent-dark"
-                : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-            }`}
+            className={`p-2 border-l  transition-colors ${viewMode === "grid"
+              ? "bg-accent-dark text-white border-accent-dark"
+              : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              }`}
           >
             <LayoutGrid size={20} />
           </button>

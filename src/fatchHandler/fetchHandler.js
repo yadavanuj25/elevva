@@ -52,6 +52,12 @@ export const fetchHandler = async (
     if (!response.ok) {
       throw responseData; //  THROW FULL API RESPONSE
     }
+
+    // Globally unwrap the 'data' payload because the backend responseFormatter wraps everything
+    if (responseData && responseData.data && typeof responseData.data === 'object' && !Array.isArray(responseData.data)) {
+      return { ...responseData, ...responseData.data };
+    }
+
     return responseData;
   } catch (error) {
     return Promise.reject({
