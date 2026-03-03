@@ -299,10 +299,10 @@ const RequirementsList = () => {
       swalWarning("Please select at least one requirement");
       return;
     }
-    if (selectedRows.length > 1) {
-      swalWarning("Please select only one requirement");
-      return;
-    }
+    // if (selectedRows.length > 1) {
+    //   swalWarning("Please select only one requirement");
+    //   return;
+    // }
     setOpenAssignModal(true);
   };
 
